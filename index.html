@@ -1,994 +1,1033 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GGbrainX</title>
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Orbitron:wght@500;700;900&display=swap');
-* { box-sizing: border-box; margin: 0; padding: 0; user-select: none; font-family: 'Inter', sans-serif; }
-html { scroll-behavior: smooth; }
-body { background: #0a0a0f; color: #e5e7eb; min-height: 100vh; padding: 20px; position: relative; overflow-x: hidden; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GGbrainX — Upgrader</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Orbitron:wght@500;700;900&display=swap');
 
-.bg-layer { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; overflow: hidden; pointer-events: none; }
-.bg-layer::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle at 20% 30%, rgba(255,140,0,0.12) 0%, transparent 40%), radial-gradient(circle at 80% 70%, rgba(255,140,0,0.08) 0%, transparent 40%); animation: bgMove 25s ease-in-out infinite; }
-@keyframes bgMove { 0%,100% { transform: translate(0,0) rotate(0deg); } 50% { transform: translate(-5%,-5%) rotate(8deg); } }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+            font-family: 'Inter', sans-serif;
+        }
 
-.wrapper { max-width: 1200px; margin: 0 auto; }
+        html { scroll-behavior: smooth; }
 
-.app { width: 100%; background: linear-gradient(180deg, rgba(30,30,38,0.95), rgba(18,18,22,0.95)); border-radius: 28px; border: 1px solid rgba(255,140,0,0.15); box-shadow: 0 30px 80px rgba(0,0,0,0.8), 0 0 80px rgba(255,140,0,0.06); overflow: hidden; display: flex; flex-direction: column; padding-bottom: 25px; backdrop-filter: blur(20px); }
+        body {
+            background: #0a0a0f;
+            color: #e5e7eb;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
 
-.top-bar { display: flex; justify-content: space-between; align-items: center; padding: 15px 30px; background: rgba(255,255,255,0.02); border-bottom: 1px solid rgba(255,140,0,0.1); gap: 15px; flex-wrap: wrap; }
-.logo-text { font-family: 'Orbitron', sans-serif; font-size: 28px; font-weight: 900; letter-spacing: 1px; background: linear-gradient(135deg, #d0d0d0 0%, #ff8c00 50%, #ffaa33 100%); background-size: 200% 200%; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; filter: drop-shadow(0 0 15px rgba(255,140,0,0.5)); animation: logoGradient 4s ease infinite; cursor: pointer; }
-@keyframes logoGradient { 0%,100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
-.top-right { display: flex; align-items: center; gap: 10px; }
-.nav-link { padding: 8px 16px; border-radius: 10px; background: rgba(255,140,0,0.1); border: 1px solid rgba(255,140,0,0.25); color: #ffaa33; font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: all 0.3s; font-family: 'Orbitron', sans-serif; }
-.nav-link:hover { background: rgba(255,140,0,0.25); color: #fff; transform: translateY(-2px); }
-.nav-link.active { background: linear-gradient(135deg, #ff8c00, #cc7000); color: #fff; }
-.balance { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); padding: 8px 16px; border-radius: 20px; font-size: 16px; font-weight: 800; display: flex; align-items: center; gap: 8px; color: #fff; font-family: 'Orbitron', sans-serif; }
-.coin-icon { width: 20px; height: 20px; object-fit: contain; filter: drop-shadow(0 0 8px rgba(255,140,0,0.8)); }
-.avatar { width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #ff8c00, #cc7000); display: flex; align-items: center; justify-content: center; font-family: 'Orbitron', sans-serif; font-weight: 900; font-size: 18px; color: #fff; box-shadow: 0 0 20px rgba(255,140,0,0.5); cursor: pointer; transition: transform 0.3s; }
-.avatar:hover { transform: scale(1.1); }
+        .bg-layer {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: -2;
+            overflow: hidden;
+            pointer-events: none;
+        }
 
-/* Страницы */
-.page { display: none; }
-.page.active { display: block; }
+        .bg-layer::before {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(255, 140, 0, 0.12) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(255, 140, 0, 0.08) 0%, transparent 40%);
+            animation: bgMove 25s ease-in-out infinite;
+        }
 
-/* Игра */
-.progress-section { display: flex; justify-content: center; align-items: center; padding: 30px 0 20px; }
-.progress-wrapper { position: relative; width: 340px; height: 340px; }
-.progress-svg { width: 100%; height: 100%; transform: rotate(-90deg); }
-.progress-bg { fill: none; stroke: #1e1e26; stroke-width: 24; }
-.progress-bar { fill: none; stroke: url(#progressGradient); stroke-width: 24; stroke-linecap: round; stroke-dasharray: 816; stroke-dashoffset: 816; transition: stroke-dashoffset 0.3s ease; filter: drop-shadow(0 0 15px rgba(255,140,0,0.8)); }
-.arrow-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; justify-content: center; align-items: flex-start; pointer-events: none; z-index: 5; transition: transform 6s cubic-bezier(0.12,0.8,0.15,1); transform-origin: center center; }
-.arrow-pointer { width: 0; height: 0; border-left: 14px solid transparent; border-right: 14px solid transparent; border-top: 28px solid #ff8c00; margin-top: 22px; filter: drop-shadow(0 0 10px rgba(255,140,0,1)) drop-shadow(0 0 20px rgba(255,140,0,0.6)); position: relative; }
-.arrow-pointer::after { content: ''; position: absolute; top: -34px; left: -6px; width: 12px; height: 12px; background: radial-gradient(circle at 30% 30%, #ffaa33, #ff8c00); border-radius: 50%; box-shadow: 0 0 15px rgba(255,140,0,1); }
-.progress-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); text-align: center; z-index: 10; }
-.chance-big { font-family: 'Orbitron', sans-serif; font-size: 48px; font-weight: 900; color: #ff8c00; text-shadow: 0 0 30px rgba(255,140,0,0.8); line-height: 1; }
-.chance-label { font-size: 14px; color: #7ed88a; font-weight: 700; text-transform: uppercase; letter-spacing: 3px; margin-top: 8px; text-shadow: 0 0 10px rgba(120,200,130,0.5); min-height: 18px; }
-.chance-label.medium { color: #ffaa33; text-shadow: 0 0 10px rgba(255,140,0,0.5); }
-.chance-label.hidden { visibility: hidden; }
+        @keyframes bgMove {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            50% { transform: translate(-5%, -5%) rotate(8deg); }
+        }
 
-.items-row { display: flex; justify-content: center; align-items: center; gap: 15px; padding: 20px 30px; }
-.item-box { background: linear-gradient(145deg, #1e1e26, #15151c); border-radius: 18px; padding: 18px; display: flex; flex-direction: column; align-items: center; border: 2px solid rgba(255,140,0,0.4); min-width: 160px; box-shadow: 0 0 30px rgba(255,140,0,0.2); }
-.item-box .label { font-size: 11px; color: #8a8d9b; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; }
-.item-box img { width: 80px; height: 80px; object-fit: contain; margin-bottom: 10px; filter: drop-shadow(0 4px 12px rgba(0,0,0,0.6)); }
-.item-box .name { font-size: 13px; font-weight: 700; text-align: center; margin-bottom: 8px; color: #fff; height: 32px; display: flex; align-items: center; }
-.item-box .price { font-family: 'Orbitron', sans-serif; font-size: 14px; font-weight: 800; color: #d0d0d0; display: flex; align-items: center; gap: 5px; }
-.price-coin { width: 16px; height: 16px; object-fit: contain; }
-.swap-arrow { font-size: 28px; color: #ff8c00; filter: drop-shadow(0 0 10px rgba(255,140,0,0.8)); animation: pulseArrow 2s ease-in-out infinite; }
-@keyframes pulseArrow { 0%,100% { transform: scale(1); opacity: 0.7; } 50% { transform: scale(1.15); opacity: 1; } }
+        .app {
+            width: 100%;
+            max-width: 100%;
+            background: linear-gradient(180deg, rgba(30, 30, 38, 0.95) 0%, rgba(18, 18, 22, 0.95) 100%);
+            border-radius: 28px;
+            border: 1px solid rgba(255, 140, 0, 0.15);
+            box-shadow: 
+                0 30px 80px rgba(0, 0, 0, 0.8),
+                0 0 80px rgba(255, 140, 0, 0.06);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            padding-bottom: 25px;
+            position: relative;
+            backdrop-filter: blur(20px);
+        }
 
-.upgrade-btn { width: calc(100% - 60px); margin: 0 auto; padding: 20px; border-radius: 16px; border: none; background: linear-gradient(135deg, #ff8c00 0%, #ffaa33 50%, #ff8c00 100%); background-size: 200% 200%; color: white; font-family: 'Orbitron', sans-serif; font-size: 20px; font-weight: 900; text-transform: uppercase; letter-spacing: 3px; cursor: pointer; box-shadow: 0 10px 30px rgba(255,140,0,0.4), 0 0 60px rgba(255,140,0,0.2); animation: gradientShift 3s ease infinite; }
-@keyframes gradientShift { 0%,100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
-.upgrade-btn:hover:not(:disabled) { transform: translateY(-3px) scale(1.02); box-shadow: 0 20px 50px rgba(255,140,0,0.6), 0 0 100px rgba(255,140,0,0.4); }
-.upgrade-btn:active { transform: scale(0.98); }
-.upgrade-btn:disabled { opacity: 0.4; cursor: not-allowed; background: #3a3d4d; animation: none; box-shadow: none; }
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 30px;
+            background: rgba(255, 255, 255, 0.02);
+            border-bottom: 1px solid rgba(255, 140, 0, 0.1);
+        }
 
-.section-title { font-family: 'Orbitron', sans-serif; font-size: 12px; font-weight: 700; color: #8a8d9b; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 10px; padding: 0 30px; display: flex; align-items: center; gap: 8px; }
-.section-title::before { content: ''; width: 4px; height: 14px; background: linear-gradient(180deg, #ff8c00, #cc7000); border-radius: 2px; box-shadow: 0 0 10px rgba(255,140,0,0.8); }
-.section-block { margin-top: 25px; }
-.target-row, .shop-row, .inventory-row { display: flex; gap: 12px; overflow-x: auto; padding: 5px 30px 15px; scroll-behavior: smooth; }
-.target-row::-webkit-scrollbar, .shop-row::-webkit-scrollbar, .inventory-row::-webkit-scrollbar { height: 5px; }
-.target-row::-webkit-scrollbar-thumb, .shop-row::-webkit-scrollbar-thumb, .inventory-row::-webkit-scrollbar-thumb { background: linear-gradient(90deg, #ff8c00, #cc7000); border-radius: 3px; }
-.inv-card, .target-card, .shop-card { flex-shrink: 0; background: linear-gradient(145deg, #1e1e26, #15151c); border-radius: 14px; padding: 10px; width: 110px; display: flex; flex-direction: column; align-items: center; border: 1px solid rgba(255,255,255,0.05); transition: all 0.3s; position: relative; }
-.inv-card:hover, .target-card:hover:not(.disabled), .shop-card:hover { transform: translateY(-4px); border-color: rgba(255,140,0,0.5); box-shadow: 0 10px 30px rgba(0,0,0,0.5), 0 0 25px rgba(255,140,0,0.2); }
-.inv-card.selected, .target-card.selected { border-color: #ff8c00; background: linear-gradient(145deg, rgba(255,140,0,0.15), rgba(255,140,0,0.05)); box-shadow: 0 0 30px rgba(255,140,0,0.5); }
-.target-card.disabled { opacity: 0.25; cursor: not-allowed; filter: grayscale(1); }
-.inv-card img, .target-card img, .shop-card img { width: 55px; height: 55px; object-fit: contain; margin-bottom: 6px; pointer-events: none; }
-.inv-card .name, .target-card .name, .shop-card .name { font-size: 10px; font-weight: 700; text-align: center; margin-bottom: 4px; height: 24px; overflow: hidden; color: #e5e7ef; pointer-events: none; }
-.inv-card .price, .target-card .price, .shop-card .price { font-size: 11px; color: #ffaa33; font-weight: 800; display: flex; align-items: center; gap: 3px; font-family: 'Orbitron', sans-serif; pointer-events: none; }
-.buy-btn { width: 100%; padding: 6px; border-radius: 8px; border: none; background: linear-gradient(135deg, #ff8c00, #cc7000); color: white; font-weight: 800; font-size: 10px; cursor: pointer; text-transform: uppercase; font-family: 'Orbitron', sans-serif; margin-top: 6px; position: relative; z-index: 5; }
-.buy-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255,140,0,0.6); }
-.buy-btn:disabled { opacity: 0.4; cursor: not-allowed; background: #3a3d4d; }
-.sell-btn { width: 100%; padding: 7px; border-radius: 8px; border: 1px solid rgba(120,200,130,0.3); background: rgba(120,200,130,0.1); color: #7ed88a; font-weight: 800; font-size: 10px; cursor: pointer; text-transform: uppercase; font-family: 'Orbitron', sans-serif; margin-top: 6px; letter-spacing: 1px; position: relative; z-index: 5; }
-.sell-btn:hover:not(:disabled) { background: rgba(120,200,130,0.3); border-color: rgba(120,200,130,0.6); box-shadow: 0 0 20px rgba(120,200,130,0.4); transform: translateY(-2px); }
-.sell-btn:disabled { opacity: 0.4; cursor: not-allowed; }
-.empty-inv { color: #4a4d5e; font-size: 13px; text-align: center; width: 100%; padding: 20px; font-weight: 600; }
-.selectable { display: flex; flex-direction: column; align-items: center; width: 100%; cursor: pointer; }
-.locked { pointer-events: none !important; opacity: 0.4 !important; filter: grayscale(0.5) !important; }
+        .logo-text {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 28px;
+            font-weight: 900;
+            letter-spacing: 1px;
+            background: linear-gradient(135deg, #d0d0d0 0%, #ff8c00 50%, #ffaa33 100%);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 0 15px rgba(255, 140, 0, 0.5));
+            animation: logoGradient 4s ease infinite;
+        }
 
-/* Профиль */
-.profile-header { display: flex; align-items: center; gap: 20px; padding: 25px; background: linear-gradient(145deg, #1e1e26, #15151c); border-radius: 18px; margin: 20px; border: 1px solid rgba(255,140,0,0.15); }
-.avatar-big { width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, #ff8c00, #cc7000); display: flex; align-items: center; justify-content: center; font-family: 'Orbitron'; font-size: 32px; font-weight: 900; color: white; box-shadow: 0 0 30px rgba(255,140,0,0.5); }
-.pinfo .pnick { font-family: 'Orbitron'; font-size: 24px; font-weight: 900; }
-.pinfo .pmeta { font-size: 12px; color: #8a8d9b; margin-top: 6px; }
-.pinfo .pmeta strong { color: #ffaa33; }
+        @keyframes logoGradient {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
 
-.stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; padding: 0 20px; margin-bottom: 20px; }
-.stat-card { background: linear-gradient(145deg, #1e1e26, #15151c); border-radius: 14px; padding: 20px; border: 1px solid rgba(255,255,255,0.05); }
-.stat-card .lbl { font-size: 11px; color: #8a8d9b; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; }
-.stat-card .val { font-family: 'Orbitron'; font-size: 24px; font-weight: 900; color: #ff8c00; }
+        .top-right { display: flex; align-items: center; gap: 12px; }
 
-.best-drop { display: flex; gap: 20px; align-items: center; background: linear-gradient(145deg, #2a1f14, #1a1410); border-radius: 18px; padding: 20px; border: 1px solid rgba(255,140,0,0.3); margin: 0 20px 20px; }
-.best-drop img { width: 100px; height: 100px; object-fit: contain; }
-.best-drop .info .nm { font-family: 'Orbitron'; font-size: 22px; font-weight: 900; color: white; }
-.best-drop .info .pr { font-family: 'Orbitron'; font-size: 18px; color: #ffaa33; margin-top: 6px; display: flex; align-items: center; gap: 6px; }
-.best-drop .info .lbl { font-size: 11px; color: #8a8d9b; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 6px; }
+        .balance {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 16px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #fff;
+            font-family: 'Orbitron', sans-serif;
+        }
 
-.section { margin: 0 20px 25px; }
-.section h3 { font-family: 'Orbitron'; font-size: 14px; color: #8a8d9b; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 12px; padding-left: 10px; border-left: 4px solid #ff8c00; }
-.promo-block, .tg-block { display: flex; gap: 10px; }
-.promo-block input, .tg-block input { flex: 1; background: #1e1e26; border: 1px solid rgba(255,140,0,0.3); border-radius: 8px; padding: 10px 14px; color: white; font-size: 14px; outline: none; }
-.promo-block input { text-transform: uppercase; }
-.wd-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
-.wd-item { background: linear-gradient(145deg, #1e1e26, #15151c); border-radius: 12px; padding: 12px; display: flex; flex-direction: column; align-items: center; border: 1px solid rgba(255,255,255,0.05); }
-.wd-item img { width: 60px; height: 60px; object-fit: contain; margin-bottom: 8px; }
-.wd-item .nm { font-size: 11px; font-weight: 700; text-align: center; margin-bottom: 8px; }
-.wd-item button { width: 100%; padding: 8px; border-radius: 8px; border: none; background: linear-gradient(135deg, #4ade80, #16a34a); color: white; font-weight: 800; font-size: 11px; cursor: pointer; text-transform: uppercase; font-family: 'Orbitron'; }
+        .coin-icon {
+            width: 20px;
+            height: 20px;
+            object-fit: contain;
+            filter: drop-shadow(0 0 8px rgba(255, 140, 0, 0.8));
+        }
 
-/* Кнопки общего назначения */
-.btn { padding: 10px 20px; border-radius: 10px; border: none; background: linear-gradient(135deg, #ff8c00, #cc7000); color: white; font-weight: 800; cursor: pointer; font-family: 'Orbitron'; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; transition: all 0.3s; }
-.btn:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(255,140,0,0.5); }
-.btn-green { background: linear-gradient(135deg, #4ade80, #16a34a); }
-.btn-danger { background: linear-gradient(135deg, #ff4d4d, #cc0000); }
-.btn-dark { background: #3a3d4d; }
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ff8c00, #cc7000);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 900;
+            font-size: 18px;
+            color: #fff;
+            box-shadow: 0 0 20px rgba(255, 140, 0, 0.5);
+            cursor: pointer;
+        }
 
-/* Админка */
-.admin-layout { display: grid; grid-template-columns: 220px 1fr; gap: 20px; padding: 20px; }
-.sidebar { background: linear-gradient(145deg, #1e1e26, #15151c); border-radius: 18px; padding: 20px; border: 1px solid rgba(255,140,0,0.15); height: fit-content; }
-.sidebar a { display: block; padding: 12px 16px; border-radius: 10px; color: #8a8d9b; font-weight: 700; margin-bottom: 6px; cursor: pointer; transition: all 0.3s; }
-.sidebar a:hover { background: rgba(255,140,0,0.1); color: #ffaa33; }
-.sidebar a.active { background: linear-gradient(135deg, #ff8c00, #cc7000); color: white; }
-.content-admin { background: linear-gradient(145deg, #1e1e26, #15151c); border-radius: 18px; padding: 25px; border: 1px solid rgba(255,140,0,0.15); }
-.content-admin h2 { font-family: 'Orbitron'; color: #ff8c00; margin-bottom: 20px; }
-.admin-input { background: #1e1e26; border: 1px solid rgba(255,140,0,0.3); border-radius: 8px; padding: 10px 14px; color: white; font-size: 14px; width: 100%; outline: none; }
-.item-row { display: flex; align-items: center; gap: 15px; padding: 12px; background: rgba(255,255,255,0.03); border-radius: 12px; margin-bottom: 8px; }
-.item-row img { width: 50px; height: 50px; object-fit: contain; }
-.item-row .info { flex: 1; }
-.item-row .info .nm { font-weight: 700; }
-.item-row .info .pr { font-size: 12px; color: #ffaa33; font-family: 'Orbitron'; }
-.toggle { width: 50px; height: 26px; background: #3a3d4d; border-radius: 13px; position: relative; cursor: pointer; transition: all 0.3s; }
-.toggle.on { background: linear-gradient(135deg, #4ade80, #16a34a); }
-.toggle::after { content: ''; position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; background: white; border-radius: 50%; transition: all 0.3s; }
-.toggle.on::after { left: 27px; }
-.form-row { margin-bottom: 15px; }
-.form-row label { display: block; font-size: 12px; color: #8a8d9b; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
-.promo-card { background: rgba(255,255,255,0.03); border-radius: 12px; padding: 15px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
-.exchange-form { background: rgba(255,255,255,0.03); border-radius: 12px; padding: 15px; margin-top: 10px; display: none; }
-.exchange-form.show { display: block; }
-.admin-tab { display: none; }
-.admin-tab.active { display: block; }
-.user-row { display: flex; justify-content: space-between; padding: 10px; background: rgba(255,255,255,0.03); border-radius: 10px; margin-bottom: 6px; font-size: 13px; }
-.no-access { text-align: center; padding: 80px 20px; }
-.no-access h2 { font-family: 'Orbitron'; color: #ff4d4d; margin-bottom: 20px; }
+        .progress-section {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 30px 0 20px;
+            position: relative;
+        }
 
-/* Toast */
-.toast { position: fixed; bottom: 20px; right: 20px; background: #1e1e26; border: 1px solid #ff8c00; border-radius: 12px; padding: 15px 25px; color: white; font-weight: 700; z-index: 10000; animation: toastIn 0.3s ease; }
-@keyframes toastIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        .progress-wrapper {
+            position: relative;
+            width: 340px;
+            height: 340px;
+        }
 
-/* Модалка обмена */
-.modal-bg { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); display: none; justify-content: center; align-items: center; z-index: 9999; padding: 20px; }
-.modal-bg.show { display: flex; }
-.modal { background: #1e1e26; border-radius: 20px; padding: 30px; max-width: 500px; width: 100%; border: 1px solid rgba(255,140,0,0.3); }
-.modal h3 { font-family: 'Orbitron'; color: #ff8c00; margin-bottom: 15px; }
-.modal .offer { display: flex; flex-wrap: wrap; gap: 12px; margin: 20px 0; justify-content: center; }
-.modal .offer-item { display: flex; flex-direction: column; align-items: center; gap: 5px; }
-.modal .offer-item img { width: 60px; height: 60px; object-fit: contain; }
-.modal .offer-item .cnt { font-family: 'Orbitron'; font-weight: 900; color: #ffaa33; }
-.modal .actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
+        .progress-svg {
+            width: 100%;
+            height: 100%;
+            transform: rotate(-90deg);
+        }
 
-@media (max-width: 900px) { .admin-layout { grid-template-columns: 1fr; } }
-@media (max-width: 600px) {
-    body { padding: 0; }
-    .app { border-radius: 0; min-height: 100vh; }
-    .progress-wrapper { width: 260px; height: 260px; }
-    .chance-big { font-size: 34px; }
-    .arrow-pointer { margin-top: 16px; border-left-width: 12px; border-right-width: 12px; border-top-width: 24px; }
-    .arrow-pointer::after { top: -30px; left: -5px; width: 10px; height: 10px; }
-    .item-box { min-width: 120px; padding: 12px; }
-    .item-box img { width: 60px; height: 60px; }
-    .upgrade-btn { font-size: 15px; padding: 15px; letter-spacing: 2px; width: calc(100% - 30px); }
-    .inv-card, .target-card, .shop-card { width: 95px; padding: 8px; }
-    .inv-card img, .target-card img, .shop-card img { width: 48px; height: 48px; }
-    .section-title, .target-row, .shop-row, .inventory-row { padding-left: 15px; padding-right: 15px; }
-    .items-row { padding: 15px 15px; gap: 10px; }
-    .top-bar { padding: 12px 15px; }
-    .logo-text { font-size: 22px; }
-    .admin-layout { padding: 10px; }
-}
-</style>
+        .progress-bg {
+            fill: none;
+            stroke: #1e1e26;
+            stroke-width: 24;
+        }
+
+        .progress-bar {
+            fill: none;
+            stroke: url(#progressGradient);
+            stroke-width: 24;
+            stroke-linecap: round;
+            stroke-dasharray: 816;
+            stroke-dashoffset: 816;
+            transition: stroke-dashoffset 0.3s ease;
+            filter: drop-shadow(0 0 15px rgba(255, 140, 0, 0.8));
+        }
+
+        .arrow-container {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            pointer-events: none;
+            z-index: 5;
+            transition: transform 6s cubic-bezier(0.12, 0.8, 0.15, 1);
+            transform-origin: center center;
+        }
+
+        .arrow-pointer {
+            width: 0;
+            height: 0;
+            border-left: 14px solid transparent;
+            border-right: 14px solid transparent;
+            border-top: 28px solid #ff8c00;
+            margin-top: 22px;
+            filter: 
+                drop-shadow(0 0 10px rgba(255, 140, 0, 1))
+                drop-shadow(0 0 20px rgba(255, 140, 0, 0.6));
+            position: relative;
+        }
+
+        .arrow-pointer::after {
+            content: '';
+            position: absolute;
+            top: -34px;
+            left: -6px;
+            width: 12px;
+            height: 12px;
+            background: radial-gradient(circle at 30% 30%, #ffaa33, #ff8c00);
+            border-radius: 50%;
+            box-shadow: 0 0 15px rgba(255, 140, 0, 1);
+        }
+
+        .progress-center {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            z-index: 10;
+        }
+
+        .chance-big {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 48px;
+            font-weight: 900;
+            color: #ff8c00;
+            text-shadow: 0 0 30px rgba(255, 140, 0, 0.8);
+            line-height: 1;
+        }
+
+        .chance-label {
+            font-size: 14px;
+            color: #7ed88a;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-top: 8px;
+            text-shadow: 0 0 10px rgba(120, 200, 130, 0.5);
+            min-height: 18px;
+        }
+
+        .chance-label.medium { color: #ffaa33; text-shadow: 0 0 10px rgba(255, 140, 0, 0.5); }
+        .chance-label.hidden { visibility: hidden; }
+
+        .items-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            padding: 20px 30px;
+        }
+
+        .item-box {
+            background: linear-gradient(145deg, #1e1e26 0%, #15151c 100%);
+            border-radius: 18px;
+            padding: 18px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border: 2px solid rgba(255, 140, 0, 0.4);
+            min-width: 160px;
+            box-shadow: 0 0 30px rgba(255, 140, 0, 0.2);
+            transition: all 0.3s;
+        }
+
+        .item-box .label {
+            font-size: 11px;
+            color: #8a8d9b;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+        }
+
+        .item-box img {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            margin-bottom: 10px;
+            filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.6));
+        }
+
+        .item-box .name {
+            font-size: 13px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 8px;
+            color: #fff;
+            height: 32px;
+            display: flex;
+            align-items: center;
+        }
+
+        .item-box .price {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 14px;
+            font-weight: 800;
+            color: #d0d0d0;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .price-coin {
+            width: 16px;
+            height: 16px;
+            object-fit: contain;
+        }
+
+        .swap-arrow {
+            font-size: 28px;
+            color: #ff8c00;
+            filter: drop-shadow(0 0 10px rgba(255, 140, 0, 0.8));
+            animation: pulseArrow 2s ease-in-out infinite;
+        }
+
+        @keyframes pulseArrow {
+            0%, 100% { transform: scale(1); opacity: 0.7; }
+            50% { transform: scale(1.15); opacity: 1; }
+        }
+
+        .multipliers {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            padding: 0 30px 20px;
+        }
+
+        .mult-btn {
+            flex: 1;
+            max-width: 80px;
+            padding: 12px 0;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.03);
+            color: #8a8d9b;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .mult-btn:hover {
+            background: rgba(255, 140, 0, 0.1);
+            border-color: rgba(255, 140, 0, 0.4);
+            color: #ffaa33;
+        }
+
+        .mult-btn.active {
+            background: linear-gradient(135deg, #ff8c00, #cc7000);
+            border-color: transparent;
+            color: #fff;
+            box-shadow: 0 0 20px rgba(255, 140, 0, 0.5);
+        }
+
+        .upgrade-btn {
+            width: calc(100% - 60px);
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 20px;
+            border-radius: 16px;
+            border: none;
+            background: linear-gradient(135deg, #ff8c00 0%, #ffaa33 50%, #ff8c00 100%);
+            background-size: 200% 200%;
+            color: white;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 20px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            cursor: pointer;
+            box-shadow: 
+                0 10px 30px rgba(255, 140, 0, 0.4),
+                0 0 60px rgba(255, 140, 0, 0.2);
+            transition: all 0.3s;
+            animation: gradientShift 3s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .upgrade-btn:hover:not(:disabled) {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 
+                0 20px 50px rgba(255, 140, 0, 0.6),
+                0 0 100px rgba(255, 140, 0, 0.4);
+        }
+
+        .upgrade-btn:active { transform: scale(0.98); }
+
+        .upgrade-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            background: #3a3d4d;
+            animation: none;
+            box-shadow: none;
+        }
+
+        .section-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 12px;
+            font-weight: 700;
+            color: #8a8d9b;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 10px;
+            padding: 0 30px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-title::before {
+            content: '';
+            width: 4px;
+            height: 14px;
+            background: linear-gradient(180deg, #ff8c00, #cc7000);
+            border-radius: 2px;
+            box-shadow: 0 0 10px rgba(255, 140, 0, 0.8);
+        }
+
+        .section-block { margin-top: 25px; }
+
+        .target-row, .shop-row, .inventory-row {
+            display: flex;
+            gap: 12px;
+            overflow-x: auto;
+            padding: 5px 30px 15px;
+            scroll-behavior: smooth;
+        }
+
+        .target-row::-webkit-scrollbar, .shop-row::-webkit-scrollbar, .inventory-row::-webkit-scrollbar { height: 5px; }
+        .target-row::-webkit-scrollbar-track, .shop-row::-webkit-scrollbar-track, .inventory-row::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.03); border-radius: 3px; }
+        .target-row::-webkit-scrollbar-thumb, .shop-row::-webkit-scrollbar-thumb, .inventory-row::-webkit-scrollbar-thumb { background: linear-gradient(90deg, #ff8c00, #cc7000); border-radius: 3px; }
+
+        .inv-card, .target-card, .shop-card {
+            flex-shrink: 0;
+            background: linear-gradient(145deg, #1e1e26 0%, #15151c 100%);
+            border-radius: 14px;
+            padding: 10px;
+            width: 110px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .inv-card:hover, .target-card:hover:not(.disabled), .shop-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(255, 140, 0, 0.5);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 25px rgba(255, 140, 0, 0.2);
+        }
+
+        .inv-card.selected, .target-card.selected {
+            border-color: #ff8c00;
+            background: linear-gradient(145deg, rgba(255, 140, 0, 0.15) 0%, rgba(255, 140, 0, 0.05) 100%);
+            box-shadow: 0 0 30px rgba(255, 140, 0, 0.5);
+        }
+
+        .target-card.disabled {
+            opacity: 0.25;
+            cursor: not-allowed;
+            filter: grayscale(1);
+        }
+
+        .inv-card img, .target-card img, .shop-card img {
+            width: 55px;
+            height: 55px;
+            object-fit: contain;
+            margin-bottom: 6px;
+            pointer-events: none;
+        }
+
+        .inv-card .name, .target-card .name, .shop-card .name {
+            font-size: 10px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 4px;
+            height: 24px;
+            overflow: hidden;
+            color: #e5e7ef;
+            pointer-events: none;
+        }
+
+        .inv-card .price, .target-card .price, .shop-card .price {
+            font-size: 11px;
+            color: #ffaa33;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            font-family: 'Orbitron', sans-serif;
+            pointer-events: none;
+        }
+
+        .buy-btn {
+            width: 100%;
+            padding: 6px;
+            border-radius: 8px;
+            border: none;
+            background: linear-gradient(135deg, #ff8c00, #cc7000);
+            color: white;
+            font-weight: 800;
+            font-size: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            font-family: 'Orbitron', sans-serif;
+            margin-top: 6px;
+            position: relative;
+            z-index: 5;
+        }
+
+        .buy-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 140, 0, 0.6);
+        }
+
+        .buy-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            background: #3a3d4d;
+        }
+
+        /* Кнопка ПРОДАТЬ в инвентаре */
+        .sell-btn {
+            width: 100%;
+            padding: 7px;
+            border-radius: 8px;
+            border: 1px solid rgba(120, 200, 130, 0.3);
+            background: rgba(120, 200, 130, 0.1);
+            color: #7ed88a;
+            font-weight: 800;
+            font-size: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            font-family: 'Orbitron', sans-serif;
+            margin-top: 6px;
+            letter-spacing: 1px;
+            position: relative;
+            z-index: 5;
+        }
+
+        .sell-btn:hover:not(:disabled) {
+            background: rgba(120, 200, 130, 0.3);
+            border-color: rgba(120, 200, 130, 0.6);
+            box-shadow: 0 0 20px rgba(120, 200, 130, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .sell-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .empty-inv {
+            color: #4a4d5e;
+            font-size: 13px;
+            text-align: center;
+            width: 100%;
+            padding: 20px;
+            font-weight: 600;
+        }
+
+        .selectable {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            cursor: pointer;
+        }
+
+        .locked {
+            pointer-events: none !important;
+            opacity: 0.4 !important;
+            filter: grayscale(0.5) !important;
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 0; }
+            .app { border-radius: 0; min-height: 100vh; }
+            .progress-wrapper { width: 280px; height: 280px; }
+            .chance-big { font-size: 38px; }
+            .arrow-pointer { margin-top: 18px; }
+            .item-box { min-width: 130px; padding: 14px; }
+            .item-box img { width: 65px; height: 65px; }
+            .mult-btn { font-size: 12px; padding: 10px 0; }
+            .upgrade-btn { font-size: 16px; padding: 16px; letter-spacing: 2px; }
+            .inv-card, .target-card, .shop-card { width: 95px; padding: 8px; }
+            .inv-card img, .target-card img, .shop-card img { width: 48px; height: 48px; }
+            .section-title, .target-row, .shop-row, .inventory-row { padding-left: 15px; padding-right: 15px; }
+            .items-row { padding: 15px 15px; gap: 10px; }
+            .multipliers { padding: 0 15px 15px; }
+            .upgrade-btn { width: calc(100% - 30px); }
+            .top-bar { padding: 12px 15px; }
+            .logo-text { font-size: 22px; }
+        }
+    </style>
 </head>
 <body>
 
+<!-- 🎵 Фоновая музыка (играет вечно по кругу) -->
+<audio id="bgMusic" loop autoplay>
+    <source src="https://raw.githubusercontent.com/saintezz/ggbrainXv2/main/8bit.mp3" type="audio/mpeg">
+    Ваш браузер не поддерживает аудио.
+</audio>
+
 <div class="bg-layer"></div>
 
-<div class="wrapper">
-    <div class="app">
-        <div class="top-bar">
-            <div class="logo-text" onclick="showPage('game')">GGbrainX</div>
-            <div class="top-right">
-                <div class="nav-link" id="navGame" onclick="showPage('game')">🎰 Игра</div>
-                <div class="nav-link" id="navProfile" onclick="showPage('profile')">👤 Профиль</div>
-                <div class="nav-link" id="navAdmin" onclick="showPage('admin')" style="display:none;">🔧 Админ</div>
-                <div class="balance">
-                    <img src="https://github.com/saintezz/saintbetW/blob/main/%D0%BC%D0%BE%D0%BD%D0%B5%D1%82%D0%B0.png?raw=true" class="coin-icon">
-                    <span id="balanceDisplay">1000</span>
-                </div>
-                <div class="avatar" id="avatarBtn" onclick="showPage('profile')">P</div>
+<div class="app">
+    <div class="top-bar">
+        <div class="logo-text">GGbrainX</div>
+        <div class="top-right">
+            <div class="balance">
+                <img src="https://github.com/saintezz/saintbetW/blob/main/%D0%BC%D0%BE%D0%BD%D0%B5%D1%82%D0%B0.png?raw=true" alt="coin" class="coin-icon">
+                <span id="balanceDisplay">1 000</span>
             </div>
+            <div class="avatar">P</div>
         </div>
+    </div>
 
-        <!-- ============ СТРАНИЦА: ИГРА ============ -->
-        <div class="page active" id="pageGame">
-            <div class="progress-section">
-                <div class="progress-wrapper">
-                    <svg class="progress-svg" viewBox="0 0 340 340">
-                        <defs>
-                            <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" stop-color="#ff8c00" />
-                                <stop offset="100%" stop-color="#ffaa33" />
-                            </linearGradient>
-                        </defs>
-                        <circle class="progress-bg" cx="170" cy="170" r="130"></circle>
-                        <circle class="progress-bar" id="progressBar" cx="170" cy="170" r="130"></circle>
-                    </svg>
-                    <div class="arrow-container" id="arrowContainer">
-                        <div class="arrow-pointer"></div>
-                    </div>
-                    <div class="progress-center">
-                        <div class="chance-big" id="chanceBig">0%</div>
-                        <div class="chance-label hidden" id="chanceLabel">—</div>
-                    </div>
-                </div>
+    <div class="progress-section">
+        <div class="progress-wrapper">
+            <svg class="progress-svg" viewBox="0 0 340 340">
+                <defs>
+                    <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#ff8c00" />
+                        <stop offset="100%" stop-color="#ffaa33" />
+                    </linearGradient>
+                </defs>
+                <circle class="progress-bg" cx="170" cy="170" r="130"></circle>
+                <circle class="progress-bar" id="progressBar" cx="170" cy="170" r="130"></circle>
+            </svg>
+            <div class="arrow-container" id="arrowContainer">
+                <div class="arrow-pointer"></div>
             </div>
-
-            <div class="items-row">
-                <div class="item-box">
-                    <div class="label">Твой предмет</div>
-                    <img id="sourceImg" src="" style="display:none">
-                    <div class="name" id="sourceName">—</div>
-                    <div class="price" id="sourcePrice"></div>
-                </div>
-                <div class="swap-arrow">➜</div>
-                <div class="item-box">
-                    <div class="label">Цель</div>
-                    <img id="targetImg" src="" style="display:none">
-                    <div class="name" id="targetName">—</div>
-                    <div class="price" id="targetPrice"></div>
-                </div>
-            </div>
-
-            <button class="upgrade-btn" id="upgradeBtn" disabled>Апгрейд - 0%</button>
-
-            <div class="section-block">
-                <div class="section-title">Инвентарь</div>
-                <div class="inventory-row" id="inventoryRow">
-                    <div class="empty-inv">Инвентарь пуст</div>
-                </div>
-            </div>
-            <div class="section-block">
-                <div class="section-title">Выбери цель</div>
-                <div class="target-row" id="targetRow"></div>
-            </div>
-            <div class="section-block">
-                <div class="section-title">Магазин</div>
-                <div class="shop-row" id="shopRow"></div>
-            </div>
-        </div>
-
-        <!-- ============ СТРАНИЦА: ПРОФИЛЬ ============ -->
-        <div class="page" id="pageProfile">
-            <div class="profile-header">
-                <div class="avatar-big" id="pAvatar">?</div>
-                <div class="pinfo">
-                    <div class="pnick" id="pNick">...</div>
-                    <div class="pmeta">ID: <strong id="pId">...</strong> • Баланс: <strong id="pBal">0</strong> • Регистрация: <strong id="pCreated">...</strong></div>
-                </div>
-            </div>
-
-            <div class="stat-grid">
-                <div class="stat-card"><div class="lbl">Всего апгрейдов</div><div class="val" id="stTotal">0</div></div>
-                <div class="stat-card"><div class="lbl">Успешных</div><div class="val" id="stSuccess">0</div></div>
-                <div class="stat-card"><div class="lbl">Провальных</div><div class="val" id="stFail">0</div></div>
-                <div class="stat-card"><div class="lbl">Заработано</div><div class="val" id="stEarned">0</div></div>
-                <div class="stat-card"><div class="lbl">Потрачено</div><div class="val" id="stSpent">0</div></div>
-                <div class="stat-card"><div class="lbl">Предметов</div><div class="val" id="stInv">0</div></div>
-            </div>
-
-            <div class="best-drop" id="bestDrop">
-                <div style="font-family:'Orbitron'; color:#8a8d9b;">Лучший дроп появится после первого выигрыша</div>
-            </div>
-
-            <div class="section">
-                <h3>Telegram</h3>
-                <div class="tg-block">
-                    <input id="tgInput" placeholder="@username">
-                    <button class="btn" onclick="saveTelegram()">Сохранить</button>
-                </div>
-                <p style="font-size:12px;color:#8a8d9b;margin-top:8px;">Укажи свой Telegram — админ свяжется для вывода</p>
-            </div>
-
-            <div class="section">
-                <h3>Промокод</h3>
-                <div class="promo-block">
-                    <input id="promoInput" placeholder="ВВЕДИ ПРОМОКОД" maxlength="32">
-                    <button class="btn" onclick="activatePromo()">Активировать</button>
-                </div>
-            </div>
-
-            <div class="section">
-                <h3>Вывод предметов</h3>
-                <div class="wd-grid" id="wdGrid">
-                    <div style="color:#4a4d5e;padding:20px;">Загрузка...</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- ============ СТРАНИЦА: АДМИН ============ -->
-        <div class="page" id="pageAdmin">
-            <div id="adminLoading" style="text-align:center; padding:80px 20px; font-family:'Orbitron'; color:#ff8c00; font-size:18px;">
-                Проверка доступа...
-            </div>
-            <div id="adminNoAccess" class="no-access" style="display:none;">
-                <h2>🚫 Доступ запрещён</h2>
-                <p style="color:#8a8d9b; margin-bottom:15px;">Админ-панель доступна только для <strong style="color:#ff8c00;">@saintezz7</strong></p>
-                <p style="color:#8a8d9b; font-size:13px;">Зайди в профиль и укажи свой Telegram, если ты админ.</p>
-            </div>
-            <div id="adminContent" style="display:none;">
-                <div class="admin-layout">
-                    <div class="sidebar">
-                        <a class="active" onclick="showAdminTab('withdraw', event)">📦 Каталог вывода</a>
-                        <a onclick="showAdminTab('exchange', event)">🔄 Обмены</a>
-                        <a onclick="showAdminTab('promo', event)">🎁 Промокоды</a>
-                        <a onclick="showAdminTab('requests', event)">📋 Заявки</a>
-                        <a onclick="showAdminTab('users', event)">👥 Пользователи</a>
-                    </div>
-                    <div class="content-admin">
-                        <div id="adminTab-withdraw" class="admin-tab active">
-                            <h2>📦 Каталог для вывода</h2>
-                            <p style="color:#8a8d9b; margin-bottom:15px;">Включи предметы для прямого вывода</p>
-                            <div id="withdrawList"></div>
-                        </div>
-                        <div id="adminTab-exchange" class="admin-tab">
-                            <h2>🔄 Правила обмена</h2>
-                            <p style="color:#8a8d9b; margin-bottom:15px;">Если предмета нет в каталоге — предложи обмен</p>
-                            <div id="exchangeList"></div>
-                        </div>
-                        <div id="adminTab-promo" class="admin-tab">
-                            <h2>🎁 Промокоды</h2>
-                            <div class="form-row"><label>Код</label><input class="admin-input" id="promoCode" placeholder="НАПРИМЕР: BRAINROT2025" style="text-transform:uppercase;"></div>
-                            <div class="form-row"><label>Монеты</label><input class="admin-input" id="promoCoins" type="number" value="100"></div>
-                            <div class="form-row"><label>Использований</label><input class="admin-input" id="promoUses" type="number" value="10"></div>
-                            <button class="btn btn-green" onclick="createPromo()">Создать</button>
-                            <div id="promoList" style="margin-top:20px;"></div>
-                        </div>
-                        <div id="adminTab-requests" class="admin-tab">
-                            <h2>📋 Заявки на вывод</h2>
-                            <div id="requestsList"></div>
-                        </div>
-                        <div id="adminTab-users" class="admin-tab">
-                            <h2>👥 Пользователи</h2>
-                            <div id="usersList"></div>
-                        </div>
-                    </div>
-                </div>
+            <div class="progress-center">
+                <div class="chance-big" id="chanceBig">0%</div>
+                <div class="chance-label hidden" id="chanceLabel">—</div>
             </div>
         </div>
     </div>
-</div>
 
-<!-- Модалка обмена -->
-<div class="modal-bg" id="exchangeModal">
-    <div class="modal">
-        <h3>⚠️ Предмет недоступен для вывода</h3>
-        <p style="color:#8a8d9b;">Такого предмета нет в каталоге. Админ предлагает обмен:</p>
-        <div class="offer" id="offerContent"></div>
-        <div class="actions">
-            <button class="btn btn-dark" onclick="closeModal()">Отмена</button>
-            <button class="btn btn-green" onclick="confirmExchange()">Обменять</button>
+    <div class="items-row">
+        <div class="item-box">
+            <div class="label">Твой предмет</div>
+            <img id="sourceImg" src="" alt="" style="display:none">
+            <div class="name" id="sourceName">—</div>
+            <div class="price" id="sourcePrice"></div>
         </div>
+        <div class="swap-arrow">➜</div>
+        <div class="item-box">
+            <div class="label">Цель</div>
+            <img id="targetImg" src="" alt="" style="display:none">
+            <div class="name" id="targetName">—</div>
+            <div class="price" id="targetPrice"></div>
+        </div>
+    </div>
+
+    <div class="multipliers">
+        <button class="mult-btn" data-mult="1.5">x1.5</button>
+        <button class="mult-btn" data-mult="2">x2</button>
+        <button class="mult-btn active" data-mult="3">x3</button>
+        <button class="mult-btn" data-mult="5">x5</button>
+        <button class="mult-btn" data-mult="10">x10</button>
+    </div>
+
+    <button class="upgrade-btn" id="upgradeBtn" disabled>Апгрейд - 0%</button>
+
+    <div class="section-block">
+        <div class="section-title">Инвентарь</div>
+        <div class="inventory-row" id="inventoryRow">
+            <div class="empty-inv">Инвентарь пуст</div>
+        </div>
+    </div>
+
+    <div class="section-block">
+        <div class="section-title">Выбери цель</div>
+        <div class="target-row" id="targetRow"></div>
+    </div>
+
+    <div class="section-block">
+        <div class="section-title">Магазин</div>
+        <div class="shop-row" id="shopRow"></div>
     </div>
 </div>
 
 <script>
-const COIN_IMG = 'https://github.com/saintezz/saintbetW/blob/main/%D0%BC%D0%BE%D0%BD%D0%B5%D1%82%D0%B0.png?raw=true';
+    const COIN_IMG = 'https://github.com/saintezz/saintbetW/blob/main/%D0%BC%D0%BE%D0%BD%D0%B5%D1%82%D0%B0.png?raw=true';
 
-let USER_ID = localStorage.getItem('ggbx_uid');
-if (!USER_ID) {
-    USER_ID = 'u_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8);
-    localStorage.setItem('ggbx_uid', USER_ID);
-}
+    const ITEMS = [
+        { id: 'cupid', name: 'Cupid Wings', price: 34, img: 'https://github.com/forerer-afk/brainroterX/blob/main/cupid-wings.png?raw=true' },
+        { id: 'garama', name: 'Garama and Madundung', price: 41, img: 'https://github.com/forerer-afk/brainroterX/blob/main/garama.png?raw=true' },
+        { id: 'burguro', name: 'Burguro and Fryuro', price: 70, img: 'https://github.com/forerer-afk/brainroterX/blob/main/burguru.png?raw=true' },
+        { id: 'celestial', name: 'Celestial Pegasus', price: 93, img: 'https://github.com/forerer-afk/brainroterX/blob/main/celestialpegasus.png?raw=true' },
+        { id: 'cooki', name: 'Cooki and Milki', price: 130, img: 'https://github.com/forerer-afk/brainroterX/blob/main/cookiandmilki.png?raw=true' },
+        { id: 'cerberus', name: 'Cerberus', price: 155, img: 'https://github.com/forerer-afk/brainroterX/blob/main/cerberus.png?raw=true' },
+        { id: 'globba', name: 'Globba Steppa', price: 164, img: 'https://github.com/forerer-afk/brainroterX/blob/main/globastepa.png?raw=true' },
+        { id: 'rubiko', name: 'Rubiko and Kubiko', price: 395, img: 'https://github.com/forerer-afk/brainroterX/blob/main/Rubiko_and_Kubiko.webp?raw=true' },
+        { id: 'lossecret', name: 'Los Secret Combinasionas', price: 419, img: 'https://github.com/forerer-afk/brainroterX/blob/main/lossecretcombination.png?raw=true' },
+        { id: 'dragon', name: 'Dragon Cannelloni', price: 890, img: 'https://github.com/forerer-afk/brainroterX/blob/main/dragoncannelloni.png?raw=true' },
+        { id: 'hydra', name: 'Hydra Dragon Cannelloni', price: 1220, img: 'https://github.com/forerer-afk/brainroterX/blob/main/hydragoncannelloni.png?raw=true' }
+    ];
 
-let ITEMS = [];
-let ME = null;
-let isAdmin = false;
-let srcId = null, tgtId = null, spinning = false;
-let pendingExchange = null;
-let adminAllItems = [];
+    const MAX_CHANCE = 70;
+    const SPIN_DURATION = 6000;
+    const CIRCUMFERENCE = 2 * Math.PI * 130;
 
-// ============================================================
-// API helper
-// ============================================================
-async function api(url, method = 'GET', body = null, extraHeaders = {}) {
-    const opt = { method, headers: { 'Content-Type': 'application/json', ...extraHeaders } };
-    if (body) opt.body = JSON.stringify(body);
-    const r = await fetch(url, opt);
-    return r.json();
-}
+    let balance = 1000;
+    let inventory = [];
+    let selectedSourceId = null;
+    let selectedTargetId = null;
+    let currentMultiplier = 3;
+    let isSpinning = false;
 
-function toast(msg) {
-    const t = document.createElement('div');
-    t.className = 'toast';
-    t.innerText = msg;
-    document.body.appendChild(t);
-    setTimeout(() => t.remove(), 3000);
-}
+    const balanceDisplay = document.getElementById('balanceDisplay');
+    const inventoryRow = document.getElementById('inventoryRow');
+    const targetRow = document.getElementById('targetRow');
+    const shopRow = document.getElementById('shopRow');
+    const progressBar = document.getElementById('progressBar');
+    const arrowContainer = document.getElementById('arrowContainer');
+    const chanceBig = document.getElementById('chanceBig');
+    const chanceLabel = document.getElementById('chanceLabel');
+    const sourceImg = document.getElementById('sourceImg');
+    const sourceName = document.getElementById('sourceName');
+    const sourcePrice = document.getElementById('sourcePrice');
+    const targetImg = document.getElementById('targetImg');
+    const targetName = document.getElementById('targetName');
+    const targetPrice = document.getElementById('targetPrice');
+    const upgradeBtn = document.getElementById('upgradeBtn');
 
-// ============================================================
-// Навигация по страницам
-// ============================================================
-function showPage(name) {
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-    document.getElementById('page' + name.charAt(0).toUpperCase() + name.slice(1)).classList.add('active');
-    const nav = document.getElementById('nav' + name.charAt(0).toUpperCase() + name.slice(1));
-    if (nav) nav.classList.add('active');
-    if (name === 'profile') loadProfile();
-    if (name === 'admin') loadAdmin();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-}
+    function updateBalance() { balanceDisplay.innerText = balance.toLocaleString('ru-RU'); }
+    function getItemById(id) { return ITEMS.find(item => item.id === id); }
 
-// ============================================================
-// Инициализация пользователя
-// ============================================================
-async function initUser() {
-    const r = await api('/api/user/init', 'POST', { userId: USER_ID });
-    ME = r.user;
-    isAdmin = r.isAdmin;
-    if (isAdmin) document.getElementById('navAdmin').style.display = 'block';
-    document.getElementById('avatarBtn').innerText = (ME.nickname || 'P').charAt(0).toUpperCase();
-    updateBalanceDisplay();
-}
-
-function updateBalanceDisplay() {
-    if (ME) document.getElementById('balanceDisplay').innerText = (ME.balance || 0).toLocaleString('ru-RU');
-}
-
-async function loadItems() {
-    const r = await api('/api/items');
-    ITEMS = r.items;
-    renderShop();
-    renderTargets();
-}
-
-function getItem(id) { return ITEMS.find(i => i.id === id); }
-
-// ============================================================
-// ИГРА
-// ============================================================
-const MAX_CHANCE = 70;
-const SPIN_DURATION = 6000;
-const CIRCUMFERENCE = 2 * Math.PI * 130;
-
-const progressBar = document.getElementById('progressBar');
-const arrowContainer = document.getElementById('arrowContainer');
-const chanceBig = document.getElementById('chanceBig');
-const chanceLabel = document.getElementById('chanceLabel');
-const sourceImg = document.getElementById('sourceImg');
-const sourceName = document.getElementById('sourceName');
-const sourcePrice = document.getElementById('sourcePrice');
-const targetImg = document.getElementById('targetImg');
-const targetName = document.getElementById('targetName');
-const targetPrice = document.getElementById('targetPrice');
-const upgradeBtn = document.getElementById('upgradeBtn');
-const inventoryRow = document.getElementById('inventoryRow');
-const targetRow = document.getElementById('targetRow');
-const shopRow = document.getElementById('shopRow');
-
-function enableWheelScroll(el) {
-    el.addEventListener('wheel', (e) => {
-        if (el.scrollWidth <= el.clientWidth) return;
-        e.preventDefault();
-        el.scrollLeft += e.deltaY > 0 ? 300 : -300;
-    }, { passive: false });
-}
-
-function renderShop() {
-    shopRow.innerHTML = ITEMS.map(item => `
-        <div class="shop-card">
-            <img src="${item.img}" alt="${item.name}" onerror="this.src='https://via.placeholder.com/60?text=?'">
-            <div class="name">${item.name}</div>
-            <div class="price"><img src="${COIN_IMG}" class="price-coin" style="width:12px;height:12px;">${item.price}</div>
-            <button class="buy-btn" onclick="buyItem('${item.id}')" ${ME.balance < item.price || spinning ? 'disabled' : ''}>Купить</button>
-        </div>
-    `).join('');
-}
-
-function buyItem(id) {
-    if (spinning) return;
-    const item = getItem(id);
-    if (!item || ME.balance < item.price) return;
-    ME.balance -= item.price;
-    ME.inventory.push(id);
-    ME.stats.totalSpent = (ME.stats.totalSpent || 0) + item.price;
-    updateBalanceDisplay();
-    renderShop(); renderInventory(); updateUpgradeScreen();
-    saveUserToServer();
-}
-
-function sellItem(id) {
-    if (spinning) return;
-    const index = ME.inventory.indexOf(id);
-    if (index === -1) return;
-    const item = getItem(id);
-    ME.inventory.splice(index, 1);
-    ME.balance += item.price;
-    ME.stats.totalEarned = (ME.stats.totalEarned || 0) + item.price;
-    if (srcId === id && !ME.inventory.includes(id)) { srcId = null; tgtId = null; }
-    updateBalanceDisplay();
-    renderInventory(); renderTargets(); renderShop(); updateUpgradeScreen();
-    saveUserToServer();
-}
-
-function renderInventory() {
-    if (!ME.inventory.length) {
-        inventoryRow.innerHTML = '<div class="empty-inv">Инвентарь пуст</div>';
-        return;
+    function enableWheelScroll(el) {
+        el.addEventListener('wheel', (e) => {
+            if (el.scrollWidth <= el.clientWidth) return;
+            e.preventDefault();
+            el.scrollLeft += e.deltaY > 0 ? 300 : -300;
+        }, { passive: false });
     }
-    const cnt = {};
-    ME.inventory.forEach(id => cnt[id] = (cnt[id] || 0) + 1);
-    inventoryRow.innerHTML = Object.keys(cnt).map(id => {
-        const item = getItem(id);
-        if (!item) return '';
-        const count = cnt[id];
-        const sel = srcId === id;
-        return `
-            <div class="inv-card ${sel ? 'selected' : ''}">
-                <div class="selectable" onclick="selectSource('${id}')">
-                    <img src="${item.img}">
-                    <div class="name">${item.name}</div>
-                    <div class="price"><img src="${COIN_IMG}" class="price-coin" style="width:12px;height:12px;">${item.price}${count > 1 ? ' (x' + count + ')' : ''}</div>
-                </div>
-                <button class="sell-btn" onclick="event.stopPropagation(); sellItem('${id}')" ${spinning ? 'disabled' : ''}>Продать</button>
-            </div>
-        `;
-    }).join('');
-}
 
-function selectSource(id) {
-    if (spinning) return;
-    if (!ME.inventory.includes(id)) return;
-    srcId = id; tgtId = null;
-    renderInventory(); renderTargets(); updateUpgradeScreen();
-}
+    document.querySelectorAll('.mult-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            if (isSpinning) return;
+            document.querySelectorAll('.mult-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            currentMultiplier = parseFloat(btn.dataset.mult);
+            updateUpgradeScreen();
+        });
+    });
 
-function renderTargets() {
-    const src = srcId ? getItem(srcId) : null;
-    targetRow.innerHTML = ITEMS.map(item => {
-        const sel = tgtId === item.id;
-        const dis = src && item.price <= src.price;
-        return `
-            <div class="target-card ${sel ? 'selected' : ''} ${dis ? 'disabled' : ''}" onclick="${dis ? '' : `selectTarget('${item.id}')`}">
-                <img src="${item.img}">
+    function renderShop() {
+        shopRow.innerHTML = ITEMS.map(item => `
+            <div class="shop-card">
+                <img src="${item.img}" alt="${item.name}" onerror="this.src='https://via.placeholder.com/60?text=?'">
                 <div class="name">${item.name}</div>
-                <div class="price"><img src="${COIN_IMG}" class="price-coin" style="width:12px;height:12px;">${item.price}</div>
+                <div class="price"><img src="${COIN_IMG}" class="price-coin" alt="coin" style="width:12px;height:12px;">${item.price}</div>
+                <button class="buy-btn" onclick="buyItem('${item.id}')" ${balance < item.price || isSpinning ? 'disabled' : ''}>Купить</button>
             </div>
-        `;
-    }).join('');
-}
-
-function selectTarget(id) {
-    if (spinning) return;
-    const src = srcId ? getItem(srcId) : null;
-    const tgt = getItem(id);
-    if (src && tgt.price <= src.price) return;
-    tgtId = id;
-    renderTargets(); updateUpgradeScreen();
-}
-
-function calculateChance() {
-    const s = srcId ? getItem(srcId) : null;
-    const t = tgtId ? getItem(tgtId) : null;
-    if (!s || !t || t.price <= s.price) return 0;
-    let c = (s.price / t.price) * 100;
-    if (c > MAX_CHANCE) c = MAX_CHANCE;
-    return c;
-}
-
-function updateUpgradeScreen() {
-    const s = srcId ? getItem(srcId) : null;
-    const t = tgtId ? getItem(tgtId) : null;
-
-    if (s) {
-        sourceImg.src = s.img; sourceImg.style.display = 'block';
-        sourceName.innerText = s.name;
-        sourcePrice.innerHTML = '<img src="' + COIN_IMG + '" class="price-coin">' + s.price;
-    } else { sourceImg.style.display = 'none'; sourceName.innerText = '—'; sourcePrice.innerHTML = ''; }
-
-    if (t) {
-        targetImg.src = t.img; targetImg.style.display = 'block';
-        targetName.innerText = t.name;
-        targetPrice.innerHTML = '<img src="' + COIN_IMG + '" class="price-coin">' + t.price;
-    } else { targetImg.style.display = 'none'; targetName.innerText = '—'; targetPrice.innerHTML = ''; }
-
-    const c = calculateChance();
-    const d = Math.floor(c);
-    progressBar.style.strokeDashoffset = CIRCUMFERENCE - (c / 100) * CIRCUMFERENCE;
-    arrowContainer.style.transform = 'rotate(' + (c / 100) * 360 + 'deg)';
-    chanceBig.innerText = d + '%';
-
-    if (d >= 60) { chanceLabel.innerText = 'ВЫСОКИЙ ШАНС'; chanceLabel.className = 'chance-label'; }
-    else if (d >= 30) { chanceLabel.innerText = 'СРЕДНИЙ ШАНС'; chanceLabel.className = 'chance-label medium'; }
-    else { chanceLabel.innerText = ''; chanceLabel.className = 'chance-label hidden'; }
-
-    if (s && t && c > 0 && !spinning) {
-        upgradeBtn.disabled = false;
-        upgradeBtn.innerText = 'Апгрейд - ' + d + '%';
-    } else {
-        upgradeBtn.disabled = true;
-        upgradeBtn.innerText = 'Апгрейд - 0%';
+        `).join('');
     }
-}
 
-upgradeBtn.addEventListener('click', () => {
-    if (spinning) return;
-    const s = getItem(srcId), t = getItem(tgtId);
-    if (!s || !t) return;
-    const c = calculateChance();
-    if (c <= 0) return;
+    function buyItem(id) {
+        if (isSpinning) return;
+        const item = getItemById(id);
+        if (!item || balance < item.price) return;
+        balance -= item.price;
+        inventory.push(id);
+        updateBalance();
+        renderShop();
+        renderInventory();
+        updateUpgradeScreen();
+    }
 
-    spinning = true;
-    upgradeBtn.disabled = true;
-    upgradeBtn.innerText = 'КРУТИМ...';
-    inventoryRow.classList.add('locked');
-    targetRow.classList.add('locked');
-    shopRow.classList.add('locked');
-
-    const totalRotation = 360 * 8 + Math.random() * 360;
-    arrowContainer.style.transition = 'transform ' + SPIN_DURATION + 'ms cubic-bezier(0.12,0.8,0.15,1)';
-    arrowContainer.style.transform = 'rotate(' + totalRotation + 'deg)';
-
-    const successAngle = (c / 100) * 360;
-    const finalAngle = totalRotation % 360;
-    const win = finalAngle <= successAngle;
-
-    setTimeout(() => {
-        if (win) {
-            const idx = ME.inventory.indexOf(srcId);
-            if (idx > -1) ME.inventory.splice(idx, 1);
-            ME.inventory.push(tgtId);
-            ME.stats.upgradesSuccess = (ME.stats.upgradesSuccess || 0) + 1;
-            api('/api/drop/record', 'POST', { userId: USER_ID, itemId: tgtId }).then(r => { if (r.bestDrop) ME.bestDrop = r.bestDrop; });
-        } else {
-            const idx = ME.inventory.indexOf(srcId);
-            if (idx > -1) ME.inventory.splice(idx, 1);
-            ME.stats.upgradesFail = (ME.stats.upgradesFail || 0) + 1;
+    // ===== ПРОДАЖА ИЗ ИНВЕНТАРЯ =====
+    window.sellItem = function(id) {
+        if (isSpinning) return;
+        const index = inventory.indexOf(id);
+        if (index === -1) return;
+        const item = getItemById(id);
+        if (!item) return;
+        
+        // Продаём за полную стоимость
+        const sellPrice = item.price;
+        inventory.splice(index, 1);
+        balance += sellPrice;
+        
+        // Сбрасываем выбор если предмет был выбран
+        if (selectedSourceId === id && !inventory.includes(id)) {
+            selectedSourceId = null;
+            selectedTargetId = null;
         }
-        srcId = null; tgtId = null; spinning = false;
-        arrowContainer.style.transition = 'none';
-        arrowContainer.style.transform = 'rotate(0deg)';
-        inventoryRow.classList.remove('locked');
-        targetRow.classList.remove('locked');
-        shopRow.classList.remove('locked');
-        updateBalanceDisplay();
-        renderInventory(); renderTargets(); renderShop(); updateUpgradeScreen();
-        saveUserToServer();
-    }, SPIN_DURATION + 100);
-});
+        
+        updateBalance();
+        renderInventory();
+        renderTargets();
+        renderShop();
+        updateUpgradeScreen();
+    };
 
-let saveTimer = null;
-function saveUserToServer() {
-    clearTimeout(saveTimer);
-    saveTimer = setTimeout(async () => {
-        await api('/api/user/update', 'POST', {
-            userId: USER_ID,
-            balance: ME.balance,
-            inventory: ME.inventory,
-            stats: ME.stats,
-            bestDrop: ME.bestDrop
-        });
-    }, 500);
-}
-
-// ============================================================
-// ПРОФИЛЬ
-// ============================================================
-async function loadProfile() {
-    const r = await api('/api/user/init', 'POST', { userId: USER_ID });
-    ME = r.user;
-    isAdmin = r.isAdmin;
-    if (isAdmin) document.getElementById('navAdmin').style.display = 'block';
-
-    document.getElementById('pNick').innerText = ME.nickname;
-    document.getElementById('pId').innerText = ME.userId;
-    document.getElementById('pBal').innerText = ME.balance.toLocaleString('ru-RU');
-    document.getElementById('pCreated').innerText = new Date(ME.createdAt).toLocaleDateString('ru-RU');
-    document.getElementById('pAvatar').innerText = (ME.nickname || 'P').charAt(0).toUpperCase();
-    document.getElementById('tgInput').value = ME.telegram || '';
-
-    document.getElementById('stTotal').innerText = ME.stats.upgradesTotal || 0;
-    document.getElementById('stSuccess').innerText = ME.stats.upgradesSuccess || 0;
-    document.getElementById('stFail').innerText = ME.stats.upgradesFail || 0;
-    document.getElementById('stEarned').innerText = (ME.stats.totalEarned || 0).toLocaleString('ru-RU');
-    document.getElementById('stSpent').innerText = (ME.stats.totalSpent || 0).toLocaleString('ru-RU');
-    document.getElementById('stInv').innerText = ME.inventory.length;
-
-    const bd = document.getElementById('bestDrop');
-    if (ME.bestDrop) {
-        bd.innerHTML = `
-            <img src="${ME.bestDrop.img}" onerror="this.src='https://via.placeholder.com/100'">
-            <div class="info">
-                <div class="lbl">Лучший дроп за всё время</div>
-                <div class="nm">${ME.bestDrop.name}</div>
-                <div class="pr"><img src="${COIN_IMG}" style="width:18px;height:18px;">${ME.bestDrop.price}</div>
-            </div>
-        `;
-    }
-
-    loadWithdrawCatalog();
-    updateBalanceDisplay();
-}
-
-async function saveTelegram() {
-    const tg = document.getElementById('tgInput').value.trim();
-    if (!tg) { toast('❌ Введи ник'); return; }
-    const r = await api('/api/user/telegram', 'POST', { userId: USER_ID, telegram: tg });
-    if (r.error) { toast('❌ ' + r.error); return; }
-    toast('✅ Telegram сохранён');
-    isAdmin = r.isAdmin;
-    if (isAdmin) document.getElementById('navAdmin').style.display = 'block';
-    loadProfile();
-}
-
-async function loadWithdrawCatalog() {
-    const r = await api('/api/withdraw/catalog');
-    const grid = document.getElementById('wdGrid');
-    if (!r.catalog || r.catalog.length === 0) {
-        grid.innerHTML = '<div style="color:#4a4d5e;padding:20px;">Каталог пока пуст</div>';
-        return;
-    }
-    grid.innerHTML = r.catalog.map(w => `
-        <div class="wd-item">
-            <img src="${w.item.img}">
-            <div class="nm">${w.item.name}</div>
-            <div style="font-size:11px;color:#ffaa33;font-family:'Orbitron';margin-bottom:8px;display:flex;align-items:center;gap:3px;">
-                <img src="${COIN_IMG}" style="width:12px;height:12px;">${w.item.price}
-            </div>
-            <button onclick="requestWithdraw('${w.itemId}')">Вывести</button>
-        </div>
-    `).join('');
-}
-
-async function activatePromo() {
-    const code = document.getElementById('promoInput').value.trim();
-    if (!code) return;
-    const r = await api('/api/promo/activate', 'POST', { userId: USER_ID, code });
-    if (r.error) { toast('❌ ' + r.error); return; }
-    toast('✅ Промокод активирован!');
-    document.getElementById('promoInput').value = '';
-    loadProfile();
-}
-
-async function requestWithdraw(itemId) {
-    const r = await api('/api/withdraw/request', 'POST', { userId: USER_ID, itemId });
-    if (r.error) { toast('❌ ' + r.error); return; }
-    if (r.type === 'direct') { toast('✅ Заявка создана'); loadProfile(); }
-    else if (r.type === 'exchange') {
-        pendingExchange = itemId;
-        const offer = r.offer;
-        let html = '';
-        if (offer.coins) html += `<div class="offer-item"><img src="${COIN_IMG}"><div class="cnt">+${offer.coins}</div><div style="font-size:10px;color:#8a8d9b;">монет</div></div>`;
-        offer.items.forEach(it => { html += `<div class="offer-item"><img src="${it.item.img}"><div class="cnt">x${it.count}</div><div style="font-size:10px;color:#8a8d9b;">${it.item.name}</div></div>`; });
-        document.getElementById('offerContent').innerHTML = html;
-        document.getElementById('exchangeModal').classList.add('show');
-    }
-}
-
-function closeModal() {
-    document.getElementById('exchangeModal').classList.remove('show');
-    pendingExchange = null;
-}
-
-async function confirmExchange() {
-    if (!pendingExchange) return;
-    const r = await api('/api/withdraw/exchange', 'POST', { userId: USER_ID, itemId: pendingExchange });
-    if (r.error) { toast('❌ ' + r.error); return; }
-    toast('✅ Обмен выполнен');
-    closeModal();
-    loadProfile();
-}
-
-// ============================================================
-// АДМИНКА
-// ============================================================
-async function loadAdmin() {
-    document.getElementById('adminLoading').style.display = 'block';
-    document.getElementById('adminNoAccess').style.display = 'none';
-    document.getElementById('adminContent').style.display = 'none';
-
-    const r = await api('/api/admin/whoami?userId=' + encodeURIComponent(USER_ID));
-    if (!r.isAdmin) {
-        document.getElementById('adminLoading').style.display = 'none';
-        document.getElementById('adminNoAccess').style.display = 'block';
-        return;
-    }
-    document.getElementById('adminLoading').style.display = 'none';
-    document.getElementById('adminContent').style.display = 'block';
-    loadAdminAll();
-}
-
-async function loadAdminAll() {
-    const r = await api('/api/admin/withdraw', 'GET', null, { 'x-user-id': USER_ID });
-    if (r.error) { alert(r.error); return; }
-    adminAllItems = r.allItems;
-    renderAdminWithdraw(r.catalog);
-    renderAdminExchange(r.exchangeRules);
-    loadAdminPromos();
-}
-
-function renderAdminWithdraw(catalog) {
-    document.getElementById('withdrawList').innerHTML = adminAllItems.map(it => {
-        const entry = catalog.find(c => c.itemId === it.id);
-        const on = entry && entry.enabled;
-        return `
-            <div class="item-row">
-                <img src="${it.img}">
-                <div class="info"><div class="nm">${it.name}</div><div class="pr">${it.price} монет</div></div>
-                <div class="toggle ${on ? 'on' : ''}" onclick="toggleWithdraw('${it.id}', ${!on})"></div>
-            </div>
-        `;
-    }).join('');
-}
-
-async function toggleWithdraw(itemId, enabled) {
-    await api('/api/admin/withdraw/toggle', 'POST', { itemId, enabled, userId: USER_ID }, { 'x-user-id': USER_ID });
-    loadAdminAll();
-}
-
-function renderAdminExchange(rules) {
-    document.getElementById('exchangeList').innerHTML = adminAllItems.map(it => {
-        const rule = rules[it.id];
-        const hasRule = !!rule;
-        let ruleHtml = '';
-        if (hasRule) {
-            let parts = [];
-            if (rule.coins) parts.push(rule.coins + ' монет');
-            (rule.items || []).forEach(x => {
-                const xi = adminAllItems.find(i => i.id === x.id);
-                if (xi) parts.push(x.count + 'x ' + xi.name);
-            });
-            ruleHtml = '<div style="font-size:12px;color:#4ade80;margin-top:5px;">Обмен: ' + (parts.join(' + ') || '—') + '</div>';
+    function renderInventory() {
+        if (inventory.length === 0) {
+            inventoryRow.innerHTML = '<div class="empty-inv">Инвентарь пуст</div>';
+            return;
         }
-        return `
-            <div class="item-row" style="flex-wrap:wrap;">
-                <img src="${it.img}">
-                <div class="info"><div class="nm">${it.name}</div><div class="pr">${it.price} монет</div>${ruleHtml}</div>
-                <button class="btn" onclick="openExchangeForm('${it.id}')">${hasRule ? 'Изменить' : 'Добавить'}</button>
-                ${hasRule ? `<button class="btn btn-danger" onclick="deleteRule('${it.id}')">Удалить</button>` : ''}
-                <div class="exchange-form" id="ef-${it.id}" style="width:100%;">
-                    <div class="form-row"><label>Монеты</label><input class="admin-input" type="number" id="ec-${it.id}" value="${rule ? rule.coins || 0 : 0}"></div>
-                    <div class="form-row"><label>Предметы (id:кол-во, garama:2, cupid:1)</label><input class="admin-input" id="ei-${it.id}" value="${rule && rule.items ? rule.items.map(x => x.id + ':' + x.count).join(', ') : ''}"></div>
-                    <button class="btn btn-green" onclick="saveRule('${it.id}')">Сохранить</button>
+        const counts = {};
+        inventory.forEach(id => { counts[id] = (counts[id] || 0) + 1; });
+        inventoryRow.innerHTML = Object.keys(counts).map(id => {
+            const item = getItemById(id);
+            const count = counts[id];
+            const isSelected = selectedSourceId === id;
+            return `
+                <div class="inv-card ${isSelected ? 'selected' : ''}">
+                    <div class="selectable" onclick="selectSource('${id}')">
+                        <img src="${item.img}" alt="${item.name}">
+                        <div class="name">${item.name}</div>
+                        <div class="price"><img src="${COIN_IMG}" class="price-coin" alt="coin" style="width:12px;height:12px;">${item.price}${count > 1 ? ` (x${count})` : ''}</div>
+                    </div>
+                    <button class="sell-btn" onclick="event.stopPropagation(); sellItem('${id}')" ${isSpinning ? 'disabled' : ''}>
+                        Продать
+                    </button>
                 </div>
-            </div>
-        `;
-    }).join('');
-}
-
-function openExchangeForm(id) { document.getElementById('ef-' + id).classList.toggle('show'); }
-
-async function saveRule(itemId) {
-    const coins = parseInt(document.getElementById('ec-' + itemId).value) || 0;
-    const itemsStr = document.getElementById('ei-' + itemId).value.trim();
-    const items = [];
-    if (itemsStr) {
-        itemsStr.split(',').forEach(part => {
-            const [id, cnt] = part.trim().split(':');
-            if (id) items.push({ id: id.trim(), count: parseInt(cnt) || 1 });
-        });
+            `;
+        }).join('');
     }
-    const r = await api('/api/admin/withdraw/exchange-rule', 'POST', { itemId, coins, items, userId: USER_ID }, { 'x-user-id': USER_ID });
-    if (r.error) { alert(r.error); return; }
-    loadAdminAll();
-}
 
-async function deleteRule(itemId) {
-    if (!confirm('Удалить?')) return;
-    await api('/api/admin/withdraw/exchange-rule/delete', 'POST', { itemId, userId: USER_ID }, { 'x-user-id': USER_ID });
-    loadAdminAll();
-}
+    window.selectSource = function(id) {
+        if (isSpinning) return;
+        if (!inventory.includes(id)) return;
+        selectedSourceId = id;
+        selectedTargetId = null;
+        renderInventory();
+        renderTargets();
+        updateUpgradeScreen();
+    };
 
-async function createPromo() {
-    const code = document.getElementById('promoCode').value.trim();
-    const coins = parseInt(document.getElementById('promoCoins').value) || 0;
-    const uses = parseInt(document.getElementById('promoUses').value) || 1;
-    if (!code) { alert('Введи код'); return; }
-    const r = await api('/api/admin/promocode/create', 'POST', { code, coins, items: [], uses, userId: USER_ID }, { 'x-user-id': USER_ID });
-    if (r.error) { alert(r.error); return; }
-    document.getElementById('promoCode').value = '';
-    loadAdminPromos();
-}
+    function renderTargets() {
+        const sourceItem = selectedSourceId ? getItemById(selectedSourceId) : null;
+        targetRow.innerHTML = ITEMS.map(item => {
+            const isSelected = selectedTargetId === item.id;
+            const isDisabled = sourceItem && item.price <= sourceItem.price;
+            return `
+                <div class="target-card ${isSelected ? 'selected' : ''} ${isDisabled ? 'disabled' : ''}" 
+                     onclick="${isDisabled ? '' : `selectTarget('${item.id}')`}">
+                    <img src="${item.img}" alt="${item.name}">
+                    <div class="name">${item.name}</div>
+                    <div class="price"><img src="${COIN_IMG}" class="price-coin" alt="coin" style="width:12px;height:12px;">${item.price}</div>
+                </div>
+            `;
+        }).join('');
+    }
 
-async function loadAdminPromos() {
-    const r = await api('/api/admin/promocodes', 'GET', null, { 'x-user-id': USER_ID });
-    const list = document.getElementById('promoList');
-    const codes = Object.values(r.promocodes);
-    if (!codes.length) { list.innerHTML = '<p style="color:#4a4d5e;">Нет промокодов</p>'; return; }
-    list.innerHTML = codes.map(p => `
-        <div class="promo-card">
-            <div>
-                <div style="font-family:'Orbitron';color:#ff8c00;font-weight:900;">${p.code}</div>
-                <div style="font-size:12px;color:#8a8d9b;">${p.reward.coins} монет • Осталось: ${p.usesLeft}</div>
-            </div>
-            <button class="btn btn-danger" onclick="deletePromo('${p.code}')">Удалить</button>
-        </div>
-    `).join('');
-}
+    window.selectTarget = function(id) {
+        if (isSpinning) return;
+        const sourceItem = selectedSourceId ? getItemById(selectedSourceId) : null;
+        const targetItem = getItemById(id);
+        if (sourceItem && targetItem.price <= sourceItem.price) return;
+        selectedTargetId = id;
+        renderTargets();
+        updateUpgradeScreen();
+    };
 
-async function deletePromo(code) {
-    if (!confirm('Удалить промокод?')) return;
-    await api('/api/admin/promocode/delete', 'POST', { code, userId: USER_ID }, { 'x-user-id': USER_ID });
-    loadAdminPromos();
-}
+    function calculateChance() {
+        const sourceItem = selectedSourceId ? getItemById(selectedSourceId) : null;
+        const targetItem = selectedTargetId ? getItemById(selectedTargetId) : null;
+        if (!sourceItem || !targetItem || targetItem.price <= sourceItem.price) return 0;
+        
+        let chance = (sourceItem.price / targetItem.price) * 100;
+        chance = chance / currentMultiplier * 3;
+        if (chance > MAX_CHANCE) chance = MAX_CHANCE;
+        if (chance < 0) chance = 0;
+        return chance;
+    }
 
-function showAdminTab(name, e) {
-    document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
-    document.querySelectorAll('.sidebar a').forEach(a => a.classList.remove('active'));
-    document.getElementById('adminTab-' + name).classList.add('active');
-    e.target.classList.add('active');
-    if (name === 'requests') loadAdminRequests();
-    if (name === 'users') loadAdminUsers();
-}
+    function updateUpgradeScreen() {
+        const sourceItem = selectedSourceId ? getItemById(selectedSourceId) : null;
+        const targetItem = selectedTargetId ? getItemById(selectedTargetId) : null;
 
-async function loadAdminRequests() {
-    const r = await api('/api/admin/withdraw/requests', 'GET', null, { 'x-user-id': USER_ID });
-    const list = document.getElementById('requestsList');
-    if (!r.requests || !r.requests.length) { list.innerHTML = '<p style="color:#4a4d5e;">Нет заявок</p>'; return; }
-    list.innerHTML = r.requests.map(rq => {
-        const it = adminAllItems.find(i => i.id === rq.itemId);
-        return `
-            <div class="user-row">
-                <div><span style="font-weight:700;">${rq.nickname}</span> <span style="color:#ff8c00;">${rq.telegram || '(нет ТГ)'}</span> <span style="color:#8a8d9b;font-size:11px;">${new Date(rq.timestamp).toLocaleString('ru-RU')}</span></div>
-                <div>${it ? it.name : rq.itemId} <span style="color:#ffaa33;">(${it ? it.price : '?'})</span></div>
-            </div>
-        `;
-    }).join('');
-}
+        if (sourceItem) {
+            sourceImg.src = sourceItem.img;
+            sourceImg.style.display = 'block';
+            sourceName.innerText = sourceItem.name;
+            sourcePrice.innerHTML = `<img src="${COIN_IMG}" class="price-coin" alt="coin">${sourceItem.price}`;
+        } else {
+            sourceImg.style.display = 'none';
+            sourceName.innerText = '—';
+            sourcePrice.innerHTML = '';
+        }
 
-async function loadAdminUsers() {
-    const r = await api('/api/admin/users', 'GET', null, { 'x-user-id': USER_ID });
-    document.getElementById('usersList').innerHTML = r.users.map(u => `
-        <div class="user-row">
-            <div><span style="font-weight:700;">${u.nickname}</span> <span style="color:#ff8c00;">${u.telegram || ''}</span> <span style="color:#8a8d9b;font-size:11px;">${u.userId}</span></div>
-            <div style="color:#ffaa33;font-family:'Orbitron';">${u.balance} • ${u.inventory.length} пр.</div>
-        </div>
-    `).join('');
-}
+        if (targetItem) {
+            targetImg.src = targetItem.img;
+            targetImg.style.display = 'block';
+            targetName.innerText = targetItem.name;
+            targetPrice.innerHTML = `<img src="${COIN_IMG}" class="price-coin" alt="coin">${targetItem.price}`;
+        } else {
+            targetImg.style.display = 'none';
+            targetName.innerText = '—';
+            targetPrice.innerHTML = '';
+        }
 
-// ============================================================
-// ЭКСПОРТ ФУНКЦИЙ В ОКНО (для inline onclick)
-// ============================================================
-window.showPage = showPage;
-window.buyItem = buyItem;
-window.sellItem = sellItem;
-window.selectSource = selectSource;
-window.selectTarget = selectTarget;
-window.saveTelegram = saveTelegram;
-window.activatePromo = activatePromo;
-window.requestWithdraw = requestWithdraw;
-window.closeModal = closeModal;
-window.confirmExchange = confirmExchange;
-window.toggleWithdraw = toggleWithdraw;
-window.openExchangeForm = openExchangeForm;
-window.saveRule = saveRule;
-window.deleteRule = deleteRule;
-window.createPromo = createPromo;
-window.deletePromo = deletePromo;
-window.showAdminTab = showAdminTab;
+        const chance = calculateChance();
+        const displayChance = Math.floor(chance);
 
-// ============================================================
-// ЗАПУСК
-// ============================================================
-(async () => {
-    await initUser();
-    await loadItems();
-    updateUpgradeScreen();
-    enableWheelScroll(targetRow);
-    enableWheelScroll(shopRow);
-    enableWheelScroll(inventoryRow);
-    document.getElementById('navGame').classList.add('active');
-})();
+        const offset = CIRCUMFERENCE - (chance / 100) * CIRCUMFERENCE;
+        progressBar.style.strokeDashoffset = offset;
+
+        const angle = (chance / 100) * 360;
+        arrowContainer.style.transform = `rotate(${angle}deg)`;
+
+        chanceBig.innerText = displayChance + '%';
+        
+        if (displayChance >= 60) {
+            chanceLabel.innerText = 'ВЫСОКИЙ ШАНС';
+            chanceLabel.className = 'chance-label';
+        } else if (displayChance >= 30) {
+            chanceLabel.innerText = 'СРЕДНИЙ ШАНС';
+            chanceLabel.className = 'chance-label medium';
+        } else {
+            chanceLabel.innerText = '';
+            chanceLabel.className = 'chance-label hidden';
+        }
+
+        if (sourceItem && targetItem && chance > 0 && !isSpinning) {
+            upgradeBtn.disabled = false;
+            upgradeBtn.innerText = `Апгрейд - ${displayChance}%`;
+        } else {
+            upgradeBtn.disabled = true;
+            upgradeBtn.innerText = 'Апгрейд - 0%';
+        }
+    }
+
+    upgradeBtn.addEventListener('click', () => {
+        if (isSpinning) return;
+        const sourceItem = getItemById(selectedSourceId);
+        const targetItem = getItemById(selectedTargetId);
+        if (!sourceItem || !targetItem) return;
+        if (targetItem.price <= sourceItem.price) return;
+
+        const chance = calculateChance();
+        if (chance <= 0) return;
+
+        isSpinning = true;
+        upgradeBtn.disabled = true;
+        upgradeBtn.innerText = 'КРУТИМ...';
+        
+        inventoryRow.classList.add('locked');
+        targetRow.classList.add('locked');
+        shopRow.classList.add('locked');
+
+        const baseRotation = 360 * 8;
+        const randomAngle = Math.random() * 360;
+        const totalRotation = baseRotation + randomAngle;
+
+        arrowContainer.style.transition = `transform ${SPIN_DURATION}ms cubic-bezier(0.12, 0.8, 0.15, 1)`;
+        arrowContainer.style.transform = `rotate(${totalRotation}deg)`;
+
+        const successAngle = (chance / 100) * 360;
+        const finalAngle = totalRotation % 360;
+        const isSuccess = finalAngle <= successAngle;
+
+        setTimeout(() => {
+            if (isSuccess) {
+                const sourceIndex = inventory.indexOf(selectedSourceId);
+                if (sourceIndex > -1) inventory.splice(sourceIndex, 1);
+                inventory.push(selectedTargetId);
+            } else {
+                const sourceIndex = inventory.indexOf(selectedSourceId);
+                if (sourceIndex > -1) inventory.splice(sourceIndex, 1);
+            }
+            
+            selectedSourceId = null;
+            selectedTargetId = null;
+            
+            isSpinning = false;
+            
+            updateBalance();
+            renderInventory();
+            renderTargets();
+            renderShop();
+            updateUpgradeScreen();
+            
+            arrowContainer.style.transition = 'none';
+            arrowContainer.style.transform = 'rotate(0deg)';
+            
+            upgradeBtn.disabled = true;
+            inventoryRow.classList.remove('locked');
+            targetRow.classList.remove('locked');
+            shopRow.classList.remove('locked');
+        }, SPIN_DURATION + 100);
+    });
+
+    function init() {
+        updateBalance();
+        renderInventory();
+        renderTargets();
+        renderShop();
+        updateUpgradeScreen();
+        
+        enableWheelScroll(targetRow);
+        enableWheelScroll(shopRow);
+        enableWheelScroll(inventoryRow);
+    }
+
+    init();
+</script>
+
+<!-- 🎵 Запуск музыки при первом клике (обход блокировки браузера) -->
+<script>
+    const bgMusic = document.getElementById('bgMusic');
+    bgMusic.volume = 0.5;
+
+    function startMusic() {
+        bgMusic.play().catch(err => console.log('Аудио заблокировано:', err));
+        document.removeEventListener('click', startMusic);
+        document.removeEventListener('touchstart', startMusic);
+    }
+
+    document.addEventListener('click', startMusic);
+    document.addEventListener('touchstart', startMusic);
 </script>
 
 </body>
