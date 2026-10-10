@@ -124,8 +124,8 @@
         }
 
         .avatar {
-            width: 40px;
-            height: 40px;
+            width: 42px;
+            height: 42px;
             border-radius: 50%;
             background: linear-gradient(135deg, #ff8c00, #cc7000);
             display: flex;
@@ -137,8 +137,444 @@
             color: #fff;
             box-shadow: 0 0 20px rgba(255, 140, 0, 0.5);
             cursor: pointer;
+            overflow: hidden;
+            border: 2px solid rgba(255, 140, 0, 0.6);
+            transition: transform 0.2s;
         }
 
+        .avatar:hover { transform: scale(1.08); }
+
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* ===== ВКЛАДКИ ===== */
+        .tabs {
+            display: flex;
+            gap: 10px;
+            padding: 18px 30px 0;
+        }
+
+        .tab {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 14px 0;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.03);
+            color: #8a8d9b;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 800;
+            font-size: 14px;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tab svg {
+            width: 22px;
+            height: 22px;
+            flex-shrink: 0;
+            transition: all 0.3s;
+        }
+
+        .tab:hover {
+            background: rgba(255, 140, 0, 0.08);
+            border-color: rgba(255, 140, 0, 0.35);
+            color: #ffaa33;
+        }
+
+        .tab.active {
+            background: linear-gradient(135deg, rgba(255, 140, 0, 0.25), rgba(255, 140, 0, 0.1));
+            border-color: #ff8c00;
+            color: #fff;
+            box-shadow: 0 0 25px rgba(255, 140, 0, 0.4);
+        }
+
+        .tab.active svg {
+            filter: drop-shadow(0 0 8px rgba(255, 140, 0, 0.9));
+        }
+
+        /* ===== ПАНЕЛИ ВКЛАДОК ===== */
+        .tab-panel { display: none; }
+        .tab-panel.active { display: block; }
+
+        /* ===== МОДАЛЬНЫЕ ОКНА ===== */
+        .modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(8px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            padding: 20px;
+        }
+
+        .modal.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-card {
+            background: linear-gradient(180deg, #1e1e26 0%, #121216 100%);
+            border: 1px solid rgba(255, 140, 0, 0.3);
+            border-radius: 24px;
+            padding: 32px 28px;
+            width: 100%;
+            max-width: 360px;
+            text-align: center;
+            box-shadow: 
+                0 30px 80px rgba(0, 0, 0, 0.9),
+                0 0 60px rgba(255, 140, 0, 0.2);
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+            position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal.open .modal-card { transform: scale(1); }
+
+        .modal-card.wide { max-width: 440px; text-align: left; }
+
+        .profile-avatar {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #ff8c00;
+            box-shadow: 
+                0 0 30px rgba(255, 140, 0, 0.6),
+                0 0 60px rgba(255, 140, 0, 0.3);
+            margin-bottom: 18px;
+        }
+
+        .profile-nick {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 22px;
+            font-weight: 900;
+            color: #fff;
+            letter-spacing: 1px;
+            margin-bottom: 6px;
+        }
+
+        .profile-tg {
+            font-size: 14px;
+            color: #ffaa33;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-decoration: none;
+            display: inline-block;
+            transition: color 0.2s;
+        }
+
+        .profile-tg:hover { color: #ffcc66; text-shadow: 0 0 12px rgba(255, 170, 51, 0.8); }
+
+        .profile-balance-label {
+            font-size: 11px;
+            color: #8a8d9b;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 6px;
+        }
+
+        .profile-balance-value {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 32px;
+            font-weight: 900;
+            color: #ff8c00;
+            text-shadow: 0 0 25px rgba(255, 140, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .profile-balance-value img {
+            width: 28px;
+            height: 28px;
+            object-fit: contain;
+            filter: drop-shadow(0 0 10px rgba(255, 140, 0, 0.9));
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
+            color: #8a8d9b;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-close:hover {
+            background: rgba(255, 80, 80, 0.2);
+            color: #ff6b6b;
+            border-color: rgba(255, 80, 80, 0.4);
+        }
+
+        .modal-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 18px;
+            font-weight: 900;
+            color: #fff;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .admin-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            background: linear-gradient(135deg, #ff8c00, #cc7000);
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 800;
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            font-family: 'Orbitron', sans-serif;
+            box-shadow: 0 0 15px rgba(255, 140, 0, 0.6);
+        }
+
+        /* ===== ФОРМЫ ===== */
+        .form-group {
+            margin-bottom: 16px;
+            text-align: left;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 11px;
+            color: #8a8d9b;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 14px 16px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.03);
+            color: #fff;
+            font-size: 15px;
+            font-weight: 600;
+            transition: all 0.3s;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #ff8c00;
+            background: rgba(255, 140, 0, 0.08);
+            box-shadow: 0 0 20px rgba(255, 140, 0, 0.3);
+        }
+
+        .form-input::placeholder {
+            color: #4a4d5e;
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 14px 16px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.03);
+            color: #fff;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s;
+            font-family: 'Orbitron', sans-serif;
+            cursor: pointer;
+        }
+
+        .form-select:focus {
+            outline: none;
+            border-color: #ff8c00;
+        }
+
+        .form-select option {
+            background: #1e1e26;
+            color: #fff;
+        }
+
+        .radio-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .radio-option {
+            flex: 1;
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.03);
+            color: #8a8d9b;
+            font-weight: 700;
+            font-size: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .radio-option:hover { border-color: rgba(255, 140, 0, 0.4); color: #ffaa33; }
+        .radio-option.active {
+            background: linear-gradient(135deg, rgba(255, 140, 0, 0.25), rgba(255, 140, 0, 0.1));
+            border-color: #ff8c00;
+            color: #fff;
+            box-shadow: 0 0 15px rgba(255, 140, 0, 0.4);
+        }
+
+        .action-btn {
+            width: 100%;
+            padding: 16px;
+            border-radius: 14px;
+            border: none;
+            background: linear-gradient(135deg, #ff8c00, #cc7000);
+            color: #fff;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 14px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 8px 25px rgba(255, 140, 0, 0.4);
+            margin-top: 8px;
+        }
+
+        .action-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 35px rgba(255, 140, 0, 0.6);
+        }
+
+        .action-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            background: #3a3d4d;
+            box-shadow: none;
+        }
+
+        .msg {
+            margin-top: 12px;
+            font-size: 13px;
+            font-weight: 700;
+            min-height: 18px;
+            text-align: center;
+        }
+
+        .msg.ok { color: #7ed88a; text-shadow: 0 0 10px rgba(120, 200, 130, 0.5); }
+        .msg.err { color: #ff6b6b; text-shadow: 0 0 10px rgba(255, 100, 100, 0.5); }
+
+        /* ===== ПРОМОКОДЫ ===== */
+        .promo-panel {
+            padding: 30px;
+            text-align: center;
+        }
+
+        .promo-panel h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 20px;
+            font-weight: 900;
+            color: #fff;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .promo-panel p {
+            color: #8a8d9b;
+            font-size: 14px;
+            margin-bottom: 22px;
+        }
+
+        .promo-input-wrap {
+            display: flex;
+            gap: 10px;
+            max-width: 480px;
+            margin: 0 auto;
+        }
+
+        .promo-input-wrap .form-input { flex: 1; text-transform: uppercase; }
+
+        .promo-input-wrap .action-btn { width: auto; padding: 14px 28px; margin-top: 0; }
+
+        /* ===== СПИСОК ПРОМОКОДОВ В АДМИНКЕ ===== */
+        .promo-list {
+            margin-top: 18px;
+            max-height: 260px;
+            overflow-y: auto;
+            text-align: left;
+        }
+
+        .promo-list-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 14px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 12px;
+            margin-bottom: 8px;
+            font-size: 13px;
+        }
+
+        .promo-list-item .code {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 800;
+            color: #ffaa33;
+            letter-spacing: 1px;
+        }
+
+        .promo-list-item .info {
+            color: #8a8d9b;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .promo-list-item .uses {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 800;
+            color: #7ed88a;
+            font-size: 12px;
+        }
+
+        .promo-list-item .uses.empty { color: #ff6b6b; }
+
+        /* ===== ИГРА ===== */
         .progress-section {
             display: flex;
             justify-content: center;
@@ -531,7 +967,6 @@
             background: #3a3d4d;
         }
 
-        /* Кнопка ПРОДАТЬ в инвентаре */
         .sell-btn {
             width: 100%;
             padding: 7px;
@@ -586,6 +1021,57 @@
             filter: grayscale(0.5) !important;
         }
 
+        /* ===== АДМИН-СЕТКА БРЕЙНРОТОВ ===== */
+        .admin-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            max-height: 240px;
+            overflow-y: auto;
+            padding: 4px;
+            margin-bottom: 12px;
+        }
+
+        .admin-item {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 12px;
+            padding: 8px 4px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .admin-item:hover {
+            border-color: rgba(255, 140, 0, 0.5);
+            background: rgba(255, 140, 0, 0.08);
+        }
+
+        .admin-item.selected {
+            border-color: #ff8c00;
+            background: rgba(255, 140, 0, 0.15);
+            box-shadow: 0 0 15px rgba(255, 140, 0, 0.4);
+        }
+
+        .admin-item img {
+            width: 42px;
+            height: 42px;
+            object-fit: contain;
+            margin-bottom: 4px;
+        }
+
+        .admin-item .name {
+            font-size: 9px;
+            color: #e5e7ef;
+            font-weight: 700;
+            text-align: center;
+            line-height: 1.2;
+            height: 22px;
+            overflow: hidden;
+        }
+
         @media (max-width: 600px) {
             body { padding: 0; }
             .app { border-radius: 0; min-height: 100vh; }
@@ -604,18 +1090,105 @@
             .upgrade-btn { width: calc(100% - 30px); }
             .top-bar { padding: 12px 15px; }
             .logo-text { font-size: 22px; }
+            .tabs { padding: 15px 15px 0; }
+            .tab { font-size: 11px; padding: 12px 0; gap: 6px; }
+            .tab svg { width: 18px; height: 18px; }
+            .promo-panel { padding: 20px 15px; }
+            .promo-input-wrap { flex-direction: column; }
+            .promo-input-wrap .action-btn { width: 100%; }
         }
     </style>
 </head>
 <body>
 
-<!-- 🎵 Фоновая музыка (играет вечно по кругу) -->
+<!-- 🎵 Фоновая музыка -->
 <audio id="bgMusic" loop autoplay>
     <source src="https://raw.githubusercontent.com/saintezz/ggbrainXv2/main/8bit.mp3" type="audio/mpeg">
-    Ваш браузер не поддерживает аудио.
 </audio>
 
 <div class="bg-layer"></div>
+
+<!-- ===== ПРОФИЛЬ ===== -->
+<div class="modal" id="profileModal">
+    <div class="modal-card">
+        <button class="modal-close" onclick="closeModal('profileModal')">✕</button>
+        <img class="profile-avatar" 
+             src="https://raw.githubusercontent.com/saintezz/ggbrainXv2/main/Avatarka.jpg" 
+             alt="Avatar"
+             onerror="this.src='https://via.placeholder.com/110?text=?'">
+        <div class="profile-nick" id="profileNick">saintezz</div>
+        <a class="profile-tg" id="profileTg" href="https://t.me/saintezz" target="_blank">@saintezz</a>
+        <div class="profile-balance-label">Баланс</div>
+        <div class="profile-balance-value">
+            <img src="https://github.com/saintezz/saintbetW/blob/main/%D0%BC%D0%BE%D0%BD%D0%B5%D1%82%D0%B0.png?raw=true" alt="coin">
+            <span id="profileBalance">1 000</span>
+        </div>
+        <div id="adminSection" style="display:none; margin-top: 20px;">
+            <div class="admin-badge">ADMIN</div>
+            <button class="action-btn" onclick="closeModal('profileModal'); openAdminPanel()">Открыть админ-панель</button>
+        </div>
+    </div>
+</div>
+
+<!-- ===== АДМИН-ПАНЕЛЬ ===== -->
+<div class="modal" id="adminModal">
+    <div class="modal-card wide">
+        <button class="modal-close" onclick="closeModal('adminModal')">✕</button>
+        <div class="admin-badge">ADMIN PANEL</div>
+        <div class="modal-title">Создать промокод</div>
+
+        <div class="form-group">
+            <label class="form-label">Название промокода</label>
+            <input type="text" class="form-input" id="adminCode" placeholder="Например: SUPER2025" maxlength="20">
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Кол-во активаций</label>
+            <input type="number" class="form-input" id="adminUses" placeholder="10" min="1" value="1">
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Тип награды</label>
+            <div class="radio-row">
+                <div class="radio-option active" data-type="balance" onclick="selectPromoType('balance')">Баланс</div>
+                <div class="radio-option" data-type="item" onclick="selectPromoType('item')">Брейнрот</div>
+            </div>
+        </div>
+
+        <!-- Баланс -->
+        <div class="form-group" id="balanceGroup">
+            <label class="form-label">Сумма монет</label>
+            <input type="number" class="form-input" id="adminBalance" placeholder="500" min="1" value="500">
+        </div>
+
+        <!-- Брейнрот -->
+        <div class="form-group" id="itemGroup" style="display:none;">
+            <label class="form-label">Выбери брейнрот</label>
+            <div class="admin-grid" id="adminGrid"></div>
+        </div>
+
+        <button class="action-btn" onclick="createPromo()">Создать промокод</button>
+        <div class="msg" id="adminMsg"></div>
+
+        <div class="modal-title" style="margin-top: 24px; font-size: 14px;">Существующие промокоды</div>
+        <div class="promo-list" id="promoList">
+            <div style="color:#4a4d5e; font-size:12px; text-align:center; padding:10px;">Загрузка...</div>
+        </div>
+    </div>
+</div>
+
+<!-- ===== АКТИВАЦИЯ ПРОМОКОДА ===== -->
+<div class="modal" id="activateModal">
+    <div class="modal-card">
+        <button class="modal-close" onclick="closeModal('activateModal')">✕</button>
+        <div class="modal-title">Ввести промокод</div>
+        <div class="form-group">
+            <input type="text" class="form-input" id="activateCode" placeholder="ВВЕДИ КОД" style="text-transform:uppercase; text-align:center; font-size:18px;">
+        </div>
+        <button class="action-btn" onclick="activatePromo()">Активировать</button>
+        <div class="msg" id="activateMsg"></div>
+    </div>
+</div>
 
 <div class="app">
     <div class="top-bar">
@@ -625,73 +1198,118 @@
                 <img src="https://github.com/saintezz/saintbetW/blob/main/%D0%BC%D0%BE%D0%BD%D0%B5%D1%82%D0%B0.png?raw=true" alt="coin" class="coin-icon">
                 <span id="balanceDisplay">1 000</span>
             </div>
-            <div class="avatar">P</div>
+            <div class="avatar" onclick="openProfile()">
+                <img src="https://raw.githubusercontent.com/saintezz/ggbrainXv2/main/Avatarka.jpg" 
+                     alt="P"
+                     onerror="this.style.display='none'; this.parentElement.textContent='P';">
+            </div>
         </div>
     </div>
 
-    <div class="progress-section">
-        <div class="progress-wrapper">
-            <svg class="progress-svg" viewBox="0 0 340 340">
-                <defs>
-                    <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stop-color="#ff8c00" />
-                        <stop offset="100%" stop-color="#ffaa33" />
-                    </linearGradient>
-                </defs>
-                <circle class="progress-bg" cx="170" cy="170" r="130"></circle>
-                <circle class="progress-bar" id="progressBar" cx="170" cy="170" r="130"></circle>
+    <!-- ===== ВКЛАДКИ ===== -->
+    <div class="tabs">
+        <div class="tab active" id="tabUpgrade" onclick="switchTab('upgrade')">
+            <!-- Иконка апгрейда: молот + стрелка вверх -->
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 9l-2-2 4-4 2 2-4 4z"/>
+                <path d="M12 7l-8 8v4h4l8-8"/>
+                <path d="M17 3l4 4"/>
+                <path d="M9 15l-2 2"/>
             </svg>
-            <div class="arrow-container" id="arrowContainer">
-                <div class="arrow-pointer"></div>
+            Апгрейд
+        </div>
+        <div class="tab" id="tabPromo" onclick="switchTab('promo')">
+            <!-- Иконка промокода: билет/подарок -->
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 12v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-6"/>
+                <path d="M2 7h20v5H2z"/>
+                <path d="M12 22V7"/>
+                <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/>
+                <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>
+            </svg>
+            Промокод
+        </div>
+    </div>
+
+    <!-- ===== ПАНЕЛЬ: АПГРЕЙД ===== -->
+    <div class="tab-panel active" id="panelUpgrade">
+        <div class="progress-section">
+            <div class="progress-wrapper">
+                <svg class="progress-svg" viewBox="0 0 340 340">
+                    <defs>
+                        <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#ff8c00" />
+                            <stop offset="100%" stop-color="#ffaa33" />
+                        </linearGradient>
+                    </defs>
+                    <circle class="progress-bg" cx="170" cy="170" r="130"></circle>
+                    <circle class="progress-bar" id="progressBar" cx="170" cy="170" r="130"></circle>
+                </svg>
+                <div class="arrow-container" id="arrowContainer">
+                    <div class="arrow-pointer"></div>
+                </div>
+                <div class="progress-center">
+                    <div class="chance-big" id="chanceBig">0%</div>
+                    <div class="chance-label hidden" id="chanceLabel">—</div>
+                </div>
             </div>
-            <div class="progress-center">
-                <div class="chance-big" id="chanceBig">0%</div>
-                <div class="chance-label hidden" id="chanceLabel">—</div>
+        </div>
+
+        <div class="items-row">
+            <div class="item-box">
+                <div class="label">Твой предмет</div>
+                <img id="sourceImg" src="" alt="" style="display:none">
+                <div class="name" id="sourceName">—</div>
+                <div class="price" id="sourcePrice"></div>
+            </div>
+            <div class="swap-arrow">➜</div>
+            <div class="item-box">
+                <div class="label">Цель</div>
+                <img id="targetImg" src="" alt="" style="display:none">
+                <div class="name" id="targetName">—</div>
+                <div class="price" id="targetPrice"></div>
             </div>
         </div>
-    </div>
 
-    <div class="items-row">
-        <div class="item-box">
-            <div class="label">Твой предмет</div>
-            <img id="sourceImg" src="" alt="" style="display:none">
-            <div class="name" id="sourceName">—</div>
-            <div class="price" id="sourcePrice"></div>
+        <div class="multipliers">
+            <button class="mult-btn" data-mult="1.5">x1.5</button>
+            <button class="mult-btn" data-mult="2">x2</button>
+            <button class="mult-btn active" data-mult="3">x3</button>
+            <button class="mult-btn" data-mult="5">x5</button>
+            <button class="mult-btn" data-mult="10">x10</button>
         </div>
-        <div class="swap-arrow">➜</div>
-        <div class="item-box">
-            <div class="label">Цель</div>
-            <img id="targetImg" src="" alt="" style="display:none">
-            <div class="name" id="targetName">—</div>
-            <div class="price" id="targetPrice"></div>
+
+        <button class="upgrade-btn" id="upgradeBtn" disabled>Апгрейд - 0%</button>
+
+        <div class="section-block">
+            <div class="section-title">Инвентарь</div>
+            <div class="inventory-row" id="inventoryRow">
+                <div class="empty-inv">Инвентарь пуст</div>
+            </div>
         </div>
-    </div>
 
-    <div class="multipliers">
-        <button class="mult-btn" data-mult="1.5">x1.5</button>
-        <button class="mult-btn" data-mult="2">x2</button>
-        <button class="mult-btn active" data-mult="3">x3</button>
-        <button class="mult-btn" data-mult="5">x5</button>
-        <button class="mult-btn" data-mult="10">x10</button>
-    </div>
+        <div class="section-block">
+            <div class="section-title">Выбери цель</div>
+            <div class="target-row" id="targetRow"></div>
+        </div>
 
-    <button class="upgrade-btn" id="upgradeBtn" disabled>Апгрейд - 0%</button>
-
-    <div class="section-block">
-        <div class="section-title">Инвентарь</div>
-        <div class="inventory-row" id="inventoryRow">
-            <div class="empty-inv">Инвентарь пуст</div>
+        <div class="section-block">
+            <div class="section-title">Магазин</div>
+            <div class="shop-row" id="shopRow"></div>
         </div>
     </div>
 
-    <div class="section-block">
-        <div class="section-title">Выбери цель</div>
-        <div class="target-row" id="targetRow"></div>
-    </div>
-
-    <div class="section-block">
-        <div class="section-title">Магазин</div>
-        <div class="shop-row" id="shopRow"></div>
+    <!-- ===== ПАНЕЛЬ: ПРОМОКОД ===== -->
+    <div class="tab-panel" id="panelPromo">
+        <div class="promo-panel">
+            <h2>🎟️ Активация промокода</h2>
+            <p>Введи код и получи награду</p>
+            <div class="promo-input-wrap">
+                <input type="text" class="form-input" id="promoInput" placeholder="ВВЕДИ ПРОМОКОД" maxlength="20">
+                <button class="action-btn" onclick="activatePromo()">Активировать</button>
+            </div>
+            <div class="msg" id="promoMsg"></div>
+        </div>
     </div>
 </div>
 
@@ -706,11 +1324,26 @@
         { id: 'cooki', name: 'Cooki and Milki', price: 130, img: 'https://github.com/forerer-afk/brainroterX/blob/main/cookiandmilki.png?raw=true' },
         { id: 'cerberus', name: 'Cerberus', price: 155, img: 'https://github.com/forerer-afk/brainroterX/blob/main/cerberus.png?raw=true' },
         { id: 'globba', name: 'Globba Steppa', price: 164, img: 'https://github.com/forerer-afk/brainroterX/blob/main/globastepa.png?raw=true' },
+        { id: 'losamigos', name: 'Los Amigos', price: 220, img: 'https://github.com/forerer-afk/brainroterX/blob/main/losamigos.png?raw=true' },
         { id: 'rubiko', name: 'Rubiko and Kubiko', price: 395, img: 'https://github.com/forerer-afk/brainroterX/blob/main/Rubiko_and_Kubiko.webp?raw=true' },
         { id: 'lossecret', name: 'Los Secret Combinasionas', price: 419, img: 'https://github.com/forerer-afk/brainroterX/blob/main/lossecretcombination.png?raw=true' },
         { id: 'dragon', name: 'Dragon Cannelloni', price: 890, img: 'https://github.com/forerer-afk/brainroterX/blob/main/dragoncannelloni.png?raw=true' },
-        { id: 'hydra', name: 'Hydra Dragon Cannelloni', price: 1220, img: 'https://github.com/forerer-afk/brainroterX/blob/main/hydragoncannelloni.png?raw=true' }
+        { id: 'hydra', name: 'Hydra Dragon Cannelloni', price: 1220, img: 'https://github.com/forerer-afk/brainroterX/blob/main/hydragoncannelloni.png?raw=true' },
+        { id: 'kraken', name: 'Kraken', price: 2030, img: 'https://github.com/forerer-afk/brainroterX/blob/main/kraken.png.webp?raw=true' },
+        { id: 'lovelovebear', name: 'Love Love Bear', price: 5540, img: 'https://github.com/forerer-afk/brainroterX/blob/main/lovelovebear.png?raw=true' }
     ];
+
+    // ===== НАСТРОЙКА АДМИНА =====
+    const ADMIN_TG = '@clonexx7'; // ник админа
+    const ADMIN_LINK = 'https://t.me/clonexx7';
+    const API_URL = 'http://localhost:3000'; // адрес сервера
+
+    // ===== НАСТРОЙКА ПОЛЬЗОВАТЕЛЯ =====
+    const USER = {
+        nick: 'saintezz',
+        tg: '@saintezz',
+        tgLink: 'https://t.me/saintezz'
+    };
 
     const MAX_CHANCE = 70;
     const SPIN_DURATION = 6000;
@@ -722,7 +1355,11 @@
     let selectedTargetId = null;
     let currentMultiplier = 3;
     let isSpinning = false;
+    let isAdmin = false;
+    let promoType = 'balance';
+    let selectedAdminItem = null;
 
+    // ===== DOM =====
     const balanceDisplay = document.getElementById('balanceDisplay');
     const inventoryRow = document.getElementById('inventoryRow');
     const targetRow = document.getElementById('targetRow');
@@ -738,10 +1375,261 @@
     const targetName = document.getElementById('targetName');
     const targetPrice = document.getElementById('targetPrice');
     const upgradeBtn = document.getElementById('upgradeBtn');
+    const profileBalance = document.getElementById('profileBalance');
 
-    function updateBalance() { balanceDisplay.innerText = balance.toLocaleString('ru-RU'); }
+    // ===== ИНИЦИАЛИЗАЦИЯ ПРОФИЛЯ =====
+    document.getElementById('profileNick').textContent = USER.nick;
+    document.getElementById('profileTg').textContent = USER.tg;
+    document.getElementById('profileTg').href = USER.tgLink;
+
+    function updateBalance() {
+        balanceDisplay.innerText = balance.toLocaleString('ru-RU');
+        profileBalance.innerText = balance.toLocaleString('ru-RU');
+    }
     function getItemById(id) { return ITEMS.find(item => item.id === id); }
 
+    // ===== МОДАЛЬНЫЕ ОКНА =====
+    window.openModal = function(id) { document.getElementById(id).classList.add('open'); };
+    window.closeModal = function(id) { document.getElementById(id).classList.remove('open'); };
+
+    // Закрытие по клику на фон
+    document.querySelectorAll('.modal').forEach(modal => {
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) modal.classList.remove('open');
+        });
+    });
+
+    // ===== ПРОФИЛЬ =====
+    window.openProfile = function() {
+        // Проверяем админ ли это (по нику в профиле)
+        const nick = document.getElementById('profileNick').textContent.trim();
+        if (nick === ADMIN_TG) {
+            isAdmin = true;
+            document.getElementById('adminSection').style.display = 'block';
+        } else {
+            isAdmin = false;
+            document.getElementById('adminSection').style.display = 'none';
+        }
+        openModal('profileModal');
+    };
+
+    window.openAdminPanel = function() {
+        if (!isAdmin) return;
+        renderAdminGrid();
+        renderPromoList();
+        openModal('adminModal');
+    };
+
+    // ===== ВКЛАДКИ =====
+    window.switchTab = function(tab) {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+
+        if (tab === 'upgrade') {
+            document.getElementById('tabUpgrade').classList.add('active');
+            document.getElementById('panelUpgrade').classList.add('active');
+        } else {
+            document.getElementById('tabPromo').classList.add('active');
+            document.getElementById('panelPromo').classList.add('active');
+        }
+    };
+
+    // ===== АДМИН: ВЫБОР ТИПА ПРОМОКОДА =====
+    window.selectPromoType = function(type) {
+        promoType = type;
+        document.querySelectorAll('.radio-option').forEach(o => {
+            o.classList.toggle('active', o.dataset.type === type);
+        });
+        document.getElementById('balanceGroup').style.display = type === 'balance' ? 'block' : 'none';
+        document.getElementById('itemGroup').style.display = type === 'item' ? 'block' : 'none';
+    };
+
+    // ===== АДМИН: СЕТКА БРЕЙНРОТОВ =====
+    function renderAdminGrid() {
+        const grid = document.getElementById('adminGrid');
+        grid.innerHTML = ITEMS.map(item => `
+            <div class="admin-item ${selectedAdminItem === item.id ? 'selected' : ''}" 
+                 onclick="selectAdminItem('${item.id}')">
+                <img src="${item.img}" alt="${item.name}" onerror="this.src='https://via.placeholder.com/42?text=?'">
+                <div class="name">${item.name}</div>
+            </div>
+        `).join('');
+    }
+
+    window.selectAdminItem = function(id) {
+        selectedAdminItem = id;
+        renderAdminGrid();
+    };
+
+    // ===== АДМИН: СОЗДАНИЕ ПРОМОКОДА =====
+    window.createPromo = async function() {
+        const code = document.getElementById('adminCode').value.trim().toUpperCase();
+        const uses = parseInt(document.getElementById('adminUses').value);
+        const msg = document.getElementById('adminMsg');
+
+        msg.className = 'msg';
+        msg.textContent = '';
+
+        if (!code || code.length < 3) {
+            msg.className = 'msg err';
+            msg.textContent = 'Название минимум 3 символа';
+            return;
+        }
+        if (!uses || uses < 1) {
+            msg.className = 'msg err';
+            msg.textContent = 'Кол-во активаций минимум 1';
+            return;
+        }
+
+        let value;
+        if (promoType === 'balance') {
+            value = parseInt(document.getElementById('adminBalance').value);
+            if (!value || value < 1) {
+                msg.className = 'msg err';
+                msg.textContent = 'Сумма монет минимум 1';
+                return;
+            }
+        } else {
+            if (!selectedAdminItem) {
+                msg.className = 'msg err';
+                msg.textContent = 'Выбери брейнрот';
+                return;
+            }
+            value = selectedAdminItem;
+        }
+
+        try {
+            const res = await fetch(API_URL + '/api/create', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ code, uses, type: promoType, value })
+            });
+            const data = await res.json();
+
+            if (data.ok) {
+                msg.className = 'msg ok';
+                msg.textContent = 'Промокод создан: ' + code;
+                document.getElementById('adminCode').value = '';
+                document.getElementById('adminUses').value = 1;
+                selectedAdminItem = null;
+                renderAdminGrid();
+                renderPromoList();
+            } else {
+                msg.className = 'msg err';
+                msg.textContent = data.error || 'Ошибка';
+            }
+        } catch (err) {
+            msg.className = 'msg err';
+            msg.textContent = 'Сервер недоступен: ' + err.message;
+            console.error(err);
+        }
+    };
+
+    // ===== АДМИН: СПИСОК ПРОМОКОДОВ =====
+    async function renderPromoList() {
+        const list = document.getElementById('promoList');
+        try {
+            const res = await fetch(API_URL + '/api/promocodes');
+            const data = await res.json();
+            if (!data.ok) throw new Error(data.error);
+
+            const codes = Object.values(data.promocodes || {});
+            if (codes.length === 0) {
+                list.innerHTML = '<div style="color:#4a4d5e; font-size:12px; text-align:center; padding:10px;">Промокодов пока нет</div>';
+                return;
+            }
+
+            list.innerHTML = codes.map(p => {
+                let rewardText = '';
+                if (p.type === 'balance') {
+                    rewardText = p.value + ' монет';
+                } else {
+                    const item = getItemById(p.value);
+                    rewardText = item ? item.name : p.value;
+                }
+                return `
+                    <div class="promo-list-item">
+                        <div>
+                            <div class="code">${p.code}</div>
+                            <div class="info">${rewardText}</div>
+                        </div>
+                        <div class="uses ${p.uses <= 0 ? 'empty' : ''}">${p.uses} акт.</div>
+                    </div>
+                `;
+            }).join('');
+        } catch (err) {
+            list.innerHTML = '<div style="color:#ff6b6b; font-size:12px; text-align:center; padding:10px;">Ошибка загрузки: ' + err.message + '</div>';
+            console.error(err);
+        }
+    }
+
+    // ===== АКТИВАЦИЯ ПРОМОКОДА =====
+    window.activatePromo = async function() {
+        // Определяем, откуда вызвано — из вкладки или из модалки
+        const inputTab = document.getElementById('promoInput');
+        const inputModal = document.getElementById('activateCode');
+        const msgTab = document.getElementById('promoMsg');
+        const msgModal = document.getElementById('activateMsg');
+
+        let code = '';
+        if (document.getElementById('panelPromo').classList.contains('active')) {
+            code = inputTab.value.trim().toUpperCase();
+            msgTab.className = 'msg';
+            msgTab.textContent = '';
+        } else {
+            code = inputModal.value.trim().toUpperCase();
+            msgModal.className = 'msg';
+            msgModal.textContent = '';
+        }
+
+        if (!code) {
+            const m = document.getElementById('panelPromo').classList.contains('active') ? msgTab : msgModal;
+            m.className = 'msg err';
+            m.textContent = 'Введи промокод';
+            return;
+        }
+
+        try {
+            const res = await fetch(API_URL + '/api/activate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ code })
+            });
+            const data = await res.json();
+
+            const m = document.getElementById('panelPromo').classList.contains('active') ? msgTab : msgModal;
+
+            if (data.ok) {
+                if (data.type === 'balance') {
+                    balance += data.value;
+                    updateBalance();
+                    m.className = 'msg ok';
+                    m.textContent = `+${data.value} монет! Осталось активаций: ${data.remaining}`;
+                } else {
+                    inventory.push(data.value);
+                    renderInventory();
+                    renderTargets();
+                    renderShop();
+                    updateUpgradeScreen();
+                    const item = getItemById(data.value);
+                    m.className = 'msg ok';
+                    m.textContent = `Получен: ${item ? item.name : data.value}! Осталось: ${data.remaining}`;
+                }
+                inputTab.value = '';
+                inputModal.value = '';
+            } else {
+                m.className = 'msg err';
+                m.textContent = data.error || 'Ошибка';
+            }
+        } catch (err) {
+            const m = document.getElementById('panelPromo').classList.contains('active') ? msgTab : msgModal;
+            m.className = 'msg err';
+            m.textContent = 'Сервер недоступен: ' + err.message;
+            console.error(err);
+        }
+    };
+
+    // ===== ИГРА (АПГРЕЙД) =====
     function enableWheelScroll(el) {
         el.addEventListener('wheel', (e) => {
             if (el.scrollWidth <= el.clientWidth) return;
@@ -783,25 +1671,21 @@
         updateUpgradeScreen();
     }
 
-    // ===== ПРОДАЖА ИЗ ИНВЕНТАРЯ =====
     window.sellItem = function(id) {
         if (isSpinning) return;
         const index = inventory.indexOf(id);
         if (index === -1) return;
         const item = getItemById(id);
         if (!item) return;
-        
-        // Продаём за полную стоимость
-        const sellPrice = item.price;
+
         inventory.splice(index, 1);
-        balance += sellPrice;
-        
-        // Сбрасываем выбор если предмет был выбран
+        balance += item.price;
+
         if (selectedSourceId === id && !inventory.includes(id)) {
             selectedSourceId = null;
             selectedTargetId = null;
         }
-        
+
         updateBalance();
         renderInventory();
         renderTargets();
@@ -875,7 +1759,7 @@
         const sourceItem = selectedSourceId ? getItemById(selectedSourceId) : null;
         const targetItem = selectedTargetId ? getItemById(selectedTargetId) : null;
         if (!sourceItem || !targetItem || targetItem.price <= sourceItem.price) return 0;
-        
+
         let chance = (sourceItem.price / targetItem.price) * 100;
         chance = chance / currentMultiplier * 3;
         if (chance > MAX_CHANCE) chance = MAX_CHANCE;
@@ -919,7 +1803,7 @@
         arrowContainer.style.transform = `rotate(${angle}deg)`;
 
         chanceBig.innerText = displayChance + '%';
-        
+
         if (displayChance >= 60) {
             chanceLabel.innerText = 'ВЫСОКИЙ ШАНС';
             chanceLabel.className = 'chance-label';
@@ -953,7 +1837,7 @@
         isSpinning = true;
         upgradeBtn.disabled = true;
         upgradeBtn.innerText = 'КРУТИМ...';
-        
+
         inventoryRow.classList.add('locked');
         targetRow.classList.add('locked');
         shopRow.classList.add('locked');
@@ -978,21 +1862,21 @@
                 const sourceIndex = inventory.indexOf(selectedSourceId);
                 if (sourceIndex > -1) inventory.splice(sourceIndex, 1);
             }
-            
+
             selectedSourceId = null;
             selectedTargetId = null;
-            
+
             isSpinning = false;
-            
+
             updateBalance();
             renderInventory();
             renderTargets();
             renderShop();
             updateUpgradeScreen();
-            
+
             arrowContainer.style.transition = 'none';
             arrowContainer.style.transform = 'rotate(0deg)';
-            
+
             upgradeBtn.disabled = true;
             inventoryRow.classList.remove('locked');
             targetRow.classList.remove('locked');
@@ -1006,7 +1890,8 @@
         renderTargets();
         renderShop();
         updateUpgradeScreen();
-        
+        renderAdminGrid();
+
         enableWheelScroll(targetRow);
         enableWheelScroll(shopRow);
         enableWheelScroll(inventoryRow);
@@ -1015,10 +1900,10 @@
     init();
 </script>
 
-<!-- 🎵 Запуск музыки при первом клике (обход блокировки браузера) -->
+<!-- 🎵 Запуск тихой музыки при первом клике -->
 <script>
     const bgMusic = document.getElementById('bgMusic');
-    bgMusic.volume = 0.5;
+    bgMusic.volume = 0.15;
 
     function startMusic() {
         bgMusic.play().catch(err => console.log('Аудио заблокировано:', err));
