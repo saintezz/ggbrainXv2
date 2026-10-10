@@ -204,7 +204,6 @@
             filter: drop-shadow(0 0 8px rgba(255, 140, 0, 0.9));
         }
 
-        /* ===== ПАНЕЛИ ВКЛАДОК ===== */
         .tab-panel { display: none; }
         .tab-panel.active { display: block; }
 
@@ -362,7 +361,6 @@
             box-shadow: 0 0 15px rgba(255, 140, 0, 0.6);
         }
 
-        /* ===== ФОРМЫ ===== */
         .form-group {
             margin-bottom: 16px;
             text-align: left;
@@ -475,6 +473,7 @@
 
         .msg.ok { color: #7ed88a; text-shadow: 0 0 10px rgba(120, 200, 130, 0.5); }
         .msg.err { color: #ff6b6b; text-shadow: 0 0 10px rgba(255, 100, 100, 0.5); }
+        .msg.wait { color: #ffaa33; text-shadow: 0 0 10px rgba(255, 170, 51, 0.5); }
 
         /* ===== ПРОМОКОДЫ ===== */
         .promo-panel {
@@ -509,7 +508,6 @@
 
         .promo-input-wrap .action-btn { width: auto; padding: 14px 28px; margin-top: 0; }
 
-        /* ===== СПИСОК ПРОМОКОДОВ ===== */
         .promo-list {
             margin-top: 18px;
             max-height: 260px;
@@ -998,7 +996,6 @@
             filter: grayscale(0.5) !important;
         }
 
-        /* ===== АДМИН-СЕТКА ===== */
         .admin-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -1152,19 +1149,6 @@
     </div>
 </div>
 
-<!-- ===== АКТИВАЦИЯ ПРОМОКОДА ===== -->
-<div class="modal" id="activateModal">
-    <div class="modal-card">
-        <button class="modal-close" onclick="closeModal('activateModal')">✕</button>
-        <div class="modal-title">Ввести промокод</div>
-        <div class="form-group">
-            <input type="text" class="form-input" id="activateCode" placeholder="ВВЕДИ КОД" style="text-transform:uppercase; text-align:center; font-size:18px;">
-        </div>
-        <button class="action-btn" onclick="activatePromo()">Активировать</button>
-        <div class="msg" id="activateMsg"></div>
-    </div>
-</div>
-
 <div class="app">
     <div class="top-bar">
         <div class="logo-text">GGbrainX</div>
@@ -1182,7 +1166,6 @@
         </div>
     </div>
 
-    <!-- ===== ВКЛАДКИ ===== -->
     <div class="tabs">
         <div class="tab active" id="tabUpgrade" onclick="switchTab('upgrade')">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -1205,7 +1188,7 @@
         </div>
     </div>
 
-    <!-- ===== ПАНЕЛЬ: АПГРЕЙД ===== -->
+    <!-- ===== АПГРЕЙД ===== -->
     <div class="tab-panel active" id="panelUpgrade">
         <div class="progress-section">
             <div class="progress-wrapper">
@@ -1273,7 +1256,7 @@
         </div>
     </div>
 
-    <!-- ===== ПАНЕЛЬ: ПРОМОКОД ===== -->
+    <!-- ===== ПРОМОКОД ===== -->
     <div class="tab-panel" id="panelPromo">
         <div class="promo-panel">
             <h2>🎟️ Активация промокода</h2>
@@ -1307,11 +1290,16 @@
         { id: 'lovelovebear', name: 'Love Love Bear', price: 5540, img: 'https://github.com/forerer-afk/brainroterX/blob/main/lovelovebear.png?raw=true' }
     ];
 
+    // ===== API =====
+    const API_URL = 'https://ggbrainxv2.onrender.com';
+
+    // Пинг при загрузке — будим Render
+    fetch(API_URL + '/').catch(() => console.log('[WAKE] Сервер Render просыпается...'));
+
     // ===== НАСТРОЙКА АДМИНА =====
     const ADMIN_TG = '@clonexx7';
-    const API_URL = 'http://localhost:3000';
 
-    // ===== НАСТРОЙКА ПОЛЬЗОВАТЕЛЯ (из Telegram) =====
+    // ===== ПОЛЬЗОВАТЕЛЬ =====
     let USER = {
         nick: 'Гость',
         tg: '@guest',
@@ -1325,7 +1313,7 @@
         try {
             const tg = window.Telegram?.WebApp;
             if (!tg) {
-                console.warn('[TG] Telegram WebApp не найден. Открыто вне Telegram.');
+                console.warn('[TG] Telegram WebApp не найден.');
                 return;
             }
 
@@ -1334,7 +1322,7 @@
 
             const u = tg.initDataUnsafe?.user;
             if (!u) {
-                console.warn('[TG] Нет данных пользователя (initDataUnsafe.user пустой).');
+                console.warn('[TG] Нет данных пользователя.');
                 return;
             }
 
@@ -1351,13 +1339,11 @@
                 USER.tg = full || '@guest';
             }
 
-            if (u.photo_url) {
-                USER.photo = u.photo_url;
-            }
+            if (u.photo_url) USER.photo = u.photo_url;
 
             console.log('[TG] Пользователь:', USER);
         } catch (err) {
-            console.error('[TG] Ошибка инициализации:', err);
+            console.error('[TG] Ошибка:', err);
         }
     })();
 
@@ -1392,21 +1378,16 @@
     const upgradeBtn = document.getElementById('upgradeBtn');
     const profileBalance = document.getElementById('profileBalance');
 
-    // ===== ПРИМЕНИТЬ ДАННЫЕ ПОЛЬЗОВАТЕЛЯ В ПРОФИЛЬ =====
     function applyUserToProfile() {
         document.getElementById('profileNick').textContent = USER.nick;
         document.getElementById('profileTg').textContent = USER.tg;
         document.getElementById('profileTg').href = USER.tgLink;
 
         const avatarImg = document.querySelector('.profile-avatar');
-        if (USER.photo && avatarImg) {
-            avatarImg.src = USER.photo;
-        }
+        if (USER.photo && avatarImg) avatarImg.src = USER.photo;
 
         const topAvatarImg = document.getElementById('topAvatarImg');
-        if (USER.photo && topAvatarImg) {
-            topAvatarImg.src = USER.photo;
-        }
+        if (USER.photo && topAvatarImg) topAvatarImg.src = USER.photo;
     }
     applyUserToProfile();
 
@@ -1426,7 +1407,6 @@
         });
     });
 
-    // ===== ПРОФИЛЬ =====
     window.openProfile = function() {
         const adminUsername = ADMIN_TG.replace('@', '').toLowerCase();
         const myUsername = (USER.username || '').toLowerCase();
@@ -1434,11 +1414,9 @@
         if (myUsername === adminUsername) {
             isAdmin = true;
             document.getElementById('adminSection').style.display = 'block';
-            console.log('[ADMIN] Доступ разрешён для', USER.username);
         } else {
             isAdmin = false;
             document.getElementById('adminSection').style.display = 'none';
-            console.log('[ADMIN] Нет доступа. Ты:', USER.username, '| Нужен:', adminUsername);
         }
         openModal('profileModal');
     };
@@ -1450,7 +1428,6 @@
         openModal('adminModal');
     };
 
-    // ===== ВКЛАДКИ =====
     window.switchTab = function(tab) {
         document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
         document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
@@ -1464,7 +1441,6 @@
         }
     };
 
-    // ===== АДМИН: ВЫБОР ТИПА =====
     window.selectPromoType = function(type) {
         promoType = type;
         document.querySelectorAll('.radio-option').forEach(o => {
@@ -1474,7 +1450,6 @@
         document.getElementById('itemGroup').style.display = type === 'item' ? 'block' : 'none';
     };
 
-    // ===== АДМИН: СЕТКА БРЕЙНРОТОВ =====
     function renderAdminGrid() {
         const grid = document.getElementById('adminGrid');
         grid.innerHTML = ITEMS.map(item => `
@@ -1491,7 +1466,21 @@
         renderAdminGrid();
     };
 
-    // ===== АДМИН: СОЗДАНИЕ =====
+    // ===== ФЕТЧ С ТАЙМАУТОМ (для холодного старта Render) =====
+    async function fetchWithTimeout(url, options = {}, timeout = 60000) {
+        const controller = new AbortController();
+        const id = setTimeout(() => controller.abort(), timeout);
+        try {
+            const res = await fetch(url, { ...options, signal: controller.signal });
+            clearTimeout(id);
+            return res;
+        } catch (err) {
+            clearTimeout(id);
+            throw err;
+        }
+    }
+
+    // ===== СОЗДАНИЕ ПРОМОКОДА =====
     window.createPromo = async function() {
         const code = document.getElementById('adminCode').value.trim().toUpperCase();
         const uses = parseInt(document.getElementById('adminUses').value);
@@ -1528,8 +1517,11 @@
             value = selectedAdminItem;
         }
 
+        msg.className = 'msg wait';
+        msg.textContent = 'Создаём... (если сервер спит, до 60 сек)';
+
         try {
-            const res = await fetch(API_URL + '/api/create', {
+            const res = await fetchWithTimeout(API_URL + '/api/create', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ code, uses, type: promoType, value })
@@ -1550,16 +1542,16 @@
             }
         } catch (err) {
             msg.className = 'msg err';
-            msg.textContent = 'Сервер недоступен: ' + err.message;
+            msg.textContent = 'Сервер не отвечает (холодный старт). Попробуй ещё раз через 30 сек.';
             console.error(err);
         }
     };
 
-    // ===== АДМИН: СПИСОК =====
+    // ===== СПИСОК ПРОМОКОДОВ =====
     async function renderPromoList() {
         const list = document.getElementById('promoList');
         try {
-            const res = await fetch(API_URL + '/api/promocodes');
+            const res = await fetchWithTimeout(API_URL + '/api/promocodes', {}, 60000);
             const data = await res.json();
             if (!data.ok) throw new Error(data.error);
 
@@ -1588,7 +1580,7 @@
                 `;
             }).join('');
         } catch (err) {
-            list.innerHTML = '<div style="color:#ff6b6b; font-size:12px; text-align:center; padding:10px;">Ошибка загрузки: ' + err.message + '</div>';
+            list.innerHTML = '<div style="color:#ff6b6b; font-size:12px; text-align:center; padding:10px;">Сервер спит. Обнови через 30 сек.</div>';
             console.error(err);
         }
     }
@@ -1596,36 +1588,32 @@
     // ===== АКТИВАЦИЯ =====
     window.activatePromo = async function() {
         const inputTab = document.getElementById('promoInput');
-        const inputModal = document.getElementById('activateCode');
         const msgTab = document.getElementById('promoMsg');
-        const msgModal = document.getElementById('activateMsg');
 
-        const fromTab = document.getElementById('panelPromo').classList.contains('active');
-        let code = fromTab ? inputTab.value.trim().toUpperCase() : inputModal.value.trim().toUpperCase();
-
+        const code = inputTab.value.trim().toUpperCase();
         if (!code) {
-            const m = fromTab ? msgTab : msgModal;
-            m.className = 'msg err';
-            m.textContent = 'Введи промокод';
+            msgTab.className = 'msg err';
+            msgTab.textContent = 'Введи промокод';
             return;
         }
 
+        msgTab.className = 'msg wait';
+        msgTab.textContent = 'Проверяем... (если сервер спит, до 60 сек)';
+
         try {
-            const res = await fetch(API_URL + '/api/activate', {
+            const res = await fetchWithTimeout(API_URL + '/api/activate', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ code })
             });
             const data = await res.json();
 
-            const m = fromTab ? msgTab : msgModal;
-
             if (data.ok) {
                 if (data.type === 'balance') {
                     balance += data.value;
                     updateBalance();
-                    m.className = 'msg ok';
-                    m.textContent = `+${data.value} монет! Осталось активаций: ${data.remaining}`;
+                    msgTab.className = 'msg ok';
+                    msgTab.textContent = `+${data.value} монет! Осталось активаций: ${data.remaining}`;
                 } else {
                     inventory.push(data.value);
                     renderInventory();
@@ -1633,19 +1621,17 @@
                     renderShop();
                     updateUpgradeScreen();
                     const item = getItemById(data.value);
-                    m.className = 'msg ok';
-                    m.textContent = `Получен: ${item ? item.name : data.value}! Осталось: ${data.remaining}`;
+                    msgTab.className = 'msg ok';
+                    msgTab.textContent = `Получен: ${item ? item.name : data.value}! Осталось: ${data.remaining}`;
                 }
                 inputTab.value = '';
-                inputModal.value = '';
             } else {
-                m.className = 'msg err';
-                m.textContent = data.error || 'Ошибка';
+                msgTab.className = 'msg err';
+                msgTab.textContent = data.error || 'Ошибка';
             }
         } catch (err) {
-            const m = fromTab ? msgTab : msgModal;
-            m.className = 'msg err';
-            m.textContent = 'Сервер недоступен: ' + err.message;
+            msgTab.className = 'msg err';
+            msgTab.textContent = 'Сервер не отвечает (холодный старт). Попробуй ещё раз через 30 сек.';
             console.error(err);
         }
     };
@@ -1886,7 +1872,6 @@
 
             selectedSourceId = null;
             selectedTargetId = null;
-
             isSpinning = false;
 
             updateBalance();
