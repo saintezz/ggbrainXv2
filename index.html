@@ -77,6 +77,7 @@
             border-radius: 50%;
             box-shadow: 0 0 12px rgba(255, 77, 77, 1);
             animation: livePulse 1.5s ease-in-out infinite;
+            transition: all 0.3s;
         }
         .live-dot.offline {
             background: #555;
@@ -107,6 +108,7 @@
             letter-spacing: 1px;
         }
         .live-status.offline { color: #ff4d4d; }
+        .live-status.connecting { color: #ffaa33; }
 
         .live-list {
             display: flex;
@@ -115,6 +117,7 @@
             overflow-y: auto;
             flex: 1;
             padding-right: 5px;
+            min-height: 100px;
         }
 
         .live-list::-webkit-scrollbar { width: 4px; }
@@ -539,8 +542,8 @@
 
         @media (max-width: 900px) {
             .game-layout { grid-template-columns: 1fr; gap: 15px; }
-            .live-board { position: relative; top: 0; max-height: 200px; order: -1; }
-            .live-list { flex-direction: row; overflow-x: auto; overflow-y: hidden; }
+            .live-board { position: relative; top: 0; max-height: 220px; order: -1; }
+            .live-list { flex-direction: row; overflow-x: auto; overflow-y: hidden; min-height: 80px; }
             .live-item { flex-shrink: 0; min-width: 180px; }
         }
 
@@ -575,9 +578,9 @@
 
     <div class="live-board">
         <div class="live-header">
-            <div class="live-dot" id="liveDot"></div>
+            <div class="live-dot offline" id="liveDot"></div>
             <div class="live-title">LIVE BOARD</div>
-            <div class="live-status" id="liveStatus">...</div>
+            <div class="live-status offline" id="liveStatus">OFFLINE</div>
         </div>
         <div class="live-list" id="liveList">
             <div class="live-empty">Пока нет дропов...<br>Играй и попади сюда!</div>
@@ -658,97 +661,167 @@
 <script>
     const COIN_IMG = 'https://github.com/saintezz/saintbetW/blob/main/%D0%BC%D0%BE%D0%BD%D0%B5%D1%82%D0%B0.png?raw=true';
 
-    // ===== WEBSOCKET =====
-    const WS_URL = (location.protocol === 'file:' || location.hostname === '')
-        ? 'ws://localhost:3000'
-        : `${location.protocol === 'https:' ? 'wss:' : 'ws:'}//${location.host}`;
+    // ===== WEBSOCKET URL =====
+    // Автоматически определяем протокол и хост
+    // - file:// или пустой host → localhost:3000 (ws)
+    // - https → wss (для Render, хостингов)
+    // - http → ws (для локальной разработки)
+    function getWsUrl() {
+        if (location.protocol === 'file:' || !location.hostname) {
+            return 'ws://localhost:3000';
+        }
+        const proto = location.protocol === 'https:' ? 'wss:' : 'ws:';
+        return `${proto}//${location.host}`;
+    }
+
+    const WS_URL = getWsUrl();
+    const WS_RECONNECT_BASE = 1000;   // старт переподключения — 1 сек
+    const WS_RECONNECT_MAX = 30000;   // максимум — 30 сек
+    const WS_PING_INTERVAL = 25000;   // пингуем сервер каждые 25 секунд (idle timeout Render ~55 сек)
 
     let ws = null;
+    let reconnectAttempts = 0;
+    let pingTimer = null;
+    let reconnectTimer = null;
+    let wsManuallyClosed = false;
+
     let myNickname = 'Игрок_' + Math.floor(Math.random() * 9000 + 1000);
 
     const liveDot = document.getElementById('liveDot');
     const liveStatus = document.getElementById('liveStatus');
+    const liveList = document.getElementById('liveList');
 
-    function setStatus(online, text) {
-        if (online) {
-            liveDot.classList.remove('offline');
-            liveStatus.classList.remove('offline');
+    // ===== СТАТУС =====
+    function setStatus(status) {
+        // status: 'online' | 'offline' | 'connecting'
+        liveDot.className = 'live-dot';
+        liveStatus.className = 'live-status';
+        
+        if (status === 'online') {
             liveStatus.textContent = 'ONLINE';
+            liveStatus.classList.remove('offline', 'connecting');
+        } else if (status === 'connecting') {
+            liveDot.classList.add('offline');
+            liveStatus.textContent = 'CONNECT...';
+            liveStatus.classList.add('connecting');
+            liveStatus.classList.remove('offline');
         } else {
             liveDot.classList.add('offline');
+            liveStatus.textContent = 'OFFLINE';
             liveStatus.classList.add('offline');
-            liveStatus.textContent = text || 'OFFLINE';
+            liveStatus.classList.remove('connecting');
         }
     }
 
+    // ===== ПОДКЛЮЧЕНИЕ =====
     function connectWS() {
-        setStatus(false, 'CONNECT...');
-        console.log('Подключаюсь к', WS_URL);
+        if (wsManuallyClosed) return;
+        if (ws && (ws.readyState === WebSocket.OPEN || ws.readyState === WebSocket.CONNECTING)) return;
+
+        setStatus('connecting');
+        console.log(`🔌 Подключаюсь к ${WS_URL} (попытка ${reconnectAttempts + 1})`);
 
         try {
             ws = new WebSocket(WS_URL);
-
-            ws.onopen = () => {
-                console.log('✅ WebSocket подключён');
-                setStatus(true);
-            };
-
-            ws.onmessage = (event) => {
-                try {
-                    const msg = JSON.parse(event.data);
-                    if (msg.type === 'history') {
-                        const list = document.getElementById('liveList');
-                        list.innerHTML = '';
-                        if (msg.drops.length === 0) {
-                            list.innerHTML = '<div class="live-empty">Пока нет дропов...<br>Играй и попади сюда!</div>';
-                        } else {
-                            msg.drops.slice().reverse().forEach(drop => addLiveDrop(drop, false));
-                        }
-                    }
-                    if (msg.type === 'new_drop') {
-                        addLiveDrop(msg.drop, true);
-                    }
-                } catch (err) {
-                    console.error('Ошибка сообщения:', err);
-                }
-            };
-
-            ws.onclose = () => {
-                console.log('❌ WebSocket отключён');
-                setStatus(false);
-                setTimeout(connectWS, 3000);
-            };
-
-            ws.onerror = (err) => {
-                console.error('WebSocket ошибка:', err);
-                setStatus(false, 'ERROR');
-            };
         } catch (err) {
-            console.error('Не удалось подключиться:', err);
-            setStatus(false, 'ERROR');
-            setTimeout(connectWS, 3000);
+            console.error('❌ Ошибка создания WebSocket:', err);
+            scheduleReconnect();
+            return;
         }
+
+        ws.onopen = () => {
+            console.log('✅ WebSocket подключён');
+            reconnectAttempts = 0;
+            setStatus('online');
+
+            // Запускаем пинг
+            clearInterval(pingTimer);
+            pingTimer = setInterval(() => {
+                if (ws && ws.readyState === WebSocket.OPEN) {
+                    try {
+                        ws.send(JSON.stringify({ type: 'ping' }));
+                    } catch (err) {
+                        console.error('Ошибка пинга:', err);
+                    }
+                }
+            }, WS_PING_INTERVAL);
+        };
+
+        ws.onmessage = (event) => {
+            try {
+                const msg = JSON.parse(event.data);
+
+                if (msg.type === 'history') {
+                    liveList.innerHTML = '';
+                    if (!msg.drops || msg.drops.length === 0) {
+                        liveList.innerHTML = '<div class="live-empty">Пока нет дропов...<br>Играй и попади сюда!</div>';
+                    } else {
+                        // Показываем в обратном порядке (старые внизу, свежие вверху)
+                        msg.drops.slice().reverse().forEach(drop => addLiveDrop(drop, false));
+                    }
+                }
+
+                if (msg.type === 'new_drop') {
+                    addLiveDrop(msg.drop, true);
+                }
+
+                if (msg.type === 'pong') {
+                    // Соединение живо
+                }
+            } catch (err) {
+                console.error('Ошибка обработки сообщения:', err);
+            }
+        };
+
+        ws.onclose = (event) => {
+            console.log(`❌ WebSocket закрыт (код: ${event.code})`);
+            clearInterval(pingTimer);
+            pingTimer = null;
+            if (!wsManuallyClosed) {
+                setStatus('offline');
+                scheduleReconnect();
+            }
+        };
+
+        ws.onerror = (err) => {
+            console.error('❌ WebSocket ошибка:', err);
+            setStatus('offline');
+        };
     }
 
+    function scheduleReconnect() {
+        clearTimeout(reconnectTimer);
+        // Экспоненциальная задержка с ограничением
+        const delay = Math.min(WS_RECONNECT_BASE * Math.pow(2, reconnectAttempts), WS_RECONNECT_MAX);
+        reconnectAttempts++;
+        console.log(`⏳ Переподключение через ${Math.round(delay / 1000)} сек...`);
+        reconnectTimer = setTimeout(connectWS, delay);
+    }
+
+    // ===== ОТПРАВКА ВЫИГРЫША =====
     function sendWin(item) {
         if (!ws || ws.readyState !== WebSocket.OPEN) {
             console.warn('⚠️ WebSocket не подключён, дроп не отправлен');
             return;
         }
-        ws.send(JSON.stringify({
-            type: 'upgrade_win',
-            nickname: myNickname,
-            itemId: item.id,
-            itemName: item.name,
-            itemImg: item.img,
-            price: item.price
-        }));
-        console.log('📤 Отправлен дроп:', item.name);
+        try {
+            ws.send(JSON.stringify({
+                type: 'upgrade_win',
+                nickname: myNickname,
+                itemId: item.id,
+                itemName: item.name,
+                itemImg: item.img,
+                price: item.price
+            }));
+            console.log('📤 Дроп отправлен:', item.name);
+        } catch (err) {
+            console.error('Ошибка отправки дропа:', err);
+        }
     }
 
+    // ===== ДОБАВЛЕНИЕ В LIVE BOARD =====
     function addLiveDrop(drop, animate) {
-        const list = document.getElementById('liveList');
-        const empty = list.querySelector('.live-empty');
+        const empty = liveList.querySelector('.live-empty');
         if (empty) empty.remove();
 
         const item = document.createElement('div');
@@ -758,7 +831,7 @@
         item.innerHTML = `
             <img class="live-img" src="${drop.itemImg}" alt="${drop.itemName}" onerror="this.src='https://via.placeholder.com/42?text=?'">
             <div class="live-info">
-                <div class="live-name">${drop.itemName}</div>
+                <div class="live-name">${escapeHtml(drop.itemName)}</div>
                 <div class="live-price">
                     <img class="live-coin" src="${COIN_IMG}" alt="coin">
                     ${drop.price}
@@ -766,9 +839,25 @@
             </div>
         `;
 
-        list.prepend(item);
-        while (list.children.length > 30) list.removeChild(list.lastChild);
+        liveList.prepend(item);
+        while (liveList.children.length > 30) {
+            liveList.removeChild(liveList.lastChild);
+        }
     }
+
+    function escapeHtml(str) {
+        return String(str).replace(/[&<>"']/g, (m) => ({
+            '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+        }[m]));
+    }
+
+    // ===== ПРИ ЗАКРЫТИИ ВКЛАДКИ =====
+    window.addEventListener('beforeunload', () => {
+        wsManuallyClosed = true;
+        clearInterval(pingTimer);
+        clearTimeout(reconnectTimer);
+        if (ws) try { ws.close(); } catch(e) {}
+    });
 
     // ===== ИГРА =====
     const ITEMS = [
@@ -1067,6 +1156,7 @@
         enableWheelScroll(shopRow);
         enableWheelScroll(inventoryRow);
 
+        // Подключаемся к WebSocket
         connectWS();
     }
 
