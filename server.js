@@ -1,13 +1,11 @@
-// server.js — простой сервер для промокодов
-// Запуск: node server.js
-// Порт: 3000 (можно поменять через process.env.PORT)
+// server.js — GGBrainX API для промокодов (Render-ready)
 
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
 
 const PORT = process.env.PORT || 3000;
-const DATA_FILE = path.join(__dirname, 'promocodes.json');
+const DATA_FILE = path.join('/tmp', 'promocodes.json'); // /tmp — пишемо на Render
 
 // ===== Хранилище промокодов =====
 let promocodes = {};
@@ -51,7 +49,7 @@ function sendJSON(res, status, data) {
     res.end(JSON.stringify(data));
 }
 
-// ===== Чтение тела запроса =====
+// ===== Чтение тела =====
 function readBody(req) {
     return new Promise((resolve, reject) => {
         let body = '';
@@ -71,6 +69,7 @@ function readBody(req) {
 const server = http.createServer(async (req, res) => {
     console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
 
+    // CORS preflight
     if (req.method === 'OPTIONS') {
         setCORS(res);
         res.writeHead(204);
@@ -78,14 +77,22 @@ const server = http.createServer(async (req, res) => {
         return;
     }
 
+    // ---- HEALTH-CHECK для Render ----
+    if (req.method === 'GET' && (req.url === '/' || req.url === '/health')) {
+        setCORS(res);
+        res.writeHead(200, { 'Content-Type': 'text/plain; charset=utf-8' });
+        res.end('GGBrainX server is alive');
+        return;
+    }
+
     try {
-        // ---- GET /api/promocodes — список всех промокодов (только для админа) ----
+        // ---- GET /api/promocodes ----
         if (req.method === 'GET' && req.url === '/api/promocodes') {
             sendJSON(res, 200, { ok: true, promocodes });
             return;
         }
 
-        // ---- POST /api/create — создать промокод ----
+        // ---- POST /api/create ----
         if (req.method === 'POST' && req.url === '/api/create') {
             const body = await readBody(req);
             const { code, uses, type, value } = body;
@@ -132,7 +139,7 @@ const server = http.createServer(async (req, res) => {
             return;
         }
 
-        // ---- POST /api/activate — активировать промокод ----
+        // ---- POST /api/activate ----
         if (req.method === 'POST' && req.url === '/api/activate') {
             const body = await readBody(req);
             const { code } = body;
@@ -155,10 +162,6 @@ const server = http.createServer(async (req, res) => {
             }
 
             promo.uses -= 1;
-            if (promo.uses <= 0) {
-                // Не удаляем, чтобы админ видел историю, но помечаем неактивным
-                console.log('[INFO] Промокод исчерпан:', upperCode);
-            }
             savePromocodes();
 
             console.log('[OK] Активирован промокод:', upperCode, 'осталось:', promo.uses);
@@ -187,6 +190,7 @@ server.listen(PORT, () => {
     console.log('  GGBrainX server запущен');
     console.log('  Порт: ' + PORT);
     console.log('  API:');
+    console.log('    GET  /            (health-check)');
     console.log('    GET  /api/promocodes');
     console.log('    POST /api/create');
     console.log('    POST /api/activate');
@@ -196,6 +200,6 @@ server.listen(PORT, () => {
 server.on('error', (err) => {
     console.error('[ERROR] Сервер не смог запуститься:', err.message);
     if (err.code === 'EADDRINUSE') {
-        console.error('Порт ' + PORT + ' уже занят. Закройте другой процесс или поменяйте PORT.');
+        console.error('Порт ' + PORT + ' уже занят.');
     }
 });
