@@ -79,9 +79,10 @@
             100% { opacity: 0; transform: translateY(-20vh) scale(1.5); }
         }
 
+        /* ===== НА ВЕСЬ ЭКРАН ===== */
         .app {
             width: 100%;
-            max-width: 960px;
+            max-width: 100%;
             background: linear-gradient(180deg, rgba(30, 30, 38, 0.95) 0%, rgba(18, 18, 22, 0.95) 100%);
             border-radius: 28px;
             border: 1px solid rgba(255, 140, 0, 0.15);
@@ -107,7 +108,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 18px 30px;
+            padding: 18px 40px;
             background: rgba(255, 255, 255, 0.02);
             border-bottom: 1px solid rgba(255, 140, 0, 0.1);
             z-index: 10;
@@ -116,7 +117,7 @@
 
         .logo-text {
             font-family: 'Orbitron', sans-serif;
-            font-size: 32px;
+            font-size: 36px;
             font-weight: 900;
             letter-spacing: 1px;
             background: linear-gradient(135deg, #d0d0d0 0%, #ff8c00 50%, #ffaa33 100%);
@@ -143,9 +144,9 @@
         .balance {
             background: linear-gradient(135deg, rgba(255, 140, 0, 0.15) 0%, rgba(255, 170, 50, 0.1) 100%);
             border: 1px solid rgba(255, 140, 0, 0.3);
-            padding: 8px 18px;
+            padding: 10px 22px;
             border-radius: 14px;
-            font-size: 17px;
+            font-size: 18px;
             font-weight: 800;
             display: flex;
             align-items: center;
@@ -159,8 +160,8 @@
         }
 
         .coin-icon {
-            width: 22px;
-            height: 22px;
+            width: 24px;
+            height: 24px;
             object-fit: contain;
             filter: drop-shadow(0 0 8px rgba(255, 140, 0, 0.8));
             animation: coinSpin 4s ease-in-out infinite;
@@ -174,18 +175,18 @@
         .main-content {
             display: flex;
             flex-direction: column;
-            padding: 25px;
-            gap: 25px;
+            padding: 30px 40px;
+            gap: 30px;
         }
 
         .section-title {
             font-family: 'Orbitron', sans-serif;
-            font-size: 13px;
+            font-size: 14px;
             font-weight: 700;
             color: #8a8d9b;
             text-transform: uppercase;
             letter-spacing: 3px;
-            margin-bottom: 12px;
+            margin-bottom: 14px;
             display: flex;
             align-items: center;
             gap: 10px;
@@ -194,7 +195,7 @@
         .section-title::before {
             content: '';
             width: 4px;
-            height: 16px;
+            height: 18px;
             background: linear-gradient(180deg, #ff8c00, #cc7000);
             border-radius: 2px;
             box-shadow: 0 0 15px rgba(255, 140, 0, 0.8);
@@ -213,12 +214,13 @@
             gap: 14px;
             overflow-x: auto;
             padding-bottom: 10px;
-            min-height: 170px;
+            min-height: 180px;
             align-items: center;
             transition: opacity 0.3s, filter 0.3s;
+            scroll-behavior: smooth;
         }
 
-        .inventory-row::-webkit-scrollbar { height: 5px; }
+        .inventory-row::-webkit-scrollbar { height: 6px; }
         .inventory-row::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.03); border-radius: 3px; }
         .inventory-row::-webkit-scrollbar-thumb { background: linear-gradient(90deg, #ff8c00, #cc7000); border-radius: 3px; box-shadow: 0 0 10px rgba(255, 140, 0, 0.5); }
 
@@ -227,7 +229,7 @@
             background: linear-gradient(145deg, #2a2a33 0%, #1a1a20 100%);
             border-radius: 18px;
             padding: 12px;
-            width: 135px;
+            width: 140px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -292,7 +294,7 @@
         }
 
         .inv-card img {
-            width: 65px; height: 65px;
+            width: 70px; height: 70px;
             object-fit: contain;
             margin-bottom: 8px;
             filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.5));
@@ -371,13 +373,13 @@
             justify-content: center;
             align-items: center;
             position: relative;
-            padding: 25px 0;
+            padding: 30px 0;
         }
 
         .roulette-wrapper {
             position: relative;
-            width: 340px;
-            height: 340px;
+            width: 400px;
+            height: 400px;
             transition: all 0.5s;
         }
 
@@ -392,9 +394,9 @@
 
         .roulette-outer {
             position: absolute;
-            top: -15px; left: -15px;
-            width: calc(100% + 30px);
-            height: calc(100% + 30px);
+            top: -18px; left: -18px;
+            width: calc(100% + 36px);
+            height: calc(100% + 36px);
             border-radius: 50%;
             background: conic-gradient(
                 from 0deg,
@@ -425,9 +427,9 @@
 
         .roulette-markers {
             position: absolute;
-            top: -8px; left: -8px;
-            width: calc(100% + 16px);
-            height: calc(100% + 16px);
+            top: -10px; left: -10px;
+            width: calc(100% + 20px);
+            height: calc(100% + 20px);
             border-radius: 50%;
             z-index: 2;
             pointer-events: none;
@@ -451,7 +453,7 @@
             border-radius: 50%;
             position: relative;
             overflow: hidden;
-            border: 10px solid #1a1a20;
+            border: 12px solid #1a1a20;
             box-shadow: 
                 0 0 80px rgba(0, 0, 0, 0.9),
                 0 0 50px rgba(255, 140, 0, 0.15),
@@ -497,9 +499,9 @@
 
         .roulette-arrow {
             width: 0; height: 0;
-            border-left: 16px solid transparent;
-            border-right: 16px solid transparent;
-            border-top: 80px solid #ff8c00;
+            border-left: 18px solid transparent;
+            border-right: 18px solid transparent;
+            border-top: 90px solid #ff8c00;
             margin-top: 8px;
             filter: 
                 drop-shadow(0 0 15px rgba(255, 140, 0, 1)) 
@@ -510,10 +512,10 @@
         .roulette-arrow::after {
             content: '';
             position: absolute;
-            top: -92px;
-            left: -9px;
-            width: 18px;
-            height: 18px;
+            top: -102px;
+            left: -10px;
+            width: 20px;
+            height: 20px;
             background: radial-gradient(circle at 30% 30%, #ffaa33, #ff8c00);
             border-radius: 50%;
             box-shadow: 
@@ -525,8 +527,8 @@
             position: absolute;
             top: 50%; left: 50%;
             transform: translate(-50%, -50%);
-            width: 115px;
-            height: 115px;
+            width: 130px;
+            height: 130px;
             background: radial-gradient(circle at 30% 30%, #2a2a33 0%, #131318 100%);
             border-radius: 50%;
             display: flex;
@@ -544,7 +546,7 @@
 
         .chance-text {
             font-family: 'Orbitron', sans-serif;
-            font-size: 28px;
+            font-size: 32px;
             font-weight: 900;
             color: #ffaa33;
             text-shadow: 
@@ -554,7 +556,7 @@
         }
 
         .chance-label {
-            font-size: 9px;
+            font-size: 10px;
             color: #8a8d9b;
             font-weight: 700;
             text-transform: uppercase;
@@ -565,15 +567,15 @@
 
         .upgrade-btn {
             width: 100%;
-            max-width: 420px;
-            padding: 22px 30px;
+            max-width: 500px;
+            padding: 24px 30px;
             border-radius: 20px;
             border: none;
             background: linear-gradient(135deg, #ff8c00 0%, #cc7000 50%, #ff8c00 100%);
             background-size: 200% 200%;
             color: white;
             font-family: 'Orbitron', sans-serif;
-            font-size: 24px;
+            font-size: 26px;
             font-weight: 900;
             text-transform: uppercase;
             letter-spacing: 8px;
@@ -634,28 +636,34 @@
             text-indent: 6px;
         }
 
-        /* ===== ВЫБОР ЦЕЛИ (горизонтальная лента) ===== */
-        .target-row {
+        /* ===== ЛЕНТЫ ЦЕЛЕЙ И МАГАЗИНА ===== */
+        .target-row,
+        .shop-row {
             display: flex;
             gap: 12px;
             overflow-x: auto;
             padding-bottom: 10px;
-            min-height: 170px;
+            min-height: 180px;
             align-items: center;
             transition: opacity 0.3s, filter 0.3s;
             scroll-behavior: smooth;
         }
 
-        .target-row::-webkit-scrollbar { height: 5px; }
-        .target-row::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.03); border-radius: 3px; }
-        .target-row::-webkit-scrollbar-thumb { background: linear-gradient(90deg, #ff8c00, #cc7000); border-radius: 3px; box-shadow: 0 0 10px rgba(255, 140, 0, 0.5); }
+        .shop-row { min-height: 200px; }
+
+        .target-row::-webkit-scrollbar,
+        .shop-row::-webkit-scrollbar { height: 6px; }
+        .target-row::-webkit-scrollbar-track,
+        .shop-row::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.03); border-radius: 3px; }
+        .target-row::-webkit-scrollbar-thumb,
+        .shop-row::-webkit-scrollbar-thumb { background: linear-gradient(90deg, #ff8c00, #cc7000); border-radius: 3px; box-shadow: 0 0 10px rgba(255, 140, 0, 0.5); }
 
         .target-card {
             flex-shrink: 0;
             background: linear-gradient(145deg, #2a2a33 0%, #1a1a20 100%);
             border-radius: 16px;
             padding: 12px;
-            width: 120px;
+            width: 130px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -693,7 +701,7 @@
         .target-card.disabled:hover { transform: none; border-color: rgba(255, 255, 255, 0.05); box-shadow: none; }
 
         .target-card img {
-            width: 65px; height: 65px;
+            width: 70px; height: 70px;
             object-fit: contain;
             margin-bottom: 6px;
             filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.5));
@@ -726,28 +734,12 @@
             pointer-events: none;
         }
 
-        /* ===== МАГАЗИН (горизонтальная лента) ===== */
-        .shop-row {
-            display: flex;
-            gap: 12px;
-            overflow-x: auto;
-            padding-bottom: 10px;
-            min-height: 200px;
-            align-items: center;
-            transition: opacity 0.3s, filter 0.3s;
-            scroll-behavior: smooth;
-        }
-
-        .shop-row::-webkit-scrollbar { height: 5px; }
-        .shop-row::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.03); border-radius: 3px; }
-        .shop-row::-webkit-scrollbar-thumb { background: linear-gradient(90deg, #ff8c00, #cc7000); border-radius: 3px; box-shadow: 0 0 10px rgba(255, 140, 0, 0.5); }
-
         .shop-card {
             flex-shrink: 0;
             background: linear-gradient(145deg, #2a2a33 0%, #1a1a20 100%);
             border-radius: 16px;
             padding: 12px;
-            width: 130px;
+            width: 140px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -775,7 +767,7 @@
         }
 
         .shop-card img {
-            width: 65px; height: 65px;
+            width: 70px; height: 70px;
             object-fit: contain;
             margin-bottom: 8px;
             filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.5));
@@ -846,6 +838,13 @@
             animation: none;
         }
 
+        /* ===== АДАПТИВ ===== */
+        @media (max-width: 900px) {
+            .top-bar { padding: 15px 20px; }
+            .logo-text { font-size: 28px; }
+            .main-content { padding: 20px; gap: 25px; }
+        }
+
         @media (max-width: 600px) {
             body { padding: 0; }
             .app { border-radius: 0; min-height: 100vh; }
@@ -854,18 +853,18 @@
             .balance { font-size: 13px; padding: 7px 12px; }
             .coin-icon { width: 18px; height: 18px; }
             .main-content { padding: 15px; gap: 20px; }
-            .roulette-wrapper { width: 270px; height: 270px; }
-            .roulette-center { width: 90px; height: 90px; }
-            .chance-text { font-size: 22px; }
-            .roulette-arrow { border-top-width: 65px; border-left-width: 13px; border-right-width: 13px; }
-            .roulette-arrow::after { top: -75px; left: -7px; width: 14px; height: 14px; }
-            .upgrade-btn { font-size: 18px; padding: 18px; letter-spacing: 5px; text-indent: 5px; }
-            .inv-card { width: 105px; padding: 10px; }
-            .inv-card img { width: 55px; height: 55px; }
-            .target-card { width: 100px; padding: 10px; }
-            .target-card img { width: 55px; height: 55px; }
-            .shop-card { width: 110px; padding: 10px; }
-            .shop-card img { width: 55px; height: 55px; }
+            .roulette-wrapper { width: 290px; height: 290px; }
+            .roulette-center { width: 95px; height: 95px; }
+            .chance-text { font-size: 24px; }
+            .roulette-arrow { border-top-width: 70px; border-left-width: 14px; border-right-width: 14px; }
+            .roulette-arrow::after { top: -80px; left: -8px; width: 16px; height: 16px; }
+            .upgrade-btn { font-size: 20px; padding: 20px; letter-spacing: 6px; text-indent: 6px; }
+            .inv-card { width: 110px; padding: 10px; }
+            .inv-card img { width: 58px; height: 58px; }
+            .target-card { width: 105px; padding: 10px; }
+            .target-card img { width: 58px; height: 58px; }
+            .shop-card { width: 115px; padding: 10px; }
+            .shop-card img { width: 58px; height: 58px; }
         }
     </style>
 </head>
@@ -930,7 +929,7 @@
     function createParticles() {
         const container = document.getElementById('particles');
         const colors = ['#ff8c00', '#ffaa33', '#8a8d9b', '#cc7000'];
-        for (let i = 0; i < 40; i++) {
+        for (let i = 0; i < 50; i++) {
             const p = document.createElement('div');
             p.className = 'particle';
             p.style.left = Math.random() * 100 + '%';
@@ -954,7 +953,7 @@
             const marker = document.createElement('div');
             marker.className = 'marker';
             const angle = (360 / markers) * i;
-            const radius = 185;
+            const radius = 210;
             const x = Math.cos((angle - 90) * Math.PI / 180) * radius;
             const y = Math.sin((angle - 90) * Math.PI / 180) * radius;
             marker.style.transform = `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`;
@@ -982,7 +981,7 @@
     const SPIN_DURATION = 6000;
     const SEGMENTS = 60;
     const MIN_VISIBLE_SEGMENTS = 3;
-    const WHEEL_SCROLL_STEP = 300; // шаг прокрутки колёсиком
+    const WHEEL_SCROLL_STEP = 300;
 
     let balance = 1000;
     let inventory = [];
@@ -1015,19 +1014,15 @@
         shopRow.classList.remove('locked');
     }
 
-    // ===== ПРОКРУТКА КОЛЁСИКОМ МЫШИ =====
     function enableWheelScroll(element) {
         element.addEventListener('wheel', (e) => {
-            // Если у элемента есть куда скроллить по горизонтали
             const canScroll = element.scrollWidth > element.clientWidth;
             if (!canScroll) return;
-            
             e.preventDefault();
             element.scrollLeft += e.deltaY > 0 ? WHEEL_SCROLL_STEP : -WHEEL_SCROLL_STEP;
         }, { passive: false });
     }
 
-    // ===== МАГАЗИН =====
     function renderShop() {
         shopRow.innerHTML = ITEMS.map(item => `
             <div class="shop-card">
@@ -1053,7 +1048,6 @@
         updateUpgradeScreen();
     }
 
-    // ===== ПРОДАЖА =====
     window.sellItem = function(id) {
         if (isSpinning) return;
         const index = inventory.indexOf(id);
@@ -1074,7 +1068,6 @@
         updateUpgradeScreen();
     };
 
-    // ===== ИНВЕНТАРЬ =====
     function renderInventory() {
         if (inventory.length === 0) {
             inventoryRow.innerHTML = '<div class="empty-inv">Инвентарь пуст. Купи что-нибудь в магазине!</div>';
@@ -1112,7 +1105,6 @@
         updateUpgradeScreen();
     };
 
-    // ===== ВЫБОР ЦЕЛИ =====
     function renderTargets() {
         const sourceItem = selectedSourceId ? getItemById(selectedSourceId) : null;
         targetRow.innerHTML = ITEMS.map(item => {
@@ -1139,7 +1131,6 @@
         updateUpgradeScreen();
     };
 
-    // ===== АПГРЕЙД =====
     function updateUpgradeScreen() {
         const sourceItem = selectedSourceId ? getItemById(selectedSourceId) : null;
         const targetItem = selectedTargetId ? getItemById(selectedTargetId) : null;
@@ -1246,7 +1237,6 @@
         renderShop();
         updateUpgradeScreen();
         
-        // Включаем прокрутку колёсиком для целей и магазина
         enableWheelScroll(targetRow);
         enableWheelScroll(shopRow);
         enableWheelScroll(inventoryRow);
