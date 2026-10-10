@@ -1,7 +1,6 @@
 {
   "name": "ggbrainx-upgrader",
   "version": "1.0.0",
-  "description": "GGbrainX Brainrot Upgrader with LIVE BOARD",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
