@@ -1,278 +1,449 @@
 const express = require('express');
 const http = require('http');
+const path = require('path');
+const fs = require('fs');
 const WebSocket = require('ws');
 
 const app = express();
 const server = http.createServer(app);
-const wss = new WebSocket.Server({
-    server,
-    verifyClient: () => true
-});
+const wss = new WebSocket.Server({ server });
+
+app.use(express.json());
+app.use(express.static(path.join(__dirname, 'public')));
 
 // ============================================================
-// HTML СТРАНИЦА (встроена прямо в server.js)
+// КОНФИГ
 // ============================================================
-const HTML_PAGE = `<!DOCTYPE html>
-<html lang="ru">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GGbrainX — Upgrader</title>
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Orbitron:wght@500;700;900&display=swap');
-* { box-sizing: border-box; margin: 0; padding: 0; user-select: none; font-family: 'Inter', sans-serif; }
-html { scroll-behavior: smooth; }
-body { background: #0a0a0f; color: #e5e7eb; min-height: 100vh; padding: 20px; position: relative; overflow-x: hidden; }
-.bg-layer { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; overflow: hidden; pointer-events: none; }
-.bg-layer::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle at 20% 30%, rgba(255, 140, 0, 0.12) 0%, transparent 40%), radial-gradient(circle at 80% 70%, rgba(255, 140, 0, 0.08) 0%, transparent 40%); animation: bgMove 25s ease-in-out infinite; }
-@keyframes bgMove { 0%, 100% { transform: translate(0, 0) rotate(0deg); } 50% { transform: translate(-5%, -5%) rotate(8deg); } }
-.game-layout { display: grid; grid-template-columns: 280px 1fr; gap: 20px; max-width: 1600px; margin: 0 auto; align-items: start; }
-.live-board { background: linear-gradient(180deg, rgba(30, 30, 38, 0.95) 0%, rgba(18, 18, 22, 0.95) 100%); border: 1px solid rgba(255, 140, 0, 0.25); border-radius: 20px; padding: 15px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7), 0 0 40px rgba(255, 140, 0, 0.08); backdrop-filter: blur(20px); position: sticky; top: 20px; max-height: calc(100vh - 40px); display: flex; flex-direction: column; }
-.live-header { display: flex; align-items: center; gap: 8px; padding-bottom: 12px; margin-bottom: 12px; border-bottom: 1px solid rgba(255, 140, 0, 0.15); }
-.live-dot { width: 10px; height: 10px; background: #ff4d4d; border-radius: 50%; box-shadow: 0 0 12px rgba(255, 77, 77, 1); animation: livePulse 1.5s ease-in-out infinite; transition: all 0.3s; }
-.live-dot.offline { background: #555; box-shadow: 0 0 12px rgba(85, 85, 85, 0.5); animation: none; }
-@keyframes livePulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(1.3); } }
-.live-title { font-family: 'Orbitron', sans-serif; font-size: 14px; font-weight: 900; letter-spacing: 2px; background: linear-gradient(135deg, #ff4d4d, #ff8c00); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; flex: 1; }
-.live-status { font-size: 9px; font-weight: 700; color: #7ed88a; text-transform: uppercase; letter-spacing: 1px; }
-.live-status.offline { color: #ff4d4d; }
-.live-status.connecting { color: #ffaa33; }
-.live-list { display: flex; flex-direction: column; gap: 8px; overflow-y: auto; flex: 1; padding-right: 5px; min-height: 100px; }
-.live-list::-webkit-scrollbar { width: 4px; }
-.live-list::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #ff8c00, #cc7000); border-radius: 2px; }
-.live-item { display: flex; align-items: center; gap: 10px; padding: 8px 10px; background: linear-gradient(145deg, rgba(255, 140, 0, 0.08) 0%, rgba(255, 140, 0, 0.02) 100%); border: 1px solid rgba(255, 140, 0, 0.2); border-radius: 12px; animation: liveSlideIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); position: relative; overflow: hidden; }
-.live-item::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255, 200, 100, 0.2), transparent); animation: shineSlide 2s ease-in-out; }
-@keyframes shineSlide { 0% { left: -100%; } 100% { left: 100%; } }
-@keyframes liveSlideIn { 0% { opacity: 0; transform: translateX(-30px); } 100% { opacity: 1; transform: translateX(0); } }
-.live-item .live-img { width: 42px; height: 42px; object-fit: contain; filter: drop-shadow(0 0 6px rgba(255, 140, 0, 0.5)); flex-shrink: 0; }
-.live-item .live-info { display: flex; flex-direction: column; gap: 2px; min-width: 0; flex: 1; }
-.live-item .live-name { font-family: 'Orbitron', sans-serif; font-size: 11px; font-weight: 800; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.live-item .live-price { font-size: 11px; color: #ffaa33; font-weight: 800; display: flex; align-items: center; gap: 3px; font-family: 'Orbitron', sans-serif; }
-.live-item .live-coin { width: 12px; height: 12px; object-fit: contain; }
-.live-empty { color: #4a4d5e; font-size: 12px; text-align: center; padding: 30px 10px; font-weight: 600; }
-.app { width: 100%; background: linear-gradient(180deg, rgba(30, 30, 38, 0.95) 0%, rgba(18, 18, 22, 0.95) 100%); border-radius: 28px; border: 1px solid rgba(255, 140, 0, 0.15); box-shadow: 0 30px 80px rgba(0, 0, 0, 0.8), 0 0 80px rgba(255, 140, 0, 0.06); overflow: hidden; display: flex; flex-direction: column; padding-bottom: 25px; backdrop-filter: blur(20px); }
-.top-bar { display: flex; justify-content: space-between; align-items: center; padding: 15px 30px; background: rgba(255, 255, 255, 0.02); border-bottom: 1px solid rgba(255, 140, 0, 0.1); }
-.logo-text { font-family: 'Orbitron', sans-serif; font-size: 28px; font-weight: 900; letter-spacing: 1px; background: linear-gradient(135deg, #d0d0d0 0%, #ff8c00 50%, #ffaa33 100%); background-size: 200% 200%; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; filter: drop-shadow(0 0 15px rgba(255, 140, 0, 0.5)); animation: logoGradient 4s ease infinite; }
-@keyframes logoGradient { 0%, 100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
-.top-right { display: flex; align-items: center; gap: 12px; }
-.balance { background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.1); padding: 8px 16px; border-radius: 20px; font-size: 16px; font-weight: 800; display: flex; align-items: center; gap: 8px; color: #fff; font-family: 'Orbitron', sans-serif; }
-.coin-icon { width: 20px; height: 20px; object-fit: contain; filter: drop-shadow(0 0 8px rgba(255, 140, 0, 0.8)); }
-.avatar { width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #ff8c00, #cc7000); display: flex; align-items: center; justify-content: center; font-family: 'Orbitron', sans-serif; font-weight: 900; font-size: 18px; color: #fff; box-shadow: 0 0 20px rgba(255, 140, 0, 0.5); cursor: pointer; }
-.progress-section { display: flex; justify-content: center; align-items: center; padding: 30px 0 20px; }
-.progress-wrapper { position: relative; width: 340px; height: 340px; }
-.progress-svg { width: 100%; height: 100%; transform: rotate(-90deg); }
-.progress-bg { fill: none; stroke: #1e1e26; stroke-width: 24; }
-.progress-bar { fill: none; stroke: url(#progressGradient); stroke-width: 24; stroke-linecap: round; stroke-dasharray: 816; stroke-dashoffset: 816; transition: stroke-dashoffset 0.3s ease; filter: drop-shadow(0 0 15px rgba(255, 140, 0, 0.8)); }
-.arrow-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; justify-content: center; align-items: flex-start; pointer-events: none; z-index: 5; transition: transform 6s cubic-bezier(0.12, 0.8, 0.15, 1); transform-origin: center center; }
-.arrow-pointer { width: 0; height: 0; border-left: 14px solid transparent; border-right: 14px solid transparent; border-top: 28px solid #ff8c00; margin-top: 22px; filter: drop-shadow(0 0 10px rgba(255, 140, 0, 1)) drop-shadow(0 0 20px rgba(255, 140, 0, 0.6)); position: relative; }
-.arrow-pointer::after { content: ''; position: absolute; top: -34px; left: -6px; width: 12px; height: 12px; background: radial-gradient(circle at 30% 30%, #ffaa33, #ff8c00); border-radius: 50%; box-shadow: 0 0 15px rgba(255, 140, 0, 1); }
-.progress-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; z-index: 10; }
-.chance-big { font-family: 'Orbitron', sans-serif; font-size: 48px; font-weight: 900; color: #ff8c00; text-shadow: 0 0 30px rgba(255, 140, 0, 0.8); line-height: 1; }
-.chance-label { font-size: 14px; color: #7ed88a; font-weight: 700; text-transform: uppercase; letter-spacing: 3px; margin-top: 8px; text-shadow: 0 0 10px rgba(120, 200, 130, 0.5); min-height: 18px; }
-.chance-label.medium { color: #ffaa33; text-shadow: 0 0 10px rgba(255, 140, 0, 0.5); }
-.chance-label.hidden { visibility: hidden; }
-.items-row { display: flex; justify-content: center; align-items: center; gap: 15px; padding: 20px 30px; }
-.item-box { background: linear-gradient(145deg, #1e1e26 0%, #15151c 100%); border-radius: 18px; padding: 18px; display: flex; flex-direction: column; align-items: center; border: 2px solid rgba(255, 140, 0, 0.4); min-width: 160px; box-shadow: 0 0 30px rgba(255, 140, 0, 0.2); }
-.item-box .label { font-size: 11px; color: #8a8d9b; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; }
-.item-box img { width: 80px; height: 80px; object-fit: contain; margin-bottom: 10px; filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.6)); }
-.item-box .name { font-size: 13px; font-weight: 700; text-align: center; margin-bottom: 8px; color: #fff; height: 32px; display: flex; align-items: center; }
-.item-box .price { font-family: 'Orbitron', sans-serif; font-size: 14px; font-weight: 800; color: #d0d0d0; display: flex; align-items: center; gap: 5px; }
-.price-coin { width: 16px; height: 16px; object-fit: contain; }
-.swap-arrow { font-size: 28px; color: #ff8c00; filter: drop-shadow(0 0 10px rgba(255, 140, 0, 0.8)); animation: pulseArrow 2s ease-in-out infinite; }
-@keyframes pulseArrow { 0%, 100% { transform: scale(1); opacity: 0.7; } 50% { transform: scale(1.15); opacity: 1; } }
-.upgrade-btn { width: calc(100% - 60px); margin: 0 auto; padding: 20px; border-radius: 16px; border: none; background: linear-gradient(135deg, #ff8c00 0%, #ffaa33 50%, #ff8c00 100%); background-size: 200% 200%; color: white; font-family: 'Orbitron', sans-serif; font-size: 20px; font-weight: 900; text-transform: uppercase; letter-spacing: 3px; cursor: pointer; box-shadow: 0 10px 30px rgba(255, 140, 0, 0.4), 0 0 60px rgba(255, 140, 0, 0.2); animation: gradientShift 3s ease infinite; }
-@keyframes gradientShift { 0%, 100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
-.upgrade-btn:hover:not(:disabled) { transform: translateY(-3px) scale(1.02); box-shadow: 0 20px 50px rgba(255, 140, 0, 0.6), 0 0 100px rgba(255, 140, 0, 0.4); }
-.upgrade-btn:active { transform: scale(0.98); }
-.upgrade-btn:disabled { opacity: 0.4; cursor: not-allowed; background: #3a3d4d; animation: none; box-shadow: none; }
-.section-title { font-family: 'Orbitron', sans-serif; font-size: 12px; font-weight: 700; color: #8a8d9b; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 10px; padding: 0 30px; display: flex; align-items: center; gap: 8px; }
-.section-title::before { content: ''; width: 4px; height: 14px; background: linear-gradient(180deg, #ff8c00, #cc7000); border-radius: 2px; box-shadow: 0 0 10px rgba(255, 140, 0, 0.8); }
-.section-block { margin-top: 25px; }
-.target-row, .shop-row, .inventory-row { display: flex; gap: 12px; overflow-x: auto; padding: 5px 30px 15px; scroll-behavior: smooth; }
-.target-row::-webkit-scrollbar, .shop-row::-webkit-scrollbar, .inventory-row::-webkit-scrollbar { height: 5px; }
-.target-row::-webkit-scrollbar-thumb, .shop-row::-webkit-scrollbar-thumb, .inventory-row::-webkit-scrollbar-thumb { background: linear-gradient(90deg, #ff8c00, #cc7000); border-radius: 3px; }
-.inv-card, .target-card, .shop-card { flex-shrink: 0; background: linear-gradient(145deg, #1e1e26 0%, #15151c 100%); border-radius: 14px; padding: 10px; width: 110px; display: flex; flex-direction: column; align-items: center; border: 1px solid rgba(255, 255, 255, 0.05); transition: all 0.3s; position: relative; }
-.inv-card:hover, .target-card:hover:not(.disabled), .shop-card:hover { transform: translateY(-4px); border-color: rgba(255, 140, 0, 0.5); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 25px rgba(255, 140, 0, 0.2); }
-.inv-card.selected, .target-card.selected { border-color: #ff8c00; background: linear-gradient(145deg, rgba(255, 140, 0, 0.15) 0%, rgba(255, 140, 0, 0.05) 100%); box-shadow: 0 0 30px rgba(255, 140, 0, 0.5); }
-.target-card.disabled { opacity: 0.25; cursor: not-allowed; filter: grayscale(1); }
-.inv-card img, .target-card img, .shop-card img { width: 55px; height: 55px; object-fit: contain; margin-bottom: 6px; pointer-events: none; }
-.inv-card .name, .target-card .name, .shop-card .name { font-size: 10px; font-weight: 700; text-align: center; margin-bottom: 4px; height: 24px; overflow: hidden; color: #e5e7ef; pointer-events: none; }
-.inv-card .price, .target-card .price, .shop-card .price { font-size: 11px; color: #ffaa33; font-weight: 800; display: flex; align-items: center; gap: 3px; font-family: 'Orbitron', sans-serif; pointer-events: none; }
-.buy-btn { width: 100%; padding: 6px; border-radius: 8px; border: none; background: linear-gradient(135deg, #ff8c00, #cc7000); color: white; font-weight: 800; font-size: 10px; cursor: pointer; text-transform: uppercase; font-family: 'Orbitron', sans-serif; margin-top: 6px; position: relative; z-index: 5; }
-.buy-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255, 140, 0, 0.6); }
-.buy-btn:disabled { opacity: 0.4; cursor: not-allowed; background: #3a3d4d; }
-.sell-btn { width: 100%; padding: 7px; border-radius: 8px; border: 1px solid rgba(120, 200, 130, 0.3); background: rgba(120, 200, 130, 0.1); color: #7ed88a; font-weight: 800; font-size: 10px; cursor: pointer; text-transform: uppercase; font-family: 'Orbitron', sans-serif; margin-top: 6px; letter-spacing: 1px; position: relative; z-index: 5; }
-.sell-btn:hover:not(:disabled) { background: rgba(120, 200, 130, 0.3); border-color: rgba(120, 200, 130, 0.6); box-shadow: 0 0 20px rgba(120, 200, 130, 0.4); transform: translateY(-2px); }
-.sell-btn:disabled { opacity: 0.4; cursor: not-allowed; }
-.empty-inv { color: #4a4d5e; font-size: 13px; text-align: center; width: 100%; padding: 20px; font-weight: 600; }
-.selectable { display: flex; flex-direction: column; align-items: center; width: 100%; cursor: pointer; }
-.locked { pointer-events: none !important; opacity: 0.4 !important; filter: grayscale(0.5) !important; }
-@media (max-width: 1100px) { .game-layout { grid-template-columns: 240px 1fr; gap: 15px; } }
-@media (max-width: 900px) { .game-layout { grid-template-columns: 1fr; gap: 15px; } .live-board { position: relative; top: 0; max-height: 220px; order: -1; } .live-list { flex-direction: row; overflow-x: auto; overflow-y: hidden; min-height: 80px; } .live-item { flex-shrink: 0; min-width: 180px; } }
-@media (max-width: 600px) { body { padding: 0; } .game-layout { padding: 10px; gap: 10px; } .live-board { border-radius: 15px; padding: 12px; } .live-title { font-size: 12px; } .app { border-radius: 20px; } .progress-wrapper { width: 260px; height: 260px; } .chance-big { font-size: 34px; } .arrow-pointer { margin-top: 16px; border-left-width: 12px; border-right-width: 12px; border-top-width: 24px; } .arrow-pointer::after { top: -30px; left: -5px; width: 10px; height: 10px; } .item-box { min-width: 120px; padding: 12px; } .item-box img { width: 60px; height: 60px; } .upgrade-btn { font-size: 15px; padding: 15px; letter-spacing: 2px; } .inv-card, .target-card, .shop-card { width: 95px; padding: 8px; } .inv-card img, .target-card img, .shop-card img { width: 48px; height: 48px; } .section-title, .target-row, .shop-row, .inventory-row { padding-left: 15px; padding-right: 15px; } .items-row { padding: 15px 15px; gap: 10px; } .upgrade-btn { width: calc(100% - 30px); } .top-bar { padding: 12px 15px; } .logo-text { font-size: 22px; } }
-</style>
-</head>
-<body>
+const ADMIN_USERNAME = '@saintezz7';
+const DATA_FILE = path.join(__dirname, 'data.json');
+const SAVE_INTERVAL = 5000;
 
-<div class="bg-layer"></div>
-<div class="game-layout">
-    <div class="live-board">
-        <div class="live-header">
-            <div class="live-dot offline" id="liveDot"></div>
-            <div class="live-title">LIVE BOARD</div>
-            <div class="live-status offline" id="liveStatus">OFFLINE</div>
-        </div>
-        <div class="live-list" id="liveList">
-            <div class="live-empty">Пока нет дропов...<br>Играй и попади сюда!</div>
-        </div>
-    </div>
-    <div class="app">
-        <div class="top-bar">
-            <div class="logo-text">GGbrainX</div>
-            <div class="top-right">
-                <div class="balance">
-                    <img src="https://github.com/saintezz/saintbetW/blob/main/%D0%BC%D0%BE%D0%BD%D0%B5%D1%82%D0%B0.png?raw=true" alt="coin" class="coin-icon">
-                    <span id="balanceDisplay">1 000</span>
-                </div>
-                <div class="avatar">P</div>
-            </div>
-        </div>
-        <div class="progress-section">
-            <div class="progress-wrapper">
-                <svg class="progress-svg" viewBox="0 0 340 340">
-                    <defs>
-                        <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" stop-color="#ff8c00" />
-                            <stop offset="100%" stop-color="#ffaa33" />
-                        </linearGradient>
-                    </defs>
-                    <circle class="progress-bg" cx="170" cy="170" r="130"></circle>
-                    <circle class="progress-bar" id="progressBar" cx="170" cy="170" r="130"></circle>
-                </svg>
-                <div class="arrow-container" id="arrowContainer"><div class="arrow-pointer"></div></div>
-                <div class="progress-center">
-                    <div class="chance-big" id="chanceBig">0%</div>
-                    <div class="chance-label hidden" id="chanceLabel">—</div>
-                </div>
-            </div>
-        </div>
-        <div class="items-row">
-            <div class="item-box">
-                <div class="label">Твой предмет</div>
-                <img id="sourceImg" src="" alt="" style="display:none">
-                <div class="name" id="sourceName">—</div>
-                <div class="price" id="sourcePrice"></div>
-            </div>
-            <div class="swap-arrow">➜</div>
-            <div class="item-box">
-                <div class="label">Цель</div>
-                <img id="targetImg" src="" alt="" style="display:none">
-                <div class="name" id="targetName">—</div>
-                <div class="price" id="targetPrice"></div>
-            </div>
-        </div>
-        <button class="upgrade-btn" id="upgradeBtn" disabled>Апгрейд - 0%</button>
-        <div class="section-block">
-            <div class="section-title">Инвентарь</div>
-            <div class="inventory-row" id="inventoryRow"><div class="empty-inv">Инвентарь пуст</div></div>
-        </div>
-        <div class="section-block">
-            <div class="section-title">Выбери цель</div>
-            <div class="target-row" id="targetRow"></div>
-        </div>
-        <div class="section-block">
-            <div class="section-title">Магазин</div>
-            <div class="shop-row" id="shopRow"></div>
-        </div>
-    </div>
-</div>
+// ============================================================
+// БАЗА
+// ============================================================
+let DB = {
+    users: {},
+    promocodes: {},
+    withdrawCatalog: [],
+    exchangeRules: {},
+    recentDrops: []
+};
 
-<script>
-const COIN_IMG = 'https://github.com/saintezz/saintbetW/blob/main/%D0%BC%D0%BE%D0%BD%D0%B5%D1%82%D0%B0.png?raw=true';
-function getWsUrl() {
-    if (location.protocol === 'file:' || !location.hostname) return 'ws://localhost:3000';
-    const proto = location.protocol === 'https:' ? 'wss:' : 'ws:';
-    return proto + '//' + location.host;
-}
-const WS_URL = getWsUrl();
-const WS_RECONNECT_BASE = 1000;
-const WS_RECONNECT_MAX = 30000;
-const WS_PING_INTERVAL = 25000;
-let ws = null, reconnectAttempts = 0, pingTimer = null, reconnectTimer = null, wsManuallyClosed = false;
-let myNickname = 'Игрок_' + Math.floor(Math.random() * 9000 + 1000);
-const liveDot = document.getElementById('liveDot');
-const liveStatus = document.getElementById('liveStatus');
-const liveList = document.getElementById('liveList');
-function setStatus(status) {
-    liveDot.className = 'live-dot';
-    liveStatus.className = 'live-status';
-    if (status === 'online') { liveStatus.textContent = 'ONLINE'; }
-    else if (status === 'connecting') { liveDot.classList.add('offline'); liveStatus.textContent = 'CONNECT...'; liveStatus.classList.add('connecting'); }
-    else { liveDot.classList.add('offline'); liveStatus.textContent = 'OFFLINE'; liveStatus.classList.add('offline'); }
-}
-function connectWS() {
-    if (wsManuallyClosed) return;
-    if (ws && (ws.readyState === WebSocket.OPEN || ws.readyState === WebSocket.CONNECTING)) return;
-    setStatus('connecting');
-    console.log('Подключаюсь к ' + WS_URL);
-    try { ws = new WebSocket(WS_URL); } catch (err) { console.error(err); scheduleReconnect(); return; }
-    ws.onopen = () => {
-        console.log('WebSocket подключён');
-        reconnectAttempts = 0;
-        setStatus('online');
-        clearInterval(pingTimer);
-        pingTimer = setInterval(() => {
-            if (ws && ws.readyState === WebSocket.OPEN) { try { ws.send(JSON.stringify({type:'ping'})); } catch(e){} }
-        }, WS_PING_INTERVAL);
-    };
-    ws.onmessage = (event) => {
-        try {
-            const msg = JSON.parse(event.data);
-            if (msg.type === 'history') {
-                liveList.innerHTML = '';
-                if (!msg.drops || msg.drops.length === 0) { liveList.innerHTML = '<div class="live-empty">Пока нет дропов...<br>Играй и попади сюда!</div>'; }
-                else { msg.drops.slice().reverse().forEach(drop => addLiveDrop(drop, false)); }
-            }
-            if (msg.type === 'new_drop') { addLiveDrop(msg.drop, true); }
-        } catch (err) { console.error(err); }
-    };
-    ws.onclose = () => {
-        console.log('WebSocket закрыт');
-        clearInterval(pingTimer);
-        if (!wsManuallyClosed) { setStatus('offline'); scheduleReconnect(); }
-    };
-    ws.onerror = () => { setStatus('offline'); };
-}
-function scheduleReconnect() {
-    clearTimeout(reconnectTimer);
-    const delay = Math.min(WS_RECONNECT_BASE * Math.pow(2, reconnectAttempts), WS_RECONNECT_MAX);
-    reconnectAttempts++;
-    reconnectTimer = setTimeout(connectWS, delay);
-}
-function sendWin(item) {
-    if (!ws || ws.readyState !== WebSocket.OPEN) return;
+function loadDB() {
     try {
-        ws.send(JSON.stringify({ type:'upgrade_win', nickname: myNickname, itemId: item.id, itemName: item.name, itemImg: item.img, price: item.price }));
-    } catch (err) { console.error(err); }
+        if (fs.existsSync(DATA_FILE)) {
+            const raw = fs.readFileSync(DATA_FILE, 'utf-8');
+            DB = Object.assign(DB, JSON.parse(raw));
+            console.log('✅ База данных загружена');
+        } else {
+            fs.writeFileSync(DATA_FILE, JSON.stringify(DB, null, 2));
+            console.log('📁 База создана');
+        }
+    } catch (err) {
+        console.error('Ошибка загрузки БД:', err);
+    }
 }
-function addLiveDrop(drop, animate) {
-    const empty = liveList.querySelector('.live-empty');
-    if (empty) empty.remove();
-    const item = document.createElement('div');
-    item.className = 'live-item';
-    if (!animate) item.style.animation = 'none';
-    item.innerHTML = '<img class="live-img" src="' + drop.itemImg + '" alt="" onerror="this.src=\\'https://via.placeholder.com/42?text=?\\'">' +
-        '<div class="live-info"><div class="live-name">' + escapeHtml(drop.itemName) + '</div>' +
-        '<div class="live-price"><img class="live-coin" src="' + COIN_IMG + '" alt="coin">' + drop.price + '</div></div>';
-    liveList.prepend(item);
-    while (liveList.children.length > 30) liveList.removeChild(liveList.lastChild);
+
+function saveDB() {
+    try {
+        fs.writeFileSync(DATA_FILE, JSON.stringify(DB, null, 2));
+    } catch (err) {
+        console.error('Ошибка сохранения БД:', err);
+    }
 }
-function escapeHtml(str) {
-    return String(str).replace(/[&<>"']/g, (m) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+
+setInterval(saveDB, SAVE_INTERVAL);
+process.on('SIGTERM', () => { saveDB(); process.exit(0); });
+process.on('SIGINT', () => { saveDB(); process.exit(0); });
+
+// ============================================================
+// КАТАЛОГ ПРЕДМЕТОВ
+// ============================================================
+const ALL_ITEMS = [
+    { id: 'cupid', name: 'Cupid Wings', price: 34, img: 'https://github.com/forerer-afk/brainroterX/blob/main/cupid-wings.png?raw=true' },
+    { id: 'garama', name: 'Garama and Madundung', price: 41, img: 'https://github.com/forerer-afk/brainroterX/blob/main/garama.png?raw=true' },
+    { id: 'burguro', name: 'Burguro and Fryuro', price: 70, img: 'https://github.com/forerer-afk/brainroterX/blob/main/burguru.png?raw=true' },
+    { id: 'celestial', name: 'Celestial Pegasus', price: 93, img: 'https://github.com/forerer-afk/brainroterX/blob/main/celestialpegasus.png?raw=true' },
+    { id: 'cooki', name: 'Cooki and Milki', price: 130, img: 'https://github.com/forerer-afk/brainroterX/blob/main/cookiandmilki.png?raw=true' },
+    { id: 'cerberus', name: 'Cerberus', price: 155, img: 'https://github.com/forerer-afk/brainroterX/blob/main/cerberus.png?raw=true' },
+    { id: 'globba', name: 'Globba Steppa', price: 164, img: 'https://github.com/forerer-afk/brainroterX/blob/main/globastepa.png?raw=true' },
+    { id: 'rubiko', name: 'Rubiko and Kubiko', price: 395, img: 'https://github.com/forerer-afk/brainroterX/blob/main/Rubiko_and_Kubiko.webp?raw=true' },
+    { id: 'lossecret', name: 'Los Secret Combinasionas', price: 419, img: 'https://github.com/forerer-afk/brainroterX/blob/main/lossecretcombination.png?raw=true' },
+    { id: 'dragon', name: 'Dragon Cannelloni', price: 890, img: 'https://github.com/forerer-afk/brainroterX/blob/main/dragoncannelloni.png?raw=true' },
+    { id: 'hydra', name: 'Hydra Dragon Cannelloni', price: 1220, img: 'https://github.com/forerer-afk/brainroterX/blob/main/hydragoncannelloni.png?raw=true' }
+];
+
+function getItemById(id) { return ALL_ITEMS.find(i => i.id === id); }
+
+// ============================================================
+// ХЕЛПЕРЫ
+// ============================================================
+function getOrCreateUser(userId) {
+    if (!DB.users[userId]) {
+        DB.users[userId] = {
+            userId,
+            nickname: 'Игрок_' + userId.slice(-4),
+            telegram: '',
+            balance: 1000,
+            inventory: [],
+            promoUsed: [],
+            createdAt: Date.now(),
+            stats: {
+                upgradesTotal: 0,
+                upgradesSuccess: 0,
+                upgradesFail: 0,
+                totalEarned: 0,
+                totalSpent: 0
+            },
+            bestDrop: null
+        };
+        saveDB();
+    }
+    return DB.users[userId];
 }
-window.addEventListener('beforeunload', () => {
-    wsManuallyClosed = true;
-    clearInterval(pingTimer); clearTimeout(reconnectTimer);
-    if (ws) try { ws.close(); } catch(e){}
+
+function addToInventory(user, itemId, count = 1) {
+    for (let i = 0; i < count; i++) user.inventory.push(itemId);
+}
+
+function removeFromInventory(user, itemId, count = 1) {
+    for (let i = 0; i < count; i++) {
+        const idx = user.inventory.indexOf(itemId);
+        if (idx > -1) user.inventory.splice(idx, 1);
+    }
+}
+
+function countInInventory(user, itemId) {
+    return user.inventory.filter(id => id === itemId).length;
+}
+
+function isAdminUser(userId) {
+    const user = DB.users[userId];
+    if (!user) return false;
+    return user.telegram && user.telegram.toLowerCase() === ADMIN_USERNAME.toLowerCase();
+}
+
+// ============================================================
+// API: ПОЛЬЗОВАТЕЛЬ
+// ============================================================
+app.post('/api/user/init', (req, res) => {
+    const { userId } = req.body;
+    if (!userId) return res.status(400).json({ error: 'userId required' });
+    const user = getOrCreateUser(userId);
+    res.json({ user, isAdmin: isAdminUser(userId) });
 });
-const ITEMS = [
-    { id: 'cupid', name: 'Cupid Wings', price: 34, img: 'https://github.com/forerer-afk/brainroterX/blob/main/cupid-wings.png?raw
+
+app.get('/api/items', (req, res) => {
+    res.json({ items: ALL_ITEMS });
+});
+
+app.post('/api/user/update', (req, res) => {
+    const { userId, balance, inventory, stats, bestDrop } = req.body;
+    const user = getOrCreateUser(userId);
+    if (typeof balance === 'number') user.balance = balance;
+    if (Array.isArray(inventory)) user.inventory = inventory;
+    if (stats) user.stats = Object.assign(user.stats, stats);
+    if (bestDrop) user.bestDrop = bestDrop;
+    saveDB();
+    res.json({ ok: true });
+});
+
+app.post('/api/user/nickname', (req, res) => {
+    const { userId, nickname } = req.body;
+    if (!userId || !nickname) return res.status(400).json({ error: 'required' });
+    const user = getOrCreateUser(userId);
+    user.nickname = String(nickname).slice(0, 20);
+    saveDB();
+    res.json({ ok: true, user });
+});
+
+app.post('/api/user/telegram', (req, res) => {
+    const { userId, telegram } = req.body;
+    if (!userId) return res.status(400).json({ error: 'userId required' });
+    const user = getOrCreateUser(userId);
+    let tg = String(telegram || '').trim();
+    if (tg && !tg.startsWith('@')) tg = '@' + tg;
+    user.telegram = tg.slice(0, 32);
+    saveDB();
+    res.json({ ok: true, user, isAdmin: isAdminUser(userId) });
+});
+
+// ============================================================
+// API: ПРОМОКОДЫ
+// ============================================================
+app.post('/api/promo/activate', (req, res) => {
+    const { userId, code } = req.body;
+    if (!userId || !code) return res.status(400).json({ error: 'required' });
+    const user = getOrCreateUser(userId);
+    const promo = DB.promocodes[code.toUpperCase()];
+    if (!promo) return res.status(404).json({ error: 'Промокод не найден' });
+    if (promo.usesLeft <= 0) return res.status(400).json({ error: 'Промокод исчерпан' });
+    if (promo.usedBy.includes(userId)) return res.status(400).json({ error: 'Вы уже использовали этот промокод' });
+
+    if (promo.reward.coins) {
+        user.balance += promo.reward.coins;
+        user.stats.totalEarned += promo.reward.coins;
+    }
+    if (Array.isArray(promo.reward.items)) {
+        promo.reward.items.forEach(it => addToInventory(user, it.id, it.count || 1));
+    }
+
+    promo.usesLeft -= 1;
+    promo.usedBy.push(userId);
+    user.promoUsed.push(code.toUpperCase());
+    saveDB();
+    res.json({ ok: true, reward: promo.reward, user });
+});
+
+// ============================================================
+// API: ВЫВОД
+// ============================================================
+app.get('/api/withdraw/catalog', (req, res) => {
+    const enabled = DB.withdrawCatalog.filter(w => w.enabled).map(w => ({
+        ...w,
+        item: getItemById(w.itemId)
+    })).filter(w => w.item);
+    res.json({ catalog: enabled });
+});
+
+app.post('/api/withdraw/request', (req, res) => {
+    const { userId, itemId } = req.body;
+    if (!userId || !itemId) return res.status(400).json({ error: 'required' });
+    const user = getOrCreateUser(userId);
+
+    const catalogEntry = DB.withdrawCatalog.find(w => w.itemId === itemId && w.enabled);
+    if (catalogEntry) {
+        if (countInInventory(user, itemId) < 1) return res.status(400).json({ error: 'У вас нет этого предмета' });
+        removeFromInventory(user, itemId, 1);
+        catalogEntry.requests = catalogEntry.requests || [];
+        catalogEntry.requests.push({
+            userId,
+            nickname: user.nickname,
+            telegram: user.telegram || '',
+            itemId,
+            timestamp: Date.now(),
+            status: 'pending'
+        });
+        saveDB();
+        return res.json({ ok: true, type: 'direct', message: 'Заявка на вывод создана' });
+    }
+
+    const rule = DB.exchangeRules[itemId];
+    if (!rule) return res.status(400).json({ error: 'Этот предмет нельзя вывести или обменять' });
+    if (countInInventory(user, itemId) < 1) return res.status(400).json({ error: 'У вас нет этого предмета' });
+
+    const offer = {
+        originalItemId: itemId,
+        originalItem: getItemById(itemId),
+        coins: rule.coins || 0,
+        items: (rule.items || []).map(it => ({ ...it, item: getItemById(it.id) })).filter(it => it.item)
+    };
+    res.json({ ok: true, type: 'exchange', offer });
+});
+
+app.post('/api/withdraw/exchange', (req, res) => {
+    const { userId, itemId } = req.body;
+    if (!userId || !itemId) return res.status(400).json({ error: 'required' });
+    const user = getOrCreateUser(userId);
+    const rule = DB.exchangeRules[itemId];
+    if (!rule) return res.status(400).json({ error: 'Правило не найдено' });
+    if (countInInventory(user, itemId) < 1) return res.status(400).json({ error: 'У вас нет этого предмета' });
+
+    removeFromInventory(user, itemId, 1);
+    if (rule.coins) {
+        user.balance += rule.coins;
+        user.stats.totalEarned += rule.coins;
+    }
+    if (Array.isArray(rule.items)) {
+        rule.items.forEach(it => addToInventory(user, it.id, it.count || 1));
+    }
+    saveDB();
+    res.json({ ok: true, user });
+});
+
+// ============================================================
+// API: СТАТИСТИКА
+// ============================================================
+app.post('/api/drop/record', (req, res) => {
+    const { userId, itemId } = req.body;
+    if (!userId || !itemId) return res.status(400).json({ error: 'required' });
+    const user = getOrCreateUser(userId);
+    const item = getItemById(itemId);
+    if (!item) return res.status(400).json({ error: 'item not found' });
+
+    if (!user.bestDrop || user.bestDrop.price < item.price) {
+        user.bestDrop = { itemId: item.id, name: item.name, price: item.price, img: item.img, timestamp: Date.now() };
+    }
+    user.stats.upgradesTotal = (user.stats.upgradesTotal || 0) + 1;
+    saveDB();
+    res.json({ ok: true, bestDrop: user.bestDrop });
+});
+
+// ============================================================
+// API: АДМИН
+// ============================================================
+function checkAdmin(req, res, next) {
+    const userId = req.headers['x-user-id'] || req.body.userId || req.query.userId;
+    if (!userId || !isAdminUser(userId)) {
+        return res.status(403).json({ error: 'Доступ только для администратора' });
+    }
+    next();
+}
+
+app.get('/api/admin/whoami', (req, res) => {
+    const userId = req.query.userId;
+    if (!userId) return res.json({ isAdmin: false });
+    res.json({ isAdmin: isAdminUser(userId), adminUsername: ADMIN_USERNAME });
+});
+
+app.get('/api/admin/withdraw', checkAdmin, (req, res) => {
+    res.json({
+        catalog: DB.withdrawCatalog,
+        exchangeRules: DB.exchangeRules,
+        allItems: ALL_ITEMS
+    });
+});
+
+app.post('/api/admin/withdraw/toggle', checkAdmin, (req, res) => {
+    const { itemId, enabled } = req.body;
+    let entry = DB.withdrawCatalog.find(w => w.itemId === itemId);
+    if (!entry) {
+        entry = { itemId, enabled: !!enabled };
+        DB.withdrawCatalog.push(entry);
+    } else {
+        entry.enabled = !!enabled;
+    }
+    saveDB();
+    res.json({ ok: true });
+});
+
+app.post('/api/admin/withdraw/exchange-rule', checkAdmin, (req, res) => {
+    const { itemId, coins, items } = req.body;
+    if (!itemId) return res.status(400).json({ error: 'itemId required' });
+    DB.exchangeRules[itemId] = {
+        coins: Number(coins) || 0,
+        items: Array.isArray(items) ? items : []
+    };
+    saveDB();
+    res.json({ ok: true });
+});
+
+app.post('/api/admin/withdraw/exchange-rule/delete', checkAdmin, (req, res) => {
+    const { itemId } = req.body;
+    delete DB.exchangeRules[itemId];
+    saveDB();
+    res.json({ ok: true });
+});
+
+app.get('/api/admin/promocodes', checkAdmin, (req, res) => {
+    res.json({ promocodes: DB.promocodes, allItems: ALL_ITEMS });
+});
+
+app.post('/api/admin/promocode/create', checkAdmin, (req, res) => {
+    const { code, coins, items, uses } = req.body;
+    if (!code) return res.status(400).json({ error: 'code required' });
+    const upper = code.toUpperCase();
+    DB.promocodes[upper] = {
+        code: upper,
+        reward: {
+            coins: Number(coins) || 0,
+            items: Array.isArray(items) ? items : []
+        },
+        usesLeft: Number(uses) || 1,
+        usedBy: []
+    };
+    saveDB();
+    res.json({ ok: true });
+});
+
+app.post('/api/admin/promocode/delete', checkAdmin, (req, res) => {
+    const { code } = req.body;
+    delete DB.promocodes[code.toUpperCase()];
+    saveDB();
+    res.json({ ok: true });
+});
+
+app.get('/api/admin/users', checkAdmin, (req, res) => {
+    res.json({ users: Object.values(DB.users) });
+});
+
+app.get('/api/admin/withdraw/requests', checkAdmin, (req, res) => {
+    const requests = [];
+    DB.withdrawCatalog.forEach(w => {
+        if (w.requests) {
+            w.requests.forEach(r => requests.push({ ...r, itemId: w.itemId }));
+        }
+    });
+    requests.sort((a, b) => b.timestamp - a.timestamp);
+    res.json({ requests });
+});
+
+// ============================================================
+// WEBSOCKET (LIVE BOARD)
+// ============================================================
+wss.on('connection', (ws) => {
+    ws.isAlive = true;
+    ws.on('pong', () => { ws.isAlive = true; });
+
+    try {
+        ws.send(JSON.stringify({ type: 'history', drops: DB.recentDrops || [] }));
+    } catch (e) {}
+
+    ws.on('message', (data) => {
+        try {
+            const msg = JSON.parse(data.toString());
+
+            if (msg.type === 'upgrade_win') {
+                const drop = {
+                    nickname: String(msg.nickname || 'Игрок').slice(0, 32),
+                    itemId: String(msg.itemId || '').slice(0, 64),
+                    itemName: String(msg.itemName || '').slice(0, 64),
+                    itemImg: String(msg.itemImg || '').slice(0, 512),
+                    price: Math.max(0, Math.min(999999, parseInt(msg.price) || 0)),
+                    timestamp: Date.now()
+                };
+
+                DB.recentDrops.unshift(drop);
+                if (DB.recentDrops.length > 30) DB.recentDrops.pop();
+
+                wss.clients.forEach(c => {
+                    if (c.readyState === WebSocket.OPEN) {
+                        try { c.send(JSON.stringify({ type: 'new_drop', drop })); } catch (e) {}
+                    }
+                });
+            }
+
+            if (msg.type === 'ping') {
+                ws.send(JSON.stringify({ type: 'pong' }));
+            }
+        } catch (e) {}
+    });
+
+    ws.on('close', () => {});
+    ws.on('error', () => {});
+});
+
+setInterval(() => {
+    wss.clients.forEach(ws => {
+        if (!ws.isAlive) return ws.terminate();
+        ws.isAlive = false;
+        try { ws.ping(); } catch (e) {}
+    });
+}, 30000);
+
+// ============================================================
+// РОУТЫ
+// ============================================================
+app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'public', 'index.html')));
+app.get('/profile', (req, res) => res.sendFile(path.join(__dirname, 'public', 'profile.html')));
+app.get('/admin', (req, res) => res.sendFile(path.join(__dirname, 'public', 'admin.html')));
+
+// ============================================================
+// ЗАПУСК
+// ============================================================
+loadDB();
+const PORT = process.env.PORT || 3000;
+server.listen(PORT, '0.0.0.0', () => {
+    console.log(`🚀 GGbrainX запущен на порту ${PORT}`);
+    console.log(`👑 Админ: ${ADMIN_USERNAME}`);
+});
