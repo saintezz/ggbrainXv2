@@ -99,18 +99,11 @@
             font-family: 'Orbitron', sans-serif;
         }
         .coin-icon { width: 16px; height: 16px; object-fit: contain; filter: drop-shadow(0 0 6px var(--accent-dim)); }
-
         .topup-btn {
-            width: 34px; height: 100%;
-            min-height: 34px;
-            border: none;
-            background: var(--accent);
-            color: #fff;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 18px;
-            font-weight: 900;
-            cursor: pointer;
-            transition: all 0.2s;
+            width: 34px; height: 100%; min-height: 34px;
+            border: none; background: var(--accent); color: #fff;
+            font-family: 'Orbitron', sans-serif; font-size: 18px; font-weight: 900;
+            cursor: pointer; transition: all 0.2s;
             display: flex; align-items: center; justify-content: center;
             border-left: 1px solid var(--accent-deep);
         }
@@ -138,7 +131,6 @@
         .avatar:hover { transform: scale(1.05); }
         .avatar img { width: 100%; height: 100%; object-fit: cover; }
 
-        /* ===== ВКЛАДКИ ===== */
         .tabs {
             display: flex; justify-content: center; gap: 5px;
             padding: 14px 18px 0; flex-wrap: wrap;
@@ -169,6 +161,7 @@
         .tab.active svg { color: var(--accent-bright); }
         .tab.active .tab-label { color: #fff; }
         .tab.tab-custom { margin-left: var(--custom-margin); }
+        .tab.tab-menu { margin-left: var(--custom-margin); }
 
         .tab-panel { display: none; }
         .tab-panel.active { display: block; animation: panelFadeIn 0.4s ease; }
@@ -177,7 +170,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* ===== МОДАЛКИ ===== */
         .modal {
             position: fixed; inset: 0; background: rgba(0, 0, 0, 0.75); backdrop-filter: blur(6px);
             display: flex; justify-content: center; align-items: center; z-index: 1000;
@@ -200,7 +192,7 @@
         .modal-close {
             position: absolute; top: 10px; right: 10px; width: 30px; height: 30px; border-radius: 6px;
             border: 1px solid rgba(255, 255, 255, 0.1); background: rgba(255, 255, 255, 0.04);
-            color: #8a8d9b; font-size: 16px; font-weight: 700; cursor: pointer; transition: all 0.2s;
+            color: #8a8d9b; font-size: 16px; font-weight: 700; cursor: pointer;
             display: flex; align-items: center; justify-content: center;
         }
         .modal-close:hover { background: rgba(255, 80, 80, 0.2); color: #ff6b6b; }
@@ -212,7 +204,7 @@
         .form-input {
             width: 100%; padding: 12px 14px; border-radius: 6px;
             border: 1px solid rgba(255, 255, 255, 0.08); background: rgba(255, 255, 255, 0.025);
-            color: #fff; font-size: 14px; font-weight: 600; transition: all 0.25s;
+            color: #fff; font-size: 14px; font-weight: 600;
             font-family: 'Orbitron', sans-serif;
         }
         .form-input:focus { outline: none; border-color: var(--accent); background: var(--accent-very-dim); }
@@ -243,7 +235,7 @@
         .msg.err { color: #ff6b6b; }
         .msg.wait { color: var(--accent-bright); }
 
-        /* ===== Пополнение — каталог предметов ===== */
+        /* ===== ПОПОЛНЕНИЕ ===== */
         .topup-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -261,15 +253,47 @@
             border-radius: 6px;
             background: rgba(255, 255, 255, 0.02);
             display: flex; flex-direction: column; align-items: center; gap: 3px;
-            cursor: pointer;
-            transition: all 0.2s;
-            text-align: center;
+            cursor: pointer; transition: all 0.2s; text-align: center;
         }
         .topup-item:hover { border-color: var(--accent); background: var(--accent-very-dim); }
         .topup-item.selected { border-color: var(--accent); background: var(--accent-very-dim); box-shadow: 0 0 15px var(--accent-dim); }
         .topup-item img { width: 40px; height: 40px; object-fit: contain; }
         .topup-item .ti-name { font-size: 8.5px; color: #e5e7ef; font-weight: 700; line-height: 1.1; height: 20px; overflow: hidden; }
         .topup-item .ti-price { font-family: 'Orbitron', sans-serif; font-size: 9px; color: var(--accent-bright); font-weight: 800; }
+
+        .promo-input-row { display: flex; gap: 6px; align-items: stretch; margin-bottom: 12px; }
+        .promo-input-row .form-input { flex: 1; text-transform: uppercase; text-align: center; letter-spacing: 1.5px; }
+        .promo-apply-btn {
+            padding: 0 16px; border-radius: 6px; border: none;
+            background: var(--accent); color: #fff;
+            font-family: 'Orbitron', sans-serif; font-size: 11px; font-weight: 900;
+            letter-spacing: 1px; cursor: pointer;
+            transition: all 0.2s;
+        }
+        .promo-apply-btn:hover { filter: brightness(1.1); }
+
+        .topup-price-line {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 10px 12px; background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--accent-very-dim);
+            border-radius: 6px; margin-bottom: 10px;
+            font-size: 12px;
+        }
+        .topup-price-line .tpl-label { color: #8a8d9b; font-weight: 700; }
+        .topup-price-line .tpl-value { font-family: 'Orbitron', sans-serif; font-weight: 800; color: #fff; display: flex; align-items: center; gap: 4px; }
+        .topup-price-line .tpl-value img { width: 12px; height: 12px; }
+        .topup-price-line .tpl-value.old { color: #8a8d9b; text-decoration: line-through; }
+        .topup-price-line .tpl-value.new { color: var(--accent-bright); }
+
+        .topup-promo-active {
+            text-align: center;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 12px;
+            font-weight: 900;
+            color: #7ed88a;
+            margin-top: 6px;
+            letter-spacing: 1px;
+        }
 
         /* ===== ПРОФИЛЬ ===== */
         .profile-page { padding: 20px 22px; }
@@ -298,8 +322,7 @@
             position: absolute; top: 50%; left: 50%;
             transform: translate(-50%, -50%);
             width: 80px; height: 80px; border-radius: 50%;
-            object-fit: cover;
-            border: 3px solid var(--accent);
+            object-fit: cover; border: 3px solid var(--accent);
             background: #1a1a20; z-index: 5;
             box-shadow: 0 0 25px var(--accent-dim);
         }
@@ -385,18 +408,16 @@
         }
         .profile-inventory-empty { text-align: center; color: #4a4d5e; font-size: 11px; padding: 16px; }
 
-        /* ===== ЗАЯВКИ НА ПОПОЛНЕНИЕ ===== */
+        /* ===== ЗАЯВКИ (АДМИН) ===== */
         .deposits-block {
-            margin-top: 14px;
-            padding: 14px;
+            margin-top: 14px; padding: 14px;
             background: rgba(255, 200, 0, 0.04);
             border: 1px solid rgba(255, 200, 0, 0.3);
             border-radius: 8px;
         }
         .deposits-block-title {
             font-family: 'Orbitron', sans-serif; font-size: 12px; font-weight: 900;
-            color: #ffcc33;
-            letter-spacing: 2px; text-transform: uppercase;
+            color: #ffcc33; letter-spacing: 2px; text-transform: uppercase;
             margin-bottom: 10px; display: flex; align-items: center; gap: 8px;
         }
         .deposits-block-title::before {
@@ -407,24 +428,20 @@
             color: #ffcc33; margin-left: auto; font-weight: 700;
         }
         .deposit-item {
-            display: grid;
-            grid-template-columns: 44px 1fr auto;
+            display: grid; grid-template-columns: 44px 1fr auto;
             gap: 10px; align-items: center;
             padding: 10px 12px;
             background: rgba(0, 0, 0, 0.3);
             border: 1px solid rgba(255, 200, 0, 0.15);
-            border-radius: 6px;
-            margin-bottom: 8px;
+            border-radius: 6px; margin-bottom: 8px;
         }
         .deposit-item img { width: 40px; height: 40px; object-fit: contain; }
         .deposit-info { min-width: 0; font-size: 11px; line-height: 1.5; color: #e5e7ef; }
-        .deposit-info .dep-line {
-            display: flex; gap: 5px; align-items: center;
-            word-break: break-word;
-        }
+        .deposit-info .dep-line { display: flex; gap: 5px; align-items: center; word-break: break-word; }
         .deposit-info .dep-key { color: #8a8d9b; font-size: 10px; }
         .deposit-info .dep-val { color: #fff; font-weight: 700; }
         .deposit-info .dep-val.accent { color: var(--accent-bright); }
+        .deposit-info .dep-val.green { color: #7ed88a; }
         .deposit-actions { display: flex; flex-direction: column; gap: 4px; }
         .dep-accept, .dep-reject {
             height: 28px; padding: 0 10px; border-radius: 4px; border: none;
@@ -436,8 +453,86 @@
         .dep-accept:hover { background: #16a34a; }
         .dep-reject { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.4); }
         .dep-reject:hover { background: #ef4444; color: #fff; }
-        .deposits-empty {
-            text-align: center; color: #4a4d5e; font-size: 11px; padding: 14px;
+        .deposits-empty { text-align: center; color: #4a4d5e; font-size: 11px; padding: 14px; }
+
+        /* ===== МЕНЮ ===== */
+        .menu-page { padding: 26px 22px; }
+        .menu-title {
+            font-family: 'Orbitron', sans-serif; font-size: 22px; font-weight: 900;
+            color: #fff; letter-spacing: 2px; text-transform: uppercase;
+            margin-bottom: 6px; text-align: center;
+        }
+        .menu-subtitle { color: #8a8d9b; font-size: 12px; text-align: center; margin-bottom: 22px; }
+
+        .menu-promo-card {
+            background: linear-gradient(180deg, rgba(30, 30, 38, 0.9), rgba(20, 20, 26, 0.9));
+            border: 1px solid var(--accent-dim);
+            border-radius: 8px;
+            padding: 20px;
+            display: flex; flex-direction: column; align-items: center;
+            gap: 14px;
+            max-width: 420px; margin: 0 auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+            position: relative; overflow: hidden;
+        }
+        .menu-promo-card::before {
+            content: ''; position: absolute; top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: radial-gradient(circle at 50% 50%, var(--accent-very-dim) 0%, transparent 60%);
+            animation: promoGlow 5s ease-in-out infinite;
+            pointer-events: none;
+        }
+        @keyframes promoGlow {
+            0%, 100% { opacity: 0.5; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.1); }
+        }
+        .menu-promo-img {
+            width: 220px; height: 220px;
+            object-fit: contain;
+            filter: drop-shadow(0 0 25px var(--accent-dim));
+            animation: promoFloat 3s ease-in-out infinite;
+            position: relative; z-index: 2;
+        }
+        @keyframes promoFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+        .menu-promo-percent {
+            font-family: 'Orbitron', sans-serif; font-size: 36px; font-weight: 900;
+            color: var(--accent-bright);
+            text-shadow: 0 0 30px var(--accent-dim);
+            letter-spacing: 2px;
+            position: relative; z-index: 2;
+        }
+        .menu-promo-label {
+            font-size: 11px; color: #8a8d9b; font-weight: 700;
+            letter-spacing: 2px; text-transform: uppercase;
+            position: relative; z-index: 2;
+            margin-top: -8px;
+        }
+        .menu-promo-timer {
+            font-family: 'Orbitron', sans-serif; font-size: 14px; font-weight: 800;
+            color: #fff;
+            padding: 8px 18px;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--accent);
+            border-radius: 6px;
+            position: relative; z-index: 2;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .menu-promo-timer .t-icon {
+            color: var(--accent-bright);
+            font-size: 16px;
+            animation: timerPulse 1s ease-in-out infinite;
+        }
+        @keyframes timerPulse {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 1; }
+        }
+        .menu-promo-hint {
+            font-size: 11px; color: #8a8d9b; text-align: center;
+            position: relative; z-index: 2;
+            line-height: 1.5;
         }
 
         /* ===== КАСТОМИЗАЦИЯ ===== */
@@ -528,11 +623,7 @@
             cursor: pointer; transition: all 0.2s; position: relative;
         }
         .orbit-item:hover { border-color: var(--accent); }
-        .orbit-item.selected {
-            border-color: var(--accent);
-            background: var(--accent-very-dim);
-            box-shadow: 0 0 15px var(--accent-dim);
-        }
+        .orbit-item.selected { border-color: var(--accent); background: var(--accent-very-dim); box-shadow: 0 0 15px var(--accent-dim); }
         .orbit-item.selected::after {
             content: '✓';
             position: absolute; top: -4px; right: -4px;
@@ -581,7 +672,6 @@
         .chance-big { font-family: 'Orbitron', sans-serif; font-size: 44px; font-weight: 900; color: var(--accent); line-height: 1; }
         .chance-label { font-size: 12px; color: var(--accent-bright); font-weight: 700; text-transform: uppercase; letter-spacing: 3px; margin-top: 6px; min-height: 16px; }
         .chance-label.hidden { visibility: hidden; }
-
         .items-row { display: flex; justify-content: center; align-items: center; gap: 12px; padding: 16px 22px; }
         .item-box {
             background: rgba(255, 255, 255, 0.02);
@@ -688,7 +778,6 @@
             border-radius: 6px; overflow: hidden;
         }
         .rocket-balance-wrap .rocket-balance-inline { padding: 6px 12px; }
-
         .rocket-stage {
             position: relative; width: 100%; height: 340px;
             background: rgba(10, 10, 15, 0.7);
@@ -861,7 +950,7 @@
             .tab { min-width: 42px; padding: 6px 2px 5px; }
             .tab svg { width: 16px; height: 16px; }
             .tab .tab-label { font-size: 7px; }
-            .tab.tab-custom { margin-left: 12px; }
+            .tab.tab-custom, .tab.tab-menu { margin-left: 12px; }
             .rocket-stage { height: 260px; }
             .rocket-x-display { font-size: 32px; top: 14px; right: 14px; }
             .rocket-sprite { width: 40px; height: 40px; }
@@ -880,7 +969,8 @@
             .profile-nick-big { font-size: 16px; }
             .avatar-orbit-item { width: 22px; height: 22px; margin-left: -11px; margin-top: -11px; transform-origin: 11px 11px; }
             .avatar-orbit-item img { width: 14px; height: 14px; }
-            .topup-grid { grid-template-columns: repeat(3, 1fr); }
+            .menu-promo-img { width: 160px; height: 160px; }
+            .menu-promo-percent { font-size: 28px; }
             @keyframes orbitSpin {
                 from { transform: rotate(0deg) translateX(40px) rotate(0deg); }
                 to { transform: rotate(360deg) translateX(40px) rotate(-360deg); }
@@ -901,14 +991,32 @@
     <div class="modal-card">
         <button class="modal-close" onclick="closeModal('topupModal')">✕</button>
         <div class="modal-title">Пополнение</div>
+
         <div class="form-group">
             <label class="form-label">Выбери предмет для пополнения</label>
             <div class="topup-grid" id="topupGrid"></div>
         </div>
+
         <div class="form-group">
+            <label class="form-label">Промокод (необязательно)</label>
+            <div class="promo-input-row">
+                <input type="text" class="form-input" id="topupPromoInput" placeholder="ПРОМОКОД" maxlength="30">
+                <button class="promo-apply-btn" onclick="applyTopupPromo()">ОК</button>
+            </div>
+            <div class="msg" id="topupPromoMsg"></div>
+        </div>
+
+        <div class="topup-price-line" id="topupPriceLine" style="display:none;">
+            <div class="tpl-label">Цена:</div>
+            <div class="tpl-value" id="topupPriceValue">0</div>
+        </div>
+        <div class="topup-promo-active" id="topupPromoActive"></div>
+
+        <div class="form-group" style="margin-top: 12px;">
             <label class="form-label">Твой Roblox ник</label>
             <input type="text" class="form-input" id="topupRoblox" placeholder="Введи ник в Roblox" maxlength="40">
         </div>
+
         <button class="action-btn" onclick="createDeposit()">Отправить заявку</button>
         <div class="msg" id="topupMsg"></div>
     </div>
@@ -1050,6 +1158,14 @@
             </svg>
             <span class="tab-label">Профиль</span>
         </div>
+        <div class="tab tab-menu" id="tabMenu" onclick="switchTab('menu')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="3" y1="6" x2="21" y2="6"/>
+                <line x1="3" y1="12" x2="21" y2="12"/>
+                <line x1="3" y1="18" x2="21" y2="18"/>
+            </svg>
+            <span class="tab-label">Меню</span>
+        </div>
         <div class="tab tab-custom" id="tabCustomize" onclick="switchTab('customize')">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M12 20h9"/>
@@ -1059,6 +1175,7 @@
         </div>
     </div>
 
+    <!-- ===== АПГРЕЙД ===== -->
     <div class="tab-panel active" id="panelUpgrade">
         <div class="progress-section">
             <div class="progress-wrapper">
@@ -1114,6 +1231,7 @@
         </div>
     </div>
 
+    <!-- ===== РАКЕТКА ===== -->
     <div class="tab-panel" id="panelRocket">
         <div class="rocket-page">
             <div class="rocket-header">
@@ -1168,6 +1286,7 @@
         </div>
     </div>
 
+    <!-- ===== ОБМЕН ===== -->
     <div class="tab-panel" id="panelTrade">
         <div class="trade-page">
             <div class="trade-page-header">
@@ -1178,6 +1297,7 @@
         </div>
     </div>
 
+    <!-- ===== ПРОМОКОД ===== -->
     <div class="tab-panel" id="panelPromo">
         <div class="promo-panel">
             <h2>Активация промокода</h2>
@@ -1190,6 +1310,7 @@
         </div>
     </div>
 
+    <!-- ===== ПРОФИЛЬ ===== -->
     <div class="tab-panel" id="panelProfile">
         <div class="profile-page">
             <div class="profile-banner" id="profileBanner">
@@ -1247,6 +1368,29 @@
         </div>
     </div>
 
+    <!-- ===== МЕНЮ ===== -->
+    <div class="tab-panel" id="panelMenu">
+        <div class="menu-page">
+            <div class="menu-title">Главное меню</div>
+            <div class="menu-subtitle">Промокод на пополнение обновляется каждые 10 минут</div>
+
+            <div class="menu-promo-card">
+                <img class="menu-promo-img" id="menuPromoImg" src="" alt="">
+                <div class="menu-promo-percent" id="menuPromoPercent">+0%</div>
+                <div class="menu-promo-label">к пополнению</div>
+                <div class="menu-promo-timer">
+                    <span class="t-icon">⏳</span>
+                    <span>Обновится через: <b id="menuPromoTimer">10:00</b></span>
+                </div>
+                <div class="menu-promo-hint">
+                    Введи этот промокод в окне пополнения,<br>
+                    чтобы получить бонус к сумме заявки.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== КАСТОМИЗАЦИЯ ===== -->
     <div class="tab-panel" id="panelCustomize">
         <div class="customize-page">
             <div class="customize-section">
@@ -1270,62 +1414,6 @@
                     <div class="color-swatch" style="background: #ef4444; color: #ef4444;" data-color="#ef4444" data-deep="#991b1b" data-bright="#f87171" onclick="changeAccent(this)"></div>
                     <div class="color-swatch" style="background: #3b82f6; color: #3b82f6;" data-color="#3b82f6" data-deep="#1e40af" data-bright="#60a5fa" onclick="changeAccent(this)"></div>
                     <div class="color-swatch" style="background: #ec4899; color: #ec4899;" data-color="#ec4899" data-deep="#9d174d" data-bright="#f472b6" onclick="changeAccent(this)"></div>
-                </div>
-            </div>
-            <div class="customize-section">
-                <div class="customize-section-title">Размер вкладок</div>
-                <div class="slider-row">
-                    <input type="range" id="tabWidthSlider" min="60" max="130" value="110" oninput="changeTabWidth(this.value)">
-                    <div class="slider-value" id="tabWidthValue">110px</div>
-                </div>
-            </div>
-            <div class="customize-section">
-                <div class="customize-section-title">Размер шрифта вкладок</div>
-                <div class="slider-row">
-                    <input type="range" id="tabFontSlider" min="6" max="14" value="9" oninput="changeTabFont(this.value)">
-                    <div class="slider-value" id="tabFontValue">9px</div>
-                </div>
-            </div>
-            <div class="customize-section">
-                <div class="customize-section-title">Размер иконок вкладок</div>
-                <div class="slider-row">
-                    <input type="range" id="tabIconSlider" min="14" max="32" value="20" oninput="changeTabIcon(this.value)">
-                    <div class="slider-value" id="tabIconValue">20px</div>
-                </div>
-            </div>
-            <div class="customize-section">
-                <div class="customize-section-title">Размер карточек брейнротов</div>
-                <div class="slider-row">
-                    <input type="range" id="cardImgSlider" min="32" max="80" value="52" oninput="changeCardImg(this.value)">
-                    <div class="slider-value" id="cardImgValue">52px</div>
-                </div>
-            </div>
-            <div class="customize-section">
-                <div class="customize-section-title">Размер названий карточек</div>
-                <div class="slider-row">
-                    <input type="range" id="cardNameSlider" min="7" max="14" value="9" oninput="changeCardName(this.value)">
-                    <div class="slider-value" id="cardNameValue">9px</div>
-                </div>
-            </div>
-            <div class="customize-section">
-                <div class="customize-section-title">Толщина границ</div>
-                <div class="slider-row">
-                    <input type="range" id="borderWidthSlider" min="1" max="4" value="1" oninput="changeBorderWidth(this.value)">
-                    <div class="slider-value" id="borderWidthValue">1px</div>
-                </div>
-            </div>
-            <div class="customize-section">
-                <div class="customize-section-title">Яркость свечения</div>
-                <div class="slider-row">
-                    <input type="range" id="glowSlider" min="0" max="30" value="10" oninput="changeGlow(this.value)">
-                    <div class="slider-value" id="glowValue">10</div>
-                </div>
-            </div>
-            <div class="customize-section">
-                <div class="customize-section-title">Отступ кастома</div>
-                <div class="slider-row">
-                    <input type="range" id="customMarginSlider" min="0" max="60" value="24" oninput="changeCustomMargin(this.value)">
-                    <div class="slider-value" id="customMarginValue">24px</div>
                 </div>
             </div>
             <div class="customize-section">
@@ -1380,6 +1468,15 @@
         { id: 'lovelovebear', name: 'Love Love Bear', price: 5540, img: 'https://github.com/forerer-afk/brainroterX/blob/main/lovelovebear.png?raw=true' }
     ];
 
+    // ===== ПРОМОКОДЫ НА ПОПОЛНЕНИЕ (меняются каждые 10 минут) =====
+    const TOPUP_PROMOS = [
+        { code: 'CLONEXX744',      percent: 12, img: 'https://github.com/saintezz/ggbrainXv2/raw/main/CLONEXX12PROCENTOV.png' },
+        { code: 'SAMMYBURGER23',   percent: 10, img: 'https://github.com/saintezz/ggbrainXv2/raw/main/SAMMYBURGER10PROCENTOV.png' },
+        { code: 'GGBRAINX2131',    percent: 4,  img: 'https://github.com/saintezz/ggbrainXv2/raw/main/ggbrainx4PROCENTA.png' },
+        { code: 'ECLIPSE9403',     percent: 8,  img: 'https://github.com/saintezz/ggbrainXv2/raw/main/eclipse9403.png' }
+    ];
+    const PROMO_ROTATION_MS = 10 * 60 * 1000; // 10 минут
+
     const API_URL = 'https://ggbrainx.onrender.com';
 
     const TRADE_RECIPES = [
@@ -1407,22 +1504,13 @@
     let accentColor = localStorage.getItem('ggbrainx_accent') || '#ff8c00';
     let accentDeep = localStorage.getItem('ggbrainx_accent_deep') || '#cc7000';
     let accentBright = localStorage.getItem('ggbrainx_accent_bright') || '#ffaa33';
-    let tabWidth = parseInt(localStorage.getItem('ggbrainx_tab_width') || '110');
-    let tabFont = parseInt(localStorage.getItem('ggbrainx_tab_font') || '9');
-    let tabIcon = parseInt(localStorage.getItem('ggbrainx_tab_icon') || '20');
-    let cardImg = parseInt(localStorage.getItem('ggbrainx_card_img') || '52');
-    let cardName = parseInt(localStorage.getItem('ggbrainx_card_name') || '9');
-    let borderWidth = parseInt(localStorage.getItem('ggbrainx_border_width') || '1');
-    let glowIntensity = parseInt(localStorage.getItem('ggbrainx_glow') || '10');
-    let customMargin = parseInt(localStorage.getItem('ggbrainx_custom_margin') || '24');
 
-    // ===== Баланс и инвентарь — с сервера, но с кешем localStorage для мгновенного старта =====
     let balance = parseFloat(localStorage.getItem('ggbrainx_balance') || '0');
     let inventory = JSON.parse(localStorage.getItem('ggbrainx_inventory') || '[]');
 
-    // Заявки (получаем с сервера для админа)
     let deposits = [];
     let topupSelectedItem = null;
+    let appliedTopupPromo = null; // { code, percent }
     let isAdmin = false;
 
     function saveLocalCache() {
@@ -1549,7 +1637,6 @@
             const res = await fetch(API_URL + '/api/user/' + encodeURIComponent(getTelegramId()));
             const data = await res.json();
             if (data.ok && data.user) {
-                // Берём с сервера только если он новее/есть данные
                 if (typeof data.user.balance === 'number') balance = data.user.balance;
                 if (Array.isArray(data.user.inventory)) inventory = data.user.inventory;
                 saveLocalCache();
@@ -1557,11 +1644,10 @@
                 renderInventory(); renderTargets(); renderShop(); updateUpgradeScreen();
                 renderProfileInventory();
             } else {
-                // Первый вход — отправляем локальные данные на сервер
                 syncUserToServer();
             }
         } catch (e) {
-            console.warn('[SYNC] сервер недоступен, работаем из кеша');
+            console.warn('[SYNC] сервер недоступен');
         }
     }
 
@@ -1601,6 +1687,10 @@
             document.getElementById('tabProfile').classList.add('active');
             document.getElementById('panelProfile').classList.add('active');
             updateProfile();
+        } else if (tab === 'menu') {
+            document.getElementById('tabMenu').classList.add('active');
+            document.getElementById('panelMenu').classList.add('active');
+            renderMenuPromo();
         } else if (tab === 'customize') {
             document.getElementById('tabCustomize').classList.add('active');
             document.getElementById('panelCustomize').classList.add('active');
@@ -1610,22 +1700,6 @@
             document.getElementById('customizeNickInput').value = customNick || USER.nick;
             document.getElementById('opacitySlider').value = Math.round(appOpacity * 100);
             document.getElementById('opacityValue').textContent = Math.round(appOpacity * 100) + '%';
-            document.getElementById('tabWidthSlider').value = tabWidth;
-            document.getElementById('tabWidthValue').textContent = tabWidth + 'px';
-            document.getElementById('tabFontSlider').value = tabFont;
-            document.getElementById('tabFontValue').textContent = tabFont + 'px';
-            document.getElementById('tabIconSlider').value = tabIcon;
-            document.getElementById('tabIconValue').textContent = tabIcon + 'px';
-            document.getElementById('cardImgSlider').value = cardImg;
-            document.getElementById('cardImgValue').textContent = cardImg + 'px';
-            document.getElementById('cardNameSlider').value = cardName;
-            document.getElementById('cardNameValue').textContent = cardName + 'px';
-            document.getElementById('borderWidthSlider').value = borderWidth;
-            document.getElementById('borderWidthValue').textContent = borderWidth + 'px';
-            document.getElementById('glowSlider').value = glowIntensity;
-            document.getElementById('glowValue').textContent = glowIntensity;
-            document.getElementById('customMarginSlider').value = customMargin;
-            document.getElementById('customMarginValue').textContent = customMargin + 'px';
         }
     };
 
@@ -1649,7 +1723,6 @@
         renderOrbit();
         renderProfileInventory();
 
-        // Админ видит заявки
         const depositsBlock = document.getElementById('depositsBlock');
         if (isAdmin) {
             depositsBlock.style.display = 'block';
@@ -1691,13 +1764,63 @@
         }).join('');
     }
 
+    // ===== ПРОМОКОДЫ НА ПОПОЛНЕНИЕ (ротация каждые 10 мин) =====
+    function getCurrentPromoIndex() {
+        const slot = Math.floor(Date.now() / PROMO_ROTATION_MS);
+        return slot % TOPUP_PROMOS.length;
+    }
+
+    function getSecondsToNextPromo() {
+        const now = Date.now();
+        const next = (Math.floor(now / PROMO_ROTATION_MS) + 1) * PROMO_ROTATION_MS;
+        return Math.max(0, Math.floor((next - now) / 1000));
+    }
+
+    function renderMenuPromo() {
+        const idx = getCurrentPromoIndex();
+        const promo = TOPUP_PROMOS[idx];
+        document.getElementById('menuPromoImg').src = promo.img;
+        document.getElementById('menuPromoImg').onerror = function() { this.src = 'https://via.placeholder.com/220?text=%2B' + promo.percent + '%25'; };
+        document.getElementById('menuPromoPercent').textContent = '+' + promo.percent + '%';
+        updateMenuTimer();
+    }
+
+    function updateMenuTimer() {
+        const sec = getSecondsToNextPromo();
+        const m = Math.floor(sec / 60);
+        const s = sec % 60;
+        document.getElementById('menuPromoTimer').textContent = 
+            String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+    }
+
+    setInterval(() => {
+        if (document.getElementById('panelMenu').classList.contains('active')) {
+            updateMenuTimer();
+            const idx = getCurrentPromoIndex();
+            const img = document.getElementById('menuPromoImg');
+            const percent = document.getElementById('menuPromoPercent');
+            if (img && img.dataset.idx !== String(idx)) {
+                img.dataset.idx = String(idx);
+                const promo = TOPUP_PROMOS[idx];
+                img.src = promo.img;
+                percent.textContent = '+' + promo.percent + '%';
+            }
+        }
+    }, 1000);
+
     // ===== ПОПОЛНЕНИЕ =====
     window.openTopup = function() {
         renderTopupGrid();
         document.getElementById('topupRoblox').value = '';
+        document.getElementById('topupPromoInput').value = '';
+        document.getElementById('topupPromoMsg').textContent = '';
+        document.getElementById('topupPromoMsg').className = 'msg';
         document.getElementById('topupMsg').textContent = '';
         document.getElementById('topupMsg').className = 'msg';
+        document.getElementById('topupPromoActive').textContent = '';
+        appliedTopupPromo = null;
         topupSelectedItem = null;
+        updateTopupPrice();
         openModal('topupModal');
     };
 
@@ -1715,6 +1838,53 @@
     window.selectTopupItem = function(id) {
         topupSelectedItem = id;
         renderTopupGrid();
+        updateTopupPrice();
+    };
+
+    function updateTopupPrice() {
+        const line = document.getElementById('topupPriceLine');
+        const val = document.getElementById('topupPriceValue');
+        const active = document.getElementById('topupPromoActive');
+        if (!topupSelectedItem) {
+            line.style.display = 'none';
+            active.textContent = '';
+            return;
+        }
+        const item = getItemById(topupSelectedItem);
+        if (!item) return;
+        line.style.display = 'flex';
+
+        if (appliedTopupPromo) {
+            const newPrice = Math.round(item.price * (1 + appliedTopupPromo.percent / 100));
+            val.innerHTML = `<span style="color:#8a8d9b;text-decoration:line-through;margin-right:6px;">${item.price}</span> <span style="color:var(--accent-bright);">${newPrice}</span> <img src="${COIN_IMG}">`;
+            active.textContent = `+${appliedTopupPromo.percent}%`;
+        } else {
+            val.innerHTML = `${item.price} <img src="${COIN_IMG}">`;
+            active.textContent = '';
+        }
+    }
+
+    window.applyTopupPromo = function() {
+        const input = document.getElementById('topupPromoInput');
+        const msg = document.getElementById('topupPromoMsg');
+        const code = input.value.trim().toUpperCase();
+        if (!code) {
+            msg.className = 'msg err';
+            msg.textContent = 'Введи промокод';
+            return;
+        }
+        const promo = TOPUP_PROMOS.find(p => p.code === code);
+        if (!promo) {
+            appliedTopupPromo = null;
+            msg.className = 'msg err';
+            msg.textContent = 'Промокод не найден';
+            updateTopupPrice();
+            return;
+        }
+        appliedTopupPromo = { code: promo.code, percent: promo.percent };
+        msg.className = 'msg ok';
+        msg.textContent = 'ПРОМОКОД АКТИВИРОВАН';
+        updateTopupPrice();
     };
 
     window.createDeposit = async function() {
@@ -1733,6 +1903,13 @@
         const item = getItemById(topupSelectedItem);
         if (!item) return;
 
+        let finalPrice = item.price;
+        let bonusText = '';
+        if (appliedTopupPromo) {
+            finalPrice = Math.round(item.price * (1 + appliedTopupPromo.percent / 100));
+            bonusText = ` (с промокодом +${appliedTopupPromo.percent}%)`;
+        }
+
         msg.className = 'msg wait';
         msg.textContent = 'Отправляем заявку...';
 
@@ -1745,15 +1922,18 @@
                     username: USER.username || '',
                     item_id: item.id,
                     item_name: item.name,
-                    item_price: item.price,
+                    item_price: finalPrice,
+                    base_price: item.price,
+                    promo_code: appliedTopupPromo ? appliedTopupPromo.code : '',
+                    promo_percent: appliedTopupPromo ? appliedTopupPromo.percent : 0,
                     roblox_name: roblox
                 })
             });
             const data = await res.json();
             if (data.ok) {
                 msg.className = 'msg ok';
-                msg.textContent = 'Заявка отправлена! Ожидай подтверждения админа.';
-                setTimeout(() => closeModal('topupModal'), 2000);
+                msg.textContent = `Заявка отправлена!${bonusText}`;
+                setTimeout(() => closeModal('topupModal'), 2200);
             } else {
                 msg.className = 'msg err';
                 msg.textContent = data.error || 'Ошибка';
@@ -1790,13 +1970,23 @@
 
         list.innerHTML = pending.map(d => {
             const item = getItemById(d.item_id) || { img: '', name: d.item_name };
+            const basePrice = d.base_price || d.item_price;
+            const finalPrice = d.item_price;
+            const promoLine = d.promo_code
+                ? `<div class="dep-line"><span class="dep-key">Промо:</span> <span class="dep-val green">${d.promo_code} (+${d.promo_percent}%)</span></div>`
+                : '';
+            const priceLine = d.promo_code
+                ? `<div class="dep-line"><span class="dep-key">Цена:</span> <span class="dep-val">${basePrice} → <b style="color:#7ed88a;">${finalPrice}</b></span></div>`
+                : `<div class="dep-line"><span class="dep-key">Цена:</span> <span class="dep-val accent">${finalPrice}</span></div>`;
+
             return `
                 <div class="deposit-item">
                     <img src="${item.img}" alt="" onerror="this.style.display='none'">
                     <div class="deposit-info">
                         <div class="dep-line"><span class="dep-key">TG:</span> <span class="dep-val accent">@${d.username || '—'}</span></div>
                         <div class="dep-line"><span class="dep-key">Предмет:</span> <span class="dep-val">${d.item_name}</span></div>
-                        <div class="dep-line"><span class="dep-key">Цена:</span> <span class="dep-val accent">${d.item_price}</span></div>
+                        ${priceLine}
+                        ${promoLine}
                         <div class="dep-line"><span class="dep-key">Roblox:</span> <span class="dep-val">${d.roblox_name}</span></div>
                     </div>
                     <div class="deposit-actions">
@@ -2362,14 +2552,6 @@
 
     function applyCustomization() {
         document.documentElement.style.setProperty('--app-bg-alpha', appOpacity);
-        document.documentElement.style.setProperty('--tab-width', tabWidth + 'px');
-        document.documentElement.style.setProperty('--tab-font-size', tabFont + 'px');
-        document.documentElement.style.setProperty('--tab-svg-size', tabIcon + 'px');
-        document.documentElement.style.setProperty('--card-img-size', cardImg + 'px');
-        document.documentElement.style.setProperty('--card-name-size', cardName + 'px');
-        document.documentElement.style.setProperty('--border-width', borderWidth + 'px');
-        document.documentElement.style.setProperty('--glow-intensity', (glowIntensity / 10));
-        document.documentElement.style.setProperty('--custom-margin', customMargin + 'px');
         document.documentElement.style.setProperty('--accent', accentColor);
         document.documentElement.style.setProperty('--accent-deep', accentDeep);
         document.documentElement.style.setProperty('--accent-bright', accentBright);
@@ -2386,54 +2568,7 @@
         document.documentElement.style.setProperty('--app-bg-alpha', appOpacity);
         document.getElementById('opacityValue').textContent = val + '%';
     };
-    window.changeTabWidth = function(val) {
-        tabWidth = parseInt(val);
-        localStorage.setItem('ggbrainx_tab_width', tabWidth);
-        document.documentElement.style.setProperty('--tab-width', tabWidth + 'px');
-        document.getElementById('tabWidthValue').textContent = tabWidth + 'px';
-    };
-    window.changeTabFont = function(val) {
-        tabFont = parseInt(val);
-        localStorage.setItem('ggbrainx_tab_font', tabFont);
-        document.documentElement.style.setProperty('--tab-font-size', tabFont + 'px');
-        document.getElementById('tabFontValue').textContent = tabFont + 'px';
-    };
-    window.changeTabIcon = function(val) {
-        tabIcon = parseInt(val);
-        localStorage.setItem('ggbrainx_tab_icon', tabIcon);
-        document.documentElement.style.setProperty('--tab-svg-size', tabIcon + 'px');
-        document.getElementById('tabIconValue').textContent = tabIcon + 'px';
-    };
-    window.changeCardImg = function(val) {
-        cardImg = parseInt(val);
-        localStorage.setItem('ggbrainx_card_img', cardImg);
-        document.documentElement.style.setProperty('--card-img-size', cardImg + 'px');
-        document.getElementById('cardImgValue').textContent = cardImg + 'px';
-    };
-    window.changeCardName = function(val) {
-        cardName = parseInt(val);
-        localStorage.setItem('ggbrainx_card_name', cardName);
-        document.documentElement.style.setProperty('--card-name-size', cardName + 'px');
-        document.getElementById('cardNameValue').textContent = cardName + 'px';
-    };
-    window.changeBorderWidth = function(val) {
-        borderWidth = parseInt(val);
-        localStorage.setItem('ggbrainx_border_width', borderWidth);
-        document.documentElement.style.setProperty('--border-width', borderWidth + 'px');
-        document.getElementById('borderWidthValue').textContent = borderWidth + 'px';
-    };
-    window.changeGlow = function(val) {
-        glowIntensity = parseInt(val);
-        localStorage.setItem('ggbrainx_glow', glowIntensity);
-        document.documentElement.style.setProperty('--glow-intensity', (glowIntensity / 10));
-        document.getElementById('glowValue').textContent = glowIntensity;
-    };
-    window.changeCustomMargin = function(val) {
-        customMargin = parseInt(val);
-        localStorage.setItem('ggbrainx_custom_margin', customMargin);
-        document.documentElement.style.setProperty('--custom-margin', customMargin + 'px');
-        document.getElementById('customMarginValue').textContent = customMargin + 'px';
-    };
+
     window.changeAccent = function(el) {
         accentColor = el.dataset.color;
         accentDeep = el.dataset.deep;
@@ -2671,8 +2806,8 @@
         renderOrbitPicker();
         renderOrbit();
         renderProfileInventory();
+        renderMenuPromo();
 
-        // Загружаем актуальные данные с сервера (синхронизация)
         loadUserFromServer();
     }
     init();
