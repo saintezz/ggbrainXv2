@@ -19,14 +19,9 @@
             --green-bright: #58d68d;
             --green-dim: rgba(46, 204, 113, 0.3);
             --app-bg-alpha: 0.55;
-            --tab-width: 110px;
-            --tab-font-size: 9px;
-            --tab-svg-size: 20px;
-            --card-img-size: 52px;
-            --card-name-size: 9px;
+            --card-img-size: 44px;
+            --card-name-size: 8px;
             --border-width: 1px;
-            --glow-intensity: 1;
-            --custom-margin: 24px;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; font-family: 'Inter', sans-serif; }
@@ -37,12 +32,73 @@
             padding: 20px; position: relative; overflow-x: hidden; overflow-y: auto;
         }
 
+        /* ===== ПРЕЛОАДЕР ===== */
+        #preloader {
+            position: fixed; inset: 0; z-index: 99999;
+            background: radial-gradient(circle at 50% 50%, #0f2a18 0%, #050d08 100%);
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            gap: 24px; transition: opacity 0.6s ease, visibility 0.6s ease;
+        }
+        #preloader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+        .preloader-logo {
+            font-family: 'Orbitron', sans-serif; font-size: 42px; font-weight: 900;
+            background: linear-gradient(135deg, var(--green) 0%, var(--accent) 50%, var(--accent-bright) 100%);
+            background-size: 200% 200%;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+            animation: logoGradient 2s ease infinite, logoPulse 1.5s ease-in-out infinite;
+            letter-spacing: 3px;
+        }
+        @keyframes logoPulse {
+            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 20px var(--accent-dim)); }
+            50% { transform: scale(1.06); filter: drop-shadow(0 0 40px var(--accent)); }
+        }
+        .preloader-bar {
+            width: 260px; height: 6px; border-radius: 3px;
+            background: rgba(255, 255, 255, 0.06); overflow: hidden;
+            border: 1px solid var(--accent-dim);
+        }
+        .preloader-bar-fill {
+            height: 100%; width: 0%;
+            background: linear-gradient(90deg, var(--green), var(--accent));
+            transition: width 0.3s ease;
+            box-shadow: 0 0 15px var(--accent);
+        }
+        .preloader-text {
+            font-family: 'Orbitron', sans-serif; font-size: 12px;
+            color: var(--accent-bright); letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+        .preloader-spinner {
+            width: 60px; height: 60px; border-radius: 50%;
+            border: 3px solid rgba(245, 197, 66, 0.15);
+            border-top-color: var(--accent);
+            border-right-color: var(--green);
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* ===== ЧАСТИЦЫ ===== */
+        #particles {
+            position: fixed; inset: 0; pointer-events: none; z-index: -1; overflow: hidden;
+        }
+        .particle {
+            position: absolute; width: 3px; height: 3px; border-radius: 50%;
+            background: var(--accent); opacity: 0.4;
+            animation: particleFloat linear infinite;
+        }
+        .particle.green { background: var(--green); }
+        @keyframes particleFloat {
+            0% { transform: translateY(0) translateX(0); opacity: 0; }
+            10% { opacity: 0.6; }
+            90% { opacity: 0.6; }
+            100% { transform: translateY(-100vh) translateX(30px); opacity: 0; }
+        }
+
         #bgVideo {
             position: fixed; top: 0; left: 0;
             width: 100%; height: 100%;
             object-fit: cover; z-index: -3;
             opacity: 0.35; pointer-events: none;
-            transition: opacity 0.5s;
         }
         .bg-layer { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; overflow: hidden; pointer-events: none; }
         .bg-layer::before {
@@ -52,7 +108,45 @@
                 radial-gradient(circle at 80% 70%, rgba(245, 197, 66, 0.12) 0%, transparent 40%);
             animation: bgMove 25s ease-in-out infinite;
         }
+        .bg-grid {
+            position: fixed; inset: 0; z-index: -2; pointer-events: none;
+            background-image: 
+                linear-gradient(rgba(46, 204, 113, 0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(46, 204, 113, 0.04) 1px, transparent 1px);
+            background-size: 40px 40px;
+            mask-image: radial-gradient(circle at 50% 50%, black 30%, transparent 80%);
+            -webkit-mask-image: radial-gradient(circle at 50% 50%, black 30%, transparent 80%);
+        }
         @keyframes bgMove { 0%, 100% { transform: translate(0, 0) rotate(0deg); } 50% { transform: translate(-5%, -5%) rotate(8deg); } }
+
+        /* ===== ТОСТЫ ===== */
+        #toastContainer {
+            position: fixed; top: 20px; right: 20px; z-index: 99998;
+            display: flex; flex-direction: column; gap: 8px;
+            pointer-events: none;
+        }
+        .toast {
+            padding: 12px 18px; border-radius: 8px;
+            background: rgba(10, 26, 15, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--accent-dim);
+            font-size: 13px; font-weight: 700; color: #fff;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            animation: toastIn 0.3s ease, toastOut 0.3s ease 3.7s forwards;
+            max-width: 280px;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .toast.ok { border-color: rgba(126, 216, 138, 0.5); }
+        .toast.err { border-color: rgba(255, 107, 107, 0.5); }
+        .toast.info { border-color: var(--accent); }
+        .toast .toast-icon { font-size: 18px; }
+        @keyframes toastIn {
+            from { opacity: 0; transform: translateX(30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes toastOut {
+            to { opacity: 0; transform: translateX(30px); }
+        }
 
         .app {
             width: 100%; max-width: 100%;
@@ -61,10 +155,9 @@
             -webkit-backdrop-filter: blur(14px);
             border: var(--border-width) solid var(--accent-dim);
             border-radius: 6px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6), 0 0 calc(40px * var(--glow-intensity)) rgba(46, 204, 113, 0.15);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6), 0 0 40px rgba(46, 204, 113, 0.15);
             overflow: hidden; display: flex; flex-direction: column; padding-bottom: 20px;
             position: relative;
-            transition: background 0.3s;
         }
 
         .top-bar {
@@ -72,10 +165,14 @@
             padding: 14px 22px;
             background: rgba(255, 255, 255, 0.015);
             border-bottom: var(--border-width) solid var(--accent-very-dim);
+            position: relative;
         }
-        .top-left {
-            display: flex; align-items: center; gap: 12px;
+        .top-bar::after {
+            content: ''; position: absolute; bottom: -1px; left: 0; right: 0; height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+            opacity: 0.5;
         }
+        .top-left { display: flex; align-items: center; gap: 12px; }
         .hamburger {
             width: 40px; height: 40px; border-radius: 6px;
             border: 1px solid var(--accent-dim);
@@ -89,11 +186,12 @@
             background: var(--accent-bright); border-radius: 2px;
             transition: all 0.3s;
         }
-        .hamburger:hover { background: var(--accent-dim); }
+        .hamburger:hover { background: var(--accent-dim); transform: scale(1.05); }
         .hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
         .hamburger.active span:nth-child(2) { opacity: 0; }
         .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
 
+        .logo-wrap { display: flex; align-items: center; gap: 8px; }
         .logo-text {
             font-family: 'Orbitron', sans-serif; font-size: 24px; font-weight: 900; letter-spacing: 1px;
             background: linear-gradient(135deg, #d0d0d0 0%, var(--green) 50%, var(--accent) 100%);
@@ -105,6 +203,17 @@
         }
         @keyframes logoGradient { 0%, 100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
 
+        .online-dot {
+            width: 8px; height: 8px; border-radius: 50%;
+            background: var(--green);
+            box-shadow: 0 0 10px var(--green);
+            animation: onlinePulse 1.5s ease-in-out infinite;
+        }
+        @keyframes onlinePulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.3); }
+        }
+
         .top-right { display: flex; align-items: center; gap: 8px; }
         .balance-wrap {
             display: flex; align-items: center;
@@ -112,6 +221,7 @@
             border: 1px solid var(--accent-dim);
             border-radius: 6px; overflow: hidden;
             transition: all 0.3s;
+            position: relative;
         }
         .balance-wrap.pulse { animation: balancePulse 0.6s ease; }
         @keyframes balancePulse {
@@ -133,7 +243,7 @@
             display: flex; align-items: center; justify-content: center;
             border-left: 1px solid var(--accent-deep);
         }
-        .topup-btn:hover { filter: brightness(1.15); }
+        .topup-btn:hover { filter: brightness(1.15); transform: scale(1.05); }
 
         .music-toggle {
             width: 38px; height: 38px; border-radius: 6px;
@@ -144,7 +254,7 @@
             padding: 0;
         }
         .music-toggle svg { width: 18px; height: 18px; }
-        .music-toggle:hover { background: var(--accent-dim); color: #fff; }
+        .music-toggle:hover { background: var(--accent-dim); color: #fff; transform: scale(1.05); }
         .music-toggle.muted { color: #6b7280; border-color: rgba(255, 255, 255, 0.15); }
 
         .avatar {
@@ -185,7 +295,7 @@
             font-size: 13px;
         }
         .side-panel .side-tab svg { width: 20px; height: 20px; flex-shrink: 0; }
-        .side-panel .side-tab:hover { background: var(--accent-very-dim); border-color: var(--accent); color: var(--accent-bright); }
+        .side-panel .side-tab:hover { background: var(--accent-very-dim); border-color: var(--accent); color: var(--accent-bright); transform: translateX(4px); }
         .side-panel .side-tab.active {
             background: var(--accent-very-dim);
             border-color: var(--accent);
@@ -265,7 +375,7 @@
             text-transform: uppercase; letter-spacing: 1.5px; cursor: pointer;
             transition: all 0.25s; margin-top: 6px;
         }
-        .action-btn:hover:not(:disabled) { filter: brightness(1.1); }
+        .action-btn:hover:not(:disabled) { filter: brightness(1.1); transform: translateY(-1px); box-shadow: 0 6px 20px var(--accent-dim); }
         .action-btn:disabled { opacity: 0.4; cursor: not-allowed; background: #3a3d4d; }
 
         .msg { margin-top: 10px; font-size: 12px; font-weight: 700; min-height: 16px; text-align: center; }
@@ -273,6 +383,7 @@
         .msg.err { color: #ff6b6b; }
         .msg.wait { color: var(--accent-bright); }
 
+        /* ===== ПОПОЛНЕНИЕ ===== */
         .topup-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -292,7 +403,7 @@
             display: flex; flex-direction: column; align-items: center; gap: 3px;
             cursor: pointer; transition: all 0.2s; text-align: center;
         }
-        .topup-item:hover { border-color: var(--accent); background: var(--accent-very-dim); }
+        .topup-item:hover { border-color: var(--accent); background: var(--accent-very-dim); transform: translateY(-2px); }
         .topup-item.selected { border-color: var(--accent); background: var(--accent-very-dim); box-shadow: 0 0 15px var(--accent-dim); }
         .topup-item img { width: 40px; height: 40px; object-fit: contain; }
         .topup-item .ti-name { font-size: 8.5px; color: #e5e7ef; font-weight: 700; line-height: 1.1; height: 20px; overflow: hidden; }
@@ -319,8 +430,6 @@
         .topup-price-line .tpl-label { color: #8a8d9b; font-weight: 700; }
         .topup-price-line .tpl-value { font-family: 'Orbitron', sans-serif; font-weight: 800; color: #fff; display: flex; align-items: center; gap: 4px; }
         .topup-price-line .tpl-value img { width: 12px; height: 12px; }
-        .topup-price-line .tpl-value.old { color: #8a8d9b; text-decoration: line-through; }
-        .topup-price-line .tpl-value.new { color: var(--accent-bright); }
 
         .topup-promo-active {
             text-align: center;
@@ -332,6 +441,7 @@
             letter-spacing: 1px;
         }
 
+        /* ===== ПРОФИЛЬ ===== */
         .profile-page { padding: 20px 22px; }
         .profile-banner {
             position: relative; width: 100%; height: 200px;
@@ -725,55 +835,81 @@
         .section-block { margin-top: 20px; }
         .target-row, .shop-row, .inventory-row {
             display: grid; grid-template-columns: repeat(6, 1fr);
-            gap: 8px; padding: 4px 22px 12px;
+            gap: 6px; padding: 4px 22px 12px;
         }
         .inv-card, .target-card, .shop-card {
             background: rgba(255, 255, 255, 0.025);
-            border-radius: 6px; padding: 8px 6px;
+            border-radius: 6px; padding: 6px 4px;
             display: flex; flex-direction: column; align-items: center;
             border: 1px solid rgba(255, 255, 255, 0.06);
             transition: all 0.2s; position: relative; min-width: 0;
+            overflow: hidden;
         }
         .inv-card:hover, .target-card:hover:not(.disabled), .shop-card:hover {
             border-color: var(--accent); background: var(--accent-very-dim);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px var(--accent-dim);
         }
-        .inv-card.selected, .target-card.selected { border-color: var(--accent); background: var(--accent-very-dim); }
+        .inv-card.selected, .target-card.selected { border-color: var(--accent); background: var(--accent-very-dim); box-shadow: 0 0 12px var(--accent-dim); }
         .target-card.disabled { opacity: 0.25; cursor: not-allowed; filter: grayscale(1); }
         .inv-card img, .target-card img, .shop-card img {
             width: 100%; max-width: var(--card-img-size);
-            height: var(--card-img-size); object-fit: contain; margin-bottom: 4px; pointer-events: none;
+            height: var(--card-img-size); object-fit: contain; margin-bottom: 3px; pointer-events: none;
         }
         .inv-card .name, .target-card .name, .shop-card .name {
-            font-size: var(--card-name-size); font-weight: 700; text-align: center; margin-bottom: 3px;
-            height: 22px; overflow: hidden; color: #e5e7ef; pointer-events: none;
+            font-size: var(--card-name-size); font-weight: 700; text-align: center; margin-bottom: 2px;
+            height: 18px; overflow: hidden; color: #e5e7ef; pointer-events: none;
             line-height: 1.1; width: 100%;
         }
         .inv-card .price, .target-card .price, .shop-card .price {
-            font-size: 9.5px; color: var(--accent-bright); font-weight: 800;
+            font-size: 8.5px; color: var(--accent-bright); font-weight: 800;
             display: flex; align-items: center; gap: 2px;
             font-family: 'Orbitron', sans-serif; pointer-events: none;
         }
         .buy-btn {
-            width: 100%; padding: 5px; border-radius: 4px; border: none;
+            width: 100%; padding: 4px; border-radius: 4px; border: none;
             background: var(--accent); color: #0a1a0f;
-            font-weight: 800; font-size: 9px; cursor: pointer; transition: all 0.2s;
+            font-weight: 800; font-size: 8px; cursor: pointer; transition: all 0.2s;
             text-transform: uppercase; font-family: 'Orbitron', sans-serif;
-            margin-top: 4px; position: relative; z-index: 5;
+            margin-top: 3px; position: relative; z-index: 5;
         }
         .buy-btn:disabled { opacity: 0.4; cursor: not-allowed; background: #3a3d4d; }
         .sell-btn {
-            width: 100%; padding: 5px; border-radius: 4px;
+            width: 100%; padding: 4px; border-radius: 4px;
             border: 1px solid rgba(120, 200, 130, 0.3);
             background: rgba(120, 200, 130, 0.08); color: #7ed88a;
-            font-weight: 800; font-size: 9px; cursor: pointer;
+            font-weight: 800; font-size: 8px; cursor: pointer;
             text-transform: uppercase; font-family: 'Orbitron', sans-serif;
-            margin-top: 4px; position: relative; z-index: 5;
+            margin-top: 3px; position: relative; z-index: 5;
         }
         .sell-btn:disabled { opacity: 0.4; cursor: not-allowed; }
         .empty-inv { color: #4a4d5e; font-size: 12px; text-align: center; width: 100%; padding: 18px; font-weight: 600; grid-column: 1 / -1; }
         .selectable { display: flex; flex-direction: column; align-items: center; width: 100%; cursor: pointer; }
         .locked { pointer-events: none !important; opacity: 0.4 !important; filter: grayscale(0.5) !important; }
 
+        /* ===== КОМПАКТНЫЙ МАГАЗИН ===== */
+        .shop-scroll {
+            max-height: 240px; overflow-y: auto;
+            padding: 4px 22px 12px;
+            scrollbar-width: thin;
+            scrollbar-color: var(--accent-dim) transparent;
+        }
+        .shop-scroll::-webkit-scrollbar { width: 6px; }
+        .shop-scroll::-webkit-scrollbar-thumb { background: var(--accent-dim); border-radius: 3px; }
+        .shop-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(64px, 1fr));
+            gap: 5px;
+        }
+        .shop-card {
+            padding: 5px 3px;
+        }
+        .shop-card img { max-width: 36px; height: 36px; }
+        .shop-card .name { font-size: 7px; height: 16px; }
+        .shop-card .price { font-size: 7.5px; }
+        .shop-card .buy-btn { font-size: 7px; padding: 3px; }
+
+        /* ===== РАКЕТКА ===== */
         .rocket-page { padding: 24px 22px; max-width: 900px; margin: 0 auto; }
         .rocket-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
         .rocket-title { font-family: 'Orbitron', sans-serif; font-size: 20px; font-weight: 900; color: #fff; letter-spacing: 3px; text-transform: uppercase; }
@@ -875,6 +1011,7 @@
         .rocket-result-prize { font-family: 'Orbitron', sans-serif; font-size: 20px; font-weight: 900; color: var(--accent-bright); display: flex; align-items: center; gap: 6px; }
         .rocket-result-prize img { width: 20px; height: 20px; }
 
+        /* ===== ОБМЕН ===== */
         .trade-page { padding: 24px 22px; max-width: 700px; margin: 0 auto; }
         .trade-page-header { text-align: center; margin-bottom: 20px; }
         .trade-page-header h2 { font-family: 'Orbitron', sans-serif; font-size: 20px; font-weight: 900; color: #fff; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; }
@@ -901,6 +1038,7 @@
         .trade-btn:disabled { opacity: 0.35; cursor: not-allowed; background: #3a3d4d; }
         .trade-empty { text-align: center; padding: 36px 12px; color: #4a4d5e; font-size: 12px; font-weight: 600; }
 
+        /* ===== ПРОМОКОД ===== */
         .promo-panel { padding: 26px 22px; text-align: center; }
         .promo-panel h2 { font-family: 'Orbitron', sans-serif; font-size: 18px; font-weight: 900; color: #fff; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 2px; }
         .promo-panel p { color: #8a8d9b; font-size: 13px; margin-bottom: 18px; }
@@ -946,8 +1084,8 @@
             .item-box img { width: 58px; height: 58px; }
             .upgrade-main-btn { flex: 0 1 200px; font-size: 12px; padding: 12px; }
             .fast-btn { width: 46px; height: 46px; }
-            .target-row, .shop-row, .inventory-row { grid-template-columns: repeat(4, 1fr); gap: 6px; padding: 4px 12px 12px; }
-            .inv-card img, .target-card img, .shop-card img { max-width: 42px; height: 42px; }
+            .target-row, .shop-row, .inventory-row { grid-template-columns: repeat(4, 1fr); gap: 5px; padding: 4px 12px 12px; }
+            .inv-card img, .target-card img, .shop-card img { max-width: 38px; height: 38px; }
             .section-title { padding-left: 12px; padding-right: 12px; }
             .items-row { padding: 12px; gap: 8px; }
             .stage-controls { padding: 0 12px 6px; }
@@ -974,6 +1112,8 @@
             .avatar-orbit-item img { width: 14px; height: 14px; }
             .menu-promo-img { max-height: 40vh; }
             .menu-promo-percent { font-size: 36px; }
+            .shop-scroll { padding: 4px 12px 12px; }
+            .shop-grid { grid-template-columns: repeat(auto-fill, minmax(56px, 1fr)); }
             @keyframes orbitSpin {
                 from { transform: rotate(0deg) translateX(40px) rotate(0deg); }
                 to { transform: rotate(360deg) translateX(40px) rotate(-360deg); }
@@ -983,20 +1123,40 @@
 </head>
 <body>
 
+<!-- Прелоадер -->
+<div id="preloader">
+    <div class="preloader-spinner"></div>
+    <div class="preloader-logo">GGbrainX</div>
+    <div class="preloader-bar"><div class="preloader-bar-fill" id="preloaderFill"></div></div>
+    <div class="preloader-text" id="preloaderText">Загрузка 0%</div>
+</div>
+
+<!-- Тосты -->
+<div id="toastContainer"></div>
+
+<!-- Частицы -->
+<div id="particles"></div>
+
 <video id="bgVideo" autoplay muted loop playsinline></video>
 <audio id="bgMusic" loop autoplay>
     <source src="https://raw.githubusercontent.com/saintezz/ggbrainXv2/main/8bit.mp3" type="audio/mpeg">
 </audio>
 <div class="bg-layer"></div>
+<div class="bg-grid"></div>
 
 <!-- Боковая панель -->
 <div class="side-overlay" id="sideOverlay" onclick="toggleSidePanel()"></div>
 <div class="side-panel" id="sidePanel">
     <div class="side-title">GGbrainX</div>
+    <div class="side-tab" id="sideTabMenu" onclick="switchTab('menu')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 12l9-9 9 9"/><path d="M5 10v10h14V10"/>
+        </svg>
+        <span>Главная</span>
+    </div>
     <div class="side-tab" id="sideTabUpgrade" onclick="switchTab('upgrade')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M3 17l6-6 4 4 8-8"/>
-            <path d="M14 7h7v7"/>
+            <path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/>
         </svg>
         <span>Апгрейд</span>
     </div>
@@ -1004,39 +1164,32 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/>
             <path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/>
-            <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/>
-            <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/>
+            <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/>
         </svg>
         <span>Ракетка</span>
     </div>
     <div class="side-tab" id="sideTabTrade" onclick="switchTab('trade')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M4 7h13l-3-3"/>
-            <path d="M20 17H7l3 3"/>
+            <path d="M4 7h13l-3-3"/><path d="M20 17H7l3 3"/>
         </svg>
         <span>Обмен</span>
     </div>
     <div class="side-tab" id="sideTabPromo" onclick="switchTab('promo')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M20 12v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-6"/>
-            <path d="M2 7h20v5H2z"/>
-            <path d="M12 22V7"/>
-            <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/>
-            <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>
+            <path d="M20 12v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-6"/><path d="M2 7h20v5H2z"/><path d="M12 22V7"/>
+            <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>
         </svg>
         <span>Промо</span>
     </div>
     <div class="side-tab" id="sideTabProfile" onclick="switchTab('profile')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="8" r="4"/>
-            <path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/>
+            <circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/>
         </svg>
         <span>Профиль</span>
     </div>
     <div class="side-tab" id="sideTabCustomize" onclick="switchTab('customize')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 20h9"/>
-            <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+            <path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
         </svg>
         <span>Кастом</span>
     </div>
@@ -1149,11 +1302,12 @@
     <div class="top-bar">
         <div class="top-left">
             <button class="hamburger" id="hamburger" onclick="toggleSidePanel()">
-                <span></span>
-                <span></span>
-                <span></span>
+                <span></span><span></span><span></span>
             </button>
-            <div class="logo-text">GGbrainX</div>
+            <div class="logo-wrap">
+                <div class="logo-text">GGbrainX</div>
+                <div class="online-dot" title="Онлайн"></div>
+            </div>
         </div>
         <div class="top-right">
             <button class="music-toggle" id="musicToggle" onclick="toggleMusic()" title="Музыка"></button>
@@ -1216,16 +1370,18 @@
             </button>
         </div>
         <div class="section-block">
-            <div class="section-title">Инвентарь</div>
+            <div class="section-title">💎 Инвентарь</div>
             <div class="inventory-row" id="inventoryRow"><div class="empty-inv">Инвентарь пуст</div></div>
         </div>
         <div class="section-block" id="targetSection" style="display:none;">
-            <div class="section-title">Выбери цель</div>
+            <div class="section-title">🎯 Выбери цель</div>
             <div class="target-row" id="targetRow"></div>
         </div>
         <div class="section-block">
-            <div class="section-title">Магазин</div>
-            <div class="shop-row" id="shopRow"></div>
+            <div class="section-title">🛒 Магазин</div>
+            <div class="shop-scroll">
+                <div class="shop-grid" id="shopRow"></div>
+            </div>
         </div>
     </div>
 
@@ -1234,7 +1390,7 @@
         <div class="rocket-page">
             <div class="rocket-header">
                 <div>
-                    <div class="rocket-title">Ракетка</div>
+                    <div class="rocket-title">🚀 Ракетка</div>
                     <div class="rocket-subtitle">Ставь монеты, забирай на любом X</div>
                 </div>
                 <div class="rocket-balance-wrap">
@@ -1288,7 +1444,7 @@
     <div class="tab-panel" id="panelTrade">
         <div class="trade-page">
             <div class="trade-page-header">
-                <h2>Обмен браинротов</h2>
+                <h2>🔄 Обмен браинротов</h2>
                 <p>Выбери своего браинрота и посмотри, на что его можно обменять</p>
             </div>
             <div class="trade-list-page" id="tradeList"></div>
@@ -1298,7 +1454,7 @@
     <!-- ===== ПРОМОКОД ===== -->
     <div class="tab-panel" id="panelPromo">
         <div class="promo-panel">
-            <h2>Активация промокода</h2>
+            <h2>🎁 Активация промокода</h2>
             <p>Введи код и получи награду</p>
             <div class="promo-input-wrap">
                 <input type="text" class="form-input" id="promoInput" placeholder="ВВЕДИ ПРОМОКОД" maxlength="20">
@@ -1331,14 +1487,14 @@
             </div>
             <div class="profile-stats-column">
                 <div class="profile-stat">
-                    <div class="profile-stat-label">Баланс</div>
+                    <div class="profile-stat-label">💰 Баланс</div>
                     <div class="profile-stat-value">
                         <img src="https://github.com/saintezz/saintbetW/blob/main/%D0%BC%D0%BE%D0%BD%D0%B5%D1%82%D0%B0.png?raw=true" alt="coin">
                         <span id="profileBalance">0</span>
                     </div>
                 </div>
                 <div class="profile-stat expandable" id="itemsStat" onclick="toggleInventoryDrawer()">
-                    <div class="profile-stat-label">Предметов</div>
+                    <div class="profile-stat-label">💎 Предметов</div>
                     <div class="profile-stat-value">
                         <span id="profileItemsCount">0</span>
                         <svg class="expand-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -1389,19 +1545,19 @@
     <div class="tab-panel" id="panelCustomize">
         <div class="customize-page">
             <div class="customize-section">
-                <div class="customize-section-title">Твой ник</div>
+                <div class="customize-section-title">✏️ Твой ник</div>
                 <input type="text" class="form-input" id="customizeNickInput" placeholder="Введи свой ник" maxlength="20">
                 <button class="action-btn" onclick="saveCustomNick()">Сохранить ник</button>
             </div>
             <div class="customize-section">
-                <div class="customize-section-title">Прозрачность сайта</div>
+                <div class="customize-section-title">🌫️ Прозрачность сайта</div>
                 <div class="slider-row">
                     <input type="range" id="opacitySlider" min="5" max="100" value="55" oninput="changeOpacity(this.value)">
                     <div class="slider-value" id="opacityValue">55%</div>
                 </div>
             </div>
             <div class="customize-section">
-                <div class="customize-section-title">Баннер профиля</div>
+                <div class="customize-section-title">🎬 Баннер профиля</div>
                 <div class="bg-options" id="bgOptions">
                     <div class="bg-option" data-bg="none" onclick="selectProfileBg('none')">
                         <div class="bg-placeholder">Без баннера</div>
@@ -1418,7 +1574,7 @@
                 </div>
             </div>
             <div class="customize-section">
-                <div class="customize-section-title">Брейнроты вокруг аватарки</div>
+                <div class="customize-section-title">🪐 Брейнроты вокруг аватарки</div>
                 <div class="orbit-picker" id="orbitPicker"></div>
             </div>
             <div class="msg" id="customizeMsg"></div>
@@ -1459,7 +1615,6 @@
         { code: 'ECLIPSE9403',     percent: 8,  img: 'https://github.com/saintezz/ggbrainXv2/raw/main/eclipse9403.png' }
     ];
     const PROMO_ROTATION_MS = 10 * 60 * 1000;
-
     const API_URL = 'https://ggbrainx.onrender.com';
 
     const TRADE_RECIPES = [
@@ -1484,10 +1639,8 @@
     let profileBg = localStorage.getItem('ggbrainx_profile_bg') || 'none';
     let orbitItems = JSON.parse(localStorage.getItem('ggbrainx_orbit') || '[]');
     let appOpacity = parseFloat(localStorage.getItem('ggbrainx_opacity') || '0.55');
-
     let balance = parseFloat(localStorage.getItem('ggbrainx_balance') || '0');
     let inventory = JSON.parse(localStorage.getItem('ggbrainx_inventory') || '[]');
-
     let deposits = [];
     let topupSelectedItem = null;
     let appliedTopupPromo = null;
@@ -1537,14 +1690,14 @@
     const CIRCUMFERENCE = 2 * Math.PI * 130;
     let fastModeEnabled = false;
 
-    let selectedSourceId = null;
+    let selectedSourceIndex = null; // ИНДЕКС в inventory
     let selectedTargetId = null;
     let isSpinning = false;
     let promoType = 'balance';
     let selectedAdminItem = null;
-
     let currentTradeOptions = [];
     let currentTradeSelected = null;
+    let currentTradeFromIndex = null;
 
     let rocketState = 'idle';
     let rocketBet = 0;
@@ -1575,6 +1728,31 @@
     const profileBalance = document.getElementById('profileBalance');
     const profileItemsCount = document.getElementById('profileItemsCount');
 
+    // ===== ТОСТЫ =====
+    function showToast(text, type = 'info') {
+        const container = document.getElementById('toastContainer');
+        const toast = document.createElement('div');
+        toast.className = 'toast ' + type;
+        const icon = type === 'ok' ? '✅' : type === 'err' ? '❌' : 'ℹ️';
+        toast.innerHTML = `<span class="toast-icon">${icon}</span><span>${text}</span>`;
+        container.appendChild(toast);
+        setTimeout(() => toast.remove(), 4200);
+    }
+
+    // ===== ЧАСТИЦЫ =====
+    function initParticles() {
+        const container = document.getElementById('particles');
+        for (let i = 0; i < 30; i++) {
+            const p = document.createElement('div');
+            p.className = 'particle' + (Math.random() > 0.5 ? ' green' : '');
+            p.style.left = Math.random() * 100 + '%';
+            p.style.top = Math.random() * 100 + '%';
+            p.style.animationDuration = (8 + Math.random() * 12) + 's';
+            p.style.animationDelay = (Math.random() * 10) + 's';
+            container.appendChild(p);
+        }
+    }
+
     function applyUserToProfile() {
         document.getElementById('profileNick').textContent = getDisplayNick();
         document.getElementById('profileTg').textContent = USER.tg;
@@ -1594,6 +1772,7 @@
         balanceBox.classList.add('pulse');
         saveLocalCache();
         syncUserToServer();
+        checkAchievements();
     }
 
     let syncTimer = null;
@@ -1713,22 +1892,20 @@
         }
     };
 
+    // ===== ПРОФИЛЬНЫЙ ИНВЕНТАРЬ (отдельные карточки) =====
     function renderProfileInventory() {
         const grid = document.getElementById('profileInventoryGrid');
         if (!inventory.length) {
             grid.innerHTML = '<div class="profile-inventory-empty">Инвентарь пуст</div>';
             return;
         }
-        const counts = {};
-        inventory.forEach(id => { counts[id] = (counts[id] || 0) + 1; });
-        grid.innerHTML = Object.keys(counts).map(id => {
+        grid.innerHTML = inventory.map(id => {
             const item = getItemById(id);
             if (!item) return '';
-            const count = counts[id];
             return `
                 <div class="profile-inventory-item">
                     <img src="${item.img}" alt="${item.name}" onerror="this.src='https://via.placeholder.com/44?text=?'">
-                    <div class="inv-name">${item.name}${count > 1 ? ` x${count}` : ''}</div>
+                    <div class="inv-name">${item.name}</div>
                     <div class="inv-price">${item.price}</div>
                 </div>
             `;
@@ -1739,11 +1916,7 @@
         const slot = Math.floor(Date.now() / PROMO_ROTATION_MS);
         return slot % TOPUP_PROMOS.length;
     }
-
-    function getCurrentPromo() {
-        return TOPUP_PROMOS[getCurrentPromoIndex()];
-    }
-
+    function getCurrentPromo() { return TOPUP_PROMOS[getCurrentPromoIndex()]; }
     function getSecondsToNextPromo() {
         const now = Date.now();
         const next = (Math.floor(now / PROMO_ROTATION_MS) + 1) * PROMO_ROTATION_MS;
@@ -1827,7 +2000,6 @@
         const item = getItemById(topupSelectedItem);
         if (!item) return;
         line.style.display = 'flex';
-
         if (appliedTopupPromo) {
             const newPrice = Math.round(item.price * (1 + appliedTopupPromo.percent / 100));
             val.innerHTML = `<span style="color:#8a8d9b;text-decoration:line-through;margin-right:6px;">${item.price}</span> <span style="color:var(--accent-bright);">${newPrice}</span> <img src="${COIN_IMG}">`;
@@ -1842,11 +2014,7 @@
         const input = document.getElementById('topupPromoInput');
         const msg = document.getElementById('topupPromoMsg');
         const code = input.value.trim().toUpperCase();
-        if (!code) {
-            msg.className = 'msg err';
-            msg.textContent = 'Введи промокод';
-            return;
-        }
+        if (!code) { msg.className = 'msg err'; msg.textContent = 'Введи промокод'; return; }
         const currentPromo = getCurrentPromo();
         if (code !== currentPromo.code) {
             appliedTopupPromo = null;
@@ -1865,50 +2033,32 @@
         const code = this.value.trim().toUpperCase();
         const msg = document.getElementById('topupPromoMsg');
         if (!code) {
-            msg.textContent = '';
-            msg.className = 'msg';
-            appliedTopupPromo = null;
-            updateTopupPrice();
-            return;
+            msg.textContent = ''; msg.className = 'msg';
+            appliedTopupPromo = null; updateTopupPrice(); return;
         }
         const currentPromo = getCurrentPromo();
         if (code === currentPromo.code) {
-            msg.className = 'msg ok';
-            msg.textContent = 'Промокод найден, нажми ОК';
+            msg.className = 'msg ok'; msg.textContent = 'Промокод найден, нажми ОК';
         } else {
-            msg.className = 'msg err';
-            msg.textContent = 'Недействующий промокод';
-            appliedTopupPromo = null;
-            updateTopupPrice();
+            msg.className = 'msg err'; msg.textContent = 'Недействующий промокод';
+            appliedTopupPromo = null; updateTopupPrice();
         }
     });
 
     window.createDeposit = async function() {
         const msg = document.getElementById('topupMsg');
         const roblox = document.getElementById('topupRoblox').value.trim();
-        if (!topupSelectedItem) {
-            msg.className = 'msg err';
-            msg.textContent = 'Выбери предмет';
-            return;
-        }
-        if (!roblox) {
-            msg.className = 'msg err';
-            msg.textContent = 'Введи Roblox ник';
-            return;
-        }
+        if (!topupSelectedItem) { msg.className = 'msg err'; msg.textContent = 'Выбери предмет'; return; }
+        if (!roblox) { msg.className = 'msg err'; msg.textContent = 'Введи Roblox ник'; return; }
         const item = getItemById(topupSelectedItem);
         if (!item) return;
-
         let finalPrice = item.price;
         let bonusText = '';
         if (appliedTopupPromo) {
             finalPrice = Math.round(item.price * (1 + appliedTopupPromo.percent / 100));
             bonusText = ` (с промокодом +${appliedTopupPromo.percent}%)`;
         }
-
-        msg.className = 'msg wait';
-        msg.textContent = 'Отправляем заявку...';
-
+        msg.className = 'msg wait'; msg.textContent = 'Отправляем заявку...';
         try {
             const res = await fetch(API_URL + '/api/deposit/create', {
                 method: 'POST',
@@ -1916,10 +2066,8 @@
                 body: JSON.stringify({
                     telegram_id: getTelegramId(),
                     username: USER.username || '',
-                    item_id: item.id,
-                    item_name: item.name,
-                    item_price: finalPrice,
-                    base_price: item.price,
+                    item_id: item.id, item_name: item.name,
+                    item_price: finalPrice, base_price: item.price,
                     promo_code: appliedTopupPromo ? appliedTopupPromo.code : '',
                     promo_percent: appliedTopupPromo ? appliedTopupPromo.percent : 0,
                     roblox_name: roblox
@@ -1929,14 +2077,15 @@
             if (data.ok) {
                 msg.className = 'msg ok';
                 msg.textContent = `Заявка отправлена!${bonusText}`;
+                showToast('Заявка отправлена!', 'ok');
                 setTimeout(() => closeModal('topupModal'), 2200);
             } else {
-                msg.className = 'msg err';
-                msg.textContent = data.error || 'Ошибка';
+                msg.className = 'msg err'; msg.textContent = data.error || 'Ошибка';
+                showToast(data.error || 'Ошибка', 'err');
             }
         } catch (err) {
-            msg.className = 'msg err';
-            msg.textContent = 'Сервер не отвечает';
+            msg.className = 'msg err'; msg.textContent = 'Сервер не отвечает';
+            showToast('Сервер не отвечает', 'err');
         }
     };
 
@@ -1944,10 +2093,7 @@
         try {
             const res = await fetch(API_URL + '/api/deposits');
             const data = await res.json();
-            if (data.ok) {
-                deposits = data.deposits || [];
-                renderDeposits();
-            }
+            if (data.ok) { deposits = data.deposits || []; renderDeposits(); }
         } catch (e) {
             document.getElementById('depositsList').innerHTML = '<div class="deposits-empty">Сервер недоступен</div>';
         }
@@ -1957,31 +2103,26 @@
         const list = document.getElementById('depositsList');
         const pending = deposits.filter(d => d.status === 'pending');
         document.getElementById('depositsCount').textContent = pending.length;
-
         if (!pending.length) {
             list.innerHTML = '<div class="deposits-empty">Нет новых заявок</div>';
             return;
         }
-
         list.innerHTML = pending.map(d => {
             const item = getItemById(d.item_id) || { img: '', name: d.item_name };
             const basePrice = d.base_price || d.item_price;
             const finalPrice = d.item_price;
             const promoLine = d.promo_code
-                ? `<div class="dep-line"><span class="dep-key">Промо:</span> <span class="dep-val green">${d.promo_code} (+${d.promo_percent}%)</span></div>`
-                : '';
+                ? `<div class="dep-line"><span class="dep-key">Промо:</span> <span class="dep-val green">${d.promo_code} (+${d.promo_percent}%)</span></div>` : '';
             const priceLine = d.promo_code
                 ? `<div class="dep-line"><span class="dep-key">Цена:</span> <span class="dep-val">${basePrice} → <b style="color:#7ed88a;">${finalPrice}</b></span></div>`
                 : `<div class="dep-line"><span class="dep-key">Цена:</span> <span class="dep-val accent">${finalPrice}</span></div>`;
-
             return `
                 <div class="deposit-item">
                     <img src="${item.img}" alt="" onerror="this.style.display='none'">
                     <div class="deposit-info">
                         <div class="dep-line"><span class="dep-key">TG:</span> <span class="dep-val accent">@${d.username || '—'}</span></div>
                         <div class="dep-line"><span class="dep-key">Предмет:</span> <span class="dep-val">${d.item_name}</span></div>
-                        ${priceLine}
-                        ${promoLine}
+                        ${priceLine}${promoLine}
                         <div class="dep-line"><span class="dep-key">Roblox:</span> <span class="dep-val">${d.roblox_name}</span></div>
                     </div>
                     <div class="deposit-actions">
@@ -1998,19 +2139,11 @@
             const res = await fetch(API_URL + '/api/deposit/status', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    id: id,
-                    status: status,
-                    admin: USER.username || ADMIN_USERNAME
-                })
+                body: JSON.stringify({ id, status, admin: USER.username || ADMIN_USERNAME })
             });
             const data = await res.json();
-            if (data.ok) {
-                await loadDeposits();
-            }
-        } catch (e) {
-            alert('Сервер недоступен');
-        }
+            if (data.ok) { await loadDeposits(); showToast('Заявка обработана', 'ok'); }
+        } catch (e) { showToast('Сервер недоступен', 'err'); }
     };
 
     window.selectPromoType = function(type) {
@@ -2033,7 +2166,7 @@
     window.selectAdminItem = function(id) { selectedAdminItem = id; renderAdminGrid(); };
 
     window.openAdminPanel = function() {
-        if (!isAdmin) return;
+        if (!isAdmin) { showToast('Нет доступа', 'err'); return; }
         renderAdminGrid();
         renderPromoList();
         openModal('adminModal');
@@ -2064,11 +2197,11 @@
             const data = await res.json();
             if (data.ok) {
                 msg.className = 'msg ok'; msg.textContent = 'Промокод создан: ' + code;
+                showToast('Промокод создан!', 'ok');
                 document.getElementById('adminCode').value = '';
                 document.getElementById('adminUses').value = 1;
                 selectedAdminItem = null;
-                renderAdminGrid();
-                renderPromoList();
+                renderAdminGrid(); renderPromoList();
             } else {
                 msg.className = 'msg err'; msg.textContent = data.error || 'Ошибка';
             }
@@ -2126,6 +2259,7 @@
                     updateBalance();
                     msgTab.className = 'msg ok';
                     msgTab.textContent = `+${data.value} монет! Осталось: ${data.remaining}`;
+                    showToast(`+${data.value} монет!`, 'ok');
                 } else {
                     inventory.push(data.value);
                     renderInventory(); renderTargets(); renderShop(); updateUpgradeScreen();
@@ -2134,10 +2268,12 @@
                     const item = getItemById(data.value);
                     msgTab.className = 'msg ok';
                     msgTab.textContent = `Получен: ${item ? item.name : data.value}! Осталось: ${data.remaining}`;
+                    showToast(`Получен: ${item ? item.name : data.value}`, 'ok');
                 }
                 inputTab.value = '';
             } else {
                 msgTab.className = 'msg err'; msgTab.textContent = data.error || 'Ошибка';
+                showToast(data.error || 'Ошибка', 'err');
             }
         } catch (err) {
             msgTab.className = 'msg err'; msgTab.textContent = 'Сервер не отвечает.';
@@ -2148,14 +2284,15 @@
         fastModeEnabled = !fastModeEnabled;
         const btn = document.getElementById('fastUpgradeBtn');
         if (btn) btn.classList.toggle('active', fastModeEnabled);
+        showToast(fastModeEnabled ? '⚡ Быстрый режим' : '🐢 Обычный режим', 'info');
     };
 
     function renderShop() {
         shopRow.innerHTML = ITEMS.map(item => `
             <div class="shop-card">
                 <img src="${item.img}" alt="${item.name}" onerror="this.src='https://via.placeholder.com/60?text=?'">
-                <div class="name">${item.name}</div>
-                <div class="price"><img src="${COIN_IMG}" class="price-coin" alt="coin" style="width:10px;height:10px;">${item.price}</div>
+                <div class="name" title="${item.name}">${item.name}</div>
+                <div class="price"><img src="${COIN_IMG}" class="price-coin" alt="coin" style="width:9px;height:9px;">${item.price}</div>
                 <button class="buy-btn" onclick="buyItem('${item.id}')" ${balance < item.price || isSpinning ? 'disabled' : ''}>Купить</button>
             </div>
         `).join('');
@@ -2164,75 +2301,79 @@
     function buyItem(id) {
         if (isSpinning) return;
         const item = getItemById(id);
-        if (!item || balance < item.price) return;
+        if (!item || balance < item.price) { showToast('Недостаточно монет', 'err'); return; }
         balance -= item.price;
         inventory.push(id);
         updateBalance();
         renderShop(); renderInventory(); updateUpgradeScreen();
         renderProfileInventory();
+        showToast(`Куплен: ${item.name}`, 'ok');
     }
 
-    window.sellItem = function(id) {
+    // ===== ПРОДАЖА ПО ИНДЕКСУ =====
+    window.sellItem = function(index) {
         if (isSpinning) return;
-        const index = inventory.indexOf(id);
-        if (index === -1) return;
+        if (index < 0 || index >= inventory.length) return;
+        const id = inventory[index];
         const item = getItemById(id);
         if (!item) return;
         inventory.splice(index, 1);
         balance += item.price;
-        if (selectedSourceId === id && !inventory.includes(id)) {
-            selectedSourceId = null; selectedTargetId = null;
+        if (selectedSourceIndex === index) {
+            selectedSourceIndex = null; selectedTargetId = null;
             targetSection.style.display = 'none';
+        } else if (selectedSourceIndex !== null && selectedSourceIndex > index) {
+            selectedSourceIndex--;
         }
         updateBalance();
         renderInventory(); renderTargets(); renderShop(); updateUpgradeScreen();
         renderProfileInventory();
+        showToast(`Продан: ${item.name} (+${item.price})`, 'ok');
     };
 
+    // ===== ИНВЕНТАРЬ (отдельные карточки) =====
     function renderInventory() {
         if (inventory.length === 0) {
             inventoryRow.innerHTML = '<div class="empty-inv">Инвентарь пуст</div>';
             return;
         }
-        const counts = {};
-        inventory.forEach(id => { counts[id] = (counts[id] || 0) + 1; });
-        inventoryRow.innerHTML = Object.keys(counts).map(id => {
+        inventoryRow.innerHTML = inventory.map((id, index) => {
             const item = getItemById(id);
-            const count = counts[id];
-            const isSelected = selectedSourceId === id;
+            if (!item) return '';
+            const isSelected = selectedSourceIndex === index;
             return `
                 <div class="inv-card ${isSelected ? 'selected' : ''}">
-                    <div class="selectable" onclick="selectSource('${id}')">
+                    <div class="selectable" onclick="selectSourceByIndex(${index})">
                         <img src="${item.img}" alt="${item.name}">
-                        <div class="name">${item.name}</div>
-                        <div class="price"><img src="${COIN_IMG}" class="price-coin" alt="coin" style="width:10px;height:10px;">${item.price}${count > 1 ? ` (x${count})` : ''}</div>
+                        <div class="name" title="${item.name}">${item.name}</div>
+                        <div class="price"><img src="${COIN_IMG}" class="price-coin" alt="coin" style="width:9px;height:9px;">${item.price}</div>
                     </div>
-                    <button class="sell-btn" onclick="event.stopPropagation(); sellItem('${id}')" ${isSpinning ? 'disabled' : ''}>Продать</button>
+                    <button class="sell-btn" onclick="event.stopPropagation(); sellItem(${index})" ${isSpinning ? 'disabled' : ''}>Продать</button>
                 </div>
             `;
         }).join('');
         profileItemsCount.innerText = inventory.length;
     }
 
-    window.selectSource = function(id) {
+    window.selectSourceByIndex = function(index) {
         if (isSpinning) return;
-        if (!inventory.includes(id)) return;
-        selectedSourceId = id;
+        if (index < 0 || index >= inventory.length) return;
+        selectedSourceIndex = index;
         selectedTargetId = null;
         targetSection.style.display = 'block';
         renderInventory(); renderTargets(); updateUpgradeScreen();
     };
 
     function renderTargets() {
-        const sourceItem = selectedSourceId ? getItemById(selectedSourceId) : null;
+        const sourceItem = selectedSourceIndex !== null ? getItemById(inventory[selectedSourceIndex]) : null;
         targetRow.innerHTML = ITEMS.map(item => {
             const isSelected = selectedTargetId === item.id;
             const isDisabled = sourceItem && item.price <= sourceItem.price;
             return `
                 <div class="target-card ${isSelected ? 'selected' : ''} ${isDisabled ? 'disabled' : ''}" onclick="${isDisabled ? '' : `selectTarget('${item.id}')`}">
                     <img src="${item.img}" alt="${item.name}">
-                    <div class="name">${item.name}</div>
-                    <div class="price"><img src="${COIN_IMG}" class="price-coin" alt="coin" style="width:10px;height:10px;">${item.price}</div>
+                    <div class="name" title="${item.name}">${item.name}</div>
+                    <div class="price"><img src="${COIN_IMG}" class="price-coin" alt="coin" style="width:9px;height:9px;">${item.price}</div>
                 </div>
             `;
         }).join('');
@@ -2240,7 +2381,7 @@
 
     window.selectTarget = function(id) {
         if (isSpinning) return;
-        const sourceItem = selectedSourceId ? getItemById(selectedSourceId) : null;
+        const sourceItem = selectedSourceIndex !== null ? getItemById(inventory[selectedSourceIndex]) : null;
         const targetItem = getItemById(id);
         if (sourceItem && targetItem.price <= sourceItem.price) return;
         selectedTargetId = id;
@@ -2248,7 +2389,7 @@
     };
 
     function calculateChance() {
-        const sourceItem = selectedSourceId ? getItemById(selectedSourceId) : null;
+        const sourceItem = selectedSourceIndex !== null ? getItemById(inventory[selectedSourceIndex]) : null;
         const targetItem = selectedTargetId ? getItemById(selectedTargetId) : null;
         if (!sourceItem || !targetItem || targetItem.price <= sourceItem.price) return 0;
         const ratio = targetItem.price / sourceItem.price;
@@ -2259,7 +2400,7 @@
     }
 
     function updateUpgradeScreen() {
-        const sourceItem = selectedSourceId ? getItemById(selectedSourceId) : null;
+        const sourceItem = selectedSourceIndex !== null ? getItemById(inventory[selectedSourceIndex]) : null;
         const targetItem = selectedTargetId ? getItemById(selectedTargetId) : null;
         if (sourceItem) {
             sourceImg.src = sourceItem.img;
@@ -2289,14 +2430,11 @@
         arrowContainer.style.transform = `rotate(${angle}deg)`;
         chanceBig.innerText = displayChance + '%';
         if (displayChance >= 45) {
-            chanceLabel.innerText = 'ВЫСОКИЙ ШАНС';
-            chanceLabel.className = 'chance-label';
+            chanceLabel.innerText = 'ВЫСОКИЙ ШАНС'; chanceLabel.className = 'chance-label';
         } else if (displayChance >= 25) {
-            chanceLabel.innerText = 'СРЕДНИЙ ШАНС';
-            chanceLabel.className = 'chance-label medium';
+            chanceLabel.innerText = 'СРЕДНИЙ ШАНС'; chanceLabel.className = 'chance-label medium';
         } else {
-            chanceLabel.innerText = '';
-            chanceLabel.className = 'chance-label hidden';
+            chanceLabel.innerText = ''; chanceLabel.className = 'chance-label hidden';
         }
         if (sourceItem && targetItem && chance > 0 && !isSpinning) {
             upgradeBtn.disabled = false;
@@ -2309,7 +2447,8 @@
 
     function performUpgrade(durationMs) {
         if (isSpinning) return;
-        const sourceItem = getItemById(selectedSourceId);
+        if (selectedSourceIndex === null) return;
+        const sourceItem = getItemById(inventory[selectedSourceIndex]);
         const targetItem = getItemById(selectedTargetId);
         if (!sourceItem || !targetItem) return;
         if (targetItem.price <= sourceItem.price) return;
@@ -2329,16 +2468,18 @@
         const successAngle = (chance / 100) * 360;
         const finalAngle = totalRotation % 360;
         const isSuccess = finalAngle <= successAngle;
+        const sourceIndex = selectedSourceIndex;
+        const targetId = selectedTargetId;
         setTimeout(() => {
             if (isSuccess) {
-                const sourceIndex = inventory.indexOf(selectedSourceId);
-                if (sourceIndex > -1) inventory.splice(sourceIndex, 1);
-                inventory.push(selectedTargetId);
+                inventory.splice(sourceIndex, 1);
+                inventory.push(targetId);
+                showToast(`УСПЕХ! Получен ${getItemById(targetId).name}`, 'ok');
             } else {
-                const sourceIndex = inventory.indexOf(selectedSourceId);
-                if (sourceIndex > -1) inventory.splice(sourceIndex, 1);
+                inventory.splice(sourceIndex, 1);
+                showToast(`Провал... ${getItemById(sourceItem.id).name} потерян`, 'err');
             }
-            selectedSourceId = null;
+            selectedSourceIndex = null;
             selectedTargetId = null;
             targetSection.style.display = 'none';
             isSpinning = false;
@@ -2351,6 +2492,8 @@
             inventoryRow.classList.remove('locked');
             targetRow.classList.remove('locked');
             shopRow.classList.remove('locked');
+            upgradeCount++;
+            checkAchievements();
         }, durationMs + 100);
     }
 
@@ -2359,6 +2502,7 @@
         else performUpgrade(SPIN_DURATION);
     };
 
+    // ===== РАКЕТКА =====
     function generateCrashX() {
         const r = Math.random();
         if (r < 0.25) return 1.00;
@@ -2424,25 +2568,21 @@
         if (rocketState === 'flying') {
             sprite.classList.add('flying');
             sprite.classList.remove('crashed', 'cashed');
-            status.className = 'rocket-status flying';
-            status.textContent = 'ЛЕТИТ';
+            status.className = 'rocket-status flying'; status.textContent = 'ЛЕТИТ';
             xDisplay.className = 'rocket-x-display';
         } else if (rocketState === 'crashed') {
             sprite.classList.remove('flying', 'cashed');
             sprite.classList.add('crashed');
-            status.className = 'rocket-status crashed';
-            status.textContent = 'ВЗОРВАЛАСЬ';
+            status.className = 'rocket-status crashed'; status.textContent = 'ВЗОРВАЛАСЬ';
             xDisplay.className = 'rocket-x-display crashed';
         } else if (rocketState === 'cashed') {
             sprite.classList.remove('flying', 'crashed');
             sprite.classList.add('cashed');
-            status.className = 'rocket-status cashed';
-            status.textContent = 'ЗАБРАЛ';
+            status.className = 'rocket-status cashed'; status.textContent = 'ЗАБРАЛ';
             xDisplay.className = 'rocket-x-display cashed';
         } else {
             sprite.classList.remove('flying', 'crashed', 'cashed');
-            status.className = 'rocket-status';
-            status.textContent = 'ГОТОВ';
+            status.className = 'rocket-status'; status.textContent = 'ГОТОВ';
             xDisplay.className = 'rocket-x-display';
         }
         if (rocketState === 'idle') {
@@ -2462,8 +2602,7 @@
             actionBtn.disabled = true;
         } else if (rocketState === 'cashed') {
             actionBtn.textContent = 'ЗАБРАНО';
-            actionBtn.classList.remove('cashout');
-            actionBtn.classList.remove('crashed');
+            actionBtn.classList.remove('cashout', 'crashed');
             actionBtn.disabled = true;
         }
     }
@@ -2482,6 +2621,7 @@
             rocketHistory.unshift({ x: rocketCurrentX, crashed: true });
             if (rocketHistory.length > 50) rocketHistory.pop();
             renderRocketHistory();
+            showToast(`💥 Краш на ${rocketCurrentX.toFixed(2)}x`, 'err');
             setTimeout(() => {
                 if (rocketState === 'crashed') {
                     rocketState = 'idle';
@@ -2512,8 +2652,8 @@
         if (rocketState === 'idle') {
             const input = document.getElementById('rocketBetInput');
             const bet = Math.floor(Number(input.value));
-            if (!bet || bet < 1) { alert('Минимальная ставка 1 монета'); return; }
-            if (bet > balance) { alert('Недостаточно монет'); return; }
+            if (!bet || bet < 1) { showToast('Минимальная ставка 1 монета', 'err'); return; }
+            if (bet > balance) { showToast('Недостаточно монет', 'err'); return; }
             rocketBet = bet;
             balance -= bet;
             updateBalance();
@@ -2535,6 +2675,7 @@
             rocketHistory.unshift({ x: xAtCashout, crashed: false });
             if (rocketHistory.length > 50) rocketHistory.pop();
             renderRocketHistory();
+            showToast(`🎉 Забрал ${winAmount} на ${xAtCashout.toFixed(2)}x`, 'ok');
             setTimeout(() => {
                 if (rocketState === 'cashed') {
                     rocketState = 'idle';
@@ -2545,13 +2686,7 @@
         }
     };
 
-    function hexToRgb(hex) {
-        const r = parseInt(hex.slice(1,3), 16);
-        const g = parseInt(hex.slice(3,5), 16);
-        const b = parseInt(hex.slice(5,7), 16);
-        return `${r}, ${g}, ${b}`;
-    }
-
+    // ===== КАСТОМИЗАЦИЯ =====
     function applyCustomization() {
         document.documentElement.style.setProperty('--app-bg-alpha', appOpacity);
     }
@@ -2591,15 +2726,11 @@
         const index = orbitItems.indexOf(id);
         if (index > -1) orbitItems.splice(index, 1);
         else {
-            if (orbitItems.length >= 6) {
-                alert('Максимум 6 брейнротов вокруг аватарки');
-                return;
-            }
+            if (orbitItems.length >= 6) { showToast('Максимум 6 брейнротов', 'err'); return; }
             orbitItems.push(id);
         }
         localStorage.setItem('ggbrainx_orbit', JSON.stringify(orbitItems));
-        renderOrbitPicker();
-        renderOrbit();
+        renderOrbitPicker(); renderOrbit();
     };
 
     function renderOrbit() {
@@ -2628,17 +2759,17 @@
         if (!val) {
             customNick = null;
             localStorage.removeItem('ggbrainx_custom_nick');
-            msg.className = 'msg ok';
-            msg.textContent = 'Ник сброшен';
+            msg.className = 'msg ok'; msg.textContent = 'Ник сброшен';
         } else {
             customNick = val;
             localStorage.setItem('ggbrainx_custom_nick', val);
-            msg.className = 'msg ok';
-            msg.textContent = 'Ник сохранён: ' + val;
+            msg.className = 'msg ok'; msg.textContent = 'Ник сохранён: ' + val;
         }
         applyUserToProfile();
+        showToast('Ник сохранён', 'ok');
     };
 
+    // ===== ОБМЕН (по индексу) =====
     function renderTradeList() {
         const list = document.getElementById('tradeList');
         if (!list) return;
@@ -2646,15 +2777,13 @@
             list.innerHTML = '<div class="trade-empty">Инвентарь пуст — сначала купи браинрота</div>';
             return;
         }
-        const counts = {};
-        inventory.forEach(id => { counts[id] = (counts[id] || 0) + 1; });
         const available = [];
-        Object.keys(counts).forEach(fromId => {
-            const srcItem = getItemById(fromId);
+        inventory.forEach((id, index) => {
+            const srcItem = getItemById(id);
             if (!srcItem) return;
             const variants = TRADE_RECIPES
                 .map((r, idx) => {
-                    if (r.from !== fromId) return null;
+                    if (r.from !== id) return null;
                     const dstItem = getItemById(r.to);
                     if (!dstItem) return null;
                     const receivePrice = dstItem.price * r.count + r.coins;
@@ -2662,38 +2791,37 @@
                     return { recipe: r, idx, dstItem };
                 })
                 .filter(Boolean);
-            if (variants.length > 0) available.push({ fromItem: srcItem, count: counts[fromId], variants });
+            if (variants.length > 0) available.push({ fromItem: srcItem, index, variants });
         });
         if (!available.length) {
             list.innerHTML = '<div class="trade-empty">Нет браинротов для обмена</div>';
             return;
         }
-        list.innerHTML = available.map(({ fromItem, count, variants }) => {
+        list.innerHTML = available.map(({ fromItem, index, variants }) => {
             const variantsHtml = variants.map(v => {
                 const coinsHtml = v.recipe.coins > 0
-                    ? ` + ${v.recipe.coins} <img src="${COIN_IMG}" alt="coin">`
-                    : '';
+                    ? ` + ${v.recipe.coins} <img src="${COIN_IMG}" alt="coin">` : '';
                 return `<div class="trade-reward" style="margin-top:6px;"><span class="arrow">→</span> ${v.recipe.count}x ${v.dstItem.name}${coinsHtml}</div>`;
             }).join('');
             return `
                 <div class="trade-item">
                     <img class="trade-left-img" src="${fromItem.img}" alt="${fromItem.name}">
                     <div class="trade-info">
-                        <div class="trade-name">${fromItem.name}${count > 1 ? ` (x${count})` : ''}</div>
+                        <div class="trade-name">${fromItem.name}</div>
                         ${variantsHtml}
                     </div>
-                    <button class="trade-btn" onclick="openConfirmTrade('${fromItem.id}')">Обменять</button>
+                    <button class="trade-btn" onclick="openConfirmTrade(${index})">Обменять</button>
                 </div>
             `;
         }).join('');
     }
 
-    window.openConfirmTrade = function(fromId) {
+    window.openConfirmTrade = function(fromIndex) {
         if (isSpinning) return;
+        if (fromIndex < 0 || fromIndex >= inventory.length) return;
+        const fromId = inventory[fromIndex];
         const srcItem = getItemById(fromId);
         if (!srcItem) return;
-        const hasCount = inventory.filter(id => id === fromId).length;
-        if (hasCount < 1) return;
         const variants = TRADE_RECIPES
             .map((r, idx) => {
                 if (r.from !== fromId) return null;
@@ -2707,6 +2835,7 @@
         if (!variants.length) return;
         currentTradeOptions = variants;
         currentTradeSelected = 0;
+        currentTradeFromIndex = fromIndex;
         document.getElementById('confirmFromImg').src = srcItem.img;
         document.getElementById('confirmFromName').textContent = srcItem.name;
         document.getElementById('confirmFromPrice').textContent = srcItem.price;
@@ -2758,41 +2887,95 @@
 
     window.confirmTrade = function() {
         if (isSpinning) return;
+        if (currentTradeFromIndex === null) return;
         const variant = currentTradeOptions[currentTradeSelected];
         if (!variant) return;
         const recipe = variant.recipe;
         const dstItem = variant.dstItem;
-        const srcItem = getItemById(recipe.from);
-        const srcIndex = inventory.indexOf(recipe.from);
-        if (srcIndex === -1) { alert('У тебя нет этого браинрота'); return; }
+        const srcIndex = currentTradeFromIndex;
+        if (srcIndex < 0 || srcIndex >= inventory.length) { showToast('Предмет не найден', 'err'); return; }
+        const fromId = inventory[srcIndex];
+        const srcItem = getItemById(fromId);
         const receivePrice = dstItem.price * recipe.count + recipe.coins;
-        if (receivePrice > srcItem.price) { alert('Рецепт нечестный'); return; }
+        if (receivePrice > srcItem.price) { showToast('Рецепт нечестный', 'err'); return; }
         inventory.splice(srcIndex, 1);
         for (let k = 0; k < recipe.count; k++) inventory.push(recipe.to);
         if (recipe.coins > 0) balance += recipe.coins;
-        if (selectedSourceId === recipe.from && !inventory.includes(recipe.from)) {
-            selectedSourceId = null; selectedTargetId = null;
-            targetSection.style.display = 'none';
+        if (selectedSourceIndex !== null) {
+            if (selectedSourceIndex === srcIndex) {
+                selectedSourceIndex = null; selectedTargetId = null;
+                targetSection.style.display = 'none';
+            } else if (selectedSourceIndex > srcIndex) {
+                selectedSourceIndex--;
+            }
         }
         updateBalance();
         renderInventory(); renderTargets(); renderShop(); updateUpgradeScreen();
         renderProfileInventory();
         closeModal('confirmTradeModal');
         renderTradeList();
+        showToast(`Обмен: ${srcItem.name} → ${recipe.count}x ${dstItem.name}`, 'ok');
+        currentTradeFromIndex = null;
     };
+
+    // ===== ДОСТИЖЕНИЯ =====
+    let upgradeCount = 0;
+    const ACHIEVEMENTS = [
+        { id: 'first_item', name: 'Первый брейнрот', icon: '🥇', check: () => inventory.length >= 1 },
+        { id: 'five_items', name: '5 предметов', icon: '📦', check: () => inventory.length >= 5 },
+        { id: 'ten_upgrades', name: '10 апгрейдов', icon: '⚡', check: () => upgradeCount >= 10 },
+        { id: 'rich', name: '1000 монет', icon: '💰', check: () => balance >= 1000 }
+    ];
+    let unlockedAchievements = JSON.parse(localStorage.getItem('ggbrainx_achievements') || '[]');
+
+    function checkAchievements() {
+        ACHIEVEMENTS.forEach(a => {
+            if (!unlockedAchievements.includes(a.id) && a.check()) {
+                unlockedAchievements.push(a.id);
+                localStorage.setItem('ggbrainx_achievements', JSON.stringify(unlockedAchievements));
+                showToast(`${a.icon} Достижение: ${a.name}`, 'ok');
+            }
+        });
+    }
+
+    // ===== ПРЕЛОАДЕР =====
+    function preloadImages() {
+        const urls = ITEMS.map(i => i.img);
+        urls.push(COIN_IMG, DEFAULT_AVATAR);
+        let loaded = 0;
+        const total = urls.length;
+        const fill = document.getElementById('preloaderFill');
+        const text = document.getElementById('preloaderText');
+        return new Promise(resolve => {
+            urls.forEach(url => {
+                const img = new Image();
+                img.onload = img.onerror = () => {
+                    loaded++;
+                    const percent = Math.round((loaded / total) * 100);
+                    fill.style.width = percent + '%';
+                    text.textContent = `Загрузка ${percent}%`;
+                    if (loaded === total) setTimeout(resolve, 400);
+                };
+                img.src = url;
+            });
+        });
+    }
 
     function init() {
         applyCustomization();
+        initParticles();
         updateBalance();
         renderInventory(); renderTargets(); renderShop(); updateUpgradeScreen(); renderAdminGrid();
-        renderRocketHistory();
-        updateRocketUI();
-        renderOrbitPicker();
-        renderOrbit();
-        renderProfileInventory();
-        renderMenuPromo();
+        renderRocketHistory(); updateRocketUI();
+        renderOrbitPicker(); renderOrbit();
+        renderProfileInventory(); renderMenuPromo();
         switchTab('menu');
         loadUserFromServer();
+
+        preloadImages().then(() => {
+            document.getElementById('preloader').classList.add('hidden');
+            showToast('Добро пожаловать в GGBrainX!', 'ok');
+        });
     }
     init();
 
@@ -2802,24 +2985,15 @@
 <script>
     const bgMusic = document.getElementById('bgMusic');
     bgMusic.volume = 0.15;
-
     let musicEnabled = localStorage.getItem('ggbrainx_music') !== 'off';
-
     const SVG_SOUND_ON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>';
     const SVG_SOUND_OFF = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4V5z"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>';
-
     function updateMusicButton() {
         const btn = document.getElementById('musicToggle');
         if (!btn) return;
-        if (musicEnabled) {
-            btn.innerHTML = SVG_SOUND_ON;
-            btn.classList.remove('muted');
-        } else {
-            btn.innerHTML = SVG_SOUND_OFF;
-            btn.classList.add('muted');
-        }
+        if (musicEnabled) { btn.innerHTML = SVG_SOUND_ON; btn.classList.remove('muted'); }
+        else { btn.innerHTML = SVG_SOUND_OFF; btn.classList.add('muted'); }
     }
-
     window.toggleMusic = function() {
         musicEnabled = !musicEnabled;
         localStorage.setItem('ggbrainx_music', musicEnabled ? 'on' : 'off');
@@ -2827,7 +3001,6 @@
         else bgMusic.pause();
         updateMusicButton();
     };
-
     function startMusic() {
         if (musicEnabled) bgMusic.play().catch(() => {});
         document.removeEventListener('click', startMusic);
