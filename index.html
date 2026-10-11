@@ -79,21 +79,42 @@
         }
         @keyframes logoGradient { 0%, 100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
 
-        .top-right { display: flex; align-items: center; gap: 10px; }
-        .balance {
+        .top-right { display: flex; align-items: center; gap: 8px; }
+        .balance-wrap {
+            display: flex; align-items: center;
             background: rgba(255, 255, 255, 0.04);
             border: 1px solid var(--accent-dim);
-            padding: 8px 14px; border-radius: 6px; font-size: 15px; font-weight: 800;
-            display: flex; align-items: center; gap: 8px; color: #fff; font-family: 'Orbitron', sans-serif;
+            border-radius: 6px; overflow: hidden;
             transition: all 0.3s;
         }
-        .balance.pulse { animation: balancePulse 0.6s ease; }
+        .balance-wrap.pulse { animation: balancePulse 0.6s ease; }
         @keyframes balancePulse {
             0% { transform: scale(1); }
-            50% { transform: scale(1.1); box-shadow: 0 0 25px var(--accent); }
+            50% { transform: scale(1.08); box-shadow: 0 0 25px var(--accent); }
             100% { transform: scale(1); }
         }
-        .coin-icon { width: 18px; height: 18px; object-fit: contain; filter: drop-shadow(0 0 6px var(--accent-dim)); }
+        .balance {
+            padding: 8px 12px; font-size: 15px; font-weight: 800;
+            display: flex; align-items: center; gap: 6px; color: #fff;
+            font-family: 'Orbitron', sans-serif;
+        }
+        .coin-icon { width: 16px; height: 16px; object-fit: contain; filter: drop-shadow(0 0 6px var(--accent-dim)); }
+
+        .topup-btn {
+            width: 34px; height: 100%;
+            min-height: 34px;
+            border: none;
+            background: var(--accent);
+            color: #fff;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 18px;
+            font-weight: 900;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex; align-items: center; justify-content: center;
+            border-left: 1px solid var(--accent-deep);
+        }
+        .topup-btn:hover { filter: brightness(1.15); }
 
         .music-toggle {
             width: 38px; height: 38px; border-radius: 6px;
@@ -123,30 +144,22 @@
             padding: 14px 18px 0; flex-wrap: wrap;
         }
         .tab {
-            flex: 1;
-            min-width: 44px;
-            max-width: var(--tab-width);
+            flex: 1; min-width: 44px; max-width: var(--tab-width);
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            gap: 3px;
-            padding: 9px 3px 7px;
+            gap: 3px; padding: 9px 3px 7px;
             border-radius: 6px;
             border: 1px solid var(--accent-very-dim);
             background: rgba(255, 255, 255, 0.015);
             color: #8a8d9b;
             font-family: 'Orbitron', sans-serif;
-            font-weight: 800;
-            font-size: var(--tab-font-size);
+            font-weight: 800; font-size: var(--tab-font-size);
             letter-spacing: 0.5px;
             cursor: pointer; transition: all 0.25s;
             text-transform: uppercase; position: relative; overflow: hidden;
         }
         .tab svg { width: var(--tab-svg-size); height: var(--tab-svg-size); flex-shrink: 0; transition: all 0.25s; }
         .tab .tab-label { font-size: var(--tab-font-size); font-weight: 800; }
-        .tab:hover {
-            background: var(--accent-very-dim);
-            border-color: var(--accent);
-            color: var(--accent-bright);
-        }
+        .tab:hover { background: var(--accent-very-dim); border-color: var(--accent); color: var(--accent-bright); }
         .tab.active {
             background: var(--accent-very-dim);
             border-color: var(--accent);
@@ -155,7 +168,6 @@
         }
         .tab.active svg { color: var(--accent-bright); }
         .tab.active .tab-label { color: #fff; }
-
         .tab.tab-custom { margin-left: var(--custom-margin); }
 
         .tab-panel { display: none; }
@@ -167,7 +179,7 @@
 
         /* ===== МОДАЛКИ ===== */
         .modal {
-            position: fixed; inset: 0; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(6px);
+            position: fixed; inset: 0; background: rgba(0, 0, 0, 0.75); backdrop-filter: blur(6px);
             display: flex; justify-content: center; align-items: center; z-index: 1000;
             opacity: 0; pointer-events: none; transition: opacity 0.25s ease; padding: 16px;
         }
@@ -177,13 +189,13 @@
             backdrop-filter: blur(20px);
             border: 1px solid var(--accent-dim);
             border-radius: 8px;
-            padding: 22px 20px; width: 100%; max-width: 380px; text-align: center;
+            padding: 22px 20px; width: 100%; max-width: 420px; text-align: center;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.85);
             transform: scale(0.95); transition: transform 0.25s ease;
             position: relative; max-height: 90vh; overflow-y: auto;
         }
         .modal.open .modal-card { transform: scale(1); }
-        .modal-card.wide { max-width: 480px; text-align: left; }
+        .modal-card.wide { max-width: 520px; text-align: left; }
 
         .modal-close {
             position: absolute; top: 10px; right: 10px; width: 30px; height: 30px; border-radius: 6px;
@@ -231,22 +243,46 @@
         .msg.err { color: #ff6b6b; }
         .msg.wait { color: var(--accent-bright); }
 
+        /* ===== Пополнение — каталог предметов ===== */
+        .topup-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 6px;
+            max-height: 280px;
+            overflow-y: auto;
+            padding: 4px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 6px;
+            margin-bottom: 12px;
+        }
+        .topup-item {
+            padding: 6px 4px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.02);
+            display: flex; flex-direction: column; align-items: center; gap: 3px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+        .topup-item:hover { border-color: var(--accent); background: var(--accent-very-dim); }
+        .topup-item.selected { border-color: var(--accent); background: var(--accent-very-dim); box-shadow: 0 0 15px var(--accent-dim); }
+        .topup-item img { width: 40px; height: 40px; object-fit: contain; }
+        .topup-item .ti-name { font-size: 8.5px; color: #e5e7ef; font-weight: 700; line-height: 1.1; height: 20px; overflow: hidden; }
+        .topup-item .ti-price { font-family: 'Orbitron', sans-serif; font-size: 9px; color: var(--accent-bright); font-weight: 800; }
+
         /* ===== ПРОФИЛЬ ===== */
         .profile-page { padding: 20px 22px; }
         .profile-banner {
-            position: relative;
-            width: 100%; height: 200px;
-            border-radius: 8px;
-            overflow: hidden;
-            margin-bottom: 14px;
+            position: relative; width: 100%; height: 200px;
+            border-radius: 8px; overflow: hidden; margin-bottom: 14px;
             border: 1px solid var(--accent-dim);
             background: linear-gradient(135deg, #1a1a20, #2a2a30);
         }
         .profile-banner video {
             position: absolute; inset: 0;
             width: 100%; height: 100%;
-            object-fit: cover;
-            display: none;
+            object-fit: cover; display: none;
         }
         .profile-banner-overlay {
             position: absolute; inset: 0;
@@ -254,91 +290,49 @@
             pointer-events: none;
         }
         .profile-banner-content {
-            position: absolute;
-            bottom: 14px;
-            left: 20px;
-            right: 20px;
-            display: flex;
-            align-items: flex-end;
-            gap: 14px;
-            z-index: 3;
+            position: absolute; bottom: 14px; left: 20px; right: 20px;
+            display: flex; align-items: flex-end; gap: 14px; z-index: 3;
         }
-
-        .avatar-orbit-wrapper {
-            position: relative;
-            width: 100px;
-            height: 100px;
-            flex-shrink: 0;
-        }
+        .avatar-orbit-wrapper { position: relative; width: 100px; height: 100px; flex-shrink: 0; }
         .profile-avatar-big {
-            position: absolute;
-            top: 50%; left: 50%;
+            position: absolute; top: 50%; left: 50%;
             transform: translate(-50%, -50%);
-            width: 80px; height: 80px;
-            border-radius: 50%;
+            width: 80px; height: 80px; border-radius: 50%;
             object-fit: cover;
             border: 3px solid var(--accent);
-            background: #1a1a20;
-            z-index: 5;
+            background: #1a1a20; z-index: 5;
             box-shadow: 0 0 25px var(--accent-dim);
         }
-        .avatar-orbit {
-            position: absolute;
-            inset: 0;
-            pointer-events: none;
-            z-index: 4;
-        }
+        .avatar-orbit { position: absolute; inset: 0; pointer-events: none; z-index: 4; }
         .avatar-orbit-item {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 26px;
-            height: 26px;
-            margin-left: -13px;
-            margin-top: -13px;
+            position: absolute; top: 50%; left: 50%;
+            width: 26px; height: 26px;
+            margin-left: -13px; margin-top: -13px;
             border-radius: 50%;
             background: rgba(20, 20, 26, 0.9);
             border: 1px solid var(--accent);
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            display: flex; align-items: center; justify-content: center;
             animation: orbitSpin linear infinite;
             transform-origin: 13px 13px;
             box-shadow: 0 0 10px var(--accent-dim);
         }
-        .avatar-orbit-item img {
-            width: 18px;
-            height: 18px;
-            object-fit: contain;
-        }
+        .avatar-orbit-item img { width: 18px; height: 18px; object-fit: contain; }
         @keyframes orbitSpin {
             from { transform: rotate(0deg) translateX(50px) rotate(0deg); }
             to { transform: rotate(360deg) translateX(50px) rotate(-360deg); }
         }
-
         .profile-nick-big {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 22px;
-            font-weight: 900;
-            color: #fff;
-            letter-spacing: 1px;
+            font-family: 'Orbitron', sans-serif; font-size: 22px; font-weight: 900;
+            color: #fff; letter-spacing: 1px;
             text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9), 0 0 12px var(--accent-dim);
         }
         .profile-tg-big {
-            font-size: 13px;
-            color: var(--accent-bright);
-            font-weight: 700;
+            font-size: 13px; color: var(--accent-bright); font-weight: 700;
             text-decoration: none;
             text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9);
         }
 
-        /* ===== СТАТИСТИКА В ПРОФИЛЕ — каждый блок на всю ширину ===== */
-        .profile-stats-column {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-bottom: 14px;
-        }
+        .profile-stats-column { display: flex; flex-direction: column; gap: 10px; margin-bottom: 14px; }
         .profile-stat {
             padding: 12px 14px;
             background: rgba(255, 255, 255, 0.025);
@@ -346,61 +340,38 @@
             border-radius: 6px;
         }
         .profile-stat-label {
-            font-size: 10px;
-            color: #8a8d9b;
-            font-weight: 700;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            margin-bottom: 4px;
+            font-size: 10px; color: #8a8d9b; font-weight: 700;
+            letter-spacing: 2px; text-transform: uppercase; margin-bottom: 4px;
         }
         .profile-stat-value {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 20px;
-            font-weight: 900;
-            color: #fff;
-            display: flex; align-items: center; gap: 6px;
+            font-family: 'Orbitron', sans-serif; font-size: 20px; font-weight: 900;
+            color: #fff; display: flex; align-items: center; gap: 6px;
         }
         .profile-stat-value img { width: 18px; height: 18px; }
-
-        .profile-stat.expandable {
-            cursor: pointer;
-            transition: all 0.25s;
-        }
-        .profile-stat.expandable:hover {
-            background: var(--accent-very-dim);
-            border-color: var(--accent);
-        }
+        .profile-stat.expandable { cursor: pointer; transition: all 0.25s; }
+        .profile-stat.expandable:hover { background: var(--accent-very-dim); border-color: var(--accent); }
         .profile-stat-value .expand-arrow {
-            margin-left: auto;
-            width: 16px; height: 16px;
-            transition: transform 0.3s;
-            color: var(--accent-bright);
+            margin-left: auto; width: 16px; height: 16px;
+            transition: transform 0.3s; color: var(--accent-bright);
         }
         .profile-stat.expanded .expand-arrow { transform: rotate(180deg); }
         .profile-inventory-drawer {
-            max-height: 0;
-            overflow: hidden;
+            max-height: 0; overflow: hidden;
             transition: max-height 0.4s ease, padding 0.4s ease, margin-top 0.4s ease;
-            background: rgba(0, 0, 0, 0.25);
-            border-radius: 6px;
-            margin-top: 0;
+            background: rgba(0, 0, 0, 0.25); border-radius: 6px; margin-top: 0;
         }
         .profile-inventory-drawer.expanded {
-            max-height: 500px;
-            padding: 10px;
-            margin-top: 10px;
+            max-height: 500px; padding: 10px; margin-top: 10px;
             border: 1px solid var(--accent-very-dim);
         }
         .profile-inventory-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
             gap: 8px;
         }
         .profile-inventory-item {
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid var(--accent-very-dim);
-            border-radius: 6px;
-            padding: 8px 4px;
+            border-radius: 6px; padding: 8px 4px;
             display: flex; flex-direction: column; align-items: center; gap: 4px;
         }
         .profile-inventory-item img { width: 44px; height: 44px; object-fit: contain; }
@@ -414,32 +385,75 @@
         }
         .profile-inventory-empty { text-align: center; color: #4a4d5e; font-size: 11px; padding: 16px; }
 
+        /* ===== ЗАЯВКИ НА ПОПОЛНЕНИЕ ===== */
+        .deposits-block {
+            margin-top: 14px;
+            padding: 14px;
+            background: rgba(255, 200, 0, 0.04);
+            border: 1px solid rgba(255, 200, 0, 0.3);
+            border-radius: 8px;
+        }
+        .deposits-block-title {
+            font-family: 'Orbitron', sans-serif; font-size: 12px; font-weight: 900;
+            color: #ffcc33;
+            letter-spacing: 2px; text-transform: uppercase;
+            margin-bottom: 10px; display: flex; align-items: center; gap: 8px;
+        }
+        .deposits-block-title::before {
+            content: ''; width: 3px; height: 12px; background: #ffcc33; border-radius: 1px;
+        }
+        .deposits-count {
+            font-family: 'JetBrains Mono', monospace; font-size: 11px;
+            color: #ffcc33; margin-left: auto; font-weight: 700;
+        }
+        .deposit-item {
+            display: grid;
+            grid-template-columns: 44px 1fr auto;
+            gap: 10px; align-items: center;
+            padding: 10px 12px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 200, 0, 0.15);
+            border-radius: 6px;
+            margin-bottom: 8px;
+        }
+        .deposit-item img { width: 40px; height: 40px; object-fit: contain; }
+        .deposit-info { min-width: 0; font-size: 11px; line-height: 1.5; color: #e5e7ef; }
+        .deposit-info .dep-line {
+            display: flex; gap: 5px; align-items: center;
+            word-break: break-word;
+        }
+        .deposit-info .dep-key { color: #8a8d9b; font-size: 10px; }
+        .deposit-info .dep-val { color: #fff; font-weight: 700; }
+        .deposit-info .dep-val.accent { color: var(--accent-bright); }
+        .deposit-actions { display: flex; flex-direction: column; gap: 4px; }
+        .dep-accept, .dep-reject {
+            height: 28px; padding: 0 10px; border-radius: 4px; border: none;
+            font-family: 'Orbitron', sans-serif; font-size: 9px; font-weight: 800;
+            letter-spacing: 0.5px; cursor: pointer; transition: all 0.2s;
+            text-transform: uppercase;
+        }
+        .dep-accept { background: #22c55e; color: #fff; }
+        .dep-accept:hover { background: #16a34a; }
+        .dep-reject { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.4); }
+        .dep-reject:hover { background: #ef4444; color: #fff; }
+        .deposits-empty {
+            text-align: center; color: #4a4d5e; font-size: 11px; padding: 14px;
+        }
+
         /* ===== КАСТОМИЗАЦИЯ ===== */
         .customize-page { padding: 20px 22px; }
         .customize-section {
-            padding: 14px;
-            background: rgba(255, 255, 255, 0.02);
+            padding: 14px; background: rgba(255, 255, 255, 0.02);
             border: 1px solid var(--accent-very-dim);
-            border-radius: 6px;
-            margin-bottom: 12px;
+            border-radius: 6px; margin-bottom: 12px;
         }
         .customize-section-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 11px;
-            color: var(--accent-bright);
-            font-weight: 800;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            font-family: 'Orbitron', sans-serif; font-size: 11px;
+            color: var(--accent-bright); font-weight: 800;
+            letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px;
+            display: flex; align-items: center; gap: 8px;
         }
-        .customize-section-title::before {
-            content: ''; width: 3px; height: 12px;
-            background: var(--accent);
-        }
-
+        .customize-section-title::before { content: ''; width: 3px; height: 12px; background: var(--accent); }
         .slider-row { display: flex; align-items: center; gap: 12px; }
         .slider-row input[type="range"] {
             flex: 1; -webkit-appearance: none; appearance: none;
@@ -460,20 +474,14 @@
             font-family: 'Orbitron', sans-serif; font-weight: 800; font-size: 13px;
             color: #fff; min-width: 50px; text-align: right;
         }
-
-        .color-picker-row {
-            display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px;
-        }
+        .color-picker-row { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; }
         .color-swatch {
             aspect-ratio: 1; border-radius: 6px;
             cursor: pointer; border: 2px solid rgba(255, 255, 255, 0.1);
             transition: all 0.2s; position: relative;
         }
         .color-swatch:hover { transform: scale(1.08); }
-        .color-swatch.selected {
-            border-color: #fff;
-            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.5), 0 0 20px var(--accent);
-        }
+        .color-swatch.selected { border-color: #fff; box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.5), 0 0 20px var(--accent); }
         .color-swatch.selected::after {
             content: '✓';
             position: absolute; inset: 0;
@@ -481,13 +489,9 @@
             color: #fff; font-size: 18px; font-weight: 900;
             text-shadow: 0 0 6px rgba(0, 0, 0, 0.9);
         }
-
-        .bg-options {
-            display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;
-        }
+        .bg-options { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
         .bg-option {
-            aspect-ratio: 1 / 0.7;
-            border-radius: 6px;
+            aspect-ratio: 1 / 0.7; border-radius: 6px;
             border: 1px solid rgba(255, 255, 255, 0.08);
             background: #1a1a20; cursor: pointer; overflow: hidden;
             position: relative; transition: all 0.25s;
@@ -510,7 +514,6 @@
             display: flex; align-items: center; justify-content: center;
             font-size: 12px; font-weight: 900;
         }
-
         .orbit-picker {
             display: flex; flex-wrap: wrap; gap: 6px;
             max-height: 200px; overflow-y: auto;
@@ -551,7 +554,6 @@
             transition: stroke-dashoffset 0.3s ease;
             filter: drop-shadow(0 0 12px var(--accent-dim));
         }
-
         .arrow-container {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             display: flex; justify-content: center; align-items: flex-start;
@@ -568,19 +570,16 @@
         .arrow-pointer::after {
             content: ''; position: absolute; top: -30px; left: -5px;
             width: 10px; height: 10px;
-            background: var(--accent-bright);
-            border-radius: 50%;
+            background: var(--accent-bright); border-radius: 50%;
             animation: pointerPulse 1s ease-in-out infinite;
         }
         @keyframes pointerPulse {
             0%, 100% { transform: scale(1); opacity: 0.8; }
             50% { transform: scale(1.5); opacity: 1; }
         }
-
         .progress-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; z-index: 10; }
         .chance-big { font-family: 'Orbitron', sans-serif; font-size: 44px; font-weight: 900; color: var(--accent); line-height: 1; }
         .chance-label { font-size: 12px; color: var(--accent-bright); font-weight: 700; text-transform: uppercase; letter-spacing: 3px; margin-top: 6px; min-height: 16px; }
-        .chance-label.medium { color: var(--accent-bright); }
         .chance-label.hidden { visibility: hidden; }
 
         .items-row { display: flex; justify-content: center; align-items: center; gap: 12px; padding: 16px 22px; }
@@ -588,40 +587,24 @@
             background: rgba(255, 255, 255, 0.02);
             border-radius: 6px; padding: 14px;
             display: flex; flex-direction: column; align-items: center;
-            border: 1px solid var(--accent-dim);
-            min-width: 150px;
+            border: 1px solid var(--accent-dim); min-width: 150px;
         }
         .item-box .label { font-size: 10px; color: #8a8d9b; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; }
         .item-box img { width: 72px; height: 72px; object-fit: contain; margin-bottom: 8px; }
         .item-box .name { font-size: 12px; font-weight: 700; text-align: center; margin-bottom: 6px; color: #fff; height: 30px; display: flex; align-items: center; }
         .item-box .price { font-family: 'Orbitron', sans-serif; font-size: 13px; font-weight: 800; color: #d0d0d0; display: flex; align-items: center; gap: 4px; }
         .price-coin { width: 14px; height: 14px; object-fit: contain; }
-
         .swap-arrow { font-size: 24px; color: var(--accent); }
-
         .stage-controls { display: flex; justify-content: center; align-items: center; gap: 8px; padding: 0 22px 6px; }
-
         .upgrade-main-btn {
-            flex: 0 1 240px;
-            padding: 14px 20px;
-            border-radius: 6px;
-            border: none;
-            background: var(--accent);
-            color: white;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 14px;
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            cursor: pointer;
-            transition: all 0.25s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            flex: 0 1 240px; padding: 14px 20px; border-radius: 6px; border: none;
+            background: var(--accent); color: white;
+            font-family: 'Orbitron', sans-serif; font-size: 14px; font-weight: 900;
+            text-transform: uppercase; letter-spacing: 1.5px; cursor: pointer;
+            transition: all 0.25s; display: flex; align-items: center; justify-content: center;
         }
         .upgrade-main-btn:hover:not(:disabled) { filter: brightness(1.15); }
         .upgrade-main-btn:disabled { opacity: 0.4; cursor: not-allowed; background: #3a3d4d; }
-
         .fast-btn {
             width: 50px; height: 50px; border-radius: 6px;
             border: 1px solid var(--accent-dim);
@@ -640,29 +623,22 @@
         }
         .section-title::before { content: ''; width: 3px; height: 12px; background: var(--accent); }
         .section-block { margin-top: 20px; }
-
         .target-row, .shop-row, .inventory-row {
             display: grid; grid-template-columns: repeat(6, 1fr);
             gap: 8px; padding: 4px 22px 12px;
         }
-
         .inv-card, .target-card, .shop-card {
             background: rgba(255, 255, 255, 0.025);
             border-radius: 6px; padding: 8px 6px;
             display: flex; flex-direction: column; align-items: center;
             border: 1px solid rgba(255, 255, 255, 0.06);
-            transition: all 0.2s;
-            position: relative; min-width: 0;
+            transition: all 0.2s; position: relative; min-width: 0;
         }
         .inv-card:hover, .target-card:hover:not(.disabled), .shop-card:hover {
-            border-color: var(--accent);
-            background: var(--accent-very-dim);
-        }
-        .inv-card.selected, .target-card.selected {
             border-color: var(--accent); background: var(--accent-very-dim);
         }
+        .inv-card.selected, .target-card.selected { border-color: var(--accent); background: var(--accent-very-dim); }
         .target-card.disabled { opacity: 0.25; cursor: not-allowed; filter: grayscale(1); }
-
         .inv-card img, .target-card img, .shop-card img {
             width: 100%; max-width: var(--card-img-size);
             height: var(--card-img-size); object-fit: contain; margin-bottom: 4px; pointer-events: none;
@@ -677,7 +653,6 @@
             display: flex; align-items: center; gap: 2px;
             font-family: 'Orbitron', sans-serif; pointer-events: none;
         }
-
         .buy-btn {
             width: 100%; padding: 5px; border-radius: 4px; border: none;
             background: var(--accent); color: white;
@@ -686,7 +661,6 @@
             margin-top: 4px; position: relative; z-index: 5;
         }
         .buy-btn:disabled { opacity: 0.4; cursor: not-allowed; background: #3a3d4d; }
-
         .sell-btn {
             width: 100%; padding: 5px; border-radius: 4px;
             border: 1px solid rgba(120, 200, 130, 0.3);
@@ -696,7 +670,6 @@
             margin-top: 4px; position: relative; z-index: 5;
         }
         .sell-btn:disabled { opacity: 0.4; cursor: not-allowed; }
-
         .empty-inv { color: #4a4d5e; font-size: 12px; text-align: center; width: 100%; padding: 18px; font-weight: 600; grid-column: 1 / -1; }
         .selectable { display: flex; flex-direction: column; align-items: center; width: 100%; cursor: pointer; }
         .locked { pointer-events: none !important; opacity: 0.4 !important; filter: grayscale(0.5) !important; }
@@ -708,6 +681,13 @@
         .rocket-subtitle { color: #8a8d9b; font-size: 11px; letter-spacing: 1px; }
         .rocket-balance-inline { display: flex; align-items: center; gap: 6px; font-family: 'Orbitron', sans-serif; font-weight: 800; font-size: 14px; color: #fff; }
         .rocket-balance-inline img { width: 16px; height: 16px; }
+        .rocket-balance-wrap {
+            display: flex; align-items: center;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--accent-dim);
+            border-radius: 6px; overflow: hidden;
+        }
+        .rocket-balance-wrap .rocket-balance-inline { padding: 6px 12px; }
 
         .rocket-stage {
             position: relative; width: 100%; height: 340px;
@@ -717,7 +697,6 @@
         .rocket-stars { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
         .star { position: absolute; width: 2px; height: 2px; background: #fff; border-radius: 50%; animation: starTwinkle 3s ease-in-out infinite; }
         @keyframes starTwinkle { 0%, 100% { opacity: 0.2; } 50% { opacity: 0.9; } }
-
         .rocket-sprite {
             position: absolute; left: 40px; bottom: 40px;
             width: 52px; height: 52px; z-index: 5;
@@ -728,7 +707,6 @@
         @keyframes rocketShake { from { transform: translate(0, 0) rotate(-3deg); } to { transform: translate(1px, -1px) rotate(3deg); } }
         .rocket-sprite.crashed img { filter: brightness(0.4) hue-rotate(-40deg); transform: rotate(45deg) scale(1.3); }
         .rocket-sprite.cashed img { filter: brightness(1.2); }
-
         .rocket-x-display {
             position: absolute; top: 20px; right: 20px;
             font-family: 'Orbitron', sans-serif; font-weight: 900; font-size: 44px;
@@ -736,12 +714,10 @@
         }
         .rocket-x-display.crashed { color: #ff5555; }
         .rocket-x-display.cashed { color: #7ed88a; }
-
         .rocket-multiplier-bar { position: absolute; left: 20px; bottom: 20px; z-index: 6; }
         .rocket-bar-label { font-family: 'Orbitron', sans-serif; font-size: 9px; color: #8a8d9b; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 4px; }
         .rocket-bar-track { width: 220px; height: 6px; background: rgba(255, 255, 255, 0.06); border-radius: 3px; overflow: hidden; }
         .rocket-bar-fill { height: 100%; width: 0%; background: var(--accent); transition: width 0.05s linear; }
-
         .rocket-status {
             position: absolute; top: 20px; left: 20px;
             font-family: 'Orbitron', sans-serif; font-size: 11px; font-weight: 800;
@@ -750,7 +726,6 @@
         .rocket-status.flying { color: var(--accent-bright); }
         .rocket-status.crashed { color: #ff5555; }
         .rocket-status.cashed { color: #7ed88a; }
-
         .rocket-history { margin-top: 12px; padding: 12px; background: rgba(255, 255, 255, 0.015); border: 1px solid var(--accent-very-dim); border-radius: 6px; }
         .rocket-history-label { font-family: 'Orbitron', sans-serif; font-size: 10px; color: #8a8d9b; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; }
         .rocket-history-list { display: flex; gap: 6px; flex-wrap: wrap; max-height: 70px; overflow-y: auto; }
@@ -761,7 +736,6 @@
         }
         .rocket-history-item.crashed { background: rgba(255, 80, 80, 0.1); border-color: #ff5555; color: #ff5555; }
         .rocket-history-item.low { color: #8a8d9b; border-color: rgba(255, 255, 255, 0.08); }
-
         .rocket-controls { margin-top: 12px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .rocket-bet-input-wrap { display: flex; gap: 6px; }
         .rocket-bet-input {
@@ -789,7 +763,6 @@
         .rocket-action-btn:disabled { opacity: 0.4; cursor: not-allowed; background: #3a3d4d; }
         .rocket-action-btn.cashout { background: #7ed88a; color: #0a0a0f; }
         .rocket-action-btn.crashed { background: #3a3d4d; color: #6b7280; }
-
         .rocket-overlay-result {
             position: absolute; inset: 0;
             display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;
@@ -814,8 +787,7 @@
             display: grid; grid-template-columns: 56px 1fr auto;
             align-items: center; gap: 12px; padding: 12px 14px;
             background: rgba(255, 255, 255, 0.02);
-            border: 1px solid var(--accent-dim);
-            border-radius: 6px;
+            border: 1px solid var(--accent-dim); border-radius: 6px;
         }
         .trade-left-img { width: 56px; height: 56px; object-fit: contain; }
         .trade-info { min-width: 0; }
@@ -839,7 +811,6 @@
         .promo-input-wrap { display: flex; gap: 8px; max-width: 460px; margin: 0 auto; }
         .promo-input-wrap .form-input { flex: 1; text-transform: uppercase; }
         .promo-input-wrap .action-btn { width: auto; padding: 12px 22px; margin-top: 0; }
-
         .admin-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; max-height: 240px; overflow-y: auto; padding: 4px; margin-bottom: 12px; }
         .admin-item {
             background: rgba(255, 255, 255, 0.025); border: 1px solid rgba(255, 255, 255, 0.06);
@@ -849,15 +820,12 @@
         .admin-item.selected { border-color: var(--accent); background: var(--accent-very-dim); }
         .admin-item img { width: 40px; height: 40px; object-fit: contain; margin-bottom: 4px; }
         .admin-item .name { font-size: 9px; color: #e5e7ef; font-weight: 700; text-align: center; line-height: 1.2; height: 22px; overflow: hidden; }
-
         .admin-badge {
             display: inline-block; padding: 4px 12px;
             background: var(--accent);
             font-size: 10px; font-weight: 800; color: #fff; text-transform: uppercase; letter-spacing: 2px;
-            margin-bottom: 10px; font-family: 'Orbitron', sans-serif;
-            border-radius: 4px;
+            margin-bottom: 10px; font-family: 'Orbitron', sans-serif; border-radius: 4px;
         }
-
         .promo-list { margin-top: 16px; max-height: 260px; overflow-y: auto; text-align: left; }
         .promo-list-item {
             display: flex; justify-content: space-between; align-items: center;
@@ -871,6 +839,7 @@
 
         @media (max-width: 900px) {
             .target-row, .shop-row, .inventory-row { grid-template-columns: repeat(5, 1fr); }
+            .topup-grid { grid-template-columns: repeat(3, 1fr); }
         }
         @media (max-width: 600px) {
             body { padding: 0; }
@@ -911,6 +880,7 @@
             .profile-nick-big { font-size: 16px; }
             .avatar-orbit-item { width: 22px; height: 22px; margin-left: -11px; margin-top: -11px; transform-origin: 11px 11px; }
             .avatar-orbit-item img { width: 14px; height: 14px; }
+            .topup-grid { grid-template-columns: repeat(3, 1fr); }
             @keyframes orbitSpin {
                 from { transform: rotate(0deg) translateX(40px) rotate(0deg); }
                 to { transform: rotate(360deg) translateX(40px) rotate(-360deg); }
@@ -926,6 +896,25 @@
 </audio>
 <div class="bg-layer"></div>
 
+<!-- ===== МОДАЛКА ПОПОЛНЕНИЯ ===== -->
+<div class="modal" id="topupModal">
+    <div class="modal-card">
+        <button class="modal-close" onclick="closeModal('topupModal')">✕</button>
+        <div class="modal-title">Пополнение</div>
+        <div class="form-group">
+            <label class="form-label">Выбери предмет для пополнения</label>
+            <div class="topup-grid" id="topupGrid"></div>
+        </div>
+        <div class="form-group">
+            <label class="form-label">Твой Roblox ник</label>
+            <input type="text" class="form-input" id="topupRoblox" placeholder="Введи ник в Roblox" maxlength="40">
+        </div>
+        <button class="action-btn" onclick="createDeposit()">Отправить заявку</button>
+        <div class="msg" id="topupMsg"></div>
+    </div>
+</div>
+
+<!-- ===== АДМИН ПАНЕЛЬ ===== -->
 <div class="modal" id="adminModal">
     <div class="modal-card wide">
         <button class="modal-close" onclick="closeModal('adminModal')">✕</button>
@@ -963,6 +952,7 @@
     </div>
 </div>
 
+<!-- ===== ПОДТВЕРЖДЕНИЕ ОБМЕНА ===== -->
 <div class="modal" id="confirmTradeModal">
     <div class="modal-card">
         <button class="modal-close" onclick="closeModal('confirmTradeModal')">✕</button>
@@ -1003,9 +993,12 @@
         <div class="logo-text">GGbrainX</div>
         <div class="top-right">
             <button class="music-toggle" id="musicToggle" onclick="toggleMusic()" title="Музыка"></button>
-            <div class="balance" id="balanceBox">
-                <img src="https://github.com/saintezz/saintbetW/blob/main/%D0%BC%D0%BE%D0%BD%D0%B5%D1%82%D0%B0.png?raw=true" alt="coin" class="coin-icon">
-                <span id="balanceDisplay">0</span>
+            <div class="balance-wrap" id="balanceBox">
+                <div class="balance">
+                    <img src="https://github.com/saintezz/saintbetW/blob/main/%D0%BC%D0%BE%D0%BD%D0%B5%D1%82%D0%B0.png?raw=true" alt="coin" class="coin-icon">
+                    <span id="balanceDisplay">0</span>
+                </div>
+                <button class="topup-btn" onclick="openTopup()" title="Пополнить">+</button>
             </div>
             <div class="avatar" onclick="switchTab('profile')">
                 <img id="topAvatarImg" 
@@ -1128,9 +1121,12 @@
                     <div class="rocket-title">Ракетка</div>
                     <div class="rocket-subtitle">Ставь монеты, забирай на любом X</div>
                 </div>
-                <div class="rocket-balance-inline">
-                    <img src="https://github.com/saintezz/saintbetW/blob/main/%D0%BC%D0%BE%D0%BD%D0%B5%D1%82%D0%B0.png?raw=true" alt="coin">
-                    <span id="rocketBalanceDisplay">0</span>
+                <div class="rocket-balance-wrap">
+                    <div class="rocket-balance-inline">
+                        <img src="https://github.com/saintezz/saintbetW/blob/main/%D0%BC%D0%BE%D0%BD%D0%B5%D1%82%D0%B0.png?raw=true" alt="coin">
+                        <span id="rocketBalanceDisplay">0</span>
+                    </div>
+                    <button class="topup-btn" onclick="openTopup()" title="Пополнить">+</button>
                 </div>
             </div>
             <div class="rocket-stage" id="rocketStage">
@@ -1215,7 +1211,6 @@
                 </div>
             </div>
 
-            <!-- Блок "Баланс" -->
             <div class="profile-stats-column">
                 <div class="profile-stat">
                     <div class="profile-stat-label">Баланс</div>
@@ -1224,8 +1219,6 @@
                         <span id="profileBalance">0</span>
                     </div>
                 </div>
-
-                <!-- Блок "Предметы" + инвентарь прямо под ним -->
                 <div class="profile-stat expandable" id="itemsStat" onclick="toggleInventoryDrawer()">
                     <div class="profile-stat-label">Предметов</div>
                     <div class="profile-stat-value">
@@ -1238,6 +1231,14 @@
                 <div class="profile-inventory-drawer" id="inventoryDrawer">
                     <div class="profile-inventory-grid" id="profileInventoryGrid"></div>
                 </div>
+            </div>
+
+            <div class="deposits-block" id="depositsBlock" style="display:none;">
+                <div class="deposits-block-title">
+                    Заявки на пополнение
+                    <span class="deposits-count" id="depositsCount">0</span>
+                </div>
+                <div id="depositsList"></div>
             </div>
 
             <div class="profile-action-row">
@@ -1253,7 +1254,6 @@
                 <input type="text" class="form-input" id="customizeNickInput" placeholder="Введи свой ник" maxlength="20">
                 <button class="action-btn" onclick="saveCustomNick()">Сохранить ник</button>
             </div>
-
             <div class="customize-section">
                 <div class="customize-section-title">Прозрачность сайта</div>
                 <div class="slider-row">
@@ -1261,7 +1261,6 @@
                     <div class="slider-value" id="opacityValue">55%</div>
                 </div>
             </div>
-
             <div class="customize-section">
                 <div class="customize-section-title">Цвет сайта</div>
                 <div class="color-picker-row" id="colorPickerRow">
@@ -1273,7 +1272,6 @@
                     <div class="color-swatch" style="background: #ec4899; color: #ec4899;" data-color="#ec4899" data-deep="#9d174d" data-bright="#f472b6" onclick="changeAccent(this)"></div>
                 </div>
             </div>
-
             <div class="customize-section">
                 <div class="customize-section-title">Размер вкладок</div>
                 <div class="slider-row">
@@ -1281,7 +1279,6 @@
                     <div class="slider-value" id="tabWidthValue">110px</div>
                 </div>
             </div>
-
             <div class="customize-section">
                 <div class="customize-section-title">Размер шрифта вкладок</div>
                 <div class="slider-row">
@@ -1289,7 +1286,6 @@
                     <div class="slider-value" id="tabFontValue">9px</div>
                 </div>
             </div>
-
             <div class="customize-section">
                 <div class="customize-section-title">Размер иконок вкладок</div>
                 <div class="slider-row">
@@ -1297,7 +1293,6 @@
                     <div class="slider-value" id="tabIconValue">20px</div>
                 </div>
             </div>
-
             <div class="customize-section">
                 <div class="customize-section-title">Размер карточек брейнротов</div>
                 <div class="slider-row">
@@ -1305,7 +1300,6 @@
                     <div class="slider-value" id="cardImgValue">52px</div>
                 </div>
             </div>
-
             <div class="customize-section">
                 <div class="customize-section-title">Размер названий карточек</div>
                 <div class="slider-row">
@@ -1313,7 +1307,6 @@
                     <div class="slider-value" id="cardNameValue">9px</div>
                 </div>
             </div>
-
             <div class="customize-section">
                 <div class="customize-section-title">Толщина границ</div>
                 <div class="slider-row">
@@ -1321,7 +1314,6 @@
                     <div class="slider-value" id="borderWidthValue">1px</div>
                 </div>
             </div>
-
             <div class="customize-section">
                 <div class="customize-section-title">Яркость свечения</div>
                 <div class="slider-row">
@@ -1329,7 +1321,6 @@
                     <div class="slider-value" id="glowValue">10</div>
                 </div>
             </div>
-
             <div class="customize-section">
                 <div class="customize-section-title">Отступ кастома</div>
                 <div class="slider-row">
@@ -1337,7 +1328,6 @@
                     <div class="slider-value" id="customMarginValue">24px</div>
                 </div>
             </div>
-
             <div class="customize-section">
                 <div class="customize-section-title">Баннер профиля</div>
                 <div class="bg-options" id="bgOptions">
@@ -1355,12 +1345,10 @@
                     </div>
                 </div>
             </div>
-
             <div class="customize-section">
                 <div class="customize-section-title">Брейнроты вокруг аватарки</div>
                 <div class="orbit-picker" id="orbitPicker"></div>
             </div>
-
             <div class="msg" id="customizeMsg"></div>
         </div>
     </div>
@@ -1369,6 +1357,7 @@
 <script>
     const COIN_IMG = 'https://github.com/saintezz/saintbetW/blob/main/%D0%BC%D0%BE%D0%BD%D0%B5%D1%82%D0%B0.png?raw=true';
     const DEFAULT_AVATAR = 'https://github.com/saintezz/ggbrainXv2/raw/main/avavatarochka.jpg';
+    const ADMIN_USERNAME = 'clonexx7';
 
     const ITEMS = [
         { id: 'cupid', name: 'Cupid Wings', price: 34, img: 'https://github.com/forerer-afk/brainroterX/blob/main/cupid-wings.png?raw=true' },
@@ -1392,7 +1381,6 @@
     ];
 
     const API_URL = 'https://ggbrainx.onrender.com';
-    const ADMIN_TG = '@clonexx7';
 
     const TRADE_RECIPES = [
         { from: 'celestial', to: 'garama',   count: 2, coins: 11 },
@@ -1412,8 +1400,6 @@
     ];
 
     let USER = { nick: 'Гость', tg: '@guest', tgLink: '#', id: null, username: null, photo: null };
-
-    // ===== ВСЕ настройки из localStorage =====
     let customNick = localStorage.getItem('ggbrainx_custom_nick') || null;
     let profileBg = localStorage.getItem('ggbrainx_profile_bg') || 'none';
     let orbitItems = JSON.parse(localStorage.getItem('ggbrainx_orbit') || '[]');
@@ -1430,13 +1416,28 @@
     let glowIntensity = parseInt(localStorage.getItem('ggbrainx_glow') || '10');
     let customMargin = parseInt(localStorage.getItem('ggbrainx_custom_margin') || '24');
 
-    // ===== СОХРАНЕНИЕ ПРОГРЕССА =====
+    // ===== Баланс и инвентарь — с сервера, но с кешем localStorage для мгновенного старта =====
     let balance = parseFloat(localStorage.getItem('ggbrainx_balance') || '0');
     let inventory = JSON.parse(localStorage.getItem('ggbrainx_inventory') || '[]');
 
-    function saveProgress() {
+    // Заявки (получаем с сервера для админа)
+    let deposits = [];
+    let topupSelectedItem = null;
+    let isAdmin = false;
+
+    function saveLocalCache() {
         localStorage.setItem('ggbrainx_balance', String(balance));
         localStorage.setItem('ggbrainx_inventory', JSON.stringify(inventory));
+    }
+
+    function getTelegramId() {
+        if (USER.id) return String(USER.id);
+        let guestId = localStorage.getItem('ggbrainx_guest_id');
+        if (!guestId) {
+            guestId = 'guest_' + Math.random().toString(36).slice(2, 10);
+            localStorage.setItem('ggbrainx_guest_id', guestId);
+        }
+        return guestId;
     }
 
     (function initTelegramUser() {
@@ -1471,7 +1472,6 @@
     let selectedSourceId = null;
     let selectedTargetId = null;
     let isSpinning = false;
-    let isAdmin = false;
     let promoType = 'balance';
     let selectedAdminItem = null;
 
@@ -1523,8 +1523,48 @@
         balanceBox.classList.remove('pulse');
         void balanceBox.offsetWidth;
         balanceBox.classList.add('pulse');
-        saveProgress();
+        saveLocalCache();
+        syncUserToServer();
     }
+
+    let syncTimer = null;
+    function syncUserToServer() {
+        if (syncTimer) clearTimeout(syncTimer);
+        syncTimer = setTimeout(() => {
+            fetch(API_URL + '/api/user/update', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    telegram_id: getTelegramId(),
+                    balance: balance,
+                    inventory: inventory,
+                    username: (USER.username || '')
+                })
+            }).catch(() => {});
+        }, 800);
+    }
+
+    async function loadUserFromServer() {
+        try {
+            const res = await fetch(API_URL + '/api/user/' + encodeURIComponent(getTelegramId()));
+            const data = await res.json();
+            if (data.ok && data.user) {
+                // Берём с сервера только если он новее/есть данные
+                if (typeof data.user.balance === 'number') balance = data.user.balance;
+                if (Array.isArray(data.user.inventory)) inventory = data.user.inventory;
+                saveLocalCache();
+                updateBalance();
+                renderInventory(); renderTargets(); renderShop(); updateUpgradeScreen();
+                renderProfileInventory();
+            } else {
+                // Первый вход — отправляем локальные данные на сервер
+                syncUserToServer();
+            }
+        } catch (e) {
+            console.warn('[SYNC] сервер недоступен, работаем из кеша');
+        }
+    }
+
     function getItemById(id) { return ITEMS.find(item => item.id === id); }
 
     window.openModal = function(id) { document.getElementById(id).classList.add('open'); };
@@ -1590,9 +1630,7 @@
     };
 
     function updateProfile() {
-        const adminUsername = ADMIN_TG.replace('@', '').toLowerCase();
-        const myUsername = (USER.username || '').toLowerCase();
-        isAdmin = myUsername === adminUsername;
+        isAdmin = (USER.username || '').toLowerCase() === ADMIN_USERNAME;
         document.getElementById('adminPanelBtn').style.display = isAdmin ? 'block' : 'none';
 
         const banner = document.getElementById('profileBanner');
@@ -1610,6 +1648,15 @@
 
         renderOrbit();
         renderProfileInventory();
+
+        // Админ видит заявки
+        const depositsBlock = document.getElementById('depositsBlock');
+        if (isAdmin) {
+            depositsBlock.style.display = 'block';
+            loadDeposits();
+        } else {
+            depositsBlock.style.display = 'none';
+        }
     }
 
     window.toggleInventoryDrawer = function() {
@@ -1644,6 +1691,144 @@
         }).join('');
     }
 
+    // ===== ПОПОЛНЕНИЕ =====
+    window.openTopup = function() {
+        renderTopupGrid();
+        document.getElementById('topupRoblox').value = '';
+        document.getElementById('topupMsg').textContent = '';
+        document.getElementById('topupMsg').className = 'msg';
+        topupSelectedItem = null;
+        openModal('topupModal');
+    };
+
+    function renderTopupGrid() {
+        const grid = document.getElementById('topupGrid');
+        grid.innerHTML = ITEMS.map(item => `
+            <div class="topup-item ${topupSelectedItem === item.id ? 'selected' : ''}" onclick="selectTopupItem('${item.id}')">
+                <img src="${item.img}" alt="${item.name}" onerror="this.src='https://via.placeholder.com/40?text=?'">
+                <div class="ti-name">${item.name}</div>
+                <div class="ti-price">${item.price}</div>
+            </div>
+        `).join('');
+    }
+
+    window.selectTopupItem = function(id) {
+        topupSelectedItem = id;
+        renderTopupGrid();
+    };
+
+    window.createDeposit = async function() {
+        const msg = document.getElementById('topupMsg');
+        const roblox = document.getElementById('topupRoblox').value.trim();
+        if (!topupSelectedItem) {
+            msg.className = 'msg err';
+            msg.textContent = 'Выбери предмет';
+            return;
+        }
+        if (!roblox) {
+            msg.className = 'msg err';
+            msg.textContent = 'Введи Roblox ник';
+            return;
+        }
+        const item = getItemById(topupSelectedItem);
+        if (!item) return;
+
+        msg.className = 'msg wait';
+        msg.textContent = 'Отправляем заявку...';
+
+        try {
+            const res = await fetch(API_URL + '/api/deposit/create', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    telegram_id: getTelegramId(),
+                    username: USER.username || '',
+                    item_id: item.id,
+                    item_name: item.name,
+                    item_price: item.price,
+                    roblox_name: roblox
+                })
+            });
+            const data = await res.json();
+            if (data.ok) {
+                msg.className = 'msg ok';
+                msg.textContent = 'Заявка отправлена! Ожидай подтверждения админа.';
+                setTimeout(() => closeModal('topupModal'), 2000);
+            } else {
+                msg.className = 'msg err';
+                msg.textContent = data.error || 'Ошибка';
+            }
+        } catch (err) {
+            msg.className = 'msg err';
+            msg.textContent = 'Сервер не отвечает';
+        }
+    };
+
+    // ===== ЗАЯВКИ (АДМИН) =====
+    async function loadDeposits() {
+        try {
+            const res = await fetch(API_URL + '/api/deposits');
+            const data = await res.json();
+            if (data.ok) {
+                deposits = data.deposits || [];
+                renderDeposits();
+            }
+        } catch (e) {
+            document.getElementById('depositsList').innerHTML = '<div class="deposits-empty">Сервер недоступен</div>';
+        }
+    }
+
+    function renderDeposits() {
+        const list = document.getElementById('depositsList');
+        const pending = deposits.filter(d => d.status === 'pending');
+        document.getElementById('depositsCount').textContent = pending.length;
+
+        if (!pending.length) {
+            list.innerHTML = '<div class="deposits-empty">Нет новых заявок</div>';
+            return;
+        }
+
+        list.innerHTML = pending.map(d => {
+            const item = getItemById(d.item_id) || { img: '', name: d.item_name };
+            return `
+                <div class="deposit-item">
+                    <img src="${item.img}" alt="" onerror="this.style.display='none'">
+                    <div class="deposit-info">
+                        <div class="dep-line"><span class="dep-key">TG:</span> <span class="dep-val accent">@${d.username || '—'}</span></div>
+                        <div class="dep-line"><span class="dep-key">Предмет:</span> <span class="dep-val">${d.item_name}</span></div>
+                        <div class="dep-line"><span class="dep-key">Цена:</span> <span class="dep-val accent">${d.item_price}</span></div>
+                        <div class="dep-line"><span class="dep-key">Roblox:</span> <span class="dep-val">${d.roblox_name}</span></div>
+                    </div>
+                    <div class="deposit-actions">
+                        <button class="dep-accept" onclick="processDeposit('${d.id}', 'accepted')">Принять</button>
+                        <button class="dep-reject" onclick="processDeposit('${d.id}', 'rejected')">Отклонить</button>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    window.processDeposit = async function(id, status) {
+        try {
+            const res = await fetch(API_URL + '/api/deposit/status', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    id: id,
+                    status: status,
+                    admin: USER.username || ADMIN_USERNAME
+                })
+            });
+            const data = await res.json();
+            if (data.ok) {
+                await loadDeposits();
+            }
+        } catch (e) {
+            alert('Сервер недоступен');
+        }
+    };
+
+    // ===== АДМИН ПРОМОКОДЫ =====
     window.selectPromoType = function(type) {
         promoType = type;
         document.querySelectorAll('.radio-option').forEach(o => { o.classList.toggle('active', o.dataset.type === type); });
@@ -1663,34 +1848,24 @@
 
     window.selectAdminItem = function(id) { selectedAdminItem = id; renderAdminGrid(); };
 
-    async function fetchWithTimeout(url, options = {}, timeout = 60000) {
-        const controller = new AbortController();
-        const id = setTimeout(() => controller.abort(), timeout);
-        try {
-            const res = await fetch(url, { ...options, signal: controller.signal });
-            clearTimeout(id);
-            return res;
-        } catch (err) { clearTimeout(id); throw err; }
-    }
-
     window.createPromo = async function() {
         const code = document.getElementById('adminCode').value.trim().toUpperCase();
         const uses = parseInt(document.getElementById('adminUses').value);
         const msg = document.getElementById('adminMsg');
         msg.className = 'msg'; msg.textContent = '';
         if (!code || code.length < 3) { msg.className = 'msg err'; msg.textContent = 'Название минимум 3 символа'; return; }
-        if (!uses || uses < 1) { msg.className = 'msg err'; msg.textContent = 'Кол-во активаций минимум 1'; return; }
+        if (!uses || uses < 1) { msg.className = 'msg err'; msg.textContent = 'Активаций минимум 1'; return; }
         let value;
         if (promoType === 'balance') {
             value = parseInt(document.getElementById('adminBalance').value);
-            if (!value || value < 1) { msg.className = 'msg err'; msg.textContent = 'Сумма монет минимум 1'; return; }
+            if (!value || value < 1) { msg.className = 'msg err'; msg.textContent = 'Сумма минимум 1'; return; }
         } else {
             if (!selectedAdminItem) { msg.className = 'msg err'; msg.textContent = 'Выбери брейнрот'; return; }
             value = selectedAdminItem;
         }
         msg.className = 'msg wait'; msg.textContent = 'Создаём...';
         try {
-            const res = await fetchWithTimeout(API_URL + '/api/create', {
+            const res = await fetch(API_URL + '/api/create', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ code, uses, type: promoType, value })
@@ -1714,7 +1889,7 @@
     async function renderPromoList() {
         const list = document.getElementById('promoList');
         try {
-            const res = await fetchWithTimeout(API_URL + '/api/promocodes', {}, 60000);
+            const res = await fetch(API_URL + '/api/promocodes');
             const data = await res.json();
             if (!data.ok) throw new Error(data.error);
             const codes = Object.values(data.promocodes || {});
@@ -1730,7 +1905,7 @@
                     <div class="promo-list-item">
                         <div>
                             <div class="code">${p.code}</div>
-                            <div class="info">${rewardText}</div>
+                            <div style="color:#8a8d9b;font-size:10px;">${rewardText}</div>
                         </div>
                         <div class="uses ${p.uses <= 0 ? 'empty' : ''}">${p.uses} акт.</div>
                     </div>
@@ -1748,10 +1923,10 @@
         if (!code) { msgTab.className = 'msg err'; msgTab.textContent = 'Введи промокод'; return; }
         msgTab.className = 'msg wait'; msgTab.textContent = 'Проверяем...';
         try {
-            const res = await fetchWithTimeout(API_URL + '/api/activate', {
+            const res = await fetch(API_URL + '/api/activate', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ code })
+                body: JSON.stringify({ code, telegram_id: getTelegramId() })
             });
             const data = await res.json();
             if (data.ok) {
@@ -1764,7 +1939,7 @@
                     inventory.push(data.value);
                     renderInventory(); renderTargets(); renderShop(); updateUpgradeScreen();
                     renderProfileInventory();
-                    saveProgress();
+                    saveLocalCache(); syncUserToServer();
                     const item = getItemById(data.value);
                     msgTab.className = 'msg ok';
                     msgTab.textContent = `Получен: ${item ? item.name : data.value}! Осталось: ${data.remaining}`;
@@ -2496,6 +2671,9 @@
         renderOrbitPicker();
         renderOrbit();
         renderProfileInventory();
+
+        // Загружаем актуальные данные с сервера (синхронизация)
+        loadUserFromServer();
     }
     init();
 
