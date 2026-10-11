@@ -138,6 +138,11 @@
         .tab.active svg { color: var(--accent-bright); }
         .tab.active .tab-label { color: #fff; }
 
+        /* Отступ для кастома, чтобы отделить от остальных */
+        .tab.tab-custom {
+            margin-left: 24px;
+        }
+
         .tab-panel { display: none; }
         .tab-panel.active { display: block; animation: panelFadeIn 0.4s ease; }
         @keyframes panelFadeIn {
@@ -244,7 +249,6 @@
             z-index: 3;
         }
 
-        /* ===== АВАТАРКА С ОРБИТОЙ ===== */
         .avatar-orbit-wrapper {
             position: relative;
             width: 100px;
@@ -342,9 +346,79 @@
         }
         .profile-stat-value img { width: 18px; height: 18px; }
 
-        .profile-action-row {
-            display: flex;
+        /* ===== СТАТИСТИКА С РАСКРЫТИЕМ ===== */
+        .profile-stat.expandable {
+            cursor: pointer;
+            transition: all 0.25s;
+            position: relative;
+        }
+        .profile-stat.expandable:hover {
+            border-color: var(--accent);
+            background: rgba(255, 140, 0, 0.05);
+        }
+        .profile-stat-value .expand-arrow {
+            margin-left: auto;
+            width: 16px;
+            height: 16px;
+            transition: transform 0.3s;
+            color: var(--accent-bright);
+        }
+        .profile-stat.expanded .expand-arrow {
+            transform: rotate(180deg);
+        }
+        .profile-inventory-drawer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, padding 0.4s ease;
+            background: rgba(0, 0, 0, 0.25);
+            border-radius: 8px;
+            margin-bottom: 0;
+        }
+        .profile-inventory-drawer.expanded {
+            max-height: 500px;
+            padding: 10px;
+            margin-bottom: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+        .profile-inventory-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
             gap: 8px;
+        }
+        .profile-inventory-item {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 8px;
+            padding: 8px 4px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+        .profile-inventory-item img {
+            width: 44px; height: 44px;
+            object-fit: contain;
+        }
+        .profile-inventory-item .inv-name {
+            font-size: 8px;
+            color: #e5e7ef;
+            font-weight: 700;
+            text-align: center;
+            line-height: 1.1;
+            height: 18px;
+            overflow: hidden;
+        }
+        .profile-inventory-item .inv-price {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 9px;
+            color: var(--accent-bright);
+            font-weight: 800;
+        }
+        .profile-inventory-empty {
+            text-align: center;
+            color: #4a4d5e;
+            font-size: 11px;
+            padding: 16px;
         }
 
         /* ===== КАСТОМИЗАЦИЯ ===== */
@@ -532,14 +606,32 @@
         .swap-arrow { font-size: 24px; color: var(--accent); }
 
         .stage-controls { display: flex; justify-content: center; align-items: center; gap: 8px; padding: 0 22px 6px; }
+
+        /* ===== КОМПАКТНАЯ КНОПКА АПГРЕЙДА ===== */
         .upgrade-main-btn {
-            flex: 0 1 260px; padding: 16px 18px; border-radius: 8px; border: none;
+            flex: 0 1 240px;
+            padding: 14px 20px;
+            border-radius: 8px;
+            border: none;
             background: linear-gradient(135deg, var(--accent) 0%, var(--accent-bright) 50%, var(--accent) 100%);
-            background-size: 200% 200%; color: white;
-            font-family: 'Orbitron', sans-serif; font-size: 15px; font-weight: 900;
-            text-transform: uppercase; letter-spacing: 2px; cursor: pointer;
-            transition: all 0.25s; animation: gradientShift 3s ease infinite;
-            display: flex; align-items: center; justify-content: center; gap: 10px;
+            background-size: 200% 200%;
+            color: white;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 14px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            cursor: pointer;
+            transition: all 0.25s;
+            animation: gradientShift 3s ease infinite;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .upgrade-main-btn svg {
+            width: 16px;
+            height: 16px;
+            flex-shrink: 0;
         }
         @keyframes gradientShift { 0%, 100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
         .upgrade-main-btn:hover:not(:disabled) { transform: translateY(-2px); filter: brightness(1.08); }
@@ -645,21 +737,12 @@
             position: absolute; left: 40px; bottom: 40px;
             width: 52px; height: 52px; z-index: 5;
             transition: left 0.05s linear, bottom 0.05s linear;
-            filter: drop-shadow(0 0 14px var(--accent));
         }
         .rocket-sprite img { width: 100%; height: 100%; object-fit: contain; }
         .rocket-sprite.flying img { animation: rocketShake 0.15s ease-in-out infinite alternate; }
         @keyframes rocketShake { from { transform: translate(0, 0) rotate(-3deg); } to { transform: translate(1px, -1px) rotate(3deg); } }
-        .rocket-sprite.crashed img { filter: drop-shadow(0 0 25px #ff3232); transform: rotate(45deg) scale(1.3); }
-        .rocket-sprite.cashed img { filter: drop-shadow(0 0 25px #7edc8c); }
-
-        .rocket-trail {
-            position: absolute; left: 40px; bottom: 40px;
-            width: 60px; height: 12px;
-            background: linear-gradient(90deg, transparent, var(--accent-bright) 30%, #ff5500 70%, transparent);
-            border-radius: 6px; filter: blur(4px); opacity: 0; z-index: 3; transition: opacity 0.2s;
-        }
-        .rocket-trail.active { opacity: 1; }
+        .rocket-sprite.crashed img { filter: brightness(0.4) hue-rotate(-40deg); transform: rotate(45deg) scale(1.3); }
+        .rocket-sprite.cashed img { filter: brightness(1.2); }
 
         .rocket-x-display {
             position: absolute; top: 20px; right: 20px;
@@ -812,7 +895,7 @@
             .chance-big { font-size: 34px; }
             .item-box { min-width: 120px; padding: 12px; }
             .item-box img { width: 58px; height: 58px; }
-            .upgrade-main-btn { flex: 0 1 200px; font-size: 12px; padding: 13px; }
+            .upgrade-main-btn { flex: 0 1 200px; font-size: 12px; padding: 12px; }
             .fast-btn { width: 46px; height: 46px; }
             .target-row, .shop-row, .inventory-row { grid-template-columns: repeat(4, 1fr); gap: 6px; padding: 4px 12px 12px; }
             .inv-card img, .target-card img, .shop-card img { max-width: 42px; height: 42px; }
@@ -825,6 +908,7 @@
             .tab { min-width: 50px; padding: 8px 2px 6px; gap: 3px; }
             .tab svg { width: 16px; height: 16px; }
             .tab .tab-label { font-size: 7px; }
+            .tab.tab-custom { margin-left: 12px; }
             .rocket-stage { height: 260px; }
             .rocket-x-display { font-size: 32px; top: 14px; right: 14px; }
             .rocket-sprite { width: 40px; height: 40px; }
@@ -909,7 +993,7 @@
                     <img src="" id="confirmFromCoin" alt="" style="width:12px;height:12px;"> <span id="confirmFromPrice">0</span>
                 </div>
             </div>
-            <div style="color:var(--accent);font-size:22px;font-weight:900;">➜</div>
+            <div style="color:var(--accent);font-size:22px;font-weight:900;">→</div>
             <div style="flex:1; display:flex; flex-direction:column; align-items:center; padding:12px 8px; background:rgba(255,255,255,0.02); border:1px solid var(--accent); border-radius:8px;">
                 <img id="confirmToImg" src="" alt="" style="width:64px;height:64px;object-fit:contain;margin-bottom:6px;">
                 <div id="confirmToName" style="font-size:10px;color:#e5e7ef;font-weight:700;text-align:center;min-height:24px;margin-bottom:4px;">—</div>
@@ -936,10 +1020,15 @@
     <div class="top-bar">
         <div class="logo-text">GGbrainX</div>
         <div class="top-right">
-            <button class="music-toggle" id="musicToggle" onclick="toggleMusic()" title="Музыка">🔊</button>
+            <button class="music-toggle" id="musicToggle" onclick="toggleMusic()" title="Музыка">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M11 5L6 9H2v6h4l5 4V5z"/>
+                    <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+                </svg>
+            </button>
             <div class="balance" id="balanceBox">
                 <img src="https://github.com/saintezz/saintbetW/blob/main/%D0%BC%D0%BE%D0%BD%D0%B5%D1%82%D0%B0.png?raw=true" alt="coin" class="coin-icon">
-                <span id="balanceDisplay">1 000</span>
+                <span id="balanceDisplay">0</span>
             </div>
             <div class="avatar" onclick="switchTab('profile')">
                 <img id="topAvatarImg" 
@@ -984,14 +1073,7 @@
             </svg>
             <span class="tab-label">Промо</span>
         </div>
-        <div class="tab" id="tabProfile" onclick="switchTab('profile')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="8" r="4"/>
-                <path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/>
-            </svg>
-            <span class="tab-label">Профиль</span>
-        </div>
-        <div class="tab" id="tabCustomize" onclick="switchTab('customize')">
+        <div class="tab tab-custom" id="tabCustomize" onclick="switchTab('customize')">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M12 20h9"/>
                 <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
@@ -1030,7 +1112,7 @@
                 <div class="name" id="sourceName">—</div>
                 <div class="price" id="sourcePrice"></div>
             </div>
-            <div class="swap-arrow">➜</div>
+            <div class="swap-arrow">→</div>
             <div class="item-box">
                 <div class="label">Цель</div>
                 <img id="targetImg" src="" alt="" style="display:none">
@@ -1040,10 +1122,6 @@
         </div>
         <div class="stage-controls">
             <button class="upgrade-main-btn" id="upgradeBtn" onclick="upgrade()" disabled>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M3 17l6-6 4 4 8-8"/>
-                    <path d="M14 7h7v7"/>
-                </svg>
                 <span>Апгрейд - 0%</span>
             </button>
             <button class="fast-btn" id="fastUpgradeBtn" onclick="toggleFastMode()" title="Быстрый режим">
@@ -1071,21 +1149,20 @@
         <div class="rocket-page">
             <div class="rocket-header">
                 <div>
-                    <div class="rocket-title">🚀 Ракетка</div>
+                    <div class="rocket-title">Ракетка</div>
                     <div class="rocket-subtitle">Ставь монеты, забирай на любом X</div>
                 </div>
                 <div class="rocket-balance-inline">
                     <img src="https://github.com/saintezz/saintbetW/blob/main/%D0%BC%D0%BE%D0%BD%D0%B5%D1%82%D0%B0.png?raw=true" alt="coin">
-                    <span id="rocketBalanceDisplay">1 000</span>
+                    <span id="rocketBalanceDisplay">0</span>
                 </div>
             </div>
             <div class="rocket-stage" id="rocketStage">
                 <div class="rocket-stars" id="rocketStars"></div>
                 <div class="rocket-status" id="rocketStatus">ГОТОВ</div>
                 <div class="rocket-x-display" id="rocketXDisplay">1.00x</div>
-                <div class="rocket-trail" id="rocketTrail"></div>
                 <div class="rocket-sprite" id="rocketSprite">
-                    <img src="https://github.com/saintezz/ggbrainXv2/raw/main/raketa.png" alt="rocket" onerror="this.replaceWith(document.createTextNode('🚀'))">
+                    <img src="https://github.com/saintezz/ggbrainXv2/raw/main/raketa.png" alt="rocket">
                 </div>
                 <div class="rocket-multiplier-bar">
                     <div class="rocket-bar-label">Прогресс до 150x</div>
@@ -1133,7 +1210,7 @@
     <!-- ===== ПРОМОКОД ===== -->
     <div class="tab-panel" id="panelPromo">
         <div class="promo-panel">
-            <h2>🎟️ Активация промокода</h2>
+            <h2>Активация промокода</h2>
             <p>Введи код и получи награду</p>
             <div class="promo-input-wrap">
                 <input type="text" class="form-input" id="promoInput" placeholder="ВВЕДИ ПРОМОКОД" maxlength="20">
@@ -1170,13 +1247,22 @@
                     <div class="profile-stat-label">Баланс</div>
                     <div class="profile-stat-value">
                         <img src="https://github.com/saintezz/saintbetW/blob/main/%D0%BC%D0%BE%D0%BD%D0%B5%D1%82%D0%B0.png?raw=true" alt="coin">
-                        <span id="profileBalance">1 000</span>
+                        <span id="profileBalance">0</span>
                     </div>
                 </div>
-                <div class="profile-stat">
+                <div class="profile-stat expandable" id="itemsStat" onclick="toggleInventoryDrawer()">
                     <div class="profile-stat-label">Предметов</div>
-                    <div class="profile-stat-value" id="profileItemsCount">0</div>
+                    <div class="profile-stat-value">
+                        <span id="profileItemsCount">0</span>
+                        <svg class="expand-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M6 9l6 6 6-6"/>
+                        </svg>
+                    </div>
                 </div>
+            </div>
+
+            <div class="profile-inventory-drawer" id="inventoryDrawer">
+                <div class="profile-inventory-grid" id="profileInventoryGrid"></div>
             </div>
 
             <div class="profile-action-row">
@@ -1325,7 +1411,7 @@
     const CIRCUMFERENCE = 2 * Math.PI * 130;
     let fastModeEnabled = false;
 
-    let balance = 1000;
+    let balance = 0;
     let inventory = [];
     let selectedSourceId = null;
     let selectedTargetId = null;
@@ -1449,6 +1535,39 @@
         }
 
         renderOrbit();
+        renderProfileInventory();
+    }
+
+    window.toggleInventoryDrawer = function() {
+        const stat = document.getElementById('itemsStat');
+        const drawer = document.getElementById('inventoryDrawer');
+        stat.classList.toggle('expanded');
+        drawer.classList.toggle('expanded');
+        if (drawer.classList.contains('expanded')) {
+            renderProfileInventory();
+        }
+    };
+
+    function renderProfileInventory() {
+        const grid = document.getElementById('profileInventoryGrid');
+        if (!inventory.length) {
+            grid.innerHTML = '<div class="profile-inventory-empty">Инвентарь пуст</div>';
+            return;
+        }
+        const counts = {};
+        inventory.forEach(id => { counts[id] = (counts[id] || 0) + 1; });
+        grid.innerHTML = Object.keys(counts).map(id => {
+            const item = getItemById(id);
+            if (!item) return '';
+            const count = counts[id];
+            return `
+                <div class="profile-inventory-item">
+                    <img src="${item.img}" alt="${item.name}" onerror="this.src='https://via.placeholder.com/44?text=?'">
+                    <div class="inv-name">${item.name}${count > 1 ? ` x${count}` : ''}</div>
+                    <div class="inv-price">${item.price}</div>
+                </div>
+            `;
+        }).join('');
     }
 
     window.selectPromoType = function(type) {
@@ -1570,6 +1689,7 @@
                 } else {
                     inventory.push(data.value);
                     renderInventory(); renderTargets(); renderShop(); updateUpgradeScreen();
+                    renderProfileInventory();
                     const item = getItemById(data.value);
                     msgTab.className = 'msg ok';
                     msgTab.textContent = `Получен: ${item ? item.name : data.value}! Осталось: ${data.remaining}`;
@@ -1608,6 +1728,7 @@
         inventory.push(id);
         updateBalance();
         renderShop(); renderInventory(); updateUpgradeScreen();
+        renderProfileInventory();
     }
 
     window.sellItem = function(id) {
@@ -1623,6 +1744,7 @@
         }
         updateBalance();
         renderInventory(); renderTargets(); renderShop(); updateUpgradeScreen();
+        renderProfileInventory();
     };
 
     function renderInventory() {
@@ -1778,6 +1900,7 @@
             isSpinning = false;
             updateBalance();
             renderInventory(); renderTargets(); renderShop(); updateUpgradeScreen();
+            renderProfileInventory();
             arrowContainer.style.transition = 'none';
             arrowContainer.style.transform = 'rotate(0deg)';
             upgradeBtn.disabled = true;
@@ -1840,7 +1963,6 @@
         const xDisplay = document.getElementById('rocketXDisplay');
         const barFill = document.getElementById('rocketBarFill');
         const sprite = document.getElementById('rocketSprite');
-        const trail = document.getElementById('rocketTrail');
         const status = document.getElementById('rocketStatus');
         const actionBtn = document.getElementById('rocketActionBtn');
         xDisplay.textContent = rocketCurrentX.toFixed(2) + 'x';
@@ -1856,32 +1978,26 @@
         const py = startY - logX * (startY - 20);
         sprite.style.left = px + 'px';
         sprite.style.bottom = (h - py - 52) + 'px';
-        trail.style.left = (px - 50) + 'px';
-        trail.style.bottom = (h - py - 52 + 20) + 'px';
         if (rocketState === 'flying') {
             sprite.classList.add('flying');
             sprite.classList.remove('crashed', 'cashed');
-            trail.classList.add('active');
             status.className = 'rocket-status flying';
             status.textContent = 'ЛЕТИТ';
             xDisplay.className = 'rocket-x-display';
         } else if (rocketState === 'crashed') {
             sprite.classList.remove('flying', 'cashed');
             sprite.classList.add('crashed');
-            trail.classList.remove('active');
             status.className = 'rocket-status crashed';
             status.textContent = 'ВЗОРВАЛАСЬ';
             xDisplay.className = 'rocket-x-display crashed';
         } else if (rocketState === 'cashed') {
             sprite.classList.remove('flying', 'crashed');
             sprite.classList.add('cashed');
-            trail.classList.remove('active');
             status.className = 'rocket-status cashed';
             status.textContent = 'ЗАБРАЛ';
             xDisplay.className = 'rocket-x-display cashed';
         } else {
             sprite.classList.remove('flying', 'crashed', 'cashed');
-            trail.classList.remove('active');
             status.className = 'rocket-status';
             status.textContent = 'ГОТОВ';
             xDisplay.className = 'rocket-x-display';
@@ -1892,7 +2008,7 @@
             actionBtn.disabled = false;
         } else if (rocketState === 'flying') {
             const winAmount = Math.floor(rocketBet * rocketCurrentX);
-            actionBtn.textContent = `ЗАБРАТЬ ${winAmount} 🪙`;
+            actionBtn.textContent = `ЗАБРАТЬ ${winAmount}`;
             actionBtn.classList.add('cashout');
             actionBtn.classList.remove('crashed');
             actionBtn.disabled = false;
@@ -2033,7 +2149,6 @@
             .arrow-pointer::after { background: ${bright} !important; }
             .swap-arrow { color: ${color} !important; }
             .chance-big { color: ${color} !important; }
-            .admin-item.selected { border-color: ${color} !important; background: ${color}25 !important; }
             .rocket-stage { border-color: ${color} !important; }
             .rocket-bet-input { border-color: ${color} !important; }
             .trade-item { border-color: ${color}30 !important; }
@@ -2052,11 +2167,14 @@
             .customize-section-title::before { background: ${color} !important; }
             .slider-row input[type="range"]::-webkit-slider-thumb { background: ${color} !important; box-shadow: 0 0 12px ${color} !important; }
             .slider-row input[type="range"]::-moz-range-thumb { background: ${color} !important; }
-            .profile-stat-value { color: #fff !important; }
             .profile-tg-big { color: ${bright} !important; }
             .rocket-quick-bet:hover { border-color: ${color} !important; color: ${bright} !important; }
             .rocket-x-display { color: ${bright} !important; }
             .rocket-history-item { background: ${color}15 !important; border-color: ${color}40 !important; color: ${bright} !important; }
+            .profile-stat.expandable:hover { border-color: ${color} !important; background: ${color}10 !important; }
+            .profile-stat.expandable .expand-arrow { color: ${bright} !important; }
+            .profile-inventory-item { border-color: ${color}30 !important; }
+            .profile-inventory-item .inv-price { color: ${bright} !important; }
         `;
     }
 
@@ -2311,6 +2429,7 @@
         }
         updateBalance();
         renderInventory(); renderTargets(); renderShop(); updateUpgradeScreen();
+        renderProfileInventory();
         closeModal('confirmTradeModal');
         renderTradeList();
     };
@@ -2323,6 +2442,7 @@
         updateRocketUI();
         renderOrbitPicker();
         renderOrbit();
+        renderProfileInventory();
     }
     init();
 
@@ -2338,8 +2458,13 @@
     function updateMusicButton() {
         const btn = document.getElementById('musicToggle');
         if (!btn) return;
-        if (musicEnabled) { btn.textContent = '🔊'; btn.classList.remove('muted'); }
-        else { btn.textContent = '🔇'; btn.classList.add('muted'); }
+        if (musicEnabled) {
+            btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>';
+            btn.classList.remove('muted');
+        } else {
+            btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M23 9l-6 6"/><path d="M17 9l6 6"/></svg>';
+            btn.classList.add('muted');
+        }
     }
 
     window.toggleMusic = function() {
