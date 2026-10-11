@@ -15,12 +15,24 @@
             display: flex; flex-direction: column; align-items: center;
             padding: 20px; position: relative; overflow-x: hidden; overflow-y: auto;
         }
+
+        /* ===== ФОНОВОЕ ВИДЕО ===== */
+        #bgVideo {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            object-fit: cover;
+            z-index: -3;
+            opacity: 0.35;
+            pointer-events: none;
+            transition: opacity 0.5s;
+        }
         .bg-layer { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; overflow: hidden; pointer-events: none; }
         .bg-layer::before {
             content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
             background:
-                radial-gradient(circle at 20% 30%, rgba(255, 140, 0, 0.12) 0%, transparent 40%),
-                radial-gradient(circle at 80% 70%, rgba(255, 140, 0, 0.08) 0%, transparent 40%);
+                radial-gradient(circle at 20% 30%, rgba(255, 140, 0, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(255, 140, 0, 0.1) 0%, transparent 40%);
             animation: bgMove 25s ease-in-out infinite;
         }
         @keyframes bgMove { 0%, 100% { transform: translate(0, 0) rotate(0deg); } 50% { transform: translate(-5%, -5%) rotate(8deg); } }
@@ -31,15 +43,21 @@
             backdrop-filter: blur(14px);
             border: 1px solid rgba(255, 140, 0, 0.12);
             border-radius: 10px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6), 0 0 40px rgba(255, 140, 0, 0.06);
             overflow: hidden; display: flex; flex-direction: column; padding-bottom: 20px;
             position: relative;
+            animation: appGlow 5s ease-in-out infinite;
+        }
+        @keyframes appGlow {
+            0%, 100% { box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6), 0 0 40px rgba(255, 140, 0, 0.06); }
+            50% { box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6), 0 0 70px rgba(255, 140, 0, 0.15); }
         }
         .top-bar {
             display: flex; justify-content: space-between; align-items: center;
             padding: 14px 22px;
             background: rgba(255, 255, 255, 0.015);
             border-bottom: 1px solid rgba(255, 140, 0, 0.08);
+            position: relative;
         }
         .logo-text {
             font-family: 'Orbitron', sans-serif; font-size: 26px; font-weight: 900; letter-spacing: 1px;
@@ -57,8 +75,21 @@
             border: 1px solid rgba(255, 255, 255, 0.08);
             padding: 8px 14px; border-radius: 8px; font-size: 15px; font-weight: 800;
             display: flex; align-items: center; gap: 8px; color: #fff; font-family: 'Orbitron', sans-serif;
+            transition: all 0.3s;
         }
-        .coin-icon { width: 18px; height: 18px; object-fit: contain; filter: drop-shadow(0 0 6px rgba(255, 140, 0, 0.7)); }
+        .balance.pulse {
+            animation: balancePulse 0.6s ease;
+        }
+        @keyframes balancePulse {
+            0% { transform: scale(1); box-shadow: 0 0 0 rgba(255, 140, 0, 0); }
+            50% { transform: scale(1.1); box-shadow: 0 0 25px rgba(255, 140, 0, 0.8); }
+            100% { transform: scale(1); box-shadow: 0 0 0 rgba(255, 140, 0, 0); }
+        }
+        .coin-icon { width: 18px; height: 18px; object-fit: contain; filter: drop-shadow(0 0 6px rgba(255, 140, 0, 0.7)); animation: coinSpin 3s linear infinite; }
+        @keyframes coinSpin {
+            0% { transform: rotateY(0deg); }
+            100% { transform: rotateY(360deg); }
+        }
 
         .music-toggle {
             width: 38px; height: 38px; border-radius: 8px;
@@ -67,7 +98,7 @@
             cursor: pointer; transition: all 0.25s;
             display: flex; align-items: center; justify-content: center;
         }
-        .music-toggle:hover { background: rgba(255, 140, 0, 0.12); }
+        .music-toggle:hover { background: rgba(255, 140, 0, 0.12); transform: scale(1.08); }
         .music-toggle.muted { color: #6b7280; border-color: rgba(255, 255, 255, 0.15); }
 
         .avatar {
@@ -77,8 +108,13 @@
             font-family: 'Orbitron', sans-serif; font-weight: 900; font-size: 16px; color: #fff;
             cursor: pointer; overflow: hidden;
             border: 1px solid rgba(255, 140, 0, 0.5); transition: transform 0.2s;
+            animation: avatarGlow 3s ease-in-out infinite;
         }
-        .avatar:hover { transform: scale(1.05); }
+        @keyframes avatarGlow {
+            0%, 100% { box-shadow: 0 0 12px rgba(255, 140, 0, 0.4); }
+            50% { box-shadow: 0 0 22px rgba(255, 140, 0, 0.8); }
+        }
+        .avatar:hover { transform: scale(1.08); }
         .avatar img { width: 100%; height: 100%; object-fit: cover; }
 
         .tabs {
@@ -86,10 +122,12 @@
             justify-content: center;
             gap: 6px;
             padding: 14px 22px 0;
+            flex-wrap: wrap;
         }
         .tab {
             flex: 1;
-            max-width: 140px;
+            min-width: 80px;
+            max-width: 120px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -110,24 +148,38 @@
             position: relative;
             overflow: hidden;
         }
+        .tab::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, transparent, rgba(255, 140, 0, 0.15), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.5s;
+        }
+        .tab:hover::before { transform: translateX(100%); }
         .tab svg { width: 22px; height: 22px; flex-shrink: 0; transition: all 0.25s; }
         .tab .tab-label { font-size: 9.5px; font-weight: 800; }
         .tab:hover {
             background: rgba(255, 140, 0, 0.08);
             border-color: rgba(255, 140, 0, 0.5);
             color: #ffaa33;
+            transform: translateY(-2px);
         }
         .tab.active {
             background: rgba(255, 140, 0, 0.18);
             border-color: #ff8c00;
             color: #fff;
-            box-shadow: 0 0 0 1px rgba(255, 140, 0, 0.4) inset;
+            box-shadow: 0 0 0 1px rgba(255, 140, 0, 0.4) inset, 0 0 20px rgba(255, 140, 0, 0.3);
         }
         .tab.active svg { filter: drop-shadow(0 0 8px rgba(255, 140, 0, 0.9)); color: #ffaa33; }
         .tab.active .tab-label { color: #fff; text-shadow: 0 0 8px rgba(255, 140, 0, 0.6); }
 
         .tab-panel { display: none; }
-        .tab-panel.active { display: block; }
+        .tab-panel.active { display: block; animation: panelFadeIn 0.4s ease; }
+        @keyframes panelFadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
         .modal {
             position: fixed; inset: 0; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(6px);
@@ -148,10 +200,37 @@
         .modal.open .modal-card { transform: scale(1); }
         .modal-card.wide { max-width: 460px; text-align: left; }
 
+        .profile-header-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        .profile-header-row .spacer { width: 32px; }
+        .edit-profile-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            border: 1px solid rgba(255, 140, 0, 0.4);
+            background: rgba(255, 140, 0, 0.12);
+            color: #ffaa33;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+        .edit-profile-btn:hover {
+            background: rgba(255, 140, 0, 0.25);
+            transform: scale(1.1);
+        }
+        .edit-profile-btn svg { width: 16px; height: 16px; }
+
         .profile-avatar {
             width: 100px; height: 100px; border-radius: 10px; object-fit: cover;
             border: 2px solid #ff8c00;
             margin-bottom: 14px;
+            animation: avatarGlow 3s ease-in-out infinite;
         }
         .profile-nick { font-family: 'Orbitron', sans-serif; font-size: 20px; font-weight: 900; color: #fff; letter-spacing: 1px; margin-bottom: 4px; }
         .profile-tg { font-size: 13px; color: #ffaa33; font-weight: 700; margin-bottom: 18px; text-decoration: none; display: inline-block; }
@@ -160,7 +239,7 @@
             font-family: 'Orbitron', sans-serif; font-size: 28px; font-weight: 900; color: #ff8c00;
             display: flex; align-items: center; justify-content: center; gap: 8px;
         }
-        .profile-balance-value img { width: 24px; height: 24px; object-fit: contain; filter: drop-shadow(0 0 8px rgba(255, 140, 0, 0.8)); }
+        .profile-balance-value img { width: 24px; height: 24px; object-fit: contain; }
 
         .modal-close {
             position: absolute; top: 10px; right: 10px; width: 30px; height: 30px; border-radius: 6px;
@@ -168,7 +247,7 @@
             color: #8a8d9b; font-size: 16px; font-weight: 700; cursor: pointer; transition: all 0.2s;
             display: flex; align-items: center; justify-content: center;
         }
-        .modal-close:hover { background: rgba(255, 80, 80, 0.2); color: #ff6b6b; border-color: rgba(255, 80, 80, 0.4); }
+        .modal-close:hover { background: rgba(255, 80, 80, 0.2); color: #ff6b6b; border-color: rgba(255, 80, 80, 0.4); transform: rotate(90deg); }
 
         .modal-title { font-family: 'Orbitron', sans-serif; font-size: 16px; font-weight: 900; color: #fff; margin-bottom: 14px; text-transform: uppercase; letter-spacing: 1px; }
 
@@ -187,7 +266,7 @@
             color: #fff; font-size: 14px; font-weight: 600; transition: all 0.25s;
             font-family: 'Orbitron', sans-serif;
         }
-        .form-input:focus { outline: none; border-color: #ff8c00; background: rgba(255, 140, 0, 0.06); }
+        .form-input:focus { outline: none; border-color: #ff8c00; background: rgba(255, 140, 0, 0.06); box-shadow: 0 0 15px rgba(255, 140, 0, 0.2); }
         .form-input::placeholder { color: #4a4d5e; font-family: 'Inter', sans-serif; font-weight: 500; }
 
         .radio-row { display: flex; gap: 8px; margin-bottom: 14px; }
@@ -211,7 +290,7 @@
             text-transform: uppercase; letter-spacing: 1.5px; cursor: pointer;
             transition: all 0.25s; margin-top: 6px;
         }
-        .action-btn:hover:not(:disabled) { filter: brightness(1.1); }
+        .action-btn:hover:not(:disabled) { filter: brightness(1.1); transform: translateY(-2px); box-shadow: 0 8px 25px rgba(255, 140, 0, 0.4); }
         .action-btn:disabled { opacity: 0.4; cursor: not-allowed; background: #3a3d4d; }
 
         .msg { margin-top: 10px; font-size: 12px; font-weight: 700; min-height: 16px; text-align: center; }
@@ -246,6 +325,7 @@
             fill: none; stroke: url(#progressGradient); stroke-width: 22; stroke-linecap: butt;
             stroke-dasharray: 816; stroke-dashoffset: 816;
             transition: stroke-dashoffset 0.3s ease;
+            filter: drop-shadow(0 0 12px rgba(255, 140, 0, 0.6));
         }
 
         .arrow-container {
@@ -267,10 +347,15 @@
             width: 10px; height: 10px;
             background: #ffaa33;
             border-radius: 50%;
+            animation: pointerPulse 1s ease-in-out infinite;
+        }
+        @keyframes pointerPulse {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.5); opacity: 1; }
         }
 
         .progress-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; z-index: 10; }
-        .chance-big { font-family: 'Orbitron', sans-serif; font-size: 44px; font-weight: 900; color: #ff8c00; line-height: 1; }
+        .chance-big { font-family: 'Orbitron', sans-serif; font-size: 44px; font-weight: 900; color: #ff8c00; line-height: 1; text-shadow: 0 0 20px rgba(255, 140, 0, 0.5); }
         .chance-label { font-size: 12px; color: #7ed88a; font-weight: 700; text-transform: uppercase; letter-spacing: 3px; margin-top: 6px; min-height: 16px; }
         .chance-label.medium { color: #ffaa33; }
         .chance-label.hidden { visibility: hidden; }
@@ -285,14 +370,19 @@
             min-width: 150px;
             transition: all 0.25s;
         }
+        .item-box:hover { border-color: rgba(255, 140, 0, 0.6); box-shadow: 0 0 25px rgba(255, 140, 0, 0.2); }
         .item-box .label { font-size: 10px; color: #8a8d9b; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; }
-        .item-box img { width: 72px; height: 72px; object-fit: contain; margin-bottom: 8px; }
+        .item-box img { width: 72px; height: 72px; object-fit: contain; margin-bottom: 8px; animation: itemBob 3s ease-in-out infinite; }
+        @keyframes itemBob {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-4px); }
+        }
         .item-box .name { font-size: 12px; font-weight: 700; text-align: center; margin-bottom: 6px; color: #fff; height: 30px; display: flex; align-items: center; }
         .item-box .price { font-family: 'Orbitron', sans-serif; font-size: 13px; font-weight: 800; color: #d0d0d0; display: flex; align-items: center; gap: 4px; }
         .price-coin { width: 14px; height: 14px; object-fit: contain; }
 
         .swap-arrow { font-size: 24px; color: #ff8c00; animation: pulseArrow 2s ease-in-out infinite; }
-        @keyframes pulseArrow { 0%, 100% { opacity: 0.6; } 50% { opacity: 1; } }
+        @keyframes pulseArrow { 0%, 100% { opacity: 0.6; transform: scale(1); } 50% { opacity: 1; transform: scale(1.15); } }
 
         .stage-controls {
             display: flex;
@@ -321,6 +411,20 @@
             align-items: center;
             justify-content: center;
             gap: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+        .upgrade-main-btn::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: shine 3s infinite;
+        }
+        @keyframes shine {
+            0% { left: -100%; }
+            100% { left: 100%; }
         }
         @keyframes gradientShift { 0%, 100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
         .upgrade-main-btn:hover:not(:disabled) { transform: translateY(-2px); filter: brightness(1.08); }
@@ -340,11 +444,16 @@
             justify-content: center;
             transition: all 0.25s;
         }
-        .fast-btn:hover { background: rgba(255, 140, 0, 0.3); }
+        .fast-btn:hover { background: rgba(255, 140, 0, 0.3); transform: translateY(-2px); }
         .fast-btn svg { width: 22px; height: 22px; }
         .fast-btn.active {
             background: rgba(163, 230, 53, 0.3);
             border-color: rgba(163, 230, 53, 0.75);
+            animation: fastPulse 1s ease-in-out infinite;
+        }
+        @keyframes fastPulse {
+            0%, 100% { box-shadow: 0 0 12px rgba(163, 230, 53, 0.5); }
+            50% { box-shadow: 0 0 25px rgba(163, 230, 53, 0.9); }
         }
 
         .section-title {
@@ -356,10 +465,14 @@
             content: ''; width: 3px; height: 12px;
             background: #ff8c00;
             border-radius: 1px;
+            animation: sectionPulse 2s ease-in-out infinite;
+        }
+        @keyframes sectionPulse {
+            0%, 100% { box-shadow: 0 0 6px rgba(255, 140, 0, 0.6); }
+            50% { box-shadow: 0 0 16px rgba(255, 140, 0, 1); }
         }
         .section-block { margin-top: 20px; }
 
-        /* ===== СЕТКА 6 В РЯД ДЛЯ ВСЕХ СПИСКОВ ===== */
         .target-row, .shop-row, .inventory-row {
             display: grid;
             grid-template-columns: repeat(6, 1fr);
@@ -378,19 +491,29 @@
             min-width: 0;
         }
         .inv-card:hover, .target-card:hover:not(.disabled), .shop-card:hover {
-            transform: translateY(-2px);
-            border-color: rgba(255, 140, 0, 0.5);
-            background: rgba(255, 140, 0, 0.05);
+            transform: translateY(-3px) scale(1.03);
+            border-color: rgba(255, 140, 0, 0.6);
+            background: rgba(255, 140, 0, 0.08);
+            box-shadow: 0 8px 22px rgba(0, 0, 0, 0.5), 0 0 22px rgba(255, 140, 0, 0.25);
         }
         .inv-card.selected, .target-card.selected {
             border-color: #ff8c00;
             background: rgba(255, 140, 0, 0.12);
+            animation: cardSelected 1.5s ease-in-out infinite;
+        }
+        @keyframes cardSelected {
+            0%, 100% { box-shadow: 0 0 12px rgba(255, 140, 0, 0.4); }
+            50% { box-shadow: 0 0 26px rgba(255, 140, 0, 0.9); }
         }
         .target-card.disabled { opacity: 0.25; cursor: not-allowed; filter: grayscale(1); }
 
         .inv-card img, .target-card img, .shop-card img {
             width: 100%; max-width: 52px;
             height: 52px; object-fit: contain; margin-bottom: 4px; pointer-events: none;
+            transition: transform 0.3s;
+        }
+        .inv-card:hover img, .target-card:hover:not(.disabled) img, .shop-card:hover img {
+            transform: scale(1.12);
         }
         .inv-card .name, .target-card .name, .shop-card .name {
             font-size: 9px; font-weight: 700; text-align: center; margin-bottom: 3px;
@@ -411,7 +534,7 @@
             text-transform: uppercase; font-family: 'Orbitron', sans-serif;
             margin-top: 4px; position: relative; z-index: 5;
         }
-        .buy-btn:hover:not(:disabled) { filter: brightness(1.1); }
+        .buy-btn:hover:not(:disabled) { filter: brightness(1.15); transform: scale(1.05); }
         .buy-btn:disabled { opacity: 0.4; cursor: not-allowed; background: #3a3d4d; }
 
         .sell-btn {
@@ -426,6 +549,7 @@
         .sell-btn:hover:not(:disabled) {
             background: rgba(120, 200, 130, 0.25);
             border-color: rgba(120, 200, 130, 0.6);
+            transform: scale(1.05);
         }
         .sell-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
@@ -439,8 +563,8 @@
             border-radius: 8px; padding: 8px 4px;
             display: flex; flex-direction: column; align-items: center; cursor: pointer; transition: all 0.2s;
         }
-        .admin-item:hover { border-color: rgba(255, 140, 0, 0.5); background: rgba(255, 140, 0, 0.06); }
-        .admin-item.selected { border-color: #ff8c00; background: rgba(255, 140, 0, 0.15); }
+        .admin-item:hover { border-color: rgba(255, 140, 0, 0.5); background: rgba(255, 140, 0, 0.06); transform: translateY(-2px); }
+        .admin-item.selected { border-color: #ff8c00; background: rgba(255, 140, 0, 0.15); box-shadow: 0 0 15px rgba(255, 140, 0, 0.4); }
         .admin-item img { width: 40px; height: 40px; object-fit: contain; margin-bottom: 4px; }
         .admin-item .name { font-size: 9px; color: #e5e7ef; font-weight: 700; text-align: center; line-height: 1.2; height: 22px; overflow: hidden; }
 
@@ -458,9 +582,9 @@
             background: rgba(255, 255, 255, 0.02);
             border: 1px solid rgba(255, 140, 0, 0.16);
             border-radius: 8px;
-            transition: all 0.2s;
+            transition: all 0.25s;
         }
-        .trade-item:hover { border-color: rgba(255, 140, 0, 0.5); background: rgba(255, 140, 0, 0.05); }
+        .trade-item:hover { border-color: rgba(255, 140, 0, 0.5); background: rgba(255, 140, 0, 0.05); transform: translateX(4px); }
         .trade-left-img { width: 56px; height: 56px; object-fit: contain; }
         .trade-info { min-width: 0; }
         .trade-name { font-size: 12px; font-weight: 700; color: #e5e7ef; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -477,7 +601,7 @@
             letter-spacing: 1px; text-transform: uppercase; cursor: pointer;
             transition: all 0.2s;
         }
-        .trade-btn:hover:not(:disabled) { filter: brightness(1.1); }
+        .trade-btn:hover:not(:disabled) { filter: brightness(1.1); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255, 140, 0, 0.5); }
         .trade-btn:disabled { opacity: 0.35; cursor: not-allowed; background: #3a3d4d; }
         .trade-empty { text-align: center; padding: 36px 12px; color: #4a4d5e; font-size: 12px; font-weight: 600; }
 
@@ -592,10 +716,11 @@
             transition: all 0.2s;
             text-align: center;
         }
-        .confirm-option:hover { border-color: rgba(255, 140, 0, 0.5); background: rgba(255, 140, 0, 0.06); }
+        .confirm-option:hover { border-color: rgba(255, 140, 0, 0.5); background: rgba(255, 140, 0, 0.06); transform: translateY(-2px); }
         .confirm-option.selected {
             border-color: #ff8c00;
             background: rgba(255, 140, 0, 0.15);
+            box-shadow: 0 0 15px rgba(255, 140, 0, 0.4);
         }
         .confirm-option img {
             width: 40px;
@@ -649,10 +774,394 @@
         .confirm-ok:hover { filter: brightness(1.1); }
         .confirm-ok:disabled { opacity: 0.35; cursor: not-allowed; filter: grayscale(0.5); }
 
+        /* ===== РАКЕТКА ===== */
+        .rocket-page { padding: 24px 22px; max-width: 900px; margin: 0 auto; }
+        .rocket-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 14px;
+        }
+        .rocket-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 20px;
+            font-weight: 900;
+            color: #fff;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            text-shadow: 0 0 15px rgba(255, 140, 0, 0.5);
+        }
+        .rocket-subtitle { color: #8a8d9b; font-size: 11px; letter-spacing: 1px; }
+        .rocket-balance-inline {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 800;
+            font-size: 14px;
+            color: #fff;
+        }
+        .rocket-balance-inline img { width: 16px; height: 16px; }
+
+        .rocket-stage {
+            position: relative;
+            width: 100%;
+            height: 340px;
+            background:
+                radial-gradient(ellipse at 50% 100%, rgba(255, 140, 0, 0.2) 0%, transparent 60%),
+                rgba(10, 10, 15, 0.7);
+            border: 1px solid rgba(255, 140, 0, 0.25);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 14px;
+        }
+        .rocket-stage::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(255, 140, 0, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 140, 0, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
+        }
+        .rocket-stars { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: #fff;
+            border-radius: 50%;
+            opacity: 0.6;
+            animation: starTwinkle 3s ease-in-out infinite;
+        }
+        @keyframes starTwinkle { 0%, 100% { opacity: 0.2; } 50% { opacity: 0.9; } }
+
+        .rocket-sprite {
+            position: absolute;
+            left: 40px;
+            bottom: 40px;
+            width: 52px;
+            height: 52px;
+            z-index: 5;
+            transition: left 0.05s linear, bottom 0.05s linear;
+            filter: drop-shadow(0 0 14px rgba(255, 140, 0, 0.9));
+            user-select: none;
+        }
+        .rocket-sprite img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+        }
+        .rocket-sprite.flying img {
+            animation: rocketShake 0.15s ease-in-out infinite alternate;
+        }
+        @keyframes rocketShake {
+            from { transform: translate(0, 0) rotate(-3deg); }
+            to { transform: translate(1px, -1px) rotate(3deg); }
+        }
+        .rocket-sprite.crashed img {
+            filter: drop-shadow(0 0 25px rgba(255, 50, 50, 1)) hue-rotate(320deg) saturate(3);
+            transform: rotate(45deg) scale(1.3);
+        }
+        .rocket-sprite.cashed img {
+            filter: drop-shadow(0 0 25px rgba(120, 220, 140, 1));
+        }
+
+        .rocket-trail {
+            position: absolute;
+            left: 40px;
+            bottom: 40px;
+            width: 60px;
+            height: 12px;
+            background: linear-gradient(90deg, transparent, #ffaa33 30%, #ff5500 70%, transparent);
+            border-radius: 6px;
+            filter: blur(4px);
+            opacity: 0;
+            z-index: 3;
+            transition: opacity 0.2s;
+        }
+        .rocket-trail.active { opacity: 1; }
+
+        .rocket-x-display {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 900;
+            font-size: 44px;
+            color: #ffaa33;
+            text-shadow: 0 0 20px rgba(255, 140, 0, 0.8);
+            z-index: 6;
+            letter-spacing: 1px;
+            transition: color 0.2s;
+        }
+        .rocket-x-display.crashed { color: #ff5555; text-shadow: 0 0 25px rgba(255, 50, 50, 0.9); }
+        .rocket-x-display.cashed { color: #7ed88a; text-shadow: 0 0 25px rgba(120, 220, 140, 0.9); }
+
+        .rocket-multiplier-bar {
+            position: absolute;
+            left: 20px;
+            bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            z-index: 6;
+        }
+        .rocket-bar-label {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 9px;
+            color: #8a8d9b;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+        .rocket-bar-track {
+            width: 220px;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        .rocket-bar-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #ffaa33, #ff5500);
+            transition: width 0.05s linear;
+            box-shadow: 0 0 12px rgba(255, 140, 0, 0.7);
+        }
+
+        .rocket-status {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #8a8d9b;
+            z-index: 6;
+        }
+        .rocket-status.flying { color: #ffaa33; animation: statusBlink 0.6s ease-in-out infinite; }
+        .rocket-status.crashed { color: #ff5555; }
+        .rocket-status.cashed { color: #7ed88a; }
+        @keyframes statusBlink { 0%, 100% { opacity: 0.6; } 50% { opacity: 1; } }
+
+        .rocket-history {
+            margin-top: 12px;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.015);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+        }
+        .rocket-history-label {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 10px;
+            color: #8a8d9b;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+        .rocket-history-list { display: flex; gap: 6px; flex-wrap: wrap; max-height: 70px; overflow-y: auto; }
+        .rocket-history-item {
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 10px;
+            font-weight: 900;
+            background: rgba(255, 140, 0, 0.1);
+            border: 1px solid rgba(255, 140, 0, 0.25);
+            color: #ffaa33;
+            animation: historyPop 0.3s ease;
+        }
+        @keyframes historyPop {
+            from { transform: scale(0.5); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        .rocket-history-item.crashed { background: rgba(255, 80, 80, 0.1); border-color: rgba(255, 80, 80, 0.3); color: #ff5555; }
+        .rocket-history-item.low { color: #8a8d9b; border-color: rgba(255, 255, 255, 0.08); }
+
+        .rocket-controls { margin-top: 12px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .rocket-bet-input-wrap { display: flex; gap: 6px; }
+        .rocket-bet-input {
+            flex: 1; height: 48px; padding: 0 14px;
+            border-radius: 8px; border: 1px solid rgba(255, 140, 0, 0.3);
+            background: rgba(255, 255, 255, 0.02); color: #fff;
+            font-family: 'Orbitron', sans-serif; font-weight: 800; font-size: 15px;
+            text-align: center; outline: none;
+        }
+        .rocket-bet-input:focus { border-color: #ff8c00; background: rgba(255, 140, 0, 0.05); box-shadow: 0 0 20px rgba(255, 140, 0, 0.2); }
+        .rocket-quick-bets { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; }
+        .rocket-quick-bet {
+            height: 48px; border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.02);
+            color: #8a8d9b; font-family: 'Orbitron', sans-serif;
+            font-size: 11px; font-weight: 800; cursor: pointer; transition: all 0.2s;
+        }
+        .rocket-quick-bet:hover {
+            border-color: rgba(255, 140, 0, 0.5); color: #ffaa33;
+            background: rgba(255, 140, 0, 0.06); transform: translateY(-2px);
+        }
+        .rocket-action-btn {
+            grid-column: 1 / -1; height: 60px; border-radius: 10px; border: none;
+            background: linear-gradient(135deg, #ff8c00, #cc7000); color: #fff;
+            font-family: 'Orbitron', sans-serif; font-size: 17px; font-weight: 900;
+            letter-spacing: 3px; text-transform: uppercase; cursor: pointer;
+            transition: all 0.25s;
+            box-shadow: 0 10px 30px rgba(255, 140, 0, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+        .rocket-action-btn::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: shine 2.5s infinite;
+        }
+        .rocket-action-btn:hover:not(:disabled) { filter: brightness(1.1); transform: translateY(-2px); }
+        .rocket-action-btn:disabled { opacity: 0.4; cursor: not-allowed; background: #3a3d4d; box-shadow: none; }
+        .rocket-action-btn.cashout {
+            background: linear-gradient(135deg, #7ed88a, #3f8a4a);
+            box-shadow: 0 10px 30px rgba(120, 200, 130, 0.4);
+            animation: cashoutPulse 1s ease-in-out infinite;
+        }
+        @keyframes cashoutPulse {
+            0%, 100% { box-shadow: 0 10px 30px rgba(120, 200, 130, 0.4); }
+            50% { box-shadow: 0 10px 45px rgba(120, 200, 130, 0.9); }
+        }
+        .rocket-action-btn.crashed { background: #3a3d4d; color: #6b7280; }
+
+        .rocket-overlay-result {
+            position: absolute; inset: 0;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center; gap: 10px;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(4px);
+            z-index: 20;
+            opacity: 0; pointer-events: none;
+            transition: opacity 0.3s;
+        }
+        .rocket-overlay-result.show { opacity: 1; pointer-events: auto; }
+        .rocket-result-x {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 64px; font-weight: 900;
+            letter-spacing: 2px;
+            animation: resultPop 0.5s ease;
+        }
+        @keyframes resultPop {
+            0% { transform: scale(0.3); opacity: 0; }
+            60% { transform: scale(1.15); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .rocket-result-x.win { color: #7ed88a; text-shadow: 0 0 30px rgba(120, 220, 140, 0.9); }
+        .rocket-result-x.lose { color: #ff5555; text-shadow: 0 0 30px rgba(255, 80, 80, 0.9); }
+        .rocket-result-label {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 14px; letter-spacing: 3px;
+            text-transform: uppercase; color: #fff;
+        }
+        .rocket-result-prize {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 20px; font-weight: 900;
+            color: #ffaa33;
+            display: flex; align-items: center; gap: 6px;
+        }
+        .rocket-result-prize img { width: 20px; height: 20px; }
+
+        /* ===== КАСТОМИЗАЦИЯ ===== */
+        .customize-card { max-width: 460px; text-align: left; }
+        .customize-section {
+            padding: 14px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 8px;
+            margin-bottom: 12px;
+        }
+        .customize-section-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 11px;
+            color: #ffaa33;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+        .bg-options {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+        }
+        .bg-option {
+            aspect-ratio: 1 / 1.4;
+            border-radius: 8px;
+            border: 2px solid rgba(255, 255, 255, 0.08);
+            background: #1a1a20;
+            cursor: pointer;
+            overflow: hidden;
+            position: relative;
+            transition: all 0.25s;
+        }
+        .bg-option:hover {
+            transform: translateY(-3px);
+            border-color: rgba(255, 140, 0, 0.5);
+            box-shadow: 0 8px 22px rgba(255, 140, 0, 0.2);
+        }
+        .bg-option.selected {
+            border-color: #ff8c00;
+            box-shadow: 0 0 0 2px rgba(255, 140, 0, 0.5), 0 8px 22px rgba(255, 140, 0, 0.4);
+        }
+        .bg-option video,
+        .bg-option .bg-placeholder {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .bg-option .bg-placeholder {
+            background: linear-gradient(135deg, #1a1a20, #2a2a30);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #8a8d9b;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 11px;
+            text-align: center;
+            padding: 8px;
+        }
+        .bg-option.selected::after {
+            content: '✓';
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: #ff8c00;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 900;
+            box-shadow: 0 0 12px rgba(255, 140, 0, 0.9);
+        }
+        .bg-option-none {
+            background: linear-gradient(135deg, #0a0a0f, #1a1a20);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #8a8d9b;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 10px;
+        }
+
         @media (max-width: 900px) {
-            .target-row, .shop-row, .inventory-row {
-                grid-template-columns: repeat(5, 1fr);
-            }
+            .target-row, .shop-row, .inventory-row { grid-template-columns: repeat(5, 1fr); }
         }
         @media (max-width: 600px) {
             body { padding: 0; }
@@ -675,10 +1184,10 @@
             .stage-controls { padding: 0 12px 6px; }
             .top-bar { padding: 10px 12px; }
             .logo-text { font-size: 20px; }
-            .tabs { padding: 12px 10px 0; gap: 5px; }
-            .tab { max-width: 100%; padding: 8px 4px 6px; gap: 3px; }
+            .tabs { padding: 12px 10px 0; gap: 4px; }
+            .tab { min-width: 60px; padding: 8px 2px 6px; gap: 3px; }
             .tab svg { width: 18px; height: 18px; }
-            .tab .tab-label { font-size: 8.5px; }
+            .tab .tab-label { font-size: 8px; }
             .promo-panel { padding: 18px 12px; }
             .promo-input-wrap { flex-direction: column; }
             .promo-input-wrap .action-btn { width: 100%; }
@@ -689,10 +1198,22 @@
             .confirm-row { flex-direction: row; gap: 8px; }
             .confirm-item img.brainrot { width: 52px; height: 52px; }
             .confirm-options { grid-template-columns: repeat(2, 1fr); }
+            .rocket-stage { height: 260px; }
+            .rocket-x-display { font-size: 32px; top: 14px; right: 14px; }
+            .rocket-sprite { width: 40px; height: 40px; }
+            .rocket-bar-track { width: 140px; }
+            .rocket-page { padding: 16px 12px; }
+            .rocket-controls { grid-template-columns: 1fr; }
+            .rocket-bet-input-wrap { grid-column: 1 / -1; }
+            .rocket-quick-bets { grid-column: 1 / -1; grid-template-columns: repeat(4, 1fr); }
+            .rocket-action-btn { grid-column: 1 / -1; }
+            .bg-options { grid-template-columns: repeat(2, 1fr); }
         }
     </style>
 </head>
 <body>
+
+<video id="bgVideo" autoplay muted loop playsinline></video>
 
 <audio id="bgMusic" loop autoplay>
     <source src="https://raw.githubusercontent.com/saintezz/ggbrainXv2/main/8bit.mp3" type="audio/mpeg">
@@ -702,11 +1223,19 @@
 
 <div class="modal" id="profileModal">
     <div class="modal-card">
-        <button class="modal-close" onclick="closeModal('profileModal')">✕</button>
+        <div class="profile-header-row">
+            <button class="edit-profile-btn" onclick="openCustomize()" title="Кастомизация">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 20h9"/>
+                    <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+                </svg>
+            </button>
+            <button class="modal-close" onclick="closeModal('profileModal')">✕</button>
+        </div>
         <img class="profile-avatar" 
+             id="profileAvatarImg"
              src="https://raw.githubusercontent.com/saintezz/ggbrainXv2/main/Avatarka.jpg" 
-             alt="Avatar"
-             onerror="this.src='https://via.placeholder.com/110?text=?'">
+             alt="Avatar">
         <div class="profile-nick" id="profileNick">Загрузка...</div>
         <a class="profile-tg" id="profileTg" href="#" target="_blank">@...</a>
         <div class="profile-balance-label">Баланс</div>
@@ -721,22 +1250,53 @@
     </div>
 </div>
 
+<!-- ===== КАСТОМИЗАЦИЯ ===== -->
+<div class="modal" id="customizeModal">
+    <div class="modal-card wide customize-card">
+        <button class="modal-close" onclick="closeModal('customizeModal')">✕</button>
+        <div class="modal-title">Кастомизация</div>
+
+        <div class="customize-section">
+            <div class="customize-section-title">Твой ник</div>
+            <input type="text" class="form-input" id="customizeNickInput" placeholder="Введи свой ник" maxlength="20">
+            <button class="action-btn" onclick="saveCustomNick()">Сохранить ник</button>
+        </div>
+
+        <div class="customize-section">
+            <div class="customize-section-title">Фон</div>
+            <div class="bg-options" id="bgOptions">
+                <div class="bg-option bg-option-none" data-bg="none" onclick="selectBackground('none')">
+                    <div class="bg-placeholder">Без фона</div>
+                </div>
+                <div class="bg-option" data-bg="https://github.com/saintezz/ggbrainXv2/raw/main/1011.mp4" onclick="selectBackground('https://github.com/saintezz/ggbrainXv2/raw/main/1011.mp4')">
+                    <video src="https://github.com/saintezz/ggbrainXv2/raw/main/1011.mp4#t=0.1" muted preload="metadata" playsinline></video>
+                </div>
+                <div class="bg-option" data-bg="https://github.com/saintezz/ggbrainXv2/raw/main/1011%20(1).mp4" onclick="selectBackground('https://github.com/saintezz/ggbrainXv2/raw/main/1011%20(1).mp4')">
+                    <video src="https://github.com/saintezz/ggbrainXv2/raw/main/1011%20(1).mp4#t=0.1" muted preload="metadata" playsinline></video>
+                </div>
+                <div class="bg-option" data-bg="https://github.com/saintezz/ggbrainXv2/raw/main/20341-308852923_medium.mp4" onclick="selectBackground('https://github.com/saintezz/ggbrainXv2/raw/main/20341-308852923_medium.mp4')">
+                    <video src="https://github.com/saintezz/ggbrainXv2/raw/main/20341-308852923_medium.mp4#t=0.1" muted preload="metadata" playsinline></video>
+                </div>
+            </div>
+        </div>
+
+        <div class="msg" id="customizeMsg"></div>
+    </div>
+</div>
+
 <div class="modal" id="adminModal">
     <div class="modal-card wide">
         <button class="modal-close" onclick="closeModal('adminModal')">✕</button>
         <div class="admin-badge">ADMIN PANEL</div>
         <div class="modal-title">Создать промокод</div>
-
         <div class="form-group">
             <label class="form-label">Название промокода</label>
             <input type="text" class="form-input" id="adminCode" placeholder="Например: SUPER2025" maxlength="20">
         </div>
-
         <div class="form-group">
             <label class="form-label">Кол-во активаций</label>
             <input type="number" class="form-input" id="adminUses" placeholder="10" min="1" value="1">
         </div>
-
         <div class="form-group">
             <label class="form-label">Тип награды</label>
             <div class="radio-row">
@@ -744,20 +1304,16 @@
                 <div class="radio-option" data-type="item" onclick="selectPromoType('item')">Брейнрот</div>
             </div>
         </div>
-
         <div class="form-group" id="balanceGroup">
             <label class="form-label">Сумма монет</label>
             <input type="number" class="form-input" id="adminBalance" placeholder="500" min="1" value="500">
         </div>
-
         <div class="form-group" id="itemGroup" style="display:none;">
             <label class="form-label">Выбери брейнрот</label>
             <div class="admin-grid" id="adminGrid"></div>
         </div>
-
         <button class="action-btn" onclick="createPromo()">Создать промокод</button>
         <div class="msg" id="adminMsg"></div>
-
         <div class="modal-title" style="margin-top: 22px; font-size: 13px;">Существующие промокоды</div>
         <div class="promo-list" id="promoList">
             <div style="color:#4a4d5e; font-size:11px; text-align:center; padding:10px;">Загрузка...</div>
@@ -769,7 +1325,6 @@
     <div class="confirm-modal-card">
         <button class="modal-close" onclick="closeModal('confirmTradeModal')">✕</button>
         <div class="confirm-title">Ты уверен?</div>
-
         <div class="confirm-row">
             <div class="confirm-item">
                 <img class="brainrot" id="confirmFromImg" src="" alt="">
@@ -786,12 +1341,10 @@
                 </div>
             </div>
         </div>
-
         <div class="confirm-selector" id="confirmSelector" style="display:none;">
             <div class="confirm-selector-label">Выбери, на что менять</div>
             <div class="confirm-options" id="confirmOptions"></div>
         </div>
-
         <div class="confirm-actions">
             <button class="confirm-cancel" onclick="closeModal('confirmTradeModal')">Отмена</button>
             <button class="confirm-ok" id="confirmOkBtn" onclick="confirmTrade()">Обменять</button>
@@ -804,15 +1357,14 @@
         <div class="logo-text">GGbrainX</div>
         <div class="top-right">
             <button class="music-toggle" id="musicToggle" onclick="toggleMusic()" title="Музыка">🔊</button>
-            <div class="balance">
+            <div class="balance" id="balanceBox">
                 <img src="https://github.com/saintezz/saintbetW/blob/main/%D0%BC%D0%BE%D0%BD%D0%B5%D1%82%D0%B0.png?raw=true" alt="coin" class="coin-icon">
                 <span id="balanceDisplay">1 000</span>
             </div>
             <div class="avatar" onclick="openProfile()">
                 <img id="topAvatarImg" 
                      src="https://raw.githubusercontent.com/saintezz/ggbrainXv2/main/Avatarka.jpg" 
-                     alt="P"
-                     onerror="this.style.display='none'; this.parentElement.textContent='P';">
+                     alt="cat">
             </div>
         </div>
     </div>
@@ -824,6 +1376,15 @@
                 <path d="M14 7h7v7"/>
             </svg>
             <span class="tab-label">Апгрейд</span>
+        </div>
+        <div class="tab" id="tabRocket" onclick="switchTab('rocket')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/>
+                <path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/>
+                <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/>
+                <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/>
+            </svg>
+            <span class="tab-label">Ракетка</span>
         </div>
         <div class="tab" id="tabTrade" onclick="switchTab('trade')">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -841,13 +1402,6 @@
                 <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>
             </svg>
             <span class="tab-label">Промокод</span>
-        </div>
-        <div class="tab" id="tabProfileTab" onclick="openProfile()">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="8" r="4"/>
-                <path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/>
-            </svg>
-            <span class="tab-label">Профиль</span>
         </div>
     </div>
 
@@ -923,6 +1477,67 @@
         </div>
     </div>
 
+    <div class="tab-panel" id="panelRocket">
+        <div class="rocket-page">
+            <div class="rocket-header">
+                <div>
+                    <div class="rocket-title">🚀 Ракетка</div>
+                    <div class="rocket-subtitle">Ставь монеты, забирай на любом X. Не дай ракете взорваться!</div>
+                </div>
+                <div class="rocket-balance-inline">
+                    <img src="https://github.com/saintezz/saintbetW/blob/main/%D0%BC%D0%BE%D0%BD%D0%B5%D1%82%D0%B0.png?raw=true" alt="coin">
+                    <span id="rocketBalanceDisplay">1 000</span>
+                </div>
+            </div>
+
+            <div class="rocket-stage" id="rocketStage">
+                <div class="rocket-stars" id="rocketStars"></div>
+                <div class="rocket-status" id="rocketStatus">ГОТОВ</div>
+                <div class="rocket-x-display" id="rocketXDisplay">1.00x</div>
+                <div class="rocket-trail" id="rocketTrail"></div>
+                <div class="rocket-sprite" id="rocketSprite">
+                    <img src="https://github.com/saintezz/ggbrainXv2/raw/main/raketa.png" alt="rocket" onerror="this.replaceWith(document.createTextNode('🚀'))">
+                </div>
+
+                <div class="rocket-multiplier-bar">
+                    <div class="rocket-bar-label">Прогресс до 150x</div>
+                    <div class="rocket-bar-track">
+                        <div class="rocket-bar-fill" id="rocketBarFill"></div>
+                    </div>
+                </div>
+
+                <div class="rocket-overlay-result" id="rocketOverlayResult">
+                    <div class="rocket-result-x" id="rocketResultX">1.00x</div>
+                    <div class="rocket-result-label" id="rocketResultLabel">Ты забрал</div>
+                    <div class="rocket-result-prize" id="rocketResultPrize">
+                        <img src="https://github.com/saintezz/saintbetW/blob/main/%D0%BC%D0%BE%D0%BD%D0%B5%D1%82%D0%B0.png?raw=true" alt="coin">
+                        <span>0</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="rocket-history">
+                <div class="rocket-history-label">История раундов</div>
+                <div class="rocket-history-list" id="rocketHistoryList">
+                    <div style="color:#4a4d5e; font-size:11px;">Пока пусто</div>
+                </div>
+            </div>
+
+            <div class="rocket-controls">
+                <div class="rocket-bet-input-wrap">
+                    <input type="number" class="rocket-bet-input" id="rocketBetInput" placeholder="Ставка" min="1" value="100">
+                </div>
+                <div class="rocket-quick-bets">
+                    <button class="rocket-quick-bet" onclick="rocketSetBet(10)">10</button>
+                    <button class="rocket-quick-bet" onclick="rocketSetBet(100)">100</button>
+                    <button class="rocket-quick-bet" onclick="rocketSetBet(500)">500</button>
+                    <button class="rocket-quick-bet" onclick="rocketSetBet('max')">MAX</button>
+                </div>
+                <button class="rocket-action-btn" id="rocketActionBtn" onclick="rocketAction()">СТАВКА</button>
+            </div>
+        </div>
+    </div>
+
     <div class="tab-panel" id="panelTrade">
         <div class="trade-page">
             <div class="trade-page-header">
@@ -948,6 +1563,15 @@
 
 <script>
     const COIN_IMG = 'https://github.com/saintezz/saintbetW/blob/main/%D0%BC%D0%BE%D0%BD%D0%B5%D1%82%D0%B0.png?raw=true';
+    const CAT_AVATAR = 'https://raw.githubusercontent.com/saintezz/ggbrainXv2/main/Avatarka.jpg';
+    const ROCKET_IMG = 'https://github.com/saintezz/ggbrainXv2/raw/main/raketa.png';
+
+    const BACKGROUNDS = {
+        none: null,
+        '1011': 'https://github.com/saintezz/ggbrainXv2/raw/main/1011.mp4',
+        '1011_1': 'https://github.com/saintezz/ggbrainXv2/raw/main/1011%20(1).mp4',
+        '20341': 'https://github.com/saintezz/ggbrainXv2/raw/main/20341-308852923_medium.mp4'
+    };
 
     const ITEMS = [
         { id: 'cupid', name: 'Cupid Wings', price: 34, img: 'https://github.com/forerer-afk/brainroterX/blob/main/cupid-wings.png?raw=true' },
@@ -991,14 +1615,16 @@
     ];
 
     let USER = { nick: 'Гость', tg: '@guest', tgLink: '#', id: null, username: null, photo: null };
+    let customNick = localStorage.getItem('ggbrainx_custom_nick') || null;
+    let selectedBg = localStorage.getItem('ggbrainx_bg') || 'none';
 
     (function initTelegramUser() {
         try {
             const tg = window.Telegram?.WebApp;
-            if (!tg) { console.warn('[TG] Telegram WebApp не найден.'); return; }
+            if (!tg) return;
             tg.ready(); tg.expand();
             const u = tg.initDataUnsafe?.user;
-            if (!u) { console.warn('[TG] Нет данных пользователя.'); return; }
+            if (!u) return;
             USER.id = u.id || null;
             USER.username = u.username || null;
             if (u.username) {
@@ -1011,8 +1637,18 @@
                 USER.tg = full || '@guest';
             }
             if (u.photo_url) USER.photo = u.photo_url;
-        } catch (err) { console.error('[TG] Ошибка:', err); }
+        } catch (err) {}
     })();
+
+    function getDisplayNick() {
+        if (customNick) return customNick;
+        return USER.nick;
+    }
+
+    function getDisplayAvatar() {
+        if (USER.photo) return USER.photo;
+        return CAT_AVATAR;
+    }
 
     const MAX_CHANCE = 70;
     const SPIN_DURATION = 6000;
@@ -1032,7 +1668,17 @@
     let currentTradeOptions = [];
     let currentTradeSelected = null;
 
+    let rocketState = 'idle';
+    let rocketBet = 0;
+    let rocketCurrentX = 1.00;
+    let rocketCrashX = 1.00;
+    let rocketStartTime = 0;
+    let rocketRaf = null;
+    let rocketHistory = [];
+
     const balanceDisplay = document.getElementById('balanceDisplay');
+    const balanceBox = document.getElementById('balanceBox');
+    const rocketBalanceDisplay = document.getElementById('rocketBalanceDisplay');
     const inventoryRow = document.getElementById('inventoryRow');
     const targetRow = document.getElementById('targetRow');
     const shopRow = document.getElementById('shopRow');
@@ -1050,19 +1696,21 @@
     const profileBalance = document.getElementById('profileBalance');
 
     function applyUserToProfile() {
-        document.getElementById('profileNick').textContent = USER.nick;
+        document.getElementById('profileNick').textContent = getDisplayNick();
         document.getElementById('profileTg').textContent = USER.tg;
         document.getElementById('profileTg').href = USER.tgLink;
-        const avatarImg = document.querySelector('.profile-avatar');
-        if (USER.photo && avatarImg) avatarImg.src = USER.photo;
-        const topAvatarImg = document.getElementById('topAvatarImg');
-        if (USER.photo && topAvatarImg) topAvatarImg.src = USER.photo;
+        document.getElementById('profileAvatarImg').src = getDisplayAvatar();
+        document.getElementById('topAvatarImg').src = getDisplayAvatar();
     }
     applyUserToProfile();
 
     function updateBalance() {
         balanceDisplay.innerText = balance.toLocaleString('ru-RU');
+        rocketBalanceDisplay.innerText = balance.toLocaleString('ru-RU');
         profileBalance.innerText = balance.toLocaleString('ru-RU');
+        balanceBox.classList.remove('pulse');
+        void balanceBox.offsetWidth;
+        balanceBox.classList.add('pulse');
     }
     function getItemById(id) { return ITEMS.find(item => item.id === id); }
 
@@ -1093,12 +1741,21 @@
         openModal('adminModal');
     };
 
+    window.openCustomize = function() {
+        document.getElementById('customizeNickInput').value = customNick || USER.nick;
+        renderBgOptions();
+        openModal('customizeModal');
+    };
+
     window.switchTab = function(tab) {
         document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
         document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
         if (tab === 'upgrade') {
             document.getElementById('tabUpgrade').classList.add('active');
             document.getElementById('panelUpgrade').classList.add('active');
+        } else if (tab === 'rocket') {
+            document.getElementById('tabRocket').classList.add('active');
+            document.getElementById('panelRocket').classList.add('active');
         } else if (tab === 'trade') {
             document.getElementById('tabTrade').classList.add('active');
             document.getElementById('panelTrade').classList.add('active');
@@ -1176,7 +1833,7 @@
             }
         } catch (err) {
             msg.className = 'msg err';
-            msg.textContent = 'Сервер не отвечает. Попробуй ещё раз через 30 сек.';
+            msg.textContent = 'Сервер не отвечает.';
         }
     };
 
@@ -1247,7 +1904,7 @@
             }
         } catch (err) {
             msgTab.className = 'msg err';
-            msgTab.textContent = 'Сервер не отвечает. Попробуй через 30 сек.';
+            msgTab.textContent = 'Сервер не отвечает.';
         }
     };
 
@@ -1486,6 +2143,260 @@
         else performUpgrade(SPIN_DURATION);
     };
 
+    // ===== КАСТОМИЗАЦИЯ =====
+    function renderBgOptions() {
+        document.querySelectorAll('#bgOptions .bg-option').forEach(el => {
+            const bg = el.dataset.bg;
+            if (bg === 'none') {
+                el.classList.toggle('selected', selectedBg === 'none');
+            } else {
+                el.classList.toggle('selected', selectedBg === bg);
+            }
+        });
+    }
+
+    window.selectBackground = function(bg) {
+        selectedBg = bg;
+        localStorage.setItem('ggbrainx_bg', bg);
+        applyBackground();
+        renderBgOptions();
+    };
+
+    function applyBackground() {
+        const video = document.getElementById('bgVideo');
+        if (selectedBg === 'none') {
+            video.pause();
+            video.removeAttribute('src');
+            video.style.opacity = 0;
+        } else {
+            video.src = selectedBg;
+            video.style.opacity = 0.35;
+            video.play().catch(() => {});
+        }
+    }
+
+    window.saveCustomNick = function() {
+        const input = document.getElementById('customizeNickInput');
+        const msg = document.getElementById('customizeMsg');
+        const val = input.value.trim();
+        if (!val) {
+            customNick = null;
+            localStorage.removeItem('ggbrainx_custom_nick');
+            msg.className = 'msg ok';
+            msg.textContent = 'Ник сброшен';
+        } else {
+            customNick = val;
+            localStorage.setItem('ggbrainx_custom_nick', val);
+            msg.className = 'msg ok';
+            msg.textContent = 'Ник сохранён: ' + val;
+        }
+        applyUserToProfile();
+    };
+
+    // ===== РАКЕТКА =====
+    function generateCrashX() {
+        const r = Math.random();
+        if (r < 0.03) return 1.00;
+        let base = 1 + (-Math.log(1 - Math.random())) * 1.4;
+        if (Math.random() < 0.02) base = 10 + Math.random() * 140;
+        if (base > 150) base = 150;
+        if (base < 1) base = 1;
+        return Math.round(base * 100) / 100;
+    }
+
+    function rocketSetBet(v) {
+        const input = document.getElementById('rocketBetInput');
+        if (v === 'max') input.value = Math.floor(balance);
+        else input.value = v;
+    }
+
+    function initRocketStars() {
+        const stars = document.getElementById('rocketStars');
+        stars.innerHTML = '';
+        for (let i = 0; i < 40; i++) {
+            const s = document.createElement('div');
+            s.className = 'star';
+            s.style.left = Math.random() * 100 + '%';
+            s.style.top = Math.random() * 100 + '%';
+            s.style.animationDelay = (Math.random() * 3) + 's';
+            s.style.opacity = 0.2 + Math.random() * 0.6;
+            stars.appendChild(s);
+        }
+    }
+    initRocketStars();
+
+    function renderRocketHistory() {
+        const list = document.getElementById('rocketHistoryList');
+        if (!rocketHistory.length) {
+            list.innerHTML = '<div style="color:#4a4d5e; font-size:11px;">Пока пусто</div>';
+            return;
+        }
+        list.innerHTML = rocketHistory.slice(0, 30).map(h => {
+            let cls = '';
+            if (h.crashed) cls = 'crashed';
+            else if (h.x < 2) cls = 'low';
+            return `<div class="rocket-history-item ${cls}">${h.x.toFixed(2)}x</div>`;
+        }).join('');
+    }
+
+    function updateRocketUI() {
+        const xDisplay = document.getElementById('rocketXDisplay');
+        const barFill = document.getElementById('rocketBarFill');
+        const sprite = document.getElementById('rocketSprite');
+        const trail = document.getElementById('rocketTrail');
+        const status = document.getElementById('rocketStatus');
+        const actionBtn = document.getElementById('rocketActionBtn');
+
+        xDisplay.textContent = rocketCurrentX.toFixed(2) + 'x';
+        const progress = Math.min(100, (rocketCurrentX / 150) * 100);
+        barFill.style.width = progress + '%';
+
+        const stage = document.getElementById('rocketStage');
+        const w = stage.clientWidth;
+        const h = stage.clientHeight;
+        const startX = 40;
+        const startY = h - 40 - 52;
+        const logX = Math.log(rocketCurrentX) / Math.log(150);
+        const px = startX + logX * (w - startX - 90);
+        const py = startY - logX * (startY - 20);
+
+        sprite.style.left = px + 'px';
+        sprite.style.bottom = (h - py - 52) + 'px';
+        trail.style.left = (px - 50) + 'px';
+        trail.style.bottom = (h - py - 52 + 20) + 'px';
+
+        if (rocketState === 'flying') {
+            sprite.classList.add('flying');
+            sprite.classList.remove('crashed', 'cashed');
+            trail.classList.add('active');
+            status.className = 'rocket-status flying';
+            status.textContent = 'ЛЕТИТ';
+            xDisplay.className = 'rocket-x-display';
+        } else if (rocketState === 'crashed') {
+            sprite.classList.remove('flying', 'cashed');
+            sprite.classList.add('crashed');
+            trail.classList.remove('active');
+            status.className = 'rocket-status crashed';
+            status.textContent = 'ВЗОРВАЛАСЬ';
+            xDisplay.className = 'rocket-x-display crashed';
+        } else if (rocketState === 'cashed') {
+            sprite.classList.remove('flying', 'crashed');
+            sprite.classList.add('cashed');
+            trail.classList.remove('active');
+            status.className = 'rocket-status cashed';
+            status.textContent = 'ЗАБРАЛ';
+            xDisplay.className = 'rocket-x-display cashed';
+        } else {
+            sprite.classList.remove('flying', 'crashed', 'cashed');
+            trail.classList.remove('active');
+            status.className = 'rocket-status';
+            status.textContent = 'ГОТОВ';
+            xDisplay.className = 'rocket-x-display';
+        }
+
+        if (rocketState === 'idle') {
+            actionBtn.textContent = 'СТАВКА';
+            actionBtn.classList.remove('cashout', 'crashed');
+            actionBtn.disabled = false;
+        } else if (rocketState === 'flying') {
+            const winAmount = Math.floor(rocketBet * rocketCurrentX);
+            actionBtn.textContent = `ЗАБРАТЬ ${winAmount} 🪙`;
+            actionBtn.classList.add('cashout');
+            actionBtn.classList.remove('crashed');
+            actionBtn.disabled = false;
+        } else if (rocketState === 'crashed') {
+            actionBtn.textContent = 'КРАШНУЛАСЬ';
+            actionBtn.classList.remove('cashout');
+            actionBtn.classList.add('crashed');
+            actionBtn.disabled = true;
+        } else if (rocketState === 'cashed') {
+            actionBtn.textContent = 'ЗАБРАНО';
+            actionBtn.classList.remove('cashout');
+            actionBtn.classList.remove('crashed');
+            actionBtn.disabled = true;
+        }
+    }
+
+    function rocketTick() {
+        if (rocketState !== 'flying') return;
+        const elapsed = (performance.now() - rocketStartTime) / 1000;
+        rocketCurrentX = Math.exp(0.35 * elapsed);
+        if (rocketCurrentX > 150) rocketCurrentX = 150;
+
+        updateRocketUI();
+
+        if (rocketCurrentX >= rocketCrashX) {
+            rocketState = 'crashed';
+            rocketCurrentX = rocketCrashX;
+            updateRocketUI();
+            showRocketOverlay(false, rocketCurrentX, 0);
+            rocketHistory.unshift({ x: rocketCurrentX, crashed: true });
+            if (rocketHistory.length > 50) rocketHistory.pop();
+            renderRocketHistory();
+            setTimeout(() => {
+                if (rocketState === 'crashed') {
+                    rocketState = 'idle';
+                    rocketCurrentX = 1.00;
+                    updateRocketUI();
+                }
+            }, 2500);
+            return;
+        }
+        rocketRaf = requestAnimationFrame(rocketTick);
+    }
+
+    function showRocketOverlay(win, x, prize) {
+        const overlay = document.getElementById('rocketOverlayResult');
+        const xEl = document.getElementById('rocketResultX');
+        const label = document.getElementById('rocketResultLabel');
+        const prizeEl = document.getElementById('rocketResultPrize');
+        xEl.textContent = x.toFixed(2) + 'x';
+        xEl.className = 'rocket-result-x ' + (win ? 'win' : 'lose');
+        label.textContent = win ? 'Ты забрал' : 'Ракета взорвалась';
+        prizeEl.querySelector('span').textContent = win ? '+' + prize : '-' + rocketBet;
+        overlay.classList.add('show');
+        setTimeout(() => overlay.classList.remove('show'), 2200);
+    }
+
+    window.rocketAction = function() {
+        const actionBtn = document.getElementById('rocketActionBtn');
+        if (rocketState === 'idle') {
+            const input = document.getElementById('rocketBetInput');
+            const bet = Math.floor(Number(input.value));
+            if (!bet || bet < 1) { alert('Минимальная ставка 1 монета'); return; }
+            if (bet > balance) { alert('Недостаточно монет'); return; }
+            rocketBet = bet;
+            balance -= bet;
+            updateBalance();
+
+            rocketState = 'flying';
+            rocketCurrentX = 1.00;
+            rocketCrashX = generateCrashX();
+            rocketStartTime = performance.now();
+            updateRocketUI();
+            rocketRaf = requestAnimationFrame(rocketTick);
+        } else if (rocketState === 'flying') {
+            if (rocketRaf) cancelAnimationFrame(rocketRaf);
+            const winAmount = Math.floor(rocketBet * rocketCurrentX);
+            balance += winAmount;
+            updateBalance();
+            const xAtCashout = rocketCurrentX;
+            rocketState = 'cashed';
+            updateRocketUI();
+            showRocketOverlay(true, xAtCashout, winAmount);
+            rocketHistory.unshift({ x: xAtCashout, crashed: false });
+            if (rocketHistory.length > 50) rocketHistory.pop();
+            renderRocketHistory();
+            setTimeout(() => {
+                if (rocketState === 'cashed') {
+                    rocketState = 'idle';
+                    rocketCurrentX = 1.00;
+                    updateRocketUI();
+                }
+            }, 2500);
+        }
+    };
+
     // ===== ОБМЕН =====
     function renderTradeList() {
         const list = document.getElementById('tradeList');
@@ -1494,15 +2405,12 @@
             list.innerHTML = '<div class="trade-empty">Инвентарь пуст — сначала купи браинрота</div>';
             return;
         }
-
         const counts = {};
         inventory.forEach(id => { counts[id] = (counts[id] || 0) + 1; });
-
         const available = [];
         Object.keys(counts).forEach(fromId => {
             const srcItem = getItemById(fromId);
             if (!srcItem) return;
-
             const variants = TRADE_RECIPES
                 .map((r, idx) => {
                     if (r.from !== fromId) return null;
@@ -1513,33 +2421,22 @@
                     return { recipe: r, idx, dstItem };
                 })
                 .filter(Boolean);
-
-            if (variants.length > 0) {
-                available.push({ fromItem: srcItem, count: counts[fromId], variants });
-            }
+            if (variants.length > 0) available.push({ fromItem: srcItem, count: counts[fromId], variants });
         });
-
         if (!available.length) {
             list.innerHTML = '<div class="trade-empty">Нет браинротов для обмена</div>';
             return;
         }
-
         list.innerHTML = available.map(({ fromItem, count, variants }) => {
             const variantsHtml = variants.map(v => {
                 const coinsHtml = v.recipe.coins > 0
                     ? ` + ${v.recipe.coins} <img src="${COIN_IMG}" alt="coin">`
                     : '';
-                return `
-                    <div class="trade-reward" style="margin-top:6px;">
-                        <span class="arrow">→</span>
-                        ${v.recipe.count}x ${v.dstItem.name}${coinsHtml}
-                    </div>
-                `;
+                return `<div class="trade-reward" style="margin-top:6px;"><span class="arrow">→</span> ${v.recipe.count}x ${v.dstItem.name}${coinsHtml}</div>`;
             }).join('');
-
             return `
                 <div class="trade-item">
-                    <img class="trade-left-img" src="${fromItem.img}" alt="${fromItem.name}" onerror="this.src='https://via.placeholder.com/52?text=?'">
+                    <img class="trade-left-img" src="${fromItem.img}" alt="${fromItem.name}">
                     <div class="trade-info">
                         <div class="trade-name">${fromItem.name}${count > 1 ? ` (x${count})` : ''}</div>
                         ${variantsHtml}
@@ -1556,7 +2453,6 @@
         if (!srcItem) return;
         const hasCount = inventory.filter(id => id === fromId).length;
         if (hasCount < 1) return;
-
         const variants = TRADE_RECIPES
             .map((r, idx) => {
                 if (r.from !== fromId) return null;
@@ -1567,27 +2463,22 @@
                 return { recipe: r, idx, dstItem };
             })
             .filter(Boolean);
-
         if (!variants.length) return;
-
         currentTradeOptions = variants;
         currentTradeSelected = 0;
-
         document.getElementById('confirmFromImg').src = srcItem.img;
         document.getElementById('confirmFromName').textContent = srcItem.name;
         document.getElementById('confirmFromPrice').textContent = srcItem.price;
         document.getElementById('confirmFromCoin').src = COIN_IMG;
-
         document.getElementById('confirmToCoin').src = COIN_IMG;
         document.getElementById('confirmCoinsCoin').src = COIN_IMG;
-
         const selector = document.getElementById('confirmSelector');
         const optionsContainer = document.getElementById('confirmOptions');
         if (variants.length > 1) {
             selector.style.display = 'block';
             optionsContainer.innerHTML = variants.map((v, i) => `
                 <div class="confirm-option ${i === 0 ? 'selected' : ''}" onclick="selectTradeOption(${i})">
-                    <img src="${v.dstItem.img}" alt="${v.dstItem.name}" onerror="this.src='https://via.placeholder.com/40?text=?'">
+                    <img src="${v.dstItem.img}" alt="${v.dstItem.name}">
                     <div class="oname">${v.recipe.count}x ${v.dstItem.name}</div>
                     <div class="oprice">${v.dstItem.price * v.recipe.count + v.recipe.coins}${v.recipe.coins > 0 ? ' (+' + v.recipe.coins + ')' : ''}</div>
                 </div>
@@ -1595,7 +2486,6 @@
         } else {
             selector.style.display = 'none';
         }
-
         renderConfirmVariant(0);
         openModal('confirmTradeModal');
     };
@@ -1612,11 +2502,9 @@
         const variant = currentTradeOptions[i];
         if (!variant) return;
         const { recipe, dstItem } = variant;
-
         document.getElementById('confirmToImg').src = dstItem.img;
         document.getElementById('confirmToName').textContent = `${recipe.count}x ${dstItem.name}`;
         document.getElementById('confirmToPrice').textContent = (dstItem.price * recipe.count);
-
         const coinsRow = document.getElementById('confirmCoinsRow');
         if (recipe.coins > 0) {
             coinsRow.style.display = 'flex';
@@ -1633,21 +2521,16 @@
         const recipe = variant.recipe;
         const dstItem = variant.dstItem;
         const srcItem = getItemById(recipe.from);
-
         const srcIndex = inventory.indexOf(recipe.from);
         if (srcIndex === -1) { alert('У тебя нет этого браинрота'); return; }
-
         const receivePrice = dstItem.price * recipe.count + recipe.coins;
         if (receivePrice > srcItem.price) { alert('Рецепт нечестный'); return; }
-
         inventory.splice(srcIndex, 1);
         for (let k = 0; k < recipe.count; k++) inventory.push(recipe.to);
         if (recipe.coins > 0) balance += recipe.coins;
-
         if (selectedSourceId === recipe.from && !inventory.includes(recipe.from)) {
             selectedSourceId = null; selectedTargetId = null;
         }
-
         updateBalance();
         renderInventory(); renderTargets(); renderShop(); updateUpgradeScreen();
         closeModal('confirmTradeModal');
@@ -1655,8 +2538,11 @@
     };
 
     function init() {
+        applyBackground();
         updateBalance();
         renderInventory(); renderTargets(); renderShop(); updateUpgradeScreen(); renderAdminGrid();
+        renderRocketHistory();
+        updateRocketUI();
     }
     init();
 
