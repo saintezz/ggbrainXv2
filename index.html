@@ -78,15 +78,15 @@
         .avatar:hover { transform: scale(1.08); }
         .avatar img { width: 100%; height: 100%; object-fit: cover; }
 
-        .tabs { display: flex; gap: 10px; padding: 18px 30px 0; }
+        .tabs { display: flex; gap: 8px; padding: 18px 30px 0; }
         .tab {
-            flex: 1; display: flex; align-items: center; justify-content: center; gap: 10px;
+            flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px;
             padding: 14px 0; border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.08);
             background: rgba(255, 255, 255, 0.03); color: #8a8d9b;
-            font-family: 'Orbitron', sans-serif; font-weight: 800; font-size: 14px; letter-spacing: 2px;
+            font-family: 'Orbitron', sans-serif; font-weight: 800; font-size: 12px; letter-spacing: 1.5px;
             cursor: pointer; transition: all 0.3s; text-transform: uppercase; position: relative; overflow: hidden;
         }
-        .tab svg { width: 22px; height: 22px; flex-shrink: 0; transition: all 0.3s; }
+        .tab svg { width: 20px; height: 20px; flex-shrink: 0; transition: all 0.3s; }
         .tab:hover { background: rgba(255, 140, 0, 0.08); border-color: rgba(255, 140, 0, 0.35); color: #ffaa33; }
         .tab.active {
             background: linear-gradient(135deg, rgba(255, 140, 0, 0.25), rgba(255, 140, 0, 0.1));
@@ -263,7 +263,6 @@
         .swap-arrow { font-size: 28px; color: #ff8c00; filter: drop-shadow(0 0 10px rgba(255, 140, 0, 0.8)); animation: pulseArrow 2s ease-in-out infinite; }
         @keyframes pulseArrow { 0%, 100% { transform: scale(1); opacity: 0.7; } 50% { transform: scale(1.15); opacity: 1; } }
 
-        /* ===== УПРАВЛЕНИЕ АПГРЕЙДОМ ===== */
         .stage-controls {
             display: flex;
             justify-content: center;
@@ -422,73 +421,69 @@
         .admin-item img { width: 42px; height: 42px; object-fit: contain; margin-bottom: 4px; }
         .admin-item .name { font-size: 9px; color: #e5e7ef; font-weight: 700; text-align: center; line-height: 1.2; height: 22px; overflow: hidden; }
 
-        /* ===== ОБМЕН В ПРОФИЛЕ ===== */
-        .trade-block {
-            margin-top: 20px;
-            padding: 18px 16px;
-            background: linear-gradient(180deg, rgba(255, 140, 0, 0.06), rgba(139, 92, 246, 0.03));
-            border: 1px solid rgba(255, 140, 0, 0.25);
-            border-radius: 18px;
+        /* ===== ОБМЕН (страница) ===== */
+        .trade-page {
+            padding: 30px;
+            max-width: 700px;
+            margin: 0 auto;
         }
-        .trade-title {
+        .trade-page-header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        .trade-page-header h2 {
             font-family: 'Orbitron', sans-serif;
-            font-size: 14px;
+            font-size: 22px;
             font-weight: 900;
-            color: #ffaa33;
-            text-transform: uppercase;
+            color: #fff;
             letter-spacing: 2px;
-            margin-bottom: 14px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            text-shadow: 0 0 12px rgba(255, 140, 0, 0.5);
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px rgba(255, 140, 0, 0.6);
         }
-        .trade-title::before {
-            content: '';
-            width: 4px; height: 14px;
-            background: linear-gradient(180deg, #ff8c00, #cc7000);
-            border-radius: 2px;
-            box-shadow: 0 0 10px rgba(255, 140, 0, 0.8);
+        .trade-page-header p {
+            color: #8a8d9b;
+            font-size: 13px;
+            line-height: 1.5;
         }
-        .trade-list {
+        .trade-list-page {
             display: flex;
             flex-direction: column;
             gap: 10px;
         }
         .trade-item {
             display: grid;
-            grid-template-columns: 52px 1fr auto;
+            grid-template-columns: 60px 1fr auto;
             align-items: center;
-            gap: 12px;
-            padding: 10px 12px;
+            gap: 14px;
+            padding: 14px 16px;
             background: linear-gradient(145deg, rgba(30, 30, 38, 0.9), rgba(21, 21, 28, 0.9));
-            border: 1px solid rgba(255, 140, 0, 0.15);
-            border-radius: 14px;
+            border: 1px solid rgba(255, 140, 0, 0.18);
+            border-radius: 16px;
             transition: all 0.25s;
         }
         .trade-item:hover {
-            border-color: rgba(255, 140, 0, 0.5);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5), 0 0 22px rgba(255, 140, 0, 0.2);
+            border-color: rgba(255, 140, 0, 0.55);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.55), 0 0 25px rgba(255, 140, 0, 0.2);
+            transform: translateY(-2px);
         }
         .trade-left-img {
-            width: 52px; height: 52px;
+            width: 60px; height: 60px;
             object-fit: contain;
-            filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.5));
+            filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.55));
         }
-        .trade-info {
-            min-width: 0;
-        }
+        .trade-info { min-width: 0; }
         .trade-name {
-            font-size: 11px;
+            font-size: 13px;
             font-weight: 700;
             color: #e5e7ef;
-            margin-bottom: 4px;
+            margin-bottom: 6px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
         .trade-reward {
-            font-size: 11px;
+            font-size: 12px;
             color: #ffaa33;
             font-weight: 700;
             display: flex;
@@ -508,14 +503,14 @@
             margin: 0 3px;
         }
         .trade-btn {
-            height: 38px;
-            padding: 0 14px;
-            border-radius: 10px;
+            height: 42px;
+            padding: 0 18px;
+            border-radius: 12px;
             border: none;
             background: linear-gradient(135deg, #ff8c00, #cc7000);
             color: white;
             font-family: 'Orbitron', sans-serif;
-            font-size: 10px;
+            font-size: 11px;
             font-weight: 900;
             letter-spacing: 1px;
             text-transform: uppercase;
@@ -530,9 +525,9 @@
         .trade-btn:disabled { opacity: 0.35; cursor: not-allowed; background: #3a3d4d; box-shadow: none; }
         .trade-empty {
             text-align: center;
-            padding: 20px 12px;
+            padding: 40px 12px;
             color: #4a4d5e;
-            font-size: 12px;
+            font-size: 13px;
             font-weight: 600;
         }
 
@@ -554,12 +549,16 @@
             .stage-controls { padding: 0 15px 6px; }
             .top-bar { padding: 12px 15px; }
             .logo-text { font-size: 22px; }
-            .tabs { padding: 15px 15px 0; }
-            .tab { font-size: 11px; padding: 12px 0; gap: 6px; }
-            .tab svg { width: 18px; height: 18px; }
+            .tabs { padding: 15px 15px 0; gap: 6px; }
+            .tab { font-size: 10px; padding: 12px 0; gap: 4px; letter-spacing: 1px; }
+            .tab svg { width: 16px; height: 16px; }
             .promo-panel { padding: 20px 15px; }
             .promo-input-wrap { flex-direction: column; }
             .promo-input-wrap .action-btn { width: 100%; }
+            .trade-page { padding: 20px 15px; }
+            .trade-item { grid-template-columns: 48px 1fr; gap: 10px; padding: 12px; }
+            .trade-left-img { width: 48px; height: 48px; }
+            .trade-btn { grid-column: 1 / -1; height: 38px; width: 100%; }
         }
     </style>
 </head>
@@ -573,32 +572,22 @@
 
 <!-- ===== ПРОФИЛЬ ===== -->
 <div class="modal" id="profileModal">
-    <div class="modal-card wide">
+    <div class="modal-card">
         <button class="modal-close" onclick="closeModal('profileModal')">✕</button>
-        <div style="text-align:center;">
-            <img class="profile-avatar" 
-                 src="https://raw.githubusercontent.com/saintezz/ggbrainXv2/main/Avatarka.jpg" 
-                 alt="Avatar"
-                 onerror="this.src='https://via.placeholder.com/110?text=?'">
-            <div class="profile-nick" id="profileNick">Загрузка...</div>
-            <a class="profile-tg" id="profileTg" href="#" target="_blank">@...</a>
-            <div class="profile-balance-label">Баланс</div>
-            <div class="profile-balance-value">
-                <img src="https://github.com/saintezz/saintbetW/blob/main/%D0%BC%D0%BE%D0%BD%D0%B5%D1%82%D0%B0.png?raw=true" alt="coin">
-                <span id="profileBalance">1 000</span>
-            </div>
+        <img class="profile-avatar" 
+             src="https://raw.githubusercontent.com/saintezz/ggbrainXv2/main/Avatarka.jpg" 
+             alt="Avatar"
+             onerror="this.src='https://via.placeholder.com/110?text=?'">
+        <div class="profile-nick" id="profileNick">Загрузка...</div>
+        <a class="profile-tg" id="profileTg" href="#" target="_blank">@...</a>
+        <div class="profile-balance-label">Баланс</div>
+        <div class="profile-balance-value">
+            <img src="https://github.com/saintezz/saintbetW/blob/main/%D0%BC%D0%BE%D0%BD%D0%B5%D1%82%D0%B0.png?raw=true" alt="coin">
+            <span id="profileBalance">1 000</span>
         </div>
-        <div id="adminSection" style="display:none; margin-top: 20px; text-align:center;">
+        <div id="adminSection" style="display:none; margin-top: 20px;">
             <div class="admin-badge">ADMIN</div>
             <button class="action-btn" onclick="closeModal('profileModal'); openAdminPanel()">Открыть админ-панель</button>
-        </div>
-
-        <!-- ===== ОБМЕН БРАИНРОТОВ ===== -->
-        <div class="trade-block">
-            <div class="trade-title">Обмен браинротов</div>
-            <div class="trade-list" id="tradeList">
-                <!-- Заполняется через JS -->
-            </div>
         </div>
     </div>
 </div>
@@ -674,6 +663,13 @@
             </svg>
             Апгрейд
         </div>
+        <div class="tab" id="tabTrade" onclick="switchTab('trade')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 7h13l-3-3"/>
+                <path d="M20 17H7l3 3"/>
+            </svg>
+            Обмен
+        </div>
         <div class="tab" id="tabPromo" onclick="switchTab('promo')">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M20 12v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-6"/>
@@ -726,7 +722,6 @@
             </div>
         </div>
 
-        <!-- ===== УПРАВЛЕНИЕ АПГРЕЙДОМ ===== -->
         <div class="stage-controls">
             <button class="upgrade-main-btn" id="upgradeBtn" onclick="upgrade()" disabled>
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
@@ -757,6 +752,19 @@
         <div class="section-block">
             <div class="section-title">Магазин</div>
             <div class="shop-row" id="shopRow"></div>
+        </div>
+    </div>
+
+    <!-- ===== ОБМЕН ===== -->
+    <div class="tab-panel" id="panelTrade">
+        <div class="trade-page">
+            <div class="trade-page-header">
+                <h2>Обмен браинротов</h2>
+                <p>Обменяй свои предметы на другие + монеты. Курс всегда честный: что отдаёшь — то и получаешь.</p>
+            </div>
+            <div class="trade-list-page" id="tradeList">
+                <!-- Заполняется через JS -->
+            </div>
         </div>
     </div>
 
@@ -797,35 +805,19 @@
     const API_URL = 'https://ggbrainx.onrender.com';
     const ADMIN_TG = '@clonexx7';
 
-    // ===== ФИКСИРОВАННЫЙ ШАНС АПГРЕЙДА =====
-    // Больше никаких кнопок ставок — просто фиксированный шанс 33%.
-    const FIXED_CHANCE = 33;
-
     // ===== РЕЦЕПТЫ ОБМЕНА =====
-    // Юзер отдаёт 1 свой браинрот → получает 2 этих + монеты.
-    // Предметы для обмена — как ты просил: Garama, Dragon Cannelloni, Cerberus, Burguro.
-    // Формат: { from: id_предмета, to: id_предмета, count: сколько_штук, coins: сколько_монет }
+    // Правило: цена(получаешь) + монеты ≤ цена(отдаёшь).
+    // Проверка в renderTradeList — если рецепт нечестный, он не показывается.
     const TRADE_RECIPES = [
-        // Celestial Pegasus (93) → 2x Garama (41 * 2 = 82) + 11 монет
-        { from: 'celestial', to: 'garama', count: 2, coins: 11 },
-        // Cooki and Milki (130) → 2x Garama (82) + 48 монет
-        { from: 'cooki', to: 'garama', count: 2, coins: 48 },
-        // Cerberus (155) → 2x Burguro (70 * 2 = 140) + 15 монет
-        { from: 'cerberus', to: 'burguro', count: 2, coins: 15 },
-        // Globba Steppa (164) → 2x Burguro (140) + 24 монет
-        { from: 'globba', to: 'burguro', count: 2, coins: 24 },
-        // Los Amigos (220) → 1x Cerberus (155) + 65 монет
+        { from: 'celestial', to: 'garama',   count: 2, coins: 11 },
+        { from: 'cooki',     to: 'garama',   count: 2, coins: 48 },
+        { from: 'cerberus',  to: 'burguro',  count: 2, coins: 15 },
+        { from: 'globba',    to: 'burguro',  count: 2, coins: 24 },
         { from: 'losamigos', to: 'cerberus', count: 1, coins: 65 },
-        // Rubiko and Kubiko (395) → 1x Dragon Cannelloni (890)? Нет — дешевле. Правильный вариант: 2x Dragon?
-        // Сделаю логично: Rubiko (395) → 1x Dragon Cannelloni (890) не даём, а вот наоборот — Dragon → ...
-        // Rubiko (395) → 2x Cerberus (155 * 2 = 310) + 85 монет
-        { from: 'rubiko', to: 'cerberus', count: 2, coins: 85 },
-        // Los Secret Combinasionas (419) → 2x Dragon Cannelloni? Дракон 890 — дорого. → 1x Burguro (70) не даём.
-        // Логично: Los Secret (419) → 1x Dragon Cannelloni (890) — даём
-        { from: 'lossecret', to: 'dragon', count: 1, coins: 0 },
-        // Dragon Cannelloni (890) → 1x Cerberus (155) + 735 монет? Многовато.
-        // Сделаем красиво: Dragon Cannelloni (890) → 2x Cerberus (310) + 580 монет
-        // Оставляю только то, что ты назвал.
+        { from: 'rubiko',    to: 'cerberus', count: 2, coins: 85 },
+        { from: 'lossecret', to: 'cerberus', count: 2, coins: 109 },
+        { from: 'hydra',     to: 'dragon',   count: 1, coins: 330 },
+        { from: 'kraken',    to: 'dragon',   count: 2, coins: 250 }
     ];
 
     let USER = { nick: 'Гость', tg: '@guest', tgLink: '#', id: null, username: null, photo: null };
@@ -919,7 +911,6 @@
             isAdmin = false;
             document.getElementById('adminSection').style.display = 'none';
         }
-        renderTradeList();
         openModal('profileModal');
     };
 
@@ -936,6 +927,10 @@
         if (tab === 'upgrade') {
             document.getElementById('tabUpgrade').classList.add('active');
             document.getElementById('panelUpgrade').classList.add('active');
+        } else if (tab === 'trade') {
+            document.getElementById('tabTrade').classList.add('active');
+            document.getElementById('panelTrade').classList.add('active');
+            renderTradeList();
         } else {
             document.getElementById('tabPromo').classList.add('active');
             document.getElementById('panelPromo').classList.add('active');
@@ -1195,15 +1190,19 @@
         renderTargets(); updateUpgradeScreen();
     };
 
-    // ===== ФИКСИРОВАННЫЙ ШАНС =====
+    // ===== ШАНС АПГРЕЙДА: формула =====
+    // шанс = 100 / (target.price / source.price), кап 70%
+    // Пример: 1 → 2 = 50%, 1 → 3 = 33%, 1 → 4 = 25%, 1 → 5 = 20%, 1 → 10 = 10%
+    // 395 → 419 = 100/1.06 ≈ 94% → кап 70%.
     function calculateChance() {
         const sourceItem = selectedSourceId ? getItemById(selectedSourceId) : null;
         const targetItem = selectedTargetId ? getItemById(selectedTargetId) : null;
         if (!sourceItem || !targetItem || targetItem.price <= sourceItem.price) return 0;
-        let chance = FIXED_CHANCE;
+        const ratio = targetItem.price / sourceItem.price;
+        let chance = 100 / ratio;
         if (chance > MAX_CHANCE) chance = MAX_CHANCE;
-        if (chance < 0) chance = 0;
-        return chance;
+        if (chance < 1) chance = 1;
+        return Math.round(chance * 10) / 10;
     }
 
     function updateUpgradeScreen() {
@@ -1322,7 +1321,7 @@
         else performUpgrade(SPIN_DURATION);
     };
 
-    // ===== ОБМЕН БРАИНРОТОВ =====
+    // ===== ОБМЕН =====
     function renderTradeList() {
         const list = document.getElementById('tradeList');
         if (!list) return;
@@ -1331,12 +1330,16 @@
             return;
         }
 
-        // Проверяем какие рецепты доступны: у юзера должен быть нужный предмет
         const available = [];
         TRADE_RECIPES.forEach((r, idx) => {
             const srcItem = getItemById(r.from);
             const dstItem = getItemById(r.to);
             if (!srcItem || !dstItem) return;
+
+            // Честность курса: цена получаемого + монеты ≤ цены отдаваемого
+            const receivePrice = dstItem.price * r.count + r.coins;
+            if (receivePrice > srcItem.price) return;
+
             const hasCount = inventory.filter(id => id === r.from).length;
             if (hasCount > 0) {
                 available.push({ recipe: r, idx, srcItem, dstItem, has: hasCount });
