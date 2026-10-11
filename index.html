@@ -1290,11 +1290,8 @@
         { id: 'lovelovebear', name: 'Love Love Bear', price: 5540, img: 'https://github.com/forerer-afk/brainroterX/blob/main/lovelovebear.png?raw=true' }
     ];
 
-    // ===== API =====
-    const API_URL = 'https://ggbrainxv.onrender.com';
-
-    // Пинг при загрузке — будим Render
-    fetch(API_URL + '/').catch(() => console.log('[WAKE] Сервер Render просыпается...'));
+    // ===== API — ПРАВИЛЬНЫЙ ДОМЕН =====
+    const API_URL = 'https://ggbrainx.onrender.com';
 
     // ===== НАСТРОЙКА АДМИНА =====
     const ADMIN_TG = '@clonexx7';
@@ -1466,7 +1463,7 @@
         renderAdminGrid();
     };
 
-    // ===== ФЕТЧ С ТАЙМАУТОМ (для холодного старта Render) =====
+    // ===== ФЕТЧ С ТАЙМАУТОМ =====
     async function fetchWithTimeout(url, options = {}, timeout = 60000) {
         const controller = new AbortController();
         const id = setTimeout(() => controller.abort(), timeout);
@@ -1904,6 +1901,9 @@
     }
 
     init();
+
+    // ===== ПРОГРЕВ RENDER — будим сервер при загрузке =====
+    fetch(API_URL + '/').catch(() => console.log('[WAKE] Сервер просыпается...'));
 </script>
 
 <script>
