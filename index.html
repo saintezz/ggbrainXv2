@@ -332,9 +332,10 @@
             text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9);
         }
 
-        .profile-stat-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
+        /* ===== СТАТИСТИКА В ПРОФИЛЕ — каждый блок на всю ширину ===== */
+        .profile-stats-column {
+            display: flex;
+            flex-direction: column;
             gap: 10px;
             margin-bottom: 14px;
         }
@@ -361,8 +362,14 @@
         }
         .profile-stat-value img { width: 18px; height: 18px; }
 
-        .profile-stat.expandable { cursor: pointer; transition: all 0.25s; }
-        .profile-stat.expandable:hover { background: var(--accent-very-dim); border-color: var(--accent); }
+        .profile-stat.expandable {
+            cursor: pointer;
+            transition: all 0.25s;
+        }
+        .profile-stat.expandable:hover {
+            background: var(--accent-very-dim);
+            border-color: var(--accent);
+        }
         .profile-stat-value .expand-arrow {
             margin-left: auto;
             width: 16px; height: 16px;
@@ -373,15 +380,15 @@
         .profile-inventory-drawer {
             max-height: 0;
             overflow: hidden;
-            transition: max-height 0.4s ease, padding 0.4s ease;
+            transition: max-height 0.4s ease, padding 0.4s ease, margin-top 0.4s ease;
             background: rgba(0, 0, 0, 0.25);
             border-radius: 6px;
-            margin-bottom: 0;
+            margin-top: 0;
         }
         .profile-inventory-drawer.expanded {
             max-height: 500px;
             padding: 10px;
-            margin-bottom: 14px;
+            margin-top: 10px;
             border: 1px solid var(--accent-very-dim);
         }
         .profile-inventory-grid {
@@ -919,7 +926,6 @@
 </audio>
 <div class="bg-layer"></div>
 
-<!-- ===== АДМИН ПАНЕЛЬ ===== -->
 <div class="modal" id="adminModal">
     <div class="modal-card wide">
         <button class="modal-close" onclick="closeModal('adminModal')">✕</button>
@@ -957,7 +963,6 @@
     </div>
 </div>
 
-<!-- ===== ОБМЕН ПОДТВЕРЖДЕНИЕ ===== -->
 <div class="modal" id="confirmTradeModal">
     <div class="modal-card">
         <button class="modal-close" onclick="closeModal('confirmTradeModal')">✕</button>
@@ -1061,7 +1066,6 @@
         </div>
     </div>
 
-    <!-- ===== АПГРЕЙД ===== -->
     <div class="tab-panel active" id="panelUpgrade">
         <div class="progress-section">
             <div class="progress-wrapper">
@@ -1117,7 +1121,6 @@
         </div>
     </div>
 
-    <!-- ===== РАКЕТКА ===== -->
     <div class="tab-panel" id="panelRocket">
         <div class="rocket-page">
             <div class="rocket-header">
@@ -1169,7 +1172,6 @@
         </div>
     </div>
 
-    <!-- ===== ОБМЕН ===== -->
     <div class="tab-panel" id="panelTrade">
         <div class="trade-page">
             <div class="trade-page-header">
@@ -1180,7 +1182,6 @@
         </div>
     </div>
 
-    <!-- ===== ПРОМОКОД ===== -->
     <div class="tab-panel" id="panelPromo">
         <div class="promo-panel">
             <h2>Активация промокода</h2>
@@ -1193,7 +1194,6 @@
         </div>
     </div>
 
-    <!-- ===== ПРОФИЛЬ ===== -->
     <div class="tab-panel" id="panelProfile">
         <div class="profile-page">
             <div class="profile-banner" id="profileBanner">
@@ -1215,7 +1215,8 @@
                 </div>
             </div>
 
-            <div class="profile-stat-row">
+            <!-- Блок "Баланс" -->
+            <div class="profile-stats-column">
                 <div class="profile-stat">
                     <div class="profile-stat-label">Баланс</div>
                     <div class="profile-stat-value">
@@ -1223,6 +1224,8 @@
                         <span id="profileBalance">0</span>
                     </div>
                 </div>
+
+                <!-- Блок "Предметы" + инвентарь прямо под ним -->
                 <div class="profile-stat expandable" id="itemsStat" onclick="toggleInventoryDrawer()">
                     <div class="profile-stat-label">Предметов</div>
                     <div class="profile-stat-value">
@@ -1232,10 +1235,9 @@
                         </svg>
                     </div>
                 </div>
-            </div>
-
-            <div class="profile-inventory-drawer" id="inventoryDrawer">
-                <div class="profile-inventory-grid" id="profileInventoryGrid"></div>
+                <div class="profile-inventory-drawer" id="inventoryDrawer">
+                    <div class="profile-inventory-grid" id="profileInventoryGrid"></div>
+                </div>
             </div>
 
             <div class="profile-action-row">
@@ -1244,7 +1246,6 @@
         </div>
     </div>
 
-    <!-- ===== КАСТОМИЗАЦИЯ ===== -->
     <div class="tab-panel" id="panelCustomize">
         <div class="customize-page">
             <div class="customize-section">
@@ -1411,6 +1412,8 @@
     ];
 
     let USER = { nick: 'Гость', tg: '@guest', tgLink: '#', id: null, username: null, photo: null };
+
+    // ===== ВСЕ настройки из localStorage =====
     let customNick = localStorage.getItem('ggbrainx_custom_nick') || null;
     let profileBg = localStorage.getItem('ggbrainx_profile_bg') || 'none';
     let orbitItems = JSON.parse(localStorage.getItem('ggbrainx_orbit') || '[]');
@@ -1426,6 +1429,15 @@
     let borderWidth = parseInt(localStorage.getItem('ggbrainx_border_width') || '1');
     let glowIntensity = parseInt(localStorage.getItem('ggbrainx_glow') || '10');
     let customMargin = parseInt(localStorage.getItem('ggbrainx_custom_margin') || '24');
+
+    // ===== СОХРАНЕНИЕ ПРОГРЕССА =====
+    let balance = parseFloat(localStorage.getItem('ggbrainx_balance') || '0');
+    let inventory = JSON.parse(localStorage.getItem('ggbrainx_inventory') || '[]');
+
+    function saveProgress() {
+        localStorage.setItem('ggbrainx_balance', String(balance));
+        localStorage.setItem('ggbrainx_inventory', JSON.stringify(inventory));
+    }
 
     (function initTelegramUser() {
         try {
@@ -1456,8 +1468,6 @@
     const CIRCUMFERENCE = 2 * Math.PI * 130;
     let fastModeEnabled = false;
 
-    let balance = 0;
-    let inventory = [];
     let selectedSourceId = null;
     let selectedTargetId = null;
     let isSpinning = false;
@@ -1513,6 +1523,7 @@
         balanceBox.classList.remove('pulse');
         void balanceBox.offsetWidth;
         balanceBox.classList.add('pulse');
+        saveProgress();
     }
     function getItemById(id) { return ITEMS.find(item => item.id === id); }
 
@@ -1753,6 +1764,7 @@
                     inventory.push(data.value);
                     renderInventory(); renderTargets(); renderShop(); updateUpgradeScreen();
                     renderProfileInventory();
+                    saveProgress();
                     const item = getItemById(data.value);
                     msgTab.className = 'msg ok';
                     msgTab.textContent = `Получен: ${item ? item.name : data.value}! Осталось: ${data.remaining}`;
