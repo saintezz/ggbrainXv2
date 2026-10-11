@@ -78,21 +78,67 @@
         .avatar:hover { transform: scale(1.08); }
         .avatar img { width: 100%; height: 100%; object-fit: cover; }
 
-        .tabs { display: flex; gap: 8px; padding: 18px 30px 0; }
+        /* ===== ВКЛАДКИ (стиль с иконками вверху) ===== */
+        .tabs {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            padding: 18px 30px 0;
+        }
         .tab {
-            flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px;
-            padding: 14px 0; border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.08);
-            background: rgba(255, 255, 255, 0.03); color: #8a8d9b;
-            font-family: 'Orbitron', sans-serif; font-weight: 800; font-size: 12px; letter-spacing: 1.5px;
-            cursor: pointer; transition: all 0.3s; text-transform: uppercase; position: relative; overflow: hidden;
+            flex: 1;
+            max-width: 130px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 12px 6px 10px;
+            border-radius: 14px;
+            border: 1px solid rgba(255, 140, 0, 0.25);
+            background: rgba(255, 255, 255, 0.02);
+            color: #8a8d9b;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 800;
+            font-size: 10px;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            position: relative;
+            overflow: hidden;
         }
-        .tab svg { width: 20px; height: 20px; flex-shrink: 0; transition: all 0.3s; }
-        .tab:hover { background: rgba(255, 140, 0, 0.08); border-color: rgba(255, 140, 0, 0.35); color: #ffaa33; }
+        .tab svg {
+            width: 26px;
+            height: 26px;
+            flex-shrink: 0;
+            transition: all 0.3s;
+        }
+        .tab .tab-label {
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+        }
+        .tab:hover {
+            background: rgba(255, 140, 0, 0.1);
+            border-color: rgba(255, 140, 0, 0.55);
+            color: #ffaa33;
+            transform: translateY(-2px);
+        }
         .tab.active {
-            background: linear-gradient(135deg, rgba(255, 140, 0, 0.25), rgba(255, 140, 0, 0.1));
-            border-color: #ff8c00; color: #fff; box-shadow: 0 0 25px rgba(255, 140, 0, 0.4);
+            background: linear-gradient(135deg, rgba(255, 140, 0, 0.28), rgba(255, 140, 0, 0.1));
+            border-color: #ff8c00;
+            color: #fff;
+            box-shadow: 0 0 25px rgba(255, 140, 0, 0.45), inset 0 1px 0 rgba(255, 157, 61, 0.35);
         }
-        .tab.active svg { filter: drop-shadow(0 0 8px rgba(255, 140, 0, 0.9)); }
+        .tab.active svg {
+            filter: drop-shadow(0 0 10px rgba(255, 140, 0, 1));
+            color: #ffaa33;
+        }
+        .tab.active .tab-label {
+            color: #fff;
+            text-shadow: 0 0 10px rgba(255, 140, 0, 0.7);
+        }
 
         .tab-panel { display: none; }
         .tab-panel.active { display: block; }
@@ -421,7 +467,6 @@
         .admin-item img { width: 42px; height: 42px; object-fit: contain; margin-bottom: 4px; }
         .admin-item .name { font-size: 9px; color: #e5e7ef; font-weight: 700; text-align: center; line-height: 1.2; height: 22px; overflow: hidden; }
 
-        /* ===== ОБМЕН (страница) ===== */
         .trade-page {
             padding: 30px;
             max-width: 700px;
@@ -549,9 +594,10 @@
             .stage-controls { padding: 0 15px 6px; }
             .top-bar { padding: 12px 15px; }
             .logo-text { font-size: 22px; }
-            .tabs { padding: 15px 15px 0; gap: 6px; }
-            .tab { font-size: 10px; padding: 12px 0; gap: 4px; letter-spacing: 1px; }
-            .tab svg { width: 16px; height: 16px; }
+            .tabs { padding: 15px 12px 0; gap: 6px; }
+            .tab { max-width: 100%; padding: 10px 4px 8px; gap: 4px; font-size: 9px; }
+            .tab svg { width: 22px; height: 22px; }
+            .tab .tab-label { font-size: 9px; }
             .promo-panel { padding: 20px 15px; }
             .promo-input-wrap { flex-direction: column; }
             .promo-input-wrap .action-btn { width: 100%; }
@@ -655,20 +701,21 @@
         </div>
     </div>
 
+    <!-- ===== ВКЛАДКИ С ИКОНКАМИ ВВЕРХУ ===== -->
     <div class="tabs">
         <div class="tab active" id="tabUpgrade" onclick="switchTab('upgrade')">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M3 17l6-6 4 4 8-8"/>
                 <path d="M14 7h7v7"/>
             </svg>
-            Апгрейд
+            <span class="tab-label">Апгрейд</span>
         </div>
         <div class="tab" id="tabTrade" onclick="switchTab('trade')">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M4 7h13l-3-3"/>
                 <path d="M20 17H7l3 3"/>
             </svg>
-            Обмен
+            <span class="tab-label">Обмен</span>
         </div>
         <div class="tab" id="tabPromo" onclick="switchTab('promo')">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -678,7 +725,14 @@
                 <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/>
                 <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>
             </svg>
-            Промокод
+            <span class="tab-label">Промокод</span>
+        </div>
+        <div class="tab" id="tabProfileTab" onclick="openProfile()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="8" r="4"/>
+                <path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/>
+            </svg>
+            <span class="tab-label">Профиль</span>
         </div>
     </div>
 
@@ -805,9 +859,6 @@
     const API_URL = 'https://ggbrainx.onrender.com';
     const ADMIN_TG = '@clonexx7';
 
-    // ===== РЕЦЕПТЫ ОБМЕНА =====
-    // Правило: цена(получаешь) + монеты ≤ цена(отдаёшь).
-    // Проверка в renderTradeList — если рецепт нечестный, он не показывается.
     const TRADE_RECIPES = [
         { from: 'celestial', to: 'garama',   count: 2, coins: 11 },
         { from: 'cooki',     to: 'garama',   count: 2, coins: 48 },
@@ -931,7 +982,7 @@
             document.getElementById('tabTrade').classList.add('active');
             document.getElementById('panelTrade').classList.add('active');
             renderTradeList();
-        } else {
+        } else if (tab === 'promo') {
             document.getElementById('tabPromo').classList.add('active');
             document.getElementById('panelPromo').classList.add('active');
         }
@@ -1190,10 +1241,7 @@
         renderTargets(); updateUpgradeScreen();
     };
 
-    // ===== ШАНС АПГРЕЙДА: формула =====
-    // шанс = 100 / (target.price / source.price), кап 70%
-    // Пример: 1 → 2 = 50%, 1 → 3 = 33%, 1 → 4 = 25%, 1 → 5 = 20%, 1 → 10 = 10%
-    // 395 → 419 = 100/1.06 ≈ 94% → кап 70%.
+    // ===== ШАНС АПГРЕЙДА — формула =====
     function calculateChance() {
         const sourceItem = selectedSourceId ? getItemById(selectedSourceId) : null;
         const targetItem = selectedTargetId ? getItemById(selectedTargetId) : null;
@@ -1336,7 +1384,6 @@
             const dstItem = getItemById(r.to);
             if (!srcItem || !dstItem) return;
 
-            // Честность курса: цена получаемого + монеты ≤ цены отдаваемого
             const receivePrice = dstItem.price * r.count + r.coins;
             if (receivePrice > srcItem.price) return;
 
