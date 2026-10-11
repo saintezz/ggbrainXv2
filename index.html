@@ -25,244 +25,231 @@
         }
         @keyframes bgMove { 0%, 100% { transform: translate(0, 0) rotate(0deg); } 50% { transform: translate(-5%, -5%) rotate(8deg); } }
 
+        /* ===== БОЛЕЕ ПРОЗРАЧНЫЙ И КВАДРАТНЫЙ APP ===== */
         .app {
             width: 100%; max-width: 100%;
-            background: linear-gradient(180deg, rgba(30, 30, 38, 0.95) 0%, rgba(18, 18, 22, 0.95) 100%);
-            border-radius: 28px; border: 1px solid rgba(255, 140, 0, 0.15);
-            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.8), 0 0 80px rgba(255, 140, 0, 0.06);
-            overflow: hidden; display: flex; flex-direction: column; padding-bottom: 25px;
-            position: relative; backdrop-filter: blur(20px);
+            background: rgba(20, 20, 26, 0.55);
+            backdrop-filter: blur(14px);
+            border: 1px solid rgba(255, 140, 0, 0.12);
+            border-radius: 10px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+            overflow: hidden; display: flex; flex-direction: column; padding-bottom: 20px;
+            position: relative;
         }
         .top-bar {
             display: flex; justify-content: space-between; align-items: center;
-            padding: 15px 30px; background: rgba(255, 255, 255, 0.02);
-            border-bottom: 1px solid rgba(255, 140, 0, 0.1);
+            padding: 14px 22px;
+            background: rgba(255, 255, 255, 0.015);
+            border-bottom: 1px solid rgba(255, 140, 0, 0.08);
         }
         .logo-text {
-            font-family: 'Orbitron', sans-serif; font-size: 28px; font-weight: 900; letter-spacing: 1px;
+            font-family: 'Orbitron', sans-serif; font-size: 26px; font-weight: 900; letter-spacing: 1px;
             background: linear-gradient(135deg, #d0d0d0 0%, #ff8c00 50%, #ffaa33 100%);
             background-size: 200% 200%;
             -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-            filter: drop-shadow(0 0 15px rgba(255, 140, 0, 0.5));
+            filter: drop-shadow(0 0 12px rgba(255, 140, 0, 0.45));
             animation: logoGradient 4s ease infinite;
         }
         @keyframes logoGradient { 0%, 100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
 
-        .top-right { display: flex; align-items: center; gap: 12px; }
+        .top-right { display: flex; align-items: center; gap: 10px; }
         .balance {
-            background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 8px 16px; border-radius: 20px; font-size: 16px; font-weight: 800;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 8px 14px; border-radius: 8px; font-size: 15px; font-weight: 800;
             display: flex; align-items: center; gap: 8px; color: #fff; font-family: 'Orbitron', sans-serif;
         }
-        .coin-icon { width: 20px; height: 20px; object-fit: contain; filter: drop-shadow(0 0 8px rgba(255, 140, 0, 0.8)); }
+        .coin-icon { width: 18px; height: 18px; object-fit: contain; filter: drop-shadow(0 0 6px rgba(255, 140, 0, 0.7)); }
 
         .music-toggle {
-            width: 42px; height: 42px; border-radius: 50%;
-            border: 2px solid rgba(255, 140, 0, 0.6);
-            background: rgba(255, 255, 255, 0.06); color: #ffaa33; font-size: 18px;
-            cursor: pointer; transition: all 0.3s;
+            width: 38px; height: 38px; border-radius: 8px;
+            border: 1px solid rgba(255, 140, 0, 0.5);
+            background: rgba(255, 255, 255, 0.04); color: #ffaa33; font-size: 16px;
+            cursor: pointer; transition: all 0.25s;
             display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 0 20px rgba(255, 140, 0, 0.3);
         }
-        .music-toggle:hover { transform: scale(1.08); background: rgba(255, 140, 0, 0.15); box-shadow: 0 0 28px rgba(255, 140, 0, 0.55); }
-        .music-toggle.muted { color: #6b7280; border-color: rgba(255, 255, 255, 0.15); box-shadow: none; }
+        .music-toggle:hover { background: rgba(255, 140, 0, 0.12); }
+        .music-toggle.muted { color: #6b7280; border-color: rgba(255, 255, 255, 0.15); }
 
         .avatar {
-            width: 42px; height: 42px; border-radius: 50%;
+            width: 38px; height: 38px; border-radius: 8px;
             background: linear-gradient(135deg, #ff8c00, #cc7000);
             display: flex; align-items: center; justify-content: center;
-            font-family: 'Orbitron', sans-serif; font-weight: 900; font-size: 18px; color: #fff;
-            box-shadow: 0 0 20px rgba(255, 140, 0, 0.5); cursor: pointer; overflow: hidden;
-            border: 2px solid rgba(255, 140, 0, 0.6); transition: transform 0.2s;
+            font-family: 'Orbitron', sans-serif; font-weight: 900; font-size: 16px; color: #fff;
+            cursor: pointer; overflow: hidden;
+            border: 1px solid rgba(255, 140, 0, 0.5); transition: transform 0.2s;
         }
-        .avatar:hover { transform: scale(1.08); }
+        .avatar:hover { transform: scale(1.05); }
         .avatar img { width: 100%; height: 100%; object-fit: cover; }
 
-        /* ===== ВКЛАДКИ (стиль с иконками вверху) ===== */
+        /* ===== ВКЛАДКИ — БОЛЕЕ КВАДРАТНЫЕ ===== */
         .tabs {
             display: flex;
             justify-content: center;
-            gap: 8px;
-            padding: 18px 30px 0;
+            gap: 6px;
+            padding: 14px 22px 0;
         }
         .tab {
             flex: 1;
-            max-width: 130px;
+            max-width: 140px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 6px;
-            padding: 12px 6px 10px;
-            border-radius: 14px;
-            border: 1px solid rgba(255, 140, 0, 0.25);
-            background: rgba(255, 255, 255, 0.02);
+            gap: 4px;
+            padding: 10px 6px 8px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 140, 0, 0.22);
+            background: rgba(255, 255, 255, 0.015);
             color: #8a8d9b;
             font-family: 'Orbitron', sans-serif;
             font-weight: 800;
             font-size: 10px;
             letter-spacing: 0.5px;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.25s;
             text-transform: uppercase;
             position: relative;
             overflow: hidden;
         }
-        .tab svg {
-            width: 26px;
-            height: 26px;
-            flex-shrink: 0;
-            transition: all 0.3s;
-        }
-        .tab .tab-label {
-            font-size: 10px;
-            font-weight: 800;
-            letter-spacing: 0.5px;
-        }
+        .tab svg { width: 22px; height: 22px; flex-shrink: 0; transition: all 0.25s; }
+        .tab .tab-label { font-size: 9.5px; font-weight: 800; }
         .tab:hover {
-            background: rgba(255, 140, 0, 0.1);
-            border-color: rgba(255, 140, 0, 0.55);
+            background: rgba(255, 140, 0, 0.08);
+            border-color: rgba(255, 140, 0, 0.5);
             color: #ffaa33;
-            transform: translateY(-2px);
         }
         .tab.active {
-            background: linear-gradient(135deg, rgba(255, 140, 0, 0.28), rgba(255, 140, 0, 0.1));
+            background: rgba(255, 140, 0, 0.18);
             border-color: #ff8c00;
             color: #fff;
-            box-shadow: 0 0 25px rgba(255, 140, 0, 0.45), inset 0 1px 0 rgba(255, 157, 61, 0.35);
+            box-shadow: 0 0 0 1px rgba(255, 140, 0, 0.4) inset;
         }
-        .tab.active svg {
-            filter: drop-shadow(0 0 10px rgba(255, 140, 0, 1));
-            color: #ffaa33;
-        }
-        .tab.active .tab-label {
-            color: #fff;
-            text-shadow: 0 0 10px rgba(255, 140, 0, 0.7);
-        }
+        .tab.active svg { filter: drop-shadow(0 0 8px rgba(255, 140, 0, 0.9)); color: #ffaa33; }
+        .tab.active .tab-label { color: #fff; text-shadow: 0 0 8px rgba(255, 140, 0, 0.6); }
 
         .tab-panel { display: none; }
         .tab-panel.active { display: block; }
 
+        /* ===== МОДАЛКИ ===== */
         .modal {
-            position: fixed; inset: 0; background: rgba(0, 0, 0, 0.75); backdrop-filter: blur(8px);
+            position: fixed; inset: 0; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(6px);
             display: flex; justify-content: center; align-items: center; z-index: 1000;
-            opacity: 0; pointer-events: none; transition: opacity 0.3s ease; padding: 20px;
+            opacity: 0; pointer-events: none; transition: opacity 0.25s ease; padding: 16px;
         }
         .modal.open { opacity: 1; pointer-events: auto; }
         .modal-card {
-            background: linear-gradient(180deg, #1e1e26 0%, #121216 100%);
-            border: 1px solid rgba(255, 140, 0, 0.3); border-radius: 24px;
-            padding: 32px 28px; width: 100%; max-width: 360px; text-align: center;
-            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.9), 0 0 60px rgba(255, 140, 0, 0.2);
-            transform: scale(0.9); transition: transform 0.3s ease;
+            background: rgba(20, 20, 26, 0.85);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 140, 0, 0.28);
+            border-radius: 10px;
+            padding: 24px 22px; width: 100%; max-width: 360px; text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.85);
+            transform: scale(0.95); transition: transform 0.25s ease;
             position: relative; max-height: 90vh; overflow-y: auto;
         }
         .modal.open .modal-card { transform: scale(1); }
-        .modal-card.wide { max-width: 480px; text-align: left; }
+        .modal-card.wide { max-width: 460px; text-align: left; }
 
         .profile-avatar {
-            width: 110px; height: 110px; border-radius: 50%; object-fit: cover;
-            border: 3px solid #ff8c00;
-            box-shadow: 0 0 30px rgba(255, 140, 0, 0.6), 0 0 60px rgba(255, 140, 0, 0.3);
-            margin-bottom: 18px;
+            width: 100px; height: 100px; border-radius: 10px; object-fit: cover;
+            border: 2px solid #ff8c00;
+            margin-bottom: 14px;
         }
-        .profile-nick { font-family: 'Orbitron', sans-serif; font-size: 22px; font-weight: 900; color: #fff; letter-spacing: 1px; margin-bottom: 6px; }
-        .profile-tg { font-size: 14px; color: #ffaa33; font-weight: 700; margin-bottom: 20px; text-decoration: none; display: inline-block; transition: color 0.2s; }
-        .profile-tg:hover { color: #ffcc66; text-shadow: 0 0 12px rgba(255, 170, 51, 0.8); }
-        .profile-balance-label { font-size: 11px; color: #8a8d9b; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 6px; }
+        .profile-nick { font-family: 'Orbitron', sans-serif; font-size: 20px; font-weight: 900; color: #fff; letter-spacing: 1px; margin-bottom: 4px; }
+        .profile-tg { font-size: 13px; color: #ffaa33; font-weight: 700; margin-bottom: 18px; text-decoration: none; display: inline-block; }
+        .profile-balance-label { font-size: 10px; color: #8a8d9b; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 4px; }
         .profile-balance-value {
-            font-family: 'Orbitron', sans-serif; font-size: 32px; font-weight: 900; color: #ff8c00;
-            text-shadow: 0 0 25px rgba(255, 140, 0, 0.7);
-            display: flex; align-items: center; justify-content: center; gap: 10px;
+            font-family: 'Orbitron', sans-serif; font-size: 28px; font-weight: 900; color: #ff8c00;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
         }
-        .profile-balance-value img { width: 28px; height: 28px; object-fit: contain; filter: drop-shadow(0 0 10px rgba(255, 140, 0, 0.9)); }
+        .profile-balance-value img { width: 24px; height: 24px; object-fit: contain; filter: drop-shadow(0 0 8px rgba(255, 140, 0, 0.8)); }
 
         .modal-close {
-            position: absolute; top: 14px; right: 14px; width: 34px; height: 34px; border-radius: 50%;
-            border: 1px solid rgba(255, 255, 255, 0.1); background: rgba(255, 255, 255, 0.05);
-            color: #8a8d9b; font-size: 18px; font-weight: 700; cursor: pointer; transition: all 0.2s;
+            position: absolute; top: 10px; right: 10px; width: 30px; height: 30px; border-radius: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.1); background: rgba(255, 255, 255, 0.04);
+            color: #8a8d9b; font-size: 16px; font-weight: 700; cursor: pointer; transition: all 0.2s;
             display: flex; align-items: center; justify-content: center;
         }
         .modal-close:hover { background: rgba(255, 80, 80, 0.2); color: #ff6b6b; border-color: rgba(255, 80, 80, 0.4); }
 
-        .modal-title { font-family: 'Orbitron', sans-serif; font-size: 18px; font-weight: 900; color: #fff; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 1px; }
+        .modal-title { font-family: 'Orbitron', sans-serif; font-size: 16px; font-weight: 900; color: #fff; margin-bottom: 14px; text-transform: uppercase; letter-spacing: 1px; }
 
         .admin-badge {
             display: inline-block; padding: 4px 12px;
-            background: linear-gradient(135deg, #ff8c00, #cc7000); border-radius: 12px;
+            background: linear-gradient(135deg, #ff8c00, #cc7000); border-radius: 6px;
             font-size: 10px; font-weight: 800; color: #fff; text-transform: uppercase; letter-spacing: 2px;
             margin-bottom: 10px; font-family: 'Orbitron', sans-serif;
-            box-shadow: 0 0 15px rgba(255, 140, 0, 0.6);
         }
 
-        .form-group { margin-bottom: 16px; text-align: left; }
-        .form-label { display: block; font-size: 11px; color: #8a8d9b; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; }
+        .form-group { margin-bottom: 14px; text-align: left; }
+        .form-label { display: block; font-size: 10px; color: #8a8d9b; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 6px; }
         .form-input {
-            width: 100%; padding: 14px 16px; border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.08); background: rgba(255, 255, 255, 0.03);
-            color: #fff; font-size: 15px; font-weight: 600; transition: all 0.3s;
+            width: 100%; padding: 12px 14px; border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.08); background: rgba(255, 255, 255, 0.025);
+            color: #fff; font-size: 14px; font-weight: 600; transition: all 0.25s;
             font-family: 'Orbitron', sans-serif;
         }
-        .form-input:focus { outline: none; border-color: #ff8c00; background: rgba(255, 140, 0, 0.08); box-shadow: 0 0 20px rgba(255, 140, 0, 0.3); }
+        .form-input:focus { outline: none; border-color: #ff8c00; background: rgba(255, 140, 0, 0.06); }
         .form-input::placeholder { color: #4a4d5e; font-family: 'Inter', sans-serif; font-weight: 500; }
 
-        .radio-row { display: flex; gap: 10px; margin-bottom: 16px; }
+        .radio-row { display: flex; gap: 8px; margin-bottom: 14px; }
         .radio-option {
-            flex: 1; padding: 12px; border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.08); background: rgba(255, 255, 255, 0.03);
-            color: #8a8d9b; font-weight: 700; font-size: 12px; text-align: center;
-            cursor: pointer; transition: all 0.3s; text-transform: uppercase; letter-spacing: 1px;
+            flex: 1; padding: 10px; border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.08); background: rgba(255, 255, 255, 0.025);
+            color: #8a8d9b; font-weight: 700; font-size: 11px; text-align: center;
+            cursor: pointer; transition: all 0.25s; text-transform: uppercase;
             font-family: 'Orbitron', sans-serif;
         }
         .radio-option:hover { border-color: rgba(255, 140, 0, 0.4); color: #ffaa33; }
         .radio-option.active {
-            background: linear-gradient(135deg, rgba(255, 140, 0, 0.25), rgba(255, 140, 0, 0.1));
-            border-color: #ff8c00; color: #fff; box-shadow: 0 0 15px rgba(255, 140, 0, 0.4);
+            background: rgba(255, 140, 0, 0.18);
+            border-color: #ff8c00; color: #fff;
         }
 
         .action-btn {
-            width: 100%; padding: 16px; border-radius: 14px; border: none;
+            width: 100%; padding: 14px; border-radius: 8px; border: none;
             background: linear-gradient(135deg, #ff8c00, #cc7000); color: #fff;
-            font-family: 'Orbitron', sans-serif; font-size: 14px; font-weight: 900;
-            text-transform: uppercase; letter-spacing: 2px; cursor: pointer;
-            transition: all 0.3s; box-shadow: 0 8px 25px rgba(255, 140, 0, 0.4); margin-top: 8px;
+            font-family: 'Orbitron', sans-serif; font-size: 13px; font-weight: 900;
+            text-transform: uppercase; letter-spacing: 1.5px; cursor: pointer;
+            transition: all 0.25s; margin-top: 6px;
         }
-        .action-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 12px 35px rgba(255, 140, 0, 0.6); }
-        .action-btn:disabled { opacity: 0.4; cursor: not-allowed; background: #3a3d4d; box-shadow: none; }
+        .action-btn:hover:not(:disabled) { filter: brightness(1.1); }
+        .action-btn:disabled { opacity: 0.4; cursor: not-allowed; background: #3a3d4d; }
 
-        .msg { margin-top: 12px; font-size: 13px; font-weight: 700; min-height: 18px; text-align: center; }
-        .msg.ok { color: #7ed88a; text-shadow: 0 0 10px rgba(120, 200, 130, 0.5); }
-        .msg.err { color: #ff6b6b; text-shadow: 0 0 10px rgba(255, 100, 100, 0.5); }
-        .msg.wait { color: #ffaa33; text-shadow: 0 0 10px rgba(255, 170, 51, 0.5); }
+        .msg { margin-top: 10px; font-size: 12px; font-weight: 700; min-height: 16px; text-align: center; }
+        .msg.ok { color: #7ed88a; }
+        .msg.err { color: #ff6b6b; }
+        .msg.wait { color: #ffaa33; }
 
-        .promo-panel { padding: 30px; text-align: center; }
-        .promo-panel h2 { font-family: 'Orbitron', sans-serif; font-size: 20px; font-weight: 900; color: #fff; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 2px; }
-        .promo-panel p { color: #8a8d9b; font-size: 14px; margin-bottom: 22px; }
-        .promo-input-wrap { display: flex; gap: 10px; max-width: 480px; margin: 0 auto; }
+        .promo-panel { padding: 26px 22px; text-align: center; }
+        .promo-panel h2 { font-family: 'Orbitron', sans-serif; font-size: 18px; font-weight: 900; color: #fff; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 2px; }
+        .promo-panel p { color: #8a8d9b; font-size: 13px; margin-bottom: 18px; }
+        .promo-input-wrap { display: flex; gap: 8px; max-width: 460px; margin: 0 auto; }
         .promo-input-wrap .form-input { flex: 1; text-transform: uppercase; }
-        .promo-input-wrap .action-btn { width: auto; padding: 14px 28px; margin-top: 0; }
+        .promo-input-wrap .action-btn { width: auto; padding: 12px 22px; margin-top: 0; }
 
-        .promo-list { margin-top: 18px; max-height: 260px; overflow-y: auto; text-align: left; }
+        .promo-list { margin-top: 16px; max-height: 260px; overflow-y: auto; text-align: left; }
         .promo-list-item {
             display: flex; justify-content: space-between; align-items: center;
-            padding: 12px 14px; background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 12px;
-            margin-bottom: 8px; font-size: 13px;
+            padding: 10px 12px; background: rgba(255, 255, 255, 0.025);
+            border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 8px;
+            margin-bottom: 6px; font-size: 12px;
         }
         .promo-list-item .code { font-family: 'Orbitron', sans-serif; font-weight: 800; color: #ffaa33; letter-spacing: 1px; }
-        .promo-list-item .info { color: #8a8d9b; font-size: 11px; font-weight: 600; }
-        .promo-list-item .uses { font-family: 'Orbitron', sans-serif; font-weight: 800; color: #7ed88a; font-size: 12px; }
+        .promo-list-item .info { color: #8a8d9b; font-size: 10px; font-weight: 600; }
+        .promo-list-item .uses { font-family: 'Orbitron', sans-serif; font-weight: 800; color: #7ed88a; font-size: 11px; }
         .promo-list-item .uses.empty { color: #ff6b6b; }
 
-        .progress-section { display: flex; justify-content: center; align-items: center; padding: 30px 0 20px; position: relative; }
-        .progress-wrapper { position: relative; width: 340px; height: 340px; }
+        /* ===== АПГРЕЙДЕР ===== */
+        .progress-section { display: flex; justify-content: center; align-items: center; padding: 24px 0 16px; position: relative; }
+        .progress-wrapper { position: relative; width: 320px; height: 320px; }
         .progress-svg { width: 100%; height: 100%; transform: rotate(-90deg); }
-        .progress-bg { fill: none; stroke: #1e1e26; stroke-width: 24; }
+        .progress-bg { fill: none; stroke: rgba(30, 30, 38, 0.9); stroke-width: 22; }
         .progress-bar {
-            fill: none; stroke: url(#progressGradient); stroke-width: 24; stroke-linecap: round;
+            fill: none; stroke: url(#progressGradient); stroke-width: 22; stroke-linecap: butt;
             stroke-dasharray: 816; stroke-dashoffset: 816;
             transition: stroke-dashoffset 0.3s ease;
-            filter: drop-shadow(0 0 15px rgba(255, 140, 0, 0.8));
         }
 
         .arrow-container {
@@ -274,64 +261,65 @@
         }
         .arrow-pointer {
             width: 0; height: 0;
-            border-left: 14px solid transparent; border-right: 14px solid transparent;
-            border-top: 28px solid #ff8c00; margin-top: 22px;
-            filter: drop-shadow(0 0 10px rgba(255, 140, 0, 1)) drop-shadow(0 0 20px rgba(255, 140, 0, 0.6));
+            border-left: 12px solid transparent; border-right: 12px solid transparent;
+            border-top: 24px solid #ff8c00; margin-top: 20px;
+            filter: drop-shadow(0 0 8px rgba(255, 140, 0, 0.9));
             position: relative;
         }
         .arrow-pointer::after {
-            content: ''; position: absolute; top: -34px; left: -6px;
-            width: 12px; height: 12px;
-            background: radial-gradient(circle at 30% 30%, #ffaa33, #ff8c00);
-            border-radius: 50%; box-shadow: 0 0 15px rgba(255, 140, 0, 1);
+            content: ''; position: absolute; top: -30px; left: -5px;
+            width: 10px; height: 10px;
+            background: #ffaa33;
+            border-radius: 50%;
         }
 
         .progress-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; z-index: 10; }
-        .chance-big { font-family: 'Orbitron', sans-serif; font-size: 48px; font-weight: 900; color: #ff8c00; text-shadow: 0 0 30px rgba(255, 140, 0, 0.8); line-height: 1; }
-        .chance-label { font-size: 14px; color: #7ed88a; font-weight: 700; text-transform: uppercase; letter-spacing: 3px; margin-top: 8px; text-shadow: 0 0 10px rgba(120, 200, 130, 0.5); min-height: 18px; }
-        .chance-label.medium { color: #ffaa33; text-shadow: 0 0 10px rgba(255, 140, 0, 0.5); }
+        .chance-big { font-family: 'Orbitron', sans-serif; font-size: 44px; font-weight: 900; color: #ff8c00; line-height: 1; }
+        .chance-label { font-size: 12px; color: #7ed88a; font-weight: 700; text-transform: uppercase; letter-spacing: 3px; margin-top: 6px; min-height: 16px; }
+        .chance-label.medium { color: #ffaa33; }
         .chance-label.hidden { visibility: hidden; }
 
-        .items-row { display: flex; justify-content: center; align-items: center; gap: 15px; padding: 20px 30px; }
+        .items-row { display: flex; justify-content: center; align-items: center; gap: 12px; padding: 16px 22px; }
         .item-box {
-            background: linear-gradient(145deg, #1e1e26 0%, #15151c 100%);
-            border-radius: 18px; padding: 18px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 8px;
+            padding: 14px;
             display: flex; flex-direction: column; align-items: center;
-            border: 2px solid rgba(255, 140, 0, 0.4); min-width: 160px;
-            box-shadow: 0 0 30px rgba(255, 140, 0, 0.2); transition: all 0.3s;
+            border: 1px solid rgba(255, 140, 0, 0.3);
+            min-width: 150px;
+            transition: all 0.25s;
         }
-        .item-box .label { font-size: 11px; color: #8a8d9b; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; }
-        .item-box img { width: 80px; height: 80px; object-fit: contain; margin-bottom: 10px; filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.6)); }
-        .item-box .name { font-size: 13px; font-weight: 700; text-align: center; margin-bottom: 8px; color: #fff; height: 32px; display: flex; align-items: center; }
-        .item-box .price { font-family: 'Orbitron', sans-serif; font-size: 14px; font-weight: 800; color: #d0d0d0; display: flex; align-items: center; gap: 5px; }
-        .price-coin { width: 16px; height: 16px; object-fit: contain; }
+        .item-box .label { font-size: 10px; color: #8a8d9b; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; }
+        .item-box img { width: 72px; height: 72px; object-fit: contain; margin-bottom: 8px; }
+        .item-box .name { font-size: 12px; font-weight: 700; text-align: center; margin-bottom: 6px; color: #fff; height: 30px; display: flex; align-items: center; }
+        .item-box .price { font-family: 'Orbitron', sans-serif; font-size: 13px; font-weight: 800; color: #d0d0d0; display: flex; align-items: center; gap: 4px; }
+        .price-coin { width: 14px; height: 14px; object-fit: contain; }
 
-        .swap-arrow { font-size: 28px; color: #ff8c00; filter: drop-shadow(0 0 10px rgba(255, 140, 0, 0.8)); animation: pulseArrow 2s ease-in-out infinite; }
-        @keyframes pulseArrow { 0%, 100% { transform: scale(1); opacity: 0.7; } 50% { transform: scale(1.15); opacity: 1; } }
+        .swap-arrow { font-size: 24px; color: #ff8c00; animation: pulseArrow 2s ease-in-out infinite; }
+        @keyframes pulseArrow { 0%, 100% { opacity: 0.6; } 50% { opacity: 1; } }
 
         .stage-controls {
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 10px;
-            padding: 0 30px 6px;
+            gap: 8px;
+            padding: 0 22px 6px;
         }
         .upgrade-main-btn {
-            flex: 0 1 280px;
-            padding: 18px 20px;
-            border-radius: 16px;
+            flex: 0 1 260px;
+            padding: 16px 18px;
+            border-radius: 8px;
             border: none;
             background: linear-gradient(135deg, #ff8c00 0%, #ffaa33 50%, #ff8c00 100%);
             background-size: 200% 200%;
             color: white;
             font-family: 'Orbitron', sans-serif;
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 900;
             text-transform: uppercase;
             letter-spacing: 2px;
             cursor: pointer;
-            box-shadow: 0 10px 30px rgba(255, 140, 0, 0.4), 0 0 60px rgba(255, 140, 0, 0.2);
-            transition: all 0.3s;
+            transition: all 0.25s;
             animation: gradientShift 3s ease infinite;
             display: flex;
             align-items: center;
@@ -339,272 +327,363 @@
             gap: 10px;
         }
         @keyframes gradientShift { 0%, 100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
-        .upgrade-main-btn:hover:not(:disabled) {
-            transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 20px 50px rgba(255, 140, 0, 0.6), 0 0 100px rgba(255, 140, 0, 0.4);
-        }
-        .upgrade-main-btn:active { transform: scale(0.98); }
-        .upgrade-main-btn:disabled { opacity: 0.4; cursor: not-allowed; background: #3a3d4d; animation: none; box-shadow: none; }
-        .upgrade-main-btn svg { width: 20px; height: 20px; filter: drop-shadow(0 0 8px rgba(255, 140, 0, 0.9)); }
+        .upgrade-main-btn:hover:not(:disabled) { transform: translateY(-2px); filter: brightness(1.08); }
+        .upgrade-main-btn:disabled { opacity: 0.4; cursor: not-allowed; background: #3a3d4d; animation: none; }
+        .upgrade-main-btn svg { width: 18px; height: 18px; }
 
         .fast-btn {
-            width: 54px;
-            height: 54px;
-            border-radius: 16px;
-            border: 2px solid rgba(255, 140, 0, 0.55);
-            background: linear-gradient(135deg, rgba(255, 140, 0, 0.28), rgba(194, 65, 12, 0.15));
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 140, 0, 0.5);
+            background: rgba(255, 140, 0, 0.18);
             color: #fff;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.3s;
-            box-shadow: 0 0 22px rgba(255, 140, 0, 0.3), inset 0 1px 0 rgba(255, 157, 61, 0.35);
+            transition: all 0.25s;
         }
-        .fast-btn:hover { transform: translateY(-3px) scale(1.06); box-shadow: 0 8px 28px rgba(255, 140, 0, 0.55); }
-        .fast-btn:active { transform: scale(0.96); }
-        .fast-btn svg { width: 26px; height: 26px; filter: drop-shadow(0 0 8px rgba(255, 140, 0, 0.9)); }
+        .fast-btn:hover { background: rgba(255, 140, 0, 0.3); }
+        .fast-btn svg { width: 22px; height: 22px; }
         .fast-btn.active {
-            background: linear-gradient(135deg, rgba(163, 230, 53, 0.4), rgba(132, 204, 22, 0.18));
-            border-color: rgba(163, 230, 53, 0.85);
-            box-shadow: 0 0 30px rgba(163, 230, 53, 0.8);
-            animation: energyPulse 1.5s ease-in-out infinite;
-        }
-        @keyframes energyPulse {
-            0%, 100% { box-shadow: 0 0 30px rgba(163, 230, 53, 0.8); }
-            50% { box-shadow: 0 0 50px rgba(163, 230, 53, 1); }
+            background: rgba(163, 230, 53, 0.3);
+            border-color: rgba(163, 230, 53, 0.75);
         }
 
         .section-title {
-            font-family: 'Orbitron', sans-serif; font-size: 12px; font-weight: 700; color: #8a8d9b;
-            text-transform: uppercase; letter-spacing: 3px; margin-bottom: 10px; padding: 0 30px;
+            font-family: 'Orbitron', sans-serif; font-size: 11px; font-weight: 700; color: #8a8d9b;
+            text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; padding: 0 22px;
             display: flex; align-items: center; gap: 8px;
         }
         .section-title::before {
-            content: ''; width: 4px; height: 14px;
-            background: linear-gradient(180deg, #ff8c00, #cc7000);
-            border-radius: 2px; box-shadow: 0 0 10px rgba(255, 140, 0, 0.8);
+            content: ''; width: 3px; height: 12px;
+            background: #ff8c00;
+            border-radius: 1px;
         }
-        .section-block { margin-top: 25px; }
+        .section-block { margin-top: 20px; }
 
         .target-row, .shop-row, .inventory-row {
-            display: flex; gap: 12px; overflow-x: auto;
-            padding: 5px 30px 15px; scroll-behavior: smooth;
+            display: flex; gap: 10px; overflow-x: auto;
+            padding: 4px 22px 12px;
         }
-        .target-row::-webkit-scrollbar, .shop-row::-webkit-scrollbar, .inventory-row::-webkit-scrollbar { height: 5px; }
-        .target-row::-webkit-scrollbar-track, .shop-row::-webkit-scrollbar-track, .inventory-row::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.03); border-radius: 3px; }
-        .target-row::-webkit-scrollbar-thumb, .shop-row::-webkit-scrollbar-thumb, .inventory-row::-webkit-scrollbar-thumb { background: linear-gradient(90deg, #ff8c00, #cc7000); border-radius: 3px; }
+        .target-row::-webkit-scrollbar, .shop-row::-webkit-scrollbar, .inventory-row::-webkit-scrollbar { height: 4px; }
+        .target-row::-webkit-scrollbar-track, .shop-row::-webkit-scrollbar-track, .inventory-row::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.03); border-radius: 2px; }
+        .target-row::-webkit-scrollbar-thumb, .shop-row::-webkit-scrollbar-thumb, .inventory-row::-webkit-scrollbar-thumb { background: #ff8c00; border-radius: 2px; }
 
         .inv-card, .target-card, .shop-card {
             flex-shrink: 0;
-            background: linear-gradient(145deg, #1e1e26 0%, #15151c 100%);
-            border-radius: 14px; padding: 10px; width: 110px;
+            background: rgba(255, 255, 255, 0.025);
+            border-radius: 8px;
+            padding: 10px; width: 106px;
             display: flex; flex-direction: column; align-items: center;
-            border: 1px solid rgba(255, 255, 255, 0.05); transition: all 0.3s; position: relative;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            transition: all 0.2s;
+            position: relative;
         }
         .inv-card:hover, .target-card:hover:not(.disabled), .shop-card:hover {
-            transform: translateY(-4px);
+            transform: translateY(-2px);
             border-color: rgba(255, 140, 0, 0.5);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 25px rgba(255, 140, 0, 0.2);
+            background: rgba(255, 140, 0, 0.05);
         }
         .inv-card.selected, .target-card.selected {
             border-color: #ff8c00;
-            background: linear-gradient(145deg, rgba(255, 140, 0, 0.15) 0%, rgba(255, 140, 0, 0.05) 100%);
-            box-shadow: 0 0 30px rgba(255, 140, 0, 0.5);
+            background: rgba(255, 140, 0, 0.12);
         }
         .target-card.disabled { opacity: 0.25; cursor: not-allowed; filter: grayscale(1); }
 
-        .inv-card img, .target-card img, .shop-card img { width: 55px; height: 55px; object-fit: contain; margin-bottom: 6px; pointer-events: none; }
+        .inv-card img, .target-card img, .shop-card img { width: 52px; height: 52px; object-fit: contain; margin-bottom: 6px; pointer-events: none; }
         .inv-card .name, .target-card .name, .shop-card .name {
-            font-size: 10px; font-weight: 700; text-align: center; margin-bottom: 4px;
-            height: 24px; overflow: hidden; color: #e5e7ef; pointer-events: none;
+            font-size: 9.5px; font-weight: 700; text-align: center; margin-bottom: 4px;
+            height: 22px; overflow: hidden; color: #e5e7ef; pointer-events: none;
         }
         .inv-card .price, .target-card .price, .shop-card .price {
-            font-size: 11px; color: #ffaa33; font-weight: 800;
+            font-size: 10px; color: #ffaa33; font-weight: 800;
             display: flex; align-items: center; gap: 3px;
             font-family: 'Orbitron', sans-serif; pointer-events: none;
         }
 
         .buy-btn {
-            width: 100%; padding: 6px; border-radius: 8px; border: none;
+            width: 100%; padding: 6px; border-radius: 6px; border: none;
             background: linear-gradient(135deg, #ff8c00, #cc7000); color: white;
-            font-weight: 800; font-size: 10px; cursor: pointer; transition: all 0.3s;
+            font-weight: 800; font-size: 9.5px; cursor: pointer; transition: all 0.2s;
             text-transform: uppercase; font-family: 'Orbitron', sans-serif;
-            margin-top: 6px; position: relative; z-index: 5;
+            margin-top: 5px; position: relative; z-index: 5;
         }
-        .buy-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255, 140, 0, 0.6); }
+        .buy-btn:hover:not(:disabled) { filter: brightness(1.1); }
         .buy-btn:disabled { opacity: 0.4; cursor: not-allowed; background: #3a3d4d; }
 
         .sell-btn {
-            width: 100%; padding: 7px; border-radius: 8px;
+            width: 100%; padding: 6px; border-radius: 6px;
             border: 1px solid rgba(120, 200, 130, 0.3);
-            background: rgba(120, 200, 130, 0.1); color: #7ed88a;
-            font-weight: 800; font-size: 10px; cursor: pointer;
-            transition: all 0.3s; text-transform: uppercase;
-            font-family: 'Orbitron', sans-serif; margin-top: 6px;
-            letter-spacing: 1px; position: relative; z-index: 5;
+            background: rgba(120, 200, 130, 0.08); color: #7ed88a;
+            font-weight: 800; font-size: 9.5px; cursor: pointer;
+            transition: all 0.2s; text-transform: uppercase;
+            font-family: 'Orbitron', sans-serif; margin-top: 5px;
+            position: relative; z-index: 5;
         }
         .sell-btn:hover:not(:disabled) {
-            background: rgba(120, 200, 130, 0.3);
+            background: rgba(120, 200, 130, 0.25);
             border-color: rgba(120, 200, 130, 0.6);
-            box-shadow: 0 0 20px rgba(120, 200, 130, 0.4);
-            transform: translateY(-2px);
         }
         .sell-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
-        .empty-inv { color: #4a4d5e; font-size: 13px; text-align: center; width: 100%; padding: 20px; font-weight: 600; }
+        .empty-inv { color: #4a4d5e; font-size: 12px; text-align: center; width: 100%; padding: 18px; font-weight: 600; }
         .selectable { display: flex; flex-direction: column; align-items: center; width: 100%; cursor: pointer; }
         .locked { pointer-events: none !important; opacity: 0.4 !important; filter: grayscale(0.5) !important; }
 
-        .admin-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; max-height: 240px; overflow-y: auto; padding: 4px; margin-bottom: 12px; }
+        .admin-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; max-height: 240px; overflow-y: auto; padding: 4px; margin-bottom: 12px; }
         .admin-item {
-            background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: 12px; padding: 8px 4px;
+            background: rgba(255, 255, 255, 0.025); border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 8px; padding: 8px 4px;
             display: flex; flex-direction: column; align-items: center; cursor: pointer; transition: all 0.2s;
         }
-        .admin-item:hover { border-color: rgba(255, 140, 0, 0.5); background: rgba(255, 140, 0, 0.08); }
-        .admin-item.selected { border-color: #ff8c00; background: rgba(255, 140, 0, 0.15); box-shadow: 0 0 15px rgba(255, 140, 0, 0.4); }
-        .admin-item img { width: 42px; height: 42px; object-fit: contain; margin-bottom: 4px; }
+        .admin-item:hover { border-color: rgba(255, 140, 0, 0.5); background: rgba(255, 140, 0, 0.06); }
+        .admin-item.selected { border-color: #ff8c00; background: rgba(255, 140, 0, 0.15); }
+        .admin-item img { width: 40px; height: 40px; object-fit: contain; margin-bottom: 4px; }
         .admin-item .name { font-size: 9px; color: #e5e7ef; font-weight: 700; text-align: center; line-height: 1.2; height: 22px; overflow: hidden; }
 
-        .trade-page {
-            padding: 30px;
-            max-width: 700px;
-            margin: 0 auto;
-        }
-        .trade-page-header {
-            text-align: center;
-            margin-bottom: 24px;
-        }
+        /* ===== ОБМЕН ===== */
+        .trade-page { padding: 24px 22px; max-width: 700px; margin: 0 auto; }
+        .trade-page-header { text-align: center; margin-bottom: 20px; }
         .trade-page-header h2 {
+            font-family: 'Orbitron', sans-serif; font-size: 20px; font-weight: 900;
+            color: #fff; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px;
+        }
+        .trade-page-header p { color: #8a8d9b; font-size: 12px; line-height: 1.5; }
+        .trade-list-page { display: flex; flex-direction: column; gap: 8px; }
+        .trade-item {
+            display: grid; grid-template-columns: 56px 1fr auto;
+            align-items: center; gap: 12px; padding: 12px 14px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 140, 0, 0.16);
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+        .trade-item:hover { border-color: rgba(255, 140, 0, 0.5); background: rgba(255, 140, 0, 0.05); }
+        .trade-left-img { width: 56px; height: 56px; object-fit: contain; }
+        .trade-info { min-width: 0; }
+        .trade-name { font-size: 12px; font-weight: 700; color: #e5e7ef; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .trade-reward {
+            font-size: 11px; color: #ffaa33; font-weight: 700;
+            display: flex; align-items: center; gap: 5px; flex-wrap: wrap;
+        }
+        .trade-reward img { width: 14px; height: 14px; object-fit: contain; vertical-align: middle; }
+        .trade-reward .arrow { color: #ff8c00; font-weight: 900; margin: 0 3px; }
+        .trade-btn {
+            height: 38px; padding: 0 16px; border-radius: 8px; border: none;
+            background: linear-gradient(135deg, #ff8c00, #cc7000); color: white;
+            font-family: 'Orbitron', sans-serif; font-size: 10px; font-weight: 900;
+            letter-spacing: 1px; text-transform: uppercase; cursor: pointer;
+            transition: all 0.2s;
+        }
+        .trade-btn:hover:not(:disabled) { filter: brightness(1.1); }
+        .trade-btn:disabled { opacity: 0.35; cursor: not-allowed; background: #3a3d4d; }
+        .trade-empty { text-align: center; padding: 36px 12px; color: #4a4d5e; font-size: 12px; font-weight: 600; }
+
+        /* ===== МОДАЛКА ПОДТВЕРЖДЕНИЯ ОБМЕНА ===== */
+        .confirm-modal-card {
+            background: rgba(20, 20, 26, 0.9);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 140, 0, 0.35);
+            border-radius: 10px;
+            padding: 24px 22px;
+            width: 100%;
+            max-width: 420px;
+            text-align: center;
+            position: relative;
+        }
+        .confirm-title {
             font-family: 'Orbitron', sans-serif;
-            font-size: 22px;
+            font-size: 18px;
             font-weight: 900;
             color: #fff;
             letter-spacing: 2px;
             text-transform: uppercase;
-            margin-bottom: 10px;
-            text-shadow: 0 0 20px rgba(255, 140, 0, 0.6);
+            margin-bottom: 18px;
+            text-shadow: 0 0 12px rgba(255, 140, 0, 0.5);
         }
-        .trade-page-header p {
-            color: #8a8d9b;
-            font-size: 13px;
-            line-height: 1.5;
+        .confirm-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 16px;
         }
-        .trade-list-page {
+        .confirm-item {
+            flex: 1;
             display: flex;
             flex-direction: column;
-            gap: 10px;
-        }
-        .trade-item {
-            display: grid;
-            grid-template-columns: 60px 1fr auto;
             align-items: center;
-            gap: 14px;
-            padding: 14px 16px;
-            background: linear-gradient(145deg, rgba(30, 30, 38, 0.9), rgba(21, 21, 28, 0.9));
-            border: 1px solid rgba(255, 140, 0, 0.18);
-            border-radius: 16px;
-            transition: all 0.25s;
+            padding: 12px 8px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 140, 0, 0.2);
+            border-radius: 8px;
+            min-width: 0;
         }
-        .trade-item:hover {
-            border-color: rgba(255, 140, 0, 0.55);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.55), 0 0 25px rgba(255, 140, 0, 0.2);
-            transform: translateY(-2px);
-        }
-        .trade-left-img {
-            width: 60px; height: 60px;
+        .confirm-item img.brainrot {
+            width: 64px;
+            height: 64px;
             object-fit: contain;
-            filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.55));
-        }
-        .trade-info { min-width: 0; }
-        .trade-name {
-            font-size: 13px;
-            font-weight: 700;
-            color: #e5e7ef;
             margin-bottom: 6px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
         }
-        .trade-reward {
-            font-size: 12px;
-            color: #ffaa33;
+        .confirm-item .cname {
+            font-size: 10px;
+            color: #e5e7ef;
             font-weight: 700;
+            text-align: center;
+            line-height: 1.2;
+            min-height: 24px;
+            margin-bottom: 4px;
+        }
+        .confirm-item .cprice {
+            font-size: 11px;
+            font-weight: 800;
+            color: #ffaa33;
+            font-family: 'Orbitron', sans-serif;
             display: flex;
             align-items: center;
-            gap: 5px;
-            flex-wrap: wrap;
+            gap: 3px;
         }
-        .trade-reward img {
-            width: 16px; height: 16px;
-            object-fit: contain;
-            vertical-align: middle;
-            filter: drop-shadow(0 0 6px rgba(255, 140, 0, 0.7));
+        .confirm-item .cprice img {
+            width: 12px;
+            height: 12px;
         }
-        .trade-reward .arrow {
+        .confirm-arrow {
             color: #ff8c00;
+            font-size: 22px;
             font-weight: 900;
-            margin: 0 3px;
+            filter: drop-shadow(0 0 8px rgba(255, 140, 0, 0.7));
         }
-        .trade-btn {
-            height: 42px;
-            padding: 0 18px;
-            border-radius: 12px;
-            border: none;
-            background: linear-gradient(135deg, #ff8c00, #cc7000);
-            color: white;
+        .confirm-coins {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            margin-top: 8px;
+            font-size: 12px;
+            font-weight: 800;
+            color: #ffaa33;
             font-family: 'Orbitron', sans-serif;
-            font-size: 11px;
-            font-weight: 900;
-            letter-spacing: 1px;
+        }
+        .confirm-coins img { width: 14px; height: 14px; object-fit: contain; }
+        .confirm-selector {
+            margin: 14px 0;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 8px;
+        }
+        .confirm-selector-label {
+            font-size: 10px;
+            color: #8a8d9b;
+            font-weight: 700;
             text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+        }
+        .confirm-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+            gap: 8px;
+        }
+        .confirm-option {
+            padding: 10px 8px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
             cursor: pointer;
             transition: all 0.2s;
-            box-shadow: 0 4px 14px rgba(255, 140, 0, 0.4);
-        }
-        .trade-btn:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 22px rgba(255, 140, 0, 0.65);
-        }
-        .trade-btn:disabled { opacity: 0.35; cursor: not-allowed; background: #3a3d4d; box-shadow: none; }
-        .trade-empty {
             text-align: center;
-            padding: 40px 12px;
-            color: #4a4d5e;
-            font-size: 13px;
-            font-weight: 600;
         }
+        .confirm-option:hover { border-color: rgba(255, 140, 0, 0.5); background: rgba(255, 140, 0, 0.06); }
+        .confirm-option.selected {
+            border-color: #ff8c00;
+            background: rgba(255, 140, 0, 0.15);
+        }
+        .confirm-option img {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+            margin-bottom: 4px;
+        }
+        .confirm-option .oname {
+            font-size: 9px;
+            color: #e5e7ef;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 2px;
+            min-height: 20px;
+        }
+        .confirm-option .oprice {
+            font-size: 10px;
+            color: #ffaa33;
+            font-weight: 800;
+            font-family: 'Orbitron', sans-serif;
+        }
+        .confirm-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 16px;
+        }
+        .confirm-cancel,
+        .confirm-ok {
+            flex: 1;
+            height: 46px;
+            border-radius: 8px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 12px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+        }
+        .confirm-cancel {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #8a8d9b;
+        }
+        .confirm-cancel:hover { background: rgba(255, 80, 80, 0.15); color: #ff6b6b; }
+        .confirm-ok {
+            background: linear-gradient(135deg, #ff8c00, #cc7000);
+            color: #fff;
+        }
+        .confirm-ok:hover { filter: brightness(1.1); }
+        .confirm-ok:disabled { opacity: 0.35; cursor: not-allowed; filter: grayscale(0.5); }
 
         @media (max-width: 600px) {
             body { padding: 0; }
             .app { border-radius: 0; min-height: 100vh; }
-            .progress-wrapper { width: 280px; height: 280px; }
-            .chance-big { font-size: 38px; }
-            .arrow-pointer { margin-top: 18px; }
-            .item-box { min-width: 130px; padding: 14px; }
-            .item-box img { width: 65px; height: 65px; }
-            .upgrade-main-btn { flex: 0 1 220px; font-size: 13px; padding: 15px; }
-            .fast-btn { width: 48px; height: 48px; }
-            .fast-btn svg { width: 22px; height: 22px; }
-            .inv-card, .target-card, .shop-card { width: 95px; padding: 8px; }
-            .inv-card img, .target-card img, .shop-card img { width: 48px; height: 48px; }
-            .section-title, .target-row, .shop-row, .inventory-row { padding-left: 15px; padding-right: 15px; }
-            .items-row { padding: 15px 15px; gap: 10px; }
-            .stage-controls { padding: 0 15px 6px; }
-            .top-bar { padding: 12px 15px; }
-            .logo-text { font-size: 22px; }
-            .tabs { padding: 15px 12px 0; gap: 6px; }
-            .tab { max-width: 100%; padding: 10px 4px 8px; gap: 4px; font-size: 9px; }
-            .tab svg { width: 22px; height: 22px; }
-            .tab .tab-label { font-size: 9px; }
-            .promo-panel { padding: 20px 15px; }
+            .progress-wrapper { width: 260px; height: 260px; }
+            .chance-big { font-size: 34px; }
+            .item-box { min-width: 120px; padding: 12px; }
+            .item-box img { width: 58px; height: 58px; }
+            .upgrade-main-btn { flex: 0 1 200px; font-size: 12px; padding: 13px; }
+            .fast-btn { width: 46px; height: 46px; }
+            .fast-btn svg { width: 20px; height: 20px; }
+            .inv-card, .target-card, .shop-card { width: 92px; padding: 8px; }
+            .inv-card img, .target-card img, .shop-card img { width: 46px; height: 46px; }
+            .section-title, .target-row, .shop-row, .inventory-row { padding-left: 12px; padding-right: 12px; }
+            .items-row { padding: 12px 12px; gap: 8px; }
+            .stage-controls { padding: 0 12px 6px; }
+            .top-bar { padding: 10px 12px; }
+            .logo-text { font-size: 20px; }
+            .tabs { padding: 12px 10px 0; gap: 5px; }
+            .tab { max-width: 100%; padding: 8px 4px 6px; gap: 3px; }
+            .tab svg { width: 18px; height: 18px; }
+            .tab .tab-label { font-size: 8.5px; }
+            .promo-panel { padding: 18px 12px; }
             .promo-input-wrap { flex-direction: column; }
             .promo-input-wrap .action-btn { width: 100%; }
-            .trade-page { padding: 20px 15px; }
-            .trade-item { grid-template-columns: 48px 1fr; gap: 10px; padding: 12px; }
-            .trade-left-img { width: 48px; height: 48px; }
-            .trade-btn { grid-column: 1 / -1; height: 38px; width: 100%; }
+            .trade-page { padding: 16px 12px; }
+            .trade-item { grid-template-columns: 46px 1fr; gap: 10px; padding: 10px; }
+            .trade-left-img { width: 46px; height: 46px; }
+            .trade-btn { grid-column: 1 / -1; height: 36px; width: 100%; }
+            .confirm-row { flex-direction: row; gap: 8px; }
+            .confirm-item img.brainrot { width: 52px; height: 52px; }
+            .confirm-options { grid-template-columns: repeat(2, 1fr); }
         }
     </style>
 </head>
@@ -631,7 +710,7 @@
             <img src="https://github.com/saintezz/saintbetW/blob/main/%D0%BC%D0%BE%D0%BD%D0%B5%D1%82%D0%B0.png?raw=true" alt="coin">
             <span id="profileBalance">1 000</span>
         </div>
-        <div id="adminSection" style="display:none; margin-top: 20px;">
+        <div id="adminSection" style="display:none; margin-top: 18px;">
             <div class="admin-badge">ADMIN</div>
             <button class="action-btn" onclick="closeModal('profileModal'); openAdminPanel()">Открыть админ-панель</button>
         </div>
@@ -676,9 +755,44 @@
         <button class="action-btn" onclick="createPromo()">Создать промокод</button>
         <div class="msg" id="adminMsg"></div>
 
-        <div class="modal-title" style="margin-top: 24px; font-size: 14px;">Существующие промокоды</div>
+        <div class="modal-title" style="margin-top: 22px; font-size: 13px;">Существующие промокоды</div>
         <div class="promo-list" id="promoList">
-            <div style="color:#4a4d5e; font-size:12px; text-align:center; padding:10px;">Загрузка...</div>
+            <div style="color:#4a4d5e; font-size:11px; text-align:center; padding:10px;">Загрузка...</div>
+        </div>
+    </div>
+</div>
+
+<!-- ===== МОДАЛКА ПОДТВЕРЖДЕНИЯ ОБМЕНА ===== -->
+<div class="modal" id="confirmTradeModal">
+    <div class="confirm-modal-card">
+        <button class="modal-close" onclick="closeModal('confirmTradeModal')">✕</button>
+        <div class="confirm-title">Ты уверен?</div>
+
+        <div class="confirm-row">
+            <div class="confirm-item">
+                <img class="brainrot" id="confirmFromImg" src="" alt="">
+                <div class="cname" id="confirmFromName">—</div>
+                <div class="cprice"><img src="" alt="" id="confirmFromCoin"> <span id="confirmFromPrice">0</span></div>
+            </div>
+            <div class="confirm-arrow">➜</div>
+            <div class="confirm-item">
+                <img class="brainrot" id="confirmToImg" src="" alt="">
+                <div class="cname" id="confirmToName">—</div>
+                <div class="cprice"><img src="" alt="" id="confirmToCoin"> <span id="confirmToPrice">0</span></div>
+                <div class="confirm-coins" id="confirmCoinsRow" style="display:none;">
+                    + <img src="" alt="" id="confirmCoinsCoin"> <span id="confirmCoins">0</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="confirm-selector" id="confirmSelector" style="display:none;">
+            <div class="confirm-selector-label">Выбери, на что менять</div>
+            <div class="confirm-options" id="confirmOptions"></div>
+        </div>
+
+        <div class="confirm-actions">
+            <button class="confirm-cancel" onclick="closeModal('confirmTradeModal')">Отмена</button>
+            <button class="confirm-ok" id="confirmOkBtn" onclick="confirmTrade()">Обменять</button>
         </div>
     </div>
 </div>
@@ -701,7 +815,6 @@
         </div>
     </div>
 
-    <!-- ===== ВКЛАДКИ С ИКОНКАМИ ВВЕРХУ ===== -->
     <div class="tabs">
         <div class="tab active" id="tabUpgrade" onclick="switchTab('upgrade')">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -814,11 +927,9 @@
         <div class="trade-page">
             <div class="trade-page-header">
                 <h2>Обмен браинротов</h2>
-                <p>Обменяй свои предметы на другие + монеты. Курс всегда честный: что отдаёшь — то и получаешь.</p>
+                <p>Выбери своего браинрота и посмотри, на что его можно обменять</p>
             </div>
-            <div class="trade-list-page" id="tradeList">
-                <!-- Заполняется через JS -->
-            </div>
+            <div class="trade-list-page" id="tradeList"></div>
         </div>
     </div>
 
@@ -859,6 +970,10 @@
     const API_URL = 'https://ggbrainx.onrender.com';
     const ADMIN_TG = '@clonexx7';
 
+    // ===== ОБМЕН =====
+    // Для каждого предмета можно задать варианты обмена.
+    // Юзер выбирает на что менять в момент подтверждения.
+    // Формат: { from: 'rubiko', to: 'cerberus', count: 2, coins: 85 }
     const TRADE_RECIPES = [
         { from: 'celestial', to: 'garama',   count: 2, coins: 11 },
         { from: 'cooki',     to: 'garama',   count: 2, coins: 48 },
@@ -866,7 +981,9 @@
         { from: 'globba',    to: 'burguro',  count: 2, coins: 24 },
         { from: 'losamigos', to: 'cerberus', count: 1, coins: 65 },
         { from: 'rubiko',    to: 'cerberus', count: 2, coins: 85 },
+        { from: 'rubiko',    to: 'garama',   count: 9, coins: 26 },
         { from: 'lossecret', to: 'cerberus', count: 2, coins: 109 },
+        { from: 'lossecret', to: 'garama',   count: 10, coins: 9 },
         { from: 'hydra',     to: 'dragon',   count: 1, coins: 330 },
         { from: 'kraken',    to: 'dragon',   count: 2, coins: 250 }
     ];
@@ -892,7 +1009,6 @@
                 USER.tg = full || '@guest';
             }
             if (u.photo_url) USER.photo = u.photo_url;
-            console.log('[TG] Пользователь:', USER);
         } catch (err) { console.error('[TG] Ошибка:', err); }
     })();
 
@@ -910,6 +1026,10 @@
     let isAdmin = false;
     let promoType = 'balance';
     let selectedAdminItem = null;
+
+    // Текущий выбранный рецепт обмена (для подтверждения)
+    let currentTradeOptions = []; // массив вариантов
+    let currentTradeSelected = null; // индекс выбранного варианта
 
     const balanceDisplay = document.getElementById('balanceDisplay');
     const inventoryRow = document.getElementById('inventoryRow');
@@ -1033,7 +1153,7 @@
             value = selectedAdminItem;
         }
         msg.className = 'msg wait';
-        msg.textContent = 'Создаём... (если сервер спит, до 60 сек)';
+        msg.textContent = 'Создаём...';
         try {
             const res = await fetchWithTimeout(API_URL + '/api/create', {
                 method: 'POST',
@@ -1055,8 +1175,7 @@
             }
         } catch (err) {
             msg.className = 'msg err';
-            msg.textContent = 'Сервер не отвечает (холодный старт). Попробуй ещё раз через 30 сек.';
-            console.error(err);
+            msg.textContent = 'Сервер не отвечает. Попробуй ещё раз через 30 сек.';
         }
     };
 
@@ -1068,7 +1187,7 @@
             if (!data.ok) throw new Error(data.error);
             const codes = Object.values(data.promocodes || {});
             if (codes.length === 0) {
-                list.innerHTML = '<div style="color:#4a4d5e; font-size:12px; text-align:center; padding:10px;">Промокодов пока нет</div>';
+                list.innerHTML = '<div style="color:#4a4d5e; font-size:11px; text-align:center; padding:10px;">Промокодов пока нет</div>';
                 return;
             }
             list.innerHTML = codes.map(p => {
@@ -1086,8 +1205,7 @@
                 `;
             }).join('');
         } catch (err) {
-            list.innerHTML = '<div style="color:#ff6b6b; font-size:12px; text-align:center; padding:10px;">Сервер спит. Обнови через 30 сек.</div>';
-            console.error(err);
+            list.innerHTML = '<div style="color:#ff6b6b; font-size:11px; text-align:center; padding:10px;">Сервер спит</div>';
         }
     }
 
@@ -1097,7 +1215,7 @@
         const code = inputTab.value.trim().toUpperCase();
         if (!code) { msgTab.className = 'msg err'; msgTab.textContent = 'Введи промокод'; return; }
         msgTab.className = 'msg wait';
-        msgTab.textContent = 'Проверяем... (если сервер спит, до 60 сек)';
+        msgTab.textContent = 'Проверяем...';
         try {
             const res = await fetchWithTimeout(API_URL + '/api/activate', {
                 method: 'POST',
@@ -1110,7 +1228,7 @@
                     balance += data.value;
                     updateBalance();
                     msgTab.className = 'msg ok';
-                    msgTab.textContent = `+${data.value} монет! Осталось активаций: ${data.remaining}`;
+                    msgTab.textContent = `+${data.value} монет! Осталось: ${data.remaining}`;
                 } else {
                     inventory.push(data.value);
                     renderInventory();
@@ -1128,8 +1246,7 @@
             }
         } catch (err) {
             msgTab.className = 'msg err';
-            msgTab.textContent = 'Сервер не отвечает (холодный старт). Попробуй ещё раз через 30 сек.';
-            console.error(err);
+            msgTab.textContent = 'Сервер не отвечает. Попробуй через 30 сек.';
         }
     };
 
@@ -1378,18 +1495,28 @@
             return;
         }
 
+        // Группируем: for каждого предмета, который есть у юзера, показываем все варианты обмена
+        const counts = {};
+        inventory.forEach(id => { counts[id] = (counts[id] || 0) + 1; });
+
         const available = [];
-        TRADE_RECIPES.forEach((r, idx) => {
-            const srcItem = getItemById(r.from);
-            const dstItem = getItemById(r.to);
-            if (!srcItem || !dstItem) return;
+        Object.keys(counts).forEach(fromId => {
+            const srcItem = getItemById(fromId);
+            if (!srcItem) return;
 
-            const receivePrice = dstItem.price * r.count + r.coins;
-            if (receivePrice > srcItem.price) return;
+            const variants = TRADE_RECIPES
+                .map((r, idx) => {
+                    if (r.from !== fromId) return null;
+                    const dstItem = getItemById(r.to);
+                    if (!dstItem) return null;
+                    const receivePrice = dstItem.price * r.count + r.coins;
+                    if (receivePrice > srcItem.price) return null;
+                    return { recipe: r, idx, dstItem };
+                })
+                .filter(Boolean);
 
-            const hasCount = inventory.filter(id => id === r.from).length;
-            if (hasCount > 0) {
-                available.push({ recipe: r, idx, srcItem, dstItem, has: hasCount });
+            if (variants.length > 0) {
+                available.push({ fromItem: srcItem, count: counts[fromId], variants });
             }
         });
 
@@ -1398,39 +1525,130 @@
             return;
         }
 
-        list.innerHTML = available.map(({ recipe, idx, srcItem, dstItem, has }) => {
-            const coinsHtml = recipe.coins > 0
-                ? ` + ${recipe.coins} <img src="${COIN_IMG}" alt="coin">`
-                : '';
+        list.innerHTML = available.map(({ fromItem, count, variants }) => {
+            const variantsHtml = variants.map(v => {
+                const coinsHtml = v.recipe.coins > 0
+                    ? ` + ${v.recipe.coins} <img src="${COIN_IMG}" alt="coin">`
+                    : '';
+                return `
+                    <div class="trade-reward" style="margin-top:6px;">
+                        <span class="arrow">→</span>
+                        ${v.recipe.count}x ${v.dstItem.name}${coinsHtml}
+                    </div>
+                `;
+            }).join('');
+
             return `
                 <div class="trade-item">
-                    <img class="trade-left-img" src="${srcItem.img}" alt="${srcItem.name}" onerror="this.src='https://via.placeholder.com/52?text=?'">
+                    <img class="trade-left-img" src="${fromItem.img}" alt="${fromItem.name}" onerror="this.src='https://via.placeholder.com/52?text=?'">
                     <div class="trade-info">
-                        <div class="trade-name">${srcItem.name}${has > 1 ? ` (x${has})` : ''}</div>
-                        <div class="trade-reward">
-                            <span class="arrow">→</span>
-                            ${recipe.count}x ${dstItem.name}${coinsHtml}
-                        </div>
+                        <div class="trade-name">${fromItem.name}${count > 1 ? ` (x${count})` : ''}</div>
+                        ${variantsHtml}
                     </div>
-                    <button class="trade-btn" onclick="doTrade(${idx})">Обменять</button>
+                    <button class="trade-btn" onclick="openConfirmTrade('${fromItem.id}')">Обменять</button>
                 </div>
             `;
         }).join('');
     }
 
-    window.doTrade = function(recipeIndex) {
+    // Открываем модалку подтверждения с выбором
+    window.openConfirmTrade = function(fromId) {
         if (isSpinning) return;
-        const recipe = TRADE_RECIPES[recipeIndex];
-        if (!recipe) return;
+        const srcItem = getItemById(fromId);
+        if (!srcItem) return;
+        const hasCount = inventory.filter(id => id === fromId).length;
+        if (hasCount < 1) return;
+
+        // Находим все варианты обмена для этого предмета
+        const variants = TRADE_RECIPES
+            .map((r, idx) => {
+                if (r.from !== fromId) return null;
+                const dstItem = getItemById(r.to);
+                if (!dstItem) return null;
+                const receivePrice = dstItem.price * r.count + r.coins;
+                if (receivePrice > srcItem.price) return null;
+                return { recipe: r, idx, dstItem };
+            })
+            .filter(Boolean);
+
+        if (!variants.length) return;
+
+        currentTradeOptions = variants;
+        currentTradeSelected = 0;
+
+        document.getElementById('confirmFromImg').src = srcItem.img;
+        document.getElementById('confirmFromName').textContent = srcItem.name;
+        document.getElementById('confirmFromPrice').textContent = srcItem.price;
+        document.getElementById('confirmFromCoin').src = COIN_IMG;
+
+        document.getElementById('confirmToCoin').src = COIN_IMG;
+        document.getElementById('confirmCoinsCoin').src = COIN_IMG;
+
+        // Если вариантов больше одного — показываем селектор
+        const selector = document.getElementById('confirmSelector');
+        const optionsContainer = document.getElementById('confirmOptions');
+        if (variants.length > 1) {
+            selector.style.display = 'block';
+            optionsContainer.innerHTML = variants.map((v, i) => `
+                <div class="confirm-option ${i === 0 ? 'selected' : ''}" onclick="selectTradeOption(${i})">
+                    <img src="${v.dstItem.img}" alt="${v.dstItem.name}" onerror="this.src='https://via.placeholder.com/40?text=?'">
+                    <div class="oname">${v.recipe.count}x ${v.dstItem.name}</div>
+                    <div class="oprice">${v.dstItem.price * v.recipe.count + v.recipe.coins}${v.recipe.coins > 0 ? ' (+' + v.recipe.coins + ')' : ''}</div>
+                </div>
+            `).join('');
+        } else {
+            selector.style.display = 'none';
+        }
+
+        // Отрисовываем первый вариант
+        renderConfirmVariant(0);
+
+        openModal('confirmTradeModal');
+    };
+
+    window.selectTradeOption = function(i) {
+        currentTradeSelected = i;
+        document.querySelectorAll('#confirmOptions .confirm-option').forEach((el, idx) => {
+            el.classList.toggle('selected', idx === i);
+        });
+        renderConfirmVariant(i);
+    };
+
+    function renderConfirmVariant(i) {
+        const variant = currentTradeOptions[i];
+        if (!variant) return;
+        const { recipe, dstItem } = variant;
+
+        document.getElementById('confirmToImg').src = dstItem.img;
+        document.getElementById('confirmToName').textContent = `${recipe.count}x ${dstItem.name}`;
+        document.getElementById('confirmToPrice').textContent = (dstItem.price * recipe.count);
+
+        const coinsRow = document.getElementById('confirmCoinsRow');
+        if (recipe.coins > 0) {
+            coinsRow.style.display = 'flex';
+            document.getElementById('confirmCoins').textContent = recipe.coins;
+        } else {
+            coinsRow.style.display = 'none';
+        }
+    }
+
+    window.confirmTrade = function() {
+        if (isSpinning) return;
+        const variant = currentTradeOptions[currentTradeSelected];
+        if (!variant) return;
+        const recipe = variant.recipe;
+        const dstItem = variant.dstItem;
+        const srcItem = getItemById(recipe.from);
+
         const srcIndex = inventory.indexOf(recipe.from);
         if (srcIndex === -1) { alert('У тебя нет этого браинрота'); return; }
-        const srcItem = getItemById(recipe.from);
-        const dstItem = getItemById(recipe.to);
-        if (!srcItem || !dstItem) return;
-        if (!confirm(`Обменять ${srcItem.name} на ${recipe.count}x ${dstItem.name}${recipe.coins > 0 ? ' + ' + recipe.coins + ' монет' : ''}?`)) return;
+
+        // Проверяем честность
+        const receivePrice = dstItem.price * recipe.count + recipe.coins;
+        if (receivePrice > srcItem.price) { alert('Рецепт нечестный'); return; }
 
         inventory.splice(srcIndex, 1);
-        for (let i = 0; i < recipe.count; i++) inventory.push(recipe.to);
+        for (let k = 0; k < recipe.count; k++) inventory.push(recipe.to);
         if (recipe.coins > 0) balance += recipe.coins;
 
         if (selectedSourceId === recipe.from && !inventory.includes(recipe.from)) {
@@ -1439,6 +1657,7 @@
 
         updateBalance();
         renderInventory(); renderTargets(); renderShop(); updateUpgradeScreen();
+        closeModal('confirmTradeModal');
         renderTradeList();
     };
 
@@ -1453,7 +1672,7 @@
 </script>
 
 <script>
-    // ===== МУЗЫКА + КНОПКА =====
+    // ===== МУЗЫКА =====
     const bgMusic = document.getElementById('bgMusic');
     bgMusic.volume = 0.15;
 
@@ -1475,7 +1694,7 @@
     };
 
     function startMusic() {
-        if (musicEnabled) bgMusic.play().catch(err => console.log('Аудио заблокировано:', err));
+        if (musicEnabled) bgMusic.play().catch(() => {});
         document.removeEventListener('click', startMusic);
         document.removeEventListener('touchstart', startMusic);
     }
