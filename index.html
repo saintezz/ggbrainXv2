@@ -2,18 +2,22 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GGbrainX — Upgrader</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>GGbrainX — Leprechaun Edition</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Orbitron:wght@500;700;900&display=swap');
 
         :root {
-            --accent: #ff8c00;
-            --accent-deep: #cc7000;
-            --accent-bright: #ffaa33;
-            --accent-dim: rgba(255, 140, 0, 0.35);
-            --accent-very-dim: rgba(255, 140, 0, 0.12);
+            --accent: #f5c542;          /* золото */
+            --accent-deep: #b8860b;
+            --accent-bright: #ffe066;
+            --accent-dim: rgba(245, 197, 66, 0.35);
+            --accent-very-dim: rgba(245, 197, 66, 0.12);
+            --green: #2ecc71;
+            --green-deep: #1e8449;
+            --green-bright: #58d68d;
+            --green-dim: rgba(46, 204, 113, 0.3);
             --app-bg-alpha: 0.55;
             --tab-width: 110px;
             --tab-font-size: 9px;
@@ -28,9 +32,33 @@
         * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; font-family: 'Inter', sans-serif; }
         html { scroll-behavior: smooth; }
         body {
-            background: #0a0a0f; color: #e5e7eb; min-height: 100vh;
+            background: #0a1a0f; color: #e5e7eb; min-height: 100vh;
             display: flex; flex-direction: column; align-items: center;
             padding: 20px; position: relative; overflow-x: hidden; overflow-y: auto;
+        }
+
+        /* ===== ПАДАЮЩИЕ МОНЕТЫ ===== */
+        #coinRain {
+            position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none; z-index: 9999;
+            overflow: hidden;
+        }
+        .falling-coin {
+            position: absolute;
+            width: 40px; height: 40px;
+            background-image: url('https://github.com/saintezz/ggbrainXv2/blob/main/leprikon.png?raw=true');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            animation: fall linear forwards;
+            will-change: transform;
+        }
+        @keyframes fall {
+            0% { transform: translateY(-10vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
         }
 
         #bgVideo {
@@ -44,20 +72,20 @@
         .bg-layer::before {
             content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
             background:
-                radial-gradient(circle at 20% 30%, var(--accent-very-dim) 0%, transparent 40%),
-                radial-gradient(circle at 80% 70%, var(--accent-very-dim) 0%, transparent 40%);
+                radial-gradient(circle at 20% 30%, rgba(46, 204, 113, 0.12) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(245, 197, 66, 0.12) 0%, transparent 40%);
             animation: bgMove 25s ease-in-out infinite;
         }
         @keyframes bgMove { 0%, 100% { transform: translate(0, 0) rotate(0deg); } 50% { transform: translate(-5%, -5%) rotate(8deg); } }
 
         .app {
             width: 100%; max-width: 100%;
-            background: rgba(20, 20, 26, var(--app-bg-alpha));
+            background: rgba(10, 26, 15, var(--app-bg-alpha));
             backdrop-filter: blur(14px);
             -webkit-backdrop-filter: blur(14px);
             border: var(--border-width) solid var(--accent-dim);
             border-radius: 6px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6), 0 0 calc(40px * var(--glow-intensity)) var(--accent-very-dim);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6), 0 0 calc(40px * var(--glow-intensity)) rgba(46, 204, 113, 0.15);
             overflow: hidden; display: flex; flex-direction: column; padding-bottom: 20px;
             position: relative;
             transition: background 0.3s;
@@ -71,7 +99,7 @@
         }
         .logo-text {
             font-family: 'Orbitron', sans-serif; font-size: 26px; font-weight: 900; letter-spacing: 1px;
-            background: linear-gradient(135deg, #d0d0d0 0%, var(--accent) 50%, var(--accent-bright) 100%);
+            background: linear-gradient(135deg, #d0d0d0 0%, var(--green) 50%, var(--accent) 100%);
             background-size: 200% 200%;
             -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
             filter: drop-shadow(0 0 12px var(--accent-dim));
@@ -101,7 +129,7 @@
         .coin-icon { width: 16px; height: 16px; object-fit: contain; filter: drop-shadow(0 0 6px var(--accent-dim)); }
         .topup-btn {
             width: 34px; height: 100%; min-height: 34px;
-            border: none; background: var(--accent); color: #fff;
+            border: none; background: var(--accent); color: #0a1a0f;
             font-family: 'Orbitron', sans-serif; font-size: 18px; font-weight: 900;
             cursor: pointer; transition: all 0.2s;
             display: flex; align-items: center; justify-content: center;
@@ -123,7 +151,7 @@
 
         .avatar {
             width: 38px; height: 38px; border-radius: 6px;
-            background: linear-gradient(135deg, var(--accent), var(--accent-deep));
+            background: linear-gradient(135deg, var(--green), var(--accent));
             display: flex; align-items: center; justify-content: center;
             cursor: pointer; overflow: hidden;
             border: 1px solid var(--accent-dim); transition: transform 0.2s;
@@ -131,37 +159,101 @@
         .avatar:hover { transform: scale(1.05); }
         .avatar img { width: 100%; height: 100%; object-fit: cover; }
 
-        .tabs {
-            display: flex; justify-content: center; gap: 5px;
-            padding: 14px 18px 0; flex-wrap: wrap;
-        }
-        .tab {
-            flex: 1; min-width: 44px; max-width: var(--tab-width);
+        /* ===== ГАМБУРГЕР И БОКОВАЯ ПАНЕЛЬ ===== */
+        .hamburger {
+            position: fixed; top: 20px; left: 20px; z-index: 2000;
+            width: 44px; height: 44px; border-radius: 6px;
+            border: 1px solid var(--accent-dim);
+            background: rgba(10, 26, 15, 0.85);
+            backdrop-filter: blur(10px);
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            gap: 3px; padding: 9px 3px 7px;
+            gap: 5px; cursor: pointer; transition: all 0.25s;
+            padding: 0;
+        }
+        .hamburger span {
+            display: block; width: 22px; height: 2px;
+            background: var(--accent-bright); border-radius: 2px;
+            transition: all 0.3s;
+        }
+        .hamburger:hover { background: var(--accent-dim); }
+        .hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+        .hamburger.active span:nth-child(2) { opacity: 0; }
+        .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+
+        .side-panel {
+            position: fixed; top: 0; left: -280px;
+            width: 260px; height: 100vh;
+            background: rgba(10, 26, 15, 0.95);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid var(--accent-dim);
+            z-index: 1500; transition: left 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 80px 16px 20px;
+            display: flex; flex-direction: column; gap: 6px;
+            overflow-y: auto;
+        }
+        .side-panel.open { left: 0; }
+        .side-panel .side-title {
+            font-family: 'Orbitron', sans-serif; font-size: 12px;
+            color: var(--accent-bright); font-weight: 800;
+            letter-spacing: 2px; text-transform: uppercase;
+            margin-bottom: 10px; padding-left: 8px;
+        }
+        .side-panel .side-tab {
+            display: flex; align-items: center; gap: 12px;
+            padding: 12px 14px; border-radius: 6px;
+            border: 1px solid transparent;
+            background: rgba(255, 255, 255, 0.02);
+            color: #8a8d9b; cursor: pointer;
+            transition: all 0.25s; font-weight: 700;
+            font-size: 13px;
+        }
+        .side-panel .side-tab svg { width: 20px; height: 20px; flex-shrink: 0; }
+        .side-panel .side-tab:hover { background: var(--accent-very-dim); border-color: var(--accent); color: var(--accent-bright); }
+        .side-panel .side-tab.active {
+            background: var(--accent-very-dim);
+            border-color: var(--accent);
+            color: #fff;
+            box-shadow: 0 0 20px var(--accent-dim);
+        }
+        .side-panel .side-tab.active svg { color: var(--accent-bright); }
+
+        .side-overlay {
+            position: fixed; inset: 0; background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px); z-index: 1400;
+            opacity: 0; pointer-events: none; transition: opacity 0.3s;
+        }
+        .side-overlay.open { opacity: 1; pointer-events: auto; }
+
+        /* ===== НИЖНИЕ КНОПКИ РЕЖИМОВ ===== */
+        .bottom-modes {
+            display: flex; justify-content: center; gap: 6px;
+            padding: 14px 18px 6px; flex-wrap: wrap;
+            border-top: 1px solid var(--accent-very-dim);
+            margin-top: 10px;
+        }
+        .mode-btn {
+            flex: 1; min-width: 60px; max-width: 120px;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            gap: 4px; padding: 10px 4px 8px;
             border-radius: 6px;
             border: 1px solid var(--accent-very-dim);
             background: rgba(255, 255, 255, 0.015);
             color: #8a8d9b;
             font-family: 'Orbitron', sans-serif;
-            font-weight: 800; font-size: var(--tab-font-size);
+            font-weight: 800; font-size: 9px;
             letter-spacing: 0.5px;
             cursor: pointer; transition: all 0.25s;
-            text-transform: uppercase; position: relative; overflow: hidden;
+            text-transform: uppercase;
         }
-        .tab svg { width: var(--tab-svg-size); height: var(--tab-svg-size); flex-shrink: 0; transition: all 0.25s; }
-        .tab .tab-label { font-size: var(--tab-font-size); font-weight: 800; }
-        .tab:hover { background: var(--accent-very-dim); border-color: var(--accent); color: var(--accent-bright); }
-        .tab.active {
+        .mode-btn svg { width: 20px; height: 20px; transition: all 0.25s; }
+        .mode-btn:hover { background: var(--accent-very-dim); border-color: var(--accent); color: var(--accent-bright); }
+        .mode-btn.active {
             background: var(--accent-very-dim);
             border-color: var(--accent);
             color: #fff;
-            box-shadow: 0 0 calc(20px * var(--glow-intensity)) var(--accent-dim);
+            box-shadow: 0 0 20px var(--accent-dim);
         }
-        .tab.active svg { color: var(--accent-bright); }
-        .tab.active .tab-label { color: #fff; }
-        .tab.tab-custom { margin-left: var(--custom-margin); }
-        .tab.tab-menu { margin-left: var(--custom-margin); }
+        .mode-btn.active svg { color: var(--accent-bright); }
 
         .tab-panel { display: none; }
         .tab-panel.active { display: block; animation: panelFadeIn 0.4s ease; }
@@ -172,12 +264,12 @@
 
         .modal {
             position: fixed; inset: 0; background: rgba(0, 0, 0, 0.75); backdrop-filter: blur(6px);
-            display: flex; justify-content: center; align-items: center; z-index: 1000;
+            display: flex; justify-content: center; align-items: center; z-index: 3000;
             opacity: 0; pointer-events: none; transition: opacity 0.25s ease; padding: 16px;
         }
         .modal.open { opacity: 1; pointer-events: auto; }
         .modal-card {
-            background: rgba(20, 20, 26, 0.95);
+            background: rgba(10, 26, 15, 0.95);
             backdrop-filter: blur(20px);
             border: 1px solid var(--accent-dim);
             border-radius: 8px;
@@ -222,7 +314,7 @@
 
         .action-btn {
             width: 100%; padding: 14px; border-radius: 6px; border: none;
-            background: var(--accent); color: #fff;
+            background: var(--accent); color: #0a1a0f;
             font-family: 'Orbitron', sans-serif; font-size: 13px; font-weight: 900;
             text-transform: uppercase; letter-spacing: 1.5px; cursor: pointer;
             transition: all 0.25s; margin-top: 6px;
@@ -265,7 +357,7 @@
         .promo-input-row .form-input { flex: 1; text-transform: uppercase; text-align: center; letter-spacing: 1.5px; }
         .promo-apply-btn {
             padding: 0 16px; border-radius: 6px; border: none;
-            background: var(--accent); color: #fff;
+            background: var(--accent); color: #0a1a0f;
             font-family: 'Orbitron', sans-serif; font-size: 11px; font-weight: 900;
             letter-spacing: 1px; cursor: pointer;
             transition: all 0.2s;
@@ -301,7 +393,7 @@
             position: relative; width: 100%; height: 200px;
             border-radius: 8px; overflow: hidden; margin-bottom: 14px;
             border: 1px solid var(--accent-dim);
-            background: linear-gradient(135deg, #1a1a20, #2a2a30);
+            background: linear-gradient(135deg, #0a1a0f, #1a3a1f);
         }
         .profile-banner video {
             position: absolute; inset: 0;
@@ -323,7 +415,7 @@
             transform: translate(-50%, -50%);
             width: 80px; height: 80px; border-radius: 50%;
             object-fit: cover; border: 3px solid var(--accent);
-            background: #1a1a20; z-index: 5;
+            background: #0a1a0f; z-index: 5;
             box-shadow: 0 0 25px var(--accent-dim);
         }
         .avatar-orbit { position: absolute; inset: 0; pointer-events: none; z-index: 4; }
@@ -332,7 +424,7 @@
             width: 26px; height: 26px;
             margin-left: -13px; margin-top: -13px;
             border-radius: 50%;
-            background: rgba(20, 20, 26, 0.9);
+            background: rgba(10, 26, 15, 0.9);
             border: 1px solid var(--accent);
             display: flex; align-items: center; justify-content: center;
             animation: orbitSpin linear infinite;
@@ -455,84 +547,77 @@
         .dep-reject:hover { background: #ef4444; color: #fff; }
         .deposits-empty { text-align: center; color: #4a4d5e; font-size: 11px; padding: 14px; }
 
-        /* ===== МЕНЮ ===== */
-        .menu-page { padding: 26px 22px; }
-        .menu-title {
-            font-family: 'Orbitron', sans-serif; font-size: 22px; font-weight: 900;
-            color: #fff; letter-spacing: 2px; text-transform: uppercase;
-            margin-bottom: 6px; text-align: center;
-        }
-        .menu-subtitle { color: #8a8d9b; font-size: 12px; text-align: center; margin-bottom: 22px; }
-
-        .menu-promo-card {
-            background: linear-gradient(180deg, rgba(30, 30, 38, 0.9), rgba(20, 20, 26, 0.9));
-            border: 1px solid var(--accent-dim);
-            border-radius: 8px;
-            padding: 20px;
-            display: flex; flex-direction: column; align-items: center;
-            gap: 14px;
-            max-width: 420px; margin: 0 auto;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+        /* ===== МЕНЮ (промокод на пол-экрана) ===== */
+        .menu-page { padding: 16px 12px; display: flex; flex-direction: column; min-height: 100vh; }
+        .menu-top-half {
+            flex: 1;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
             position: relative; overflow: hidden;
-        }
-        .menu-promo-card::before {
-            content: ''; position: absolute; top: -50%; left: -50%;
-            width: 200%; height: 200%;
-            background: radial-gradient(circle at 50% 50%, var(--accent-very-dim) 0%, transparent 60%);
-            animation: promoGlow 5s ease-in-out infinite;
-            pointer-events: none;
-        }
-        @keyframes promoGlow {
-            0%, 100% { opacity: 0.5; transform: scale(1); }
-            50% { opacity: 1; transform: scale(1.1); }
+            min-height: 45vh;
         }
         .menu-promo-img {
-            width: 220px; height: 220px;
+            width: 100%; height: 100%;
+            max-height: 45vh;
             object-fit: contain;
-            filter: drop-shadow(0 0 25px var(--accent-dim));
+            filter: drop-shadow(0 0 40px var(--accent-dim));
             animation: promoFloat 3s ease-in-out infinite;
             position: relative; z-index: 2;
         }
         @keyframes promoFloat {
             0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-8px); }
+            50% { transform: translateY(-10px); }
         }
         .menu-promo-percent {
-            font-family: 'Orbitron', sans-serif; font-size: 36px; font-weight: 900;
+            font-family: 'Orbitron', sans-serif; font-size: 48px; font-weight: 900;
             color: var(--accent-bright);
-            text-shadow: 0 0 30px var(--accent-dim);
-            letter-spacing: 2px;
+            text-shadow: 0 0 40px var(--accent-dim);
+            letter-spacing: 3px;
             position: relative; z-index: 2;
+            margin-top: -10px;
         }
         .menu-promo-label {
-            font-size: 11px; color: #8a8d9b; font-weight: 700;
-            letter-spacing: 2px; text-transform: uppercase;
+            font-size: 13px; color: #8a8d9b; font-weight: 700;
+            letter-spacing: 3px; text-transform: uppercase;
             position: relative; z-index: 2;
-            margin-top: -8px;
+            margin-top: -6px;
         }
         .menu-promo-timer {
-            font-family: 'Orbitron', sans-serif; font-size: 14px; font-weight: 800;
+            font-family: 'Orbitron', sans-serif; font-size: 16px; font-weight: 800;
             color: #fff;
-            padding: 8px 18px;
-            background: rgba(0, 0, 0, 0.4);
+            padding: 10px 22px;
+            background: rgba(0, 0, 0, 0.5);
             border: 1px solid var(--accent);
             border-radius: 6px;
             position: relative; z-index: 2;
             display: flex; align-items: center; gap: 8px;
+            margin-top: 12px;
         }
         .menu-promo-timer .t-icon {
             color: var(--accent-bright);
-            font-size: 16px;
+            font-size: 18px;
             animation: timerPulse 1s ease-in-out infinite;
         }
         @keyframes timerPulse {
             0%, 100% { opacity: 0.7; }
             50% { opacity: 1; }
         }
+        .menu-bottom-half {
+            padding: 14px 8px 6px;
+            display: flex; flex-direction: column; align-items: center; gap: 8px;
+        }
         .menu-promo-hint {
-            font-size: 11px; color: #8a8d9b; text-align: center;
-            position: relative; z-index: 2;
+            font-size: 12px; color: #8a8d9b; text-align: center;
             line-height: 1.5;
+        }
+        .menu-promo-code-box {
+            display: flex; align-items: center; gap: 10px;
+            padding: 10px 18px;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px dashed var(--accent);
+            border-radius: 6px;
+            font-family: 'Orbitron', sans-serif; font-size: 16px; font-weight: 900;
+            color: var(--accent-bright);
+            letter-spacing: 2px;
         }
 
         /* ===== КАСТОМИЗАЦИЯ ===== */
@@ -588,7 +673,7 @@
         .bg-option {
             aspect-ratio: 1 / 0.7; border-radius: 6px;
             border: 1px solid rgba(255, 255, 255, 0.08);
-            background: #1a1a20; cursor: pointer; overflow: hidden;
+            background: #0a1a0f; cursor: pointer; overflow: hidden;
             position: relative; transition: all 0.25s;
         }
         .bg-option:hover { border-color: var(--accent); }
@@ -596,7 +681,7 @@
         .bg-option video { width: 100%; height: 100%; object-fit: cover; }
         .bg-option .bg-placeholder {
             width: 100%; height: 100%;
-            background: linear-gradient(135deg, #1a1a20, #2a2a30);
+            background: linear-gradient(135deg, #0a1a0f, #1a3a1f);
             display: flex; align-items: center; justify-content: center;
             color: #8a8d9b; font-family: 'Orbitron', sans-serif;
             font-size: 10px; text-align: center; padding: 6px;
@@ -605,7 +690,7 @@
             content: '✓';
             position: absolute; top: 4px; right: 4px;
             width: 20px; height: 20px; border-radius: 50%;
-            background: var(--accent); color: #fff;
+            background: var(--accent); color: #0a1a0f;
             display: flex; align-items: center; justify-content: center;
             font-size: 12px; font-weight: 900;
         }
@@ -628,7 +713,7 @@
             content: '✓';
             position: absolute; top: -4px; right: -4px;
             width: 16px; height: 16px; border-radius: 50%;
-            background: var(--accent); color: #fff;
+            background: var(--accent); color: #0a1a0f;
             font-size: 10px; font-weight: 900;
             display: flex; align-items: center; justify-content: center;
         }
@@ -688,7 +773,7 @@
         .stage-controls { display: flex; justify-content: center; align-items: center; gap: 8px; padding: 0 22px 6px; }
         .upgrade-main-btn {
             flex: 0 1 240px; padding: 14px 20px; border-radius: 6px; border: none;
-            background: var(--accent); color: white;
+            background: var(--accent); color: #0a1a0f;
             font-family: 'Orbitron', sans-serif; font-size: 14px; font-weight: 900;
             text-transform: uppercase; letter-spacing: 1.5px; cursor: pointer;
             transition: all 0.25s; display: flex; align-items: center; justify-content: center;
@@ -745,7 +830,7 @@
         }
         .buy-btn {
             width: 100%; padding: 5px; border-radius: 4px; border: none;
-            background: var(--accent); color: white;
+            background: var(--accent); color: #0a1a0f;
             font-weight: 800; font-size: 9px; cursor: pointer; transition: all 0.2s;
             text-transform: uppercase; font-family: 'Orbitron', sans-serif;
             margin-top: 4px; position: relative; z-index: 5;
@@ -780,7 +865,7 @@
         .rocket-balance-wrap .rocket-balance-inline { padding: 6px 12px; }
         .rocket-stage {
             position: relative; width: 100%; height: 340px;
-            background: rgba(10, 10, 15, 0.7);
+            background: rgba(5, 15, 8, 0.7);
             border: 1px solid var(--accent-dim); border-radius: 6px; overflow: hidden; margin-bottom: 14px;
         }
         .rocket-stars { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
@@ -845,12 +930,12 @@
         .rocket-quick-bet:hover { border-color: var(--accent); color: var(--accent-bright); }
         .rocket-action-btn {
             grid-column: 1 / -1; height: 60px; border-radius: 6px; border: none;
-            background: var(--accent); color: #fff;
+            background: var(--accent); color: #0a1a0f;
             font-family: 'Orbitron', sans-serif; font-size: 17px; font-weight: 900;
             letter-spacing: 3px; text-transform: uppercase; cursor: pointer;
         }
         .rocket-action-btn:disabled { opacity: 0.4; cursor: not-allowed; background: #3a3d4d; }
-        .rocket-action-btn.cashout { background: #7ed88a; color: #0a0a0f; }
+        .rocket-action-btn.cashout { background: #7ed88a; color: #0a1a0f; }
         .rocket-action-btn.crashed { background: #3a3d4d; color: #6b7280; }
         .rocket-overlay-result {
             position: absolute; inset: 0;
@@ -886,7 +971,7 @@
         .trade-reward .arrow { color: var(--accent); font-weight: 900; margin: 0 3px; }
         .trade-btn {
             height: 38px; padding: 0 16px; border-radius: 6px; border: none;
-            background: var(--accent); color: white;
+            background: var(--accent); color: #0a1a0f;
             font-family: 'Orbitron', sans-serif; font-size: 10px; font-weight: 900;
             letter-spacing: 1px; text-transform: uppercase; cursor: pointer;
         }
@@ -912,7 +997,7 @@
         .admin-badge {
             display: inline-block; padding: 4px 12px;
             background: var(--accent);
-            font-size: 10px; font-weight: 800; color: #fff; text-transform: uppercase; letter-spacing: 2px;
+            font-size: 10px; font-weight: 800; color: #0a1a0f; text-transform: uppercase; letter-spacing: 2px;
             margin-bottom: 10px; font-family: 'Orbitron', sans-serif; border-radius: 4px;
         }
         .promo-list { margin-top: 16px; max-height: 260px; overflow-y: auto; text-align: left; }
@@ -946,11 +1031,10 @@
             .stage-controls { padding: 0 12px 6px; }
             .top-bar { padding: 10px 12px; }
             .logo-text { font-size: 20px; }
-            .tabs { padding: 12px 8px 0; gap: 3px; }
-            .tab { min-width: 42px; padding: 6px 2px 5px; }
-            .tab svg { width: 16px; height: 16px; }
-            .tab .tab-label { font-size: 7px; }
-            .tab.tab-custom, .tab.tab-menu { margin-left: 12px; }
+            .bottom-modes { padding: 10px 8px 4px; gap: 3px; }
+            .mode-btn { min-width: 42px; padding: 6px 2px 5px; }
+            .mode-btn svg { width: 16px; height: 16px; }
+            .mode-btn .mode-label { font-size: 7px; }
             .rocket-stage { height: 260px; }
             .rocket-x-display { font-size: 32px; top: 14px; right: 14px; }
             .rocket-sprite { width: 40px; height: 40px; }
@@ -969,8 +1053,8 @@
             .profile-nick-big { font-size: 16px; }
             .avatar-orbit-item { width: 22px; height: 22px; margin-left: -11px; margin-top: -11px; transform-origin: 11px 11px; }
             .avatar-orbit-item img { width: 14px; height: 14px; }
-            .menu-promo-img { width: 160px; height: 160px; }
-            .menu-promo-percent { font-size: 28px; }
+            .menu-promo-img { max-height: 40vh; }
+            .menu-promo-percent { font-size: 36px; }
             @keyframes orbitSpin {
                 from { transform: rotate(0deg) translateX(40px) rotate(0deg); }
                 to { transform: rotate(360deg) translateX(40px) rotate(-360deg); }
@@ -980,49 +1064,106 @@
 </head>
 <body>
 
+<!-- Падающие монеты -->
+<div id="coinRain"></div>
+
 <video id="bgVideo" autoplay muted loop playsinline></video>
 <audio id="bgMusic" loop autoplay>
     <source src="https://raw.githubusercontent.com/saintezz/ggbrainXv2/main/8bit.mp3" type="audio/mpeg">
 </audio>
 <div class="bg-layer"></div>
 
-<!-- ===== МОДАЛКА ПОПОЛНЕНИЯ ===== -->
+<!-- Гамбургер -->
+<button class="hamburger" id="hamburger" onclick="toggleSidePanel()">
+    <span></span>
+    <span></span>
+    <span></span>
+</button>
+
+<!-- Боковая панель -->
+<div class="side-overlay" id="sideOverlay" onclick="toggleSidePanel()"></div>
+<div class="side-panel" id="sidePanel">
+    <div class="side-title">GGbrainX</div>
+    <div class="side-tab" id="sideTabUpgrade" onclick="switchTab('upgrade')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 17l6-6 4 4 8-8"/>
+            <path d="M14 7h7v7"/>
+        </svg>
+        <span>Апгрейд</span>
+    </div>
+    <div class="side-tab" id="sideTabRocket" onclick="switchTab('rocket')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/>
+            <path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/>
+            <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/>
+            <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/>
+        </svg>
+        <span>Ракетка</span>
+    </div>
+    <div class="side-tab" id="sideTabTrade" onclick="switchTab('trade')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 7h13l-3-3"/>
+            <path d="M20 17H7l3 3"/>
+        </svg>
+        <span>Обмен</span>
+    </div>
+    <div class="side-tab" id="sideTabPromo" onclick="switchTab('promo')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 12v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-6"/>
+            <path d="M2 7h20v5H2z"/>
+            <path d="M12 22V7"/>
+            <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/>
+            <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>
+        </svg>
+        <span>Промо</span>
+    </div>
+    <div class="side-tab" id="sideTabProfile" onclick="switchTab('profile')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="8" r="4"/>
+            <path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/>
+        </svg>
+        <span>Профиль</span>
+    </div>
+    <div class="side-tab" id="sideTabCustomize" onclick="switchTab('customize')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 20h9"/>
+            <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+        </svg>
+        <span>Кастом</span>
+    </div>
+</div>
+
+<!-- Модалки -->
 <div class="modal" id="topupModal">
     <div class="modal-card">
         <button class="modal-close" onclick="closeModal('topupModal')">✕</button>
         <div class="modal-title">Пополнение</div>
-
         <div class="form-group">
             <label class="form-label">Выбери предмет для пополнения</label>
             <div class="topup-grid" id="topupGrid"></div>
         </div>
-
         <div class="form-group">
-            <label class="form-label">Промокод (необязательно)</label>
+            <label class="form-label">Промокод (только активный)</label>
             <div class="promo-input-row">
                 <input type="text" class="form-input" id="topupPromoInput" placeholder="ПРОМОКОД" maxlength="30">
                 <button class="promo-apply-btn" onclick="applyTopupPromo()">ОК</button>
             </div>
             <div class="msg" id="topupPromoMsg"></div>
         </div>
-
         <div class="topup-price-line" id="topupPriceLine" style="display:none;">
             <div class="tpl-label">Цена:</div>
             <div class="tpl-value" id="topupPriceValue">0</div>
         </div>
         <div class="topup-promo-active" id="topupPromoActive"></div>
-
         <div class="form-group" style="margin-top: 12px;">
             <label class="form-label">Твой Roblox ник</label>
             <input type="text" class="form-input" id="topupRoblox" placeholder="Введи ник в Roblox" maxlength="40">
         </div>
-
         <button class="action-btn" onclick="createDeposit()">Отправить заявку</button>
         <div class="msg" id="topupMsg"></div>
     </div>
 </div>
 
-<!-- ===== АДМИН ПАНЕЛЬ ===== -->
 <div class="modal" id="adminModal">
     <div class="modal-card wide">
         <button class="modal-close" onclick="closeModal('adminModal')">✕</button>
@@ -1060,7 +1201,6 @@
     </div>
 </div>
 
-<!-- ===== ПОДТВЕРЖДЕНИЕ ОБМЕНА ===== -->
 <div class="modal" id="confirmTradeModal">
     <div class="modal-card">
         <button class="modal-close" onclick="closeModal('confirmTradeModal')">✕</button>
@@ -1091,7 +1231,7 @@
         </div>
         <div style="display:flex;gap:8px;margin-top:16px;">
             <button onclick="closeModal('confirmTradeModal')" style="flex:1;height:46px;border-radius:6px;font-family:'Orbitron',sans-serif;font-size:12px;font-weight:900;text-transform:uppercase;cursor:pointer;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.04);color:#8a8d9b;">Отмена</button>
-            <button onclick="confirmTrade()" style="flex:1;height:46px;border-radius:6px;font-family:'Orbitron',sans-serif;font-size:12px;font-weight:900;text-transform:uppercase;cursor:pointer;border:none;background:var(--accent);color:#fff;">Обменять</button>
+            <button onclick="confirmTrade()" style="flex:1;height:46px;border-radius:6px;font-family:'Orbitron',sans-serif;font-size:12px;font-weight:900;text-transform:uppercase;cursor:pointer;border:none;background:var(--accent);color:#0a1a0f;">Обменять</button>
         </div>
     </div>
 </div>
@@ -1117,66 +1257,8 @@
         </div>
     </div>
 
-    <div class="tabs">
-        <div class="tab active" id="tabUpgrade" onclick="switchTab('upgrade')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M3 17l6-6 4 4 8-8"/>
-                <path d="M14 7h7v7"/>
-            </svg>
-            <span class="tab-label">Апгрейд</span>
-        </div>
-        <div class="tab" id="tabRocket" onclick="switchTab('rocket')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/>
-                <path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/>
-                <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/>
-                <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/>
-            </svg>
-            <span class="tab-label">Ракетка</span>
-        </div>
-        <div class="tab" id="tabTrade" onclick="switchTab('trade')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M4 7h13l-3-3"/>
-                <path d="M20 17H7l3 3"/>
-            </svg>
-            <span class="tab-label">Обмен</span>
-        </div>
-        <div class="tab" id="tabPromo" onclick="switchTab('promo')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M20 12v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-6"/>
-                <path d="M2 7h20v5H2z"/>
-                <path d="M12 22V7"/>
-                <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/>
-                <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>
-            </svg>
-            <span class="tab-label">Промо</span>
-        </div>
-        <div class="tab" id="tabProfile" onclick="switchTab('profile')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="8" r="4"/>
-                <path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/>
-            </svg>
-            <span class="tab-label">Профиль</span>
-        </div>
-        <div class="tab tab-menu" id="tabMenu" onclick="switchTab('menu')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <line x1="3" y1="6" x2="21" y2="6"/>
-                <line x1="3" y1="12" x2="21" y2="12"/>
-                <line x1="3" y1="18" x2="21" y2="18"/>
-            </svg>
-            <span class="tab-label">Меню</span>
-        </div>
-        <div class="tab tab-custom" id="tabCustomize" onclick="switchTab('customize')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M12 20h9"/>
-                <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
-            </svg>
-            <span class="tab-label">Кастом</span>
-        </div>
-    </div>
-
     <!-- ===== АПГРЕЙД ===== -->
-    <div class="tab-panel active" id="panelUpgrade">
+    <div class="tab-panel" id="panelUpgrade">
         <div class="progress-section">
             <div class="progress-wrapper">
                 <svg class="progress-svg" viewBox="0 0 340 340">
@@ -1331,7 +1413,6 @@
                     </div>
                 </div>
             </div>
-
             <div class="profile-stats-column">
                 <div class="profile-stat">
                     <div class="profile-stat-label">Баланс</div>
@@ -1353,7 +1434,6 @@
                     <div class="profile-inventory-grid" id="profileInventoryGrid"></div>
                 </div>
             </div>
-
             <div class="deposits-block" id="depositsBlock" style="display:none;">
                 <div class="deposits-block-title">
                     Заявки на пополнение
@@ -1361,27 +1441,26 @@
                 </div>
                 <div id="depositsList"></div>
             </div>
-
             <div class="profile-action-row">
                 <button class="action-btn" id="adminPanelBtn" style="display:none; background: #ef4444;" onclick="openAdminPanel()">Админ-панель</button>
             </div>
         </div>
     </div>
 
-    <!-- ===== МЕНЮ ===== -->
-    <div class="tab-panel" id="panelMenu">
+    <!-- ===== МЕНЮ (с промокодом на пол-экрана) ===== -->
+    <div class="tab-panel active" id="panelMenu">
         <div class="menu-page">
-            <div class="menu-title">Главное меню</div>
-            <div class="menu-subtitle">Промокод на пополнение обновляется каждые 10 минут</div>
-
-            <div class="menu-promo-card">
+            <div class="menu-top-half">
                 <img class="menu-promo-img" id="menuPromoImg" src="" alt="">
                 <div class="menu-promo-percent" id="menuPromoPercent">+0%</div>
                 <div class="menu-promo-label">к пополнению</div>
+            </div>
+            <div class="menu-bottom-half">
                 <div class="menu-promo-timer">
                     <span class="t-icon">⏳</span>
                     <span>Обновится через: <b id="menuPromoTimer">10:00</b></span>
                 </div>
+                <div class="menu-promo-code-box" id="menuPromoCodeBox">----</div>
                 <div class="menu-promo-hint">
                     Введи этот промокод в окне пополнения,<br>
                     чтобы получить бонус к сумме заявки.
@@ -1408,9 +1487,9 @@
             <div class="customize-section">
                 <div class="customize-section-title">Цвет сайта</div>
                 <div class="color-picker-row" id="colorPickerRow">
-                    <div class="color-swatch" style="background: #ff8c00; color: #ff8c00;" data-color="#ff8c00" data-deep="#cc7000" data-bright="#ffaa33" onclick="changeAccent(this)"></div>
+                    <div class="color-swatch" style="background: #f5c542; color: #f5c542;" data-color="#f5c542" data-deep="#b8860b" data-bright="#ffe066" onclick="changeAccent(this)"></div>
+                    <div class="color-swatch" style="background: #2ecc71; color: #2ecc71;" data-color="#2ecc71" data-deep="#1e8449" data-bright="#58d68d" onclick="changeAccent(this)"></div>
                     <div class="color-swatch" style="background: #8b5cf6; color: #8b5cf6;" data-color="#8b5cf6" data-deep="#5b21b6" data-bright="#a78bfa" onclick="changeAccent(this)"></div>
-                    <div class="color-swatch" style="background: #22c55e; color: #22c55e;" data-color="#22c55e" data-deep="#166534" data-bright="#4ade80" onclick="changeAccent(this)"></div>
                     <div class="color-swatch" style="background: #ef4444; color: #ef4444;" data-color="#ef4444" data-deep="#991b1b" data-bright="#f87171" onclick="changeAccent(this)"></div>
                     <div class="color-swatch" style="background: #3b82f6; color: #3b82f6;" data-color="#3b82f6" data-deep="#1e40af" data-bright="#60a5fa" onclick="changeAccent(this)"></div>
                     <div class="color-swatch" style="background: #ec4899; color: #ec4899;" data-color="#ec4899" data-deep="#9d174d" data-bright="#f472b6" onclick="changeAccent(this)"></div>
@@ -1438,6 +1517,57 @@
                 <div class="orbit-picker" id="orbitPicker"></div>
             </div>
             <div class="msg" id="customizeMsg"></div>
+        </div>
+    </div>
+
+    <!-- ===== НИЖНИЕ КНОПКИ РЕЖИМОВ ===== -->
+    <div class="bottom-modes">
+        <div class="mode-btn active" id="modeUpgrade" onclick="switchTab('upgrade')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 17l6-6 4 4 8-8"/>
+                <path d="M14 7h7v7"/>
+            </svg>
+            <span class="mode-label">Апгрейд</span>
+        </div>
+        <div class="mode-btn" id="modeRocket" onclick="switchTab('rocket')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/>
+                <path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/>
+                <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/>
+                <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/>
+            </svg>
+            <span class="mode-label">Ракетка</span>
+        </div>
+        <div class="mode-btn" id="modeTrade" onclick="switchTab('trade')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 7h13l-3-3"/>
+                <path d="M20 17H7l3 3"/>
+            </svg>
+            <span class="mode-label">Обмен</span>
+        </div>
+        <div class="mode-btn" id="modePromo" onclick="switchTab('promo')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 12v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-6"/>
+                <path d="M2 7h20v5H2z"/>
+                <path d="M12 22V7"/>
+                <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/>
+                <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>
+            </svg>
+            <span class="mode-label">Промо</span>
+        </div>
+        <div class="mode-btn" id="modeProfile" onclick="switchTab('profile')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="8" r="4"/>
+                <path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/>
+            </svg>
+            <span class="mode-label">Профиль</span>
+        </div>
+        <div class="mode-btn" id="modeCustomize" onclick="switchTab('customize')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 20h9"/>
+                <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+            </svg>
+            <span class="mode-label">Кастом</span>
         </div>
     </div>
 </div>
@@ -1468,14 +1598,13 @@
         { id: 'lovelovebear', name: 'Love Love Bear', price: 5540, img: 'https://github.com/forerer-afk/brainroterX/blob/main/lovelovebear.png?raw=true' }
     ];
 
-    // ===== ПРОМОКОДЫ НА ПОПОЛНЕНИЕ (меняются каждые 10 минут) =====
     const TOPUP_PROMOS = [
         { code: 'CLONEXX744',      percent: 12, img: 'https://github.com/saintezz/ggbrainXv2/raw/main/CLONEXX12PROCENTOV.png' },
         { code: 'SAMMYBURGER23',   percent: 10, img: 'https://github.com/saintezz/ggbrainXv2/raw/main/SAMMYBURGER10PROCENTOV.png' },
         { code: 'GGBRAINX2131',    percent: 4,  img: 'https://github.com/saintezz/ggbrainXv2/raw/main/ggbrainx4PROCENTA.png' },
         { code: 'ECLIPSE9403',     percent: 8,  img: 'https://github.com/saintezz/ggbrainXv2/raw/main/eclipse9403.png' }
     ];
-    const PROMO_ROTATION_MS = 10 * 60 * 1000; // 10 минут
+    const PROMO_ROTATION_MS = 10 * 60 * 1000;
 
     const API_URL = 'https://ggbrainx.onrender.com';
 
@@ -1501,16 +1630,16 @@
     let profileBg = localStorage.getItem('ggbrainx_profile_bg') || 'none';
     let orbitItems = JSON.parse(localStorage.getItem('ggbrainx_orbit') || '[]');
     let appOpacity = parseFloat(localStorage.getItem('ggbrainx_opacity') || '0.55');
-    let accentColor = localStorage.getItem('ggbrainx_accent') || '#ff8c00';
-    let accentDeep = localStorage.getItem('ggbrainx_accent_deep') || '#cc7000';
-    let accentBright = localStorage.getItem('ggbrainx_accent_bright') || '#ffaa33';
+    let accentColor = localStorage.getItem('ggbrainx_accent') || '#f5c542';
+    let accentDeep = localStorage.getItem('ggbrainx_accent_deep') || '#b8860b';
+    let accentBright = localStorage.getItem('ggbrainx_accent_bright') || '#ffe066';
 
     let balance = parseFloat(localStorage.getItem('ggbrainx_balance') || '0');
     let inventory = JSON.parse(localStorage.getItem('ggbrainx_inventory') || '[]');
 
     let deposits = [];
     let topupSelectedItem = null;
-    let appliedTopupPromo = null; // { code, percent }
+    let appliedTopupPromo = null;
     let isAdmin = false;
 
     function saveLocalCache() {
@@ -1660,40 +1789,36 @@
         modal.addEventListener('click', (e) => { if (e.target === modal) modal.classList.remove('open'); });
     });
 
-    window.openAdminPanel = function() {
-        if (!isAdmin) return;
-        renderAdminGrid();
-        renderPromoList();
-        openModal('adminModal');
+    // ===== БОКОВАЯ ПАНЕЛЬ =====
+    window.toggleSidePanel = function() {
+        document.getElementById('sidePanel').classList.toggle('open');
+        document.getElementById('sideOverlay').classList.toggle('open');
+        document.getElementById('hamburger').classList.toggle('active');
     };
 
+    // ===== ПЕРЕКЛЮЧЕНИЕ ВКЛАДОК =====
     window.switchTab = function(tab) {
-        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        // Закрыть боковую панель
+        document.getElementById('sidePanel').classList.remove('open');
+        document.getElementById('sideOverlay').classList.remove('open');
+        document.getElementById('hamburger').classList.remove('active');
+
         document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-        if (tab === 'upgrade') {
-            document.getElementById('tabUpgrade').classList.add('active');
-            document.getElementById('panelUpgrade').classList.add('active');
-        } else if (tab === 'rocket') {
-            document.getElementById('tabRocket').classList.add('active');
-            document.getElementById('panelRocket').classList.add('active');
-        } else if (tab === 'trade') {
-            document.getElementById('tabTrade').classList.add('active');
-            document.getElementById('panelTrade').classList.add('active');
-            renderTradeList();
-        } else if (tab === 'promo') {
-            document.getElementById('tabPromo').classList.add('active');
-            document.getElementById('panelPromo').classList.add('active');
-        } else if (tab === 'profile') {
-            document.getElementById('tabProfile').classList.add('active');
-            document.getElementById('panelProfile').classList.add('active');
-            updateProfile();
-        } else if (tab === 'menu') {
-            document.getElementById('tabMenu').classList.add('active');
-            document.getElementById('panelMenu').classList.add('active');
-            renderMenuPromo();
-        } else if (tab === 'customize') {
-            document.getElementById('tabCustomize').classList.add('active');
-            document.getElementById('panelCustomize').classList.add('active');
+        document.querySelectorAll('.mode-btn').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.side-tab').forEach(t => t.classList.remove('active'));
+
+        const panel = document.getElementById('panel' + tab.charAt(0).toUpperCase() + tab.slice(1));
+        const modeBtn = document.getElementById('mode' + tab.charAt(0).toUpperCase() + tab.slice(1));
+        const sideBtn = document.getElementById('sideTab' + tab.charAt(0).toUpperCase() + tab.slice(1));
+
+        if (panel) panel.classList.add('active');
+        if (modeBtn) modeBtn.classList.add('active');
+        if (sideBtn) sideBtn.classList.add('active');
+
+        if (tab === 'trade') renderTradeList();
+        if (tab === 'profile') updateProfile();
+        if (tab === 'menu') renderMenuPromo();
+        if (tab === 'customize') {
             renderBgOptions();
             renderOrbitPicker();
             renderOrbit();
@@ -1712,7 +1837,7 @@
         if (profileBg === 'none') {
             video.style.display = 'none';
             video.pause();
-            banner.style.background = 'linear-gradient(135deg, #1a1a20, #2a2a30)';
+            banner.style.background = 'linear-gradient(135deg, #0a1a0f, #1a3a1f)';
         } else {
             video.style.display = 'block';
             if (video.src !== profileBg) video.src = profileBg;
@@ -1770,6 +1895,10 @@
         return slot % TOPUP_PROMOS.length;
     }
 
+    function getCurrentPromo() {
+        return TOPUP_PROMOS[getCurrentPromoIndex()];
+    }
+
     function getSecondsToNextPromo() {
         const now = Date.now();
         const next = (Math.floor(now / PROMO_ROTATION_MS) + 1) * PROMO_ROTATION_MS;
@@ -1777,11 +1906,11 @@
     }
 
     function renderMenuPromo() {
-        const idx = getCurrentPromoIndex();
-        const promo = TOPUP_PROMOS[idx];
+        const promo = getCurrentPromo();
         document.getElementById('menuPromoImg').src = promo.img;
         document.getElementById('menuPromoImg').onerror = function() { this.src = 'https://via.placeholder.com/220?text=%2B' + promo.percent + '%25'; };
         document.getElementById('menuPromoPercent').textContent = '+' + promo.percent + '%';
+        document.getElementById('menuPromoCodeBox').textContent = promo.code;
         updateMenuTimer();
     }
 
@@ -1796,14 +1925,15 @@
     setInterval(() => {
         if (document.getElementById('panelMenu').classList.contains('active')) {
             updateMenuTimer();
-            const idx = getCurrentPromoIndex();
+            const promo = getCurrentPromo();
             const img = document.getElementById('menuPromoImg');
             const percent = document.getElementById('menuPromoPercent');
-            if (img && img.dataset.idx !== String(idx)) {
-                img.dataset.idx = String(idx);
-                const promo = TOPUP_PROMOS[idx];
+            const codeBox = document.getElementById('menuPromoCodeBox');
+            if (img && img.dataset.idx !== String(getCurrentPromoIndex())) {
+                img.dataset.idx = String(getCurrentPromoIndex());
                 img.src = promo.img;
                 percent.textContent = '+' + promo.percent + '%';
+                codeBox.textContent = promo.code;
             }
         }
     }, 1000);
@@ -1873,19 +2003,42 @@
             msg.textContent = 'Введи промокод';
             return;
         }
-        const promo = TOPUP_PROMOS.find(p => p.code === code);
-        if (!promo) {
+        const currentPromo = getCurrentPromo();
+        if (code !== currentPromo.code) {
             appliedTopupPromo = null;
             msg.className = 'msg err';
-            msg.textContent = 'Промокод не найден';
+            msg.textContent = 'Этот промокод не действует. Активный: ' + currentPromo.code;
             updateTopupPrice();
             return;
         }
-        appliedTopupPromo = { code: promo.code, percent: promo.percent };
+        appliedTopupPromo = { code: currentPromo.code, percent: currentPromo.percent };
         msg.className = 'msg ok';
         msg.textContent = 'ПРОМОКОД АКТИВИРОВАН';
         updateTopupPrice();
     };
+
+    // Проверка при вводе в поле промокода (только активный)
+    document.getElementById('topupPromoInput')?.addEventListener('input', function() {
+        const code = this.value.trim().toUpperCase();
+        const msg = document.getElementById('topupPromoMsg');
+        if (!code) {
+            msg.textContent = '';
+            msg.className = 'msg';
+            appliedTopupPromo = null;
+            updateTopupPrice();
+            return;
+        }
+        const currentPromo = getCurrentPromo();
+        if (code === currentPromo.code) {
+            msg.className = 'msg ok';
+            msg.textContent = 'Промокод найден, нажми ОК';
+        } else {
+            msg.className = 'msg err';
+            msg.textContent = 'Недействующий промокод';
+            appliedTopupPromo = null;
+            updateTopupPrice();
+        }
+    });
 
     window.createDeposit = async function() {
         const msg = document.getElementById('topupMsg');
@@ -2797,6 +2950,27 @@
         renderTradeList();
     };
 
+    // ===== ПАДАЮЩИЕ МОНЕТЫ =====
+    function spawnCoin() {
+        const container = document.getElementById('coinRain');
+        if (!container) return;
+        const coin = document.createElement('div');
+        coin.className = 'falling-coin';
+        const size = 20 + Math.random() * 30;
+        coin.style.width = size + 'px';
+        coin.style.height = size + 'px';
+        coin.style.left = Math.random() * 100 + '%';
+        const duration = 4 + Math.random() * 4;
+        coin.style.animationDuration = duration + 's';
+        coin.style.opacity = 0.3 + Math.random() * 0.5;
+        container.appendChild(coin);
+        setTimeout(() => coin.remove(), duration * 1000 + 200);
+    }
+
+    // Запускаем падающие монеты
+    setInterval(spawnCoin, 350);
+    for (let i = 0; i < 8; i++) setTimeout(spawnCoin, i * 120);
+
     function init() {
         applyCustomization();
         updateBalance();
@@ -2807,6 +2981,9 @@
         renderOrbit();
         renderProfileInventory();
         renderMenuPromo();
+
+        // Открываем меню при заходе
+        switchTab('menu');
 
         loadUserFromServer();
     }
