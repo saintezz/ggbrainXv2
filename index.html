@@ -124,6 +124,32 @@
             filter: drop-shadow(0 0 8px rgba(255, 140, 0, 0.8));
         }
 
+        .music-toggle {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 140, 0, 0.6);
+            background: rgba(255, 255, 255, 0.06);
+            color: #ffaa33;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 20px rgba(255, 140, 0, 0.3);
+        }
+        .music-toggle:hover {
+            transform: scale(1.08);
+            background: rgba(255, 140, 0, 0.15);
+            box-shadow: 0 0 28px rgba(255, 140, 0, 0.55);
+        }
+        .music-toggle.muted {
+            color: #6b7280;
+            border-color: rgba(255, 255, 255, 0.15);
+            box-shadow: none;
+        }
+
         .avatar {
             width: 42px;
             height: 42px;
@@ -151,7 +177,6 @@
             object-fit: cover;
         }
 
-        /* ===== ВКЛАДКИ ===== */
         .tabs {
             display: flex;
             gap: 10px;
@@ -207,7 +232,6 @@
         .tab-panel { display: none; }
         .tab-panel.active { display: block; }
 
-        /* ===== МОДАЛЬНЫЕ ОКНА ===== */
         .modal {
             position: fixed;
             inset: 0;
@@ -475,7 +499,6 @@
         .msg.err { color: #ff6b6b; text-shadow: 0 0 10px rgba(255, 100, 100, 0.5); }
         .msg.wait { color: #ffaa33; text-shadow: 0 0 10px rgba(255, 170, 51, 0.5); }
 
-        /* ===== ПРОМОКОДЫ ===== */
         .promo-panel {
             padding: 30px;
             text-align: center;
@@ -549,7 +572,6 @@
 
         .promo-list-item .uses.empty { color: #ff6b6b; }
 
-        /* ===== ИГРА ===== */
         .progress-section {
             display: flex;
             justify-content: center;
@@ -743,7 +765,7 @@
 
         .mult-btn {
             flex: 1;
-            max-width: 80px;
+            max-width: 200px;
             padding: 12px 0;
             border-radius: 12px;
             border: 1px solid rgba(255, 255, 255, 0.08);
@@ -751,7 +773,7 @@
             color: #8a8d9b;
             font-family: 'Orbitron', sans-serif;
             font-weight: 700;
-            font-size: 14px;
+            font-size: 13px;
             cursor: pointer;
             transition: all 0.3s;
         }
@@ -1054,13 +1076,13 @@
             .arrow-pointer { margin-top: 18px; }
             .item-box { min-width: 130px; padding: 14px; }
             .item-box img { width: 65px; height: 65px; }
-            .mult-btn { font-size: 12px; padding: 10px 0; }
+            .mult-btn { font-size: 11px; padding: 10px 0; }
             .upgrade-btn { font-size: 16px; padding: 16px; letter-spacing: 2px; }
             .inv-card, .target-card, .shop-card { width: 95px; padding: 8px; }
             .inv-card img, .target-card img, .shop-card img { width: 48px; height: 48px; }
             .section-title, .target-row, .shop-row, .inventory-row { padding-left: 15px; padding-right: 15px; }
             .items-row { padding: 15px 15px; gap: 10px; }
-            .multipliers { padding: 0 15px 15px; }
+            .multipliers { padding: 0 15px 15px; gap: 6px; }
             .upgrade-btn { width: calc(100% - 30px); }
             .top-bar { padding: 12px 15px; }
             .logo-text { font-size: 22px; }
@@ -1075,7 +1097,6 @@
 </head>
 <body>
 
-<!-- 🎵 Фоновая музыка -->
 <audio id="bgMusic" loop autoplay>
     <source src="https://raw.githubusercontent.com/saintezz/ggbrainXv2/main/8bit.mp3" type="audio/mpeg">
 </audio>
@@ -1153,6 +1174,7 @@
     <div class="top-bar">
         <div class="logo-text">GGbrainX</div>
         <div class="top-right">
+            <button class="music-toggle" id="musicToggle" onclick="toggleMusic()" title="Музыка">🔊</button>
             <div class="balance">
                 <img src="https://github.com/saintezz/saintbetW/blob/main/%D0%BC%D0%BE%D0%BD%D0%B5%D1%82%D0%B0.png?raw=true" alt="coin" class="coin-icon">
                 <span id="balanceDisplay">1 000</span>
@@ -1229,11 +1251,9 @@
         </div>
 
         <div class="multipliers">
-            <button class="mult-btn" data-mult="1.5">x1.5</button>
-            <button class="mult-btn" data-mult="2">x2</button>
-            <button class="mult-btn active" data-mult="3">x3</button>
-            <button class="mult-btn" data-mult="5">x5</button>
-            <button class="mult-btn" data-mult="10">x10</button>
+            <button class="mult-btn active" data-mult="3">1 к 3 · 33%</button>
+            <button class="mult-btn" data-mult="5">1 к 5 · 20%</button>
+            <button class="mult-btn" data-mult="10">10 к 100 · 10%</button>
         </div>
 
         <button class="upgrade-btn" id="upgradeBtn" disabled>Апгрейд - 0%</button>
@@ -1290,11 +1310,18 @@
         { id: 'lovelovebear', name: 'Love Love Bear', price: 5540, img: 'https://github.com/forerer-afk/brainroterX/blob/main/lovelovebear.png?raw=true' }
     ];
 
-    // ===== API — ПРАВИЛЬНЫЙ ДОМЕН =====
+    // ===== API =====
     const API_URL = 'https://ggbrainx.onrender.com';
 
     // ===== НАСТРОЙКА АДМИНА =====
     const ADMIN_TG = '@clonexx7';
+
+    // ===== ШАНСЫ СТАВОК =====
+    const MULTIPLIER_CHANCES = {
+        3: 33,    // 1 к 3
+        5: 20,    // 1 к 5
+        10: 10    // 10 к 100
+    };
 
     // ===== ПОЛЬЗОВАТЕЛЬ =====
     let USER = {
@@ -1313,19 +1340,15 @@
                 console.warn('[TG] Telegram WebApp не найден.');
                 return;
             }
-
             tg.ready();
             tg.expand();
-
             const u = tg.initDataUnsafe?.user;
             if (!u) {
                 console.warn('[TG] Нет данных пользователя.');
                 return;
             }
-
             USER.id = u.id || null;
             USER.username = u.username || null;
-
             if (u.username) {
                 USER.tg = '@' + u.username;
                 USER.tgLink = 'https://t.me/' + u.username;
@@ -1335,9 +1358,7 @@
                 USER.nick = full || 'Гость';
                 USER.tg = full || '@guest';
             }
-
             if (u.photo_url) USER.photo = u.photo_url;
-
             console.log('[TG] Пользователь:', USER);
         } catch (err) {
             console.error('[TG] Ошибка:', err);
@@ -1379,10 +1400,8 @@
         document.getElementById('profileNick').textContent = USER.nick;
         document.getElementById('profileTg').textContent = USER.tg;
         document.getElementById('profileTg').href = USER.tgLink;
-
         const avatarImg = document.querySelector('.profile-avatar');
         if (USER.photo && avatarImg) avatarImg.src = USER.photo;
-
         const topAvatarImg = document.getElementById('topAvatarImg');
         if (USER.photo && topAvatarImg) topAvatarImg.src = USER.photo;
     }
@@ -1394,7 +1413,6 @@
     }
     function getItemById(id) { return ITEMS.find(item => item.id === id); }
 
-    // ===== МОДАЛЬНЫЕ ОКНА =====
     window.openModal = function(id) { document.getElementById(id).classList.add('open'); };
     window.closeModal = function(id) { document.getElementById(id).classList.remove('open'); };
 
@@ -1407,7 +1425,6 @@
     window.openProfile = function() {
         const adminUsername = ADMIN_TG.replace('@', '').toLowerCase();
         const myUsername = (USER.username || '').toLowerCase();
-
         if (myUsername === adminUsername) {
             isAdmin = true;
             document.getElementById('adminSection').style.display = 'block';
@@ -1428,7 +1445,6 @@
     window.switchTab = function(tab) {
         document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
         document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-
         if (tab === 'upgrade') {
             document.getElementById('tabUpgrade').classList.add('active');
             document.getElementById('panelUpgrade').classList.add('active');
@@ -1463,7 +1479,6 @@
         renderAdminGrid();
     };
 
-    // ===== ФЕТЧ С ТАЙМАУТОМ =====
     async function fetchWithTimeout(url, options = {}, timeout = 60000) {
         const controller = new AbortController();
         const id = setTimeout(() => controller.abort(), timeout);
@@ -1477,46 +1492,24 @@
         }
     }
 
-    // ===== СОЗДАНИЕ ПРОМОКОДА =====
     window.createPromo = async function() {
         const code = document.getElementById('adminCode').value.trim().toUpperCase();
         const uses = parseInt(document.getElementById('adminUses').value);
         const msg = document.getElementById('adminMsg');
-
         msg.className = 'msg';
         msg.textContent = '';
-
-        if (!code || code.length < 3) {
-            msg.className = 'msg err';
-            msg.textContent = 'Название минимум 3 символа';
-            return;
-        }
-        if (!uses || uses < 1) {
-            msg.className = 'msg err';
-            msg.textContent = 'Кол-во активаций минимум 1';
-            return;
-        }
-
+        if (!code || code.length < 3) { msg.className = 'msg err'; msg.textContent = 'Название минимум 3 символа'; return; }
+        if (!uses || uses < 1) { msg.className = 'msg err'; msg.textContent = 'Кол-во активаций минимум 1'; return; }
         let value;
         if (promoType === 'balance') {
             value = parseInt(document.getElementById('adminBalance').value);
-            if (!value || value < 1) {
-                msg.className = 'msg err';
-                msg.textContent = 'Сумма монет минимум 1';
-                return;
-            }
+            if (!value || value < 1) { msg.className = 'msg err'; msg.textContent = 'Сумма монет минимум 1'; return; }
         } else {
-            if (!selectedAdminItem) {
-                msg.className = 'msg err';
-                msg.textContent = 'Выбери брейнрот';
-                return;
-            }
+            if (!selectedAdminItem) { msg.className = 'msg err'; msg.textContent = 'Выбери брейнрот'; return; }
             value = selectedAdminItem;
         }
-
         msg.className = 'msg wait';
         msg.textContent = 'Создаём... (если сервер спит, до 60 сек)';
-
         try {
             const res = await fetchWithTimeout(API_URL + '/api/create', {
                 method: 'POST',
@@ -1524,7 +1517,6 @@
                 body: JSON.stringify({ code, uses, type: promoType, value })
             });
             const data = await res.json();
-
             if (data.ok) {
                 msg.className = 'msg ok';
                 msg.textContent = 'Промокод создан: ' + code;
@@ -1544,20 +1536,17 @@
         }
     };
 
-    // ===== СПИСОК ПРОМОКОДОВ =====
     async function renderPromoList() {
         const list = document.getElementById('promoList');
         try {
             const res = await fetchWithTimeout(API_URL + '/api/promocodes', {}, 60000);
             const data = await res.json();
             if (!data.ok) throw new Error(data.error);
-
             const codes = Object.values(data.promocodes || {});
             if (codes.length === 0) {
                 list.innerHTML = '<div style="color:#4a4d5e; font-size:12px; text-align:center; padding:10px;">Промокодов пока нет</div>';
                 return;
             }
-
             list.innerHTML = codes.map(p => {
                 let rewardText = '';
                 if (p.type === 'balance') {
@@ -1582,21 +1571,13 @@
         }
     }
 
-    // ===== АКТИВАЦИЯ =====
     window.activatePromo = async function() {
         const inputTab = document.getElementById('promoInput');
         const msgTab = document.getElementById('promoMsg');
-
         const code = inputTab.value.trim().toUpperCase();
-        if (!code) {
-            msgTab.className = 'msg err';
-            msgTab.textContent = 'Введи промокод';
-            return;
-        }
-
+        if (!code) { msgTab.className = 'msg err'; msgTab.textContent = 'Введи промокод'; return; }
         msgTab.className = 'msg wait';
         msgTab.textContent = 'Проверяем... (если сервер спит, до 60 сек)';
-
         try {
             const res = await fetchWithTimeout(API_URL + '/api/activate', {
                 method: 'POST',
@@ -1604,7 +1585,6 @@
                 body: JSON.stringify({ code })
             });
             const data = await res.json();
-
             if (data.ok) {
                 if (data.type === 'balance') {
                     balance += data.value;
@@ -1633,7 +1613,6 @@
         }
     };
 
-    // ===== ИГРА =====
     function enableWheelScroll(el) {
         el.addEventListener('wheel', (e) => {
             if (el.scrollWidth <= el.clientWidth) return;
@@ -1681,15 +1660,12 @@
         if (index === -1) return;
         const item = getItemById(id);
         if (!item) return;
-
         inventory.splice(index, 1);
         balance += item.price;
-
         if (selectedSourceId === id && !inventory.includes(id)) {
             selectedSourceId = null;
             selectedTargetId = null;
         }
-
         updateBalance();
         renderInventory();
         renderTargets();
@@ -1759,13 +1735,13 @@
         updateUpgradeScreen();
     };
 
+    // ===== НОВЫЙ РАСЧЁТ ШАНСА =====
     function calculateChance() {
         const sourceItem = selectedSourceId ? getItemById(selectedSourceId) : null;
         const targetItem = selectedTargetId ? getItemById(selectedTargetId) : null;
         if (!sourceItem || !targetItem || targetItem.price <= sourceItem.price) return 0;
-
-        let chance = (sourceItem.price / targetItem.price) * 100;
-        chance = chance / currentMultiplier * 3;
+        let chance = MULTIPLIER_CHANCES[currentMultiplier];
+        if (!chance) chance = 33;
         if (chance > MAX_CHANCE) chance = MAX_CHANCE;
         if (chance < 0) chance = 0;
         return chance;
@@ -1834,7 +1810,6 @@
         const targetItem = getItemById(selectedTargetId);
         if (!sourceItem || !targetItem) return;
         if (targetItem.price <= sourceItem.price) return;
-
         const chance = calculateChance();
         if (chance <= 0) return;
 
@@ -1866,7 +1841,6 @@
                 const sourceIndex = inventory.indexOf(selectedSourceId);
                 if (sourceIndex > -1) inventory.splice(sourceIndex, 1);
             }
-
             selectedSourceId = null;
             selectedTargetId = null;
             isSpinning = false;
@@ -1894,7 +1868,6 @@
         renderShop();
         updateUpgradeScreen();
         renderAdminGrid();
-
         enableWheelScroll(targetRow);
         enableWheelScroll(shopRow);
         enableWheelScroll(inventoryRow);
@@ -1902,22 +1875,50 @@
 
     init();
 
-    // ===== ПРОГРЕВ RENDER — будим сервер при загрузке =====
     fetch(API_URL + '/').catch(() => console.log('[WAKE] Сервер просыпается...'));
 </script>
 
 <script>
+    // ===== МУЗЫКА + КНОПКА =====
     const bgMusic = document.getElementById('bgMusic');
     bgMusic.volume = 0.15;
 
+    let musicEnabled = localStorage.getItem('ggbrainx_music') !== 'off';
+
+    function updateMusicButton() {
+        const btn = document.getElementById('musicToggle');
+        if (!btn) return;
+        if (musicEnabled) {
+            btn.textContent = '🔊';
+            btn.classList.remove('muted');
+        } else {
+            btn.textContent = '🔇';
+            btn.classList.add('muted');
+        }
+    }
+
+    window.toggleMusic = function() {
+        musicEnabled = !musicEnabled;
+        localStorage.setItem('ggbrainx_music', musicEnabled ? 'on' : 'off');
+        if (musicEnabled) {
+            bgMusic.play().catch(() => {});
+        } else {
+            bgMusic.pause();
+        }
+        updateMusicButton();
+    };
+
     function startMusic() {
-        bgMusic.play().catch(err => console.log('Аудио заблокировано:', err));
+        if (musicEnabled) {
+            bgMusic.play().catch(err => console.log('Аудио заблокировано:', err));
+        }
         document.removeEventListener('click', startMusic);
         document.removeEventListener('touchstart', startMusic);
     }
 
     document.addEventListener('click', startMusic);
     document.addEventListener('touchstart', startMusic);
+    updateMusicButton();
 </script>
 
 </body>
