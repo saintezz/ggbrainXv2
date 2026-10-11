@@ -25,7 +25,6 @@
         }
         @keyframes bgMove { 0%, 100% { transform: translate(0, 0) rotate(0deg); } 50% { transform: translate(-5%, -5%) rotate(8deg); } }
 
-        /* ===== БОЛЕЕ ПРОЗРАЧНЫЙ И КВАДРАТНЫЙ APP ===== */
         .app {
             width: 100%; max-width: 100%;
             background: rgba(20, 20, 26, 0.55);
@@ -82,7 +81,6 @@
         .avatar:hover { transform: scale(1.05); }
         .avatar img { width: 100%; height: 100%; object-fit: cover; }
 
-        /* ===== ВКЛАДКИ — БОЛЕЕ КВАДРАТНЫЕ ===== */
         .tabs {
             display: flex;
             justify-content: center;
@@ -131,7 +129,6 @@
         .tab-panel { display: none; }
         .tab-panel.active { display: block; }
 
-        /* ===== МОДАЛКИ ===== */
         .modal {
             position: fixed; inset: 0; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(6px);
             display: flex; justify-content: center; align-items: center; z-index: 1000;
@@ -241,7 +238,6 @@
         .promo-list-item .uses { font-family: 'Orbitron', sans-serif; font-weight: 800; color: #7ed88a; font-size: 11px; }
         .promo-list-item .uses.empty { color: #ff6b6b; }
 
-        /* ===== АПГРЕЙДЕР ===== */
         .progress-section { display: flex; justify-content: center; align-items: center; padding: 24px 0 16px; position: relative; }
         .progress-wrapper { position: relative; width: 320px; height: 320px; }
         .progress-svg { width: 100%; height: 100%; transform: rotate(-90deg); }
@@ -363,23 +359,23 @@
         }
         .section-block { margin-top: 20px; }
 
+        /* ===== СЕТКА 6 В РЯД ДЛЯ ВСЕХ СПИСКОВ ===== */
         .target-row, .shop-row, .inventory-row {
-            display: flex; gap: 10px; overflow-x: auto;
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 8px;
             padding: 4px 22px 12px;
         }
-        .target-row::-webkit-scrollbar, .shop-row::-webkit-scrollbar, .inventory-row::-webkit-scrollbar { height: 4px; }
-        .target-row::-webkit-scrollbar-track, .shop-row::-webkit-scrollbar-track, .inventory-row::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.03); border-radius: 2px; }
-        .target-row::-webkit-scrollbar-thumb, .shop-row::-webkit-scrollbar-thumb, .inventory-row::-webkit-scrollbar-thumb { background: #ff8c00; border-radius: 2px; }
 
         .inv-card, .target-card, .shop-card {
-            flex-shrink: 0;
             background: rgba(255, 255, 255, 0.025);
             border-radius: 8px;
-            padding: 10px; width: 106px;
+            padding: 8px 6px;
             display: flex; flex-direction: column; align-items: center;
             border: 1px solid rgba(255, 255, 255, 0.06);
             transition: all 0.2s;
             position: relative;
+            min-width: 0;
         }
         .inv-card:hover, .target-card:hover:not(.disabled), .shop-card:hover {
             transform: translateY(-2px);
@@ -392,34 +388,39 @@
         }
         .target-card.disabled { opacity: 0.25; cursor: not-allowed; filter: grayscale(1); }
 
-        .inv-card img, .target-card img, .shop-card img { width: 52px; height: 52px; object-fit: contain; margin-bottom: 6px; pointer-events: none; }
+        .inv-card img, .target-card img, .shop-card img {
+            width: 100%; max-width: 52px;
+            height: 52px; object-fit: contain; margin-bottom: 4px; pointer-events: none;
+        }
         .inv-card .name, .target-card .name, .shop-card .name {
-            font-size: 9.5px; font-weight: 700; text-align: center; margin-bottom: 4px;
+            font-size: 9px; font-weight: 700; text-align: center; margin-bottom: 3px;
             height: 22px; overflow: hidden; color: #e5e7ef; pointer-events: none;
+            line-height: 1.1;
+            width: 100%;
         }
         .inv-card .price, .target-card .price, .shop-card .price {
-            font-size: 10px; color: #ffaa33; font-weight: 800;
-            display: flex; align-items: center; gap: 3px;
+            font-size: 9.5px; color: #ffaa33; font-weight: 800;
+            display: flex; align-items: center; gap: 2px;
             font-family: 'Orbitron', sans-serif; pointer-events: none;
         }
 
         .buy-btn {
-            width: 100%; padding: 6px; border-radius: 6px; border: none;
+            width: 100%; padding: 5px; border-radius: 6px; border: none;
             background: linear-gradient(135deg, #ff8c00, #cc7000); color: white;
-            font-weight: 800; font-size: 9.5px; cursor: pointer; transition: all 0.2s;
+            font-weight: 800; font-size: 9px; cursor: pointer; transition: all 0.2s;
             text-transform: uppercase; font-family: 'Orbitron', sans-serif;
-            margin-top: 5px; position: relative; z-index: 5;
+            margin-top: 4px; position: relative; z-index: 5;
         }
         .buy-btn:hover:not(:disabled) { filter: brightness(1.1); }
         .buy-btn:disabled { opacity: 0.4; cursor: not-allowed; background: #3a3d4d; }
 
         .sell-btn {
-            width: 100%; padding: 6px; border-radius: 6px;
+            width: 100%; padding: 5px; border-radius: 6px;
             border: 1px solid rgba(120, 200, 130, 0.3);
             background: rgba(120, 200, 130, 0.08); color: #7ed88a;
-            font-weight: 800; font-size: 9.5px; cursor: pointer;
+            font-weight: 800; font-size: 9px; cursor: pointer;
             transition: all 0.2s; text-transform: uppercase;
-            font-family: 'Orbitron', sans-serif; margin-top: 5px;
+            font-family: 'Orbitron', sans-serif; margin-top: 4px;
             position: relative; z-index: 5;
         }
         .sell-btn:hover:not(:disabled) {
@@ -428,11 +429,11 @@
         }
         .sell-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
-        .empty-inv { color: #4a4d5e; font-size: 12px; text-align: center; width: 100%; padding: 18px; font-weight: 600; }
+        .empty-inv { color: #4a4d5e; font-size: 12px; text-align: center; width: 100%; padding: 18px; font-weight: 600; grid-column: 1 / -1; }
         .selectable { display: flex; flex-direction: column; align-items: center; width: 100%; cursor: pointer; }
         .locked { pointer-events: none !important; opacity: 0.4 !important; filter: grayscale(0.5) !important; }
 
-        .admin-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; max-height: 240px; overflow-y: auto; padding: 4px; margin-bottom: 12px; }
+        .admin-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; max-height: 240px; overflow-y: auto; padding: 4px; margin-bottom: 12px; }
         .admin-item {
             background: rgba(255, 255, 255, 0.025); border: 1px solid rgba(255, 255, 255, 0.06);
             border-radius: 8px; padding: 8px 4px;
@@ -443,7 +444,6 @@
         .admin-item img { width: 40px; height: 40px; object-fit: contain; margin-bottom: 4px; }
         .admin-item .name { font-size: 9px; color: #e5e7ef; font-weight: 700; text-align: center; line-height: 1.2; height: 22px; overflow: hidden; }
 
-        /* ===== ОБМЕН ===== */
         .trade-page { padding: 24px 22px; max-width: 700px; margin: 0 auto; }
         .trade-page-header { text-align: center; margin-bottom: 20px; }
         .trade-page-header h2 {
@@ -481,7 +481,6 @@
         .trade-btn:disabled { opacity: 0.35; cursor: not-allowed; background: #3a3d4d; }
         .trade-empty { text-align: center; padding: 36px 12px; color: #4a4d5e; font-size: 12px; font-weight: 600; }
 
-        /* ===== МОДАЛКА ПОДТВЕРЖДЕНИЯ ОБМЕНА ===== */
         .confirm-modal-card {
             background: rgba(20, 20, 26, 0.9);
             backdrop-filter: blur(20px);
@@ -545,10 +544,7 @@
             align-items: center;
             gap: 3px;
         }
-        .confirm-item .cprice img {
-            width: 12px;
-            height: 12px;
-        }
+        .confirm-item .cprice img { width: 12px; height: 12px; }
         .confirm-arrow {
             color: #ff8c00;
             font-size: 22px;
@@ -653,6 +649,11 @@
         .confirm-ok:hover { filter: brightness(1.1); }
         .confirm-ok:disabled { opacity: 0.35; cursor: not-allowed; filter: grayscale(0.5); }
 
+        @media (max-width: 900px) {
+            .target-row, .shop-row, .inventory-row {
+                grid-template-columns: repeat(5, 1fr);
+            }
+        }
         @media (max-width: 600px) {
             body { padding: 0; }
             .app { border-radius: 0; min-height: 100vh; }
@@ -663,9 +664,13 @@
             .upgrade-main-btn { flex: 0 1 200px; font-size: 12px; padding: 13px; }
             .fast-btn { width: 46px; height: 46px; }
             .fast-btn svg { width: 20px; height: 20px; }
-            .inv-card, .target-card, .shop-card { width: 92px; padding: 8px; }
-            .inv-card img, .target-card img, .shop-card img { width: 46px; height: 46px; }
-            .section-title, .target-row, .shop-row, .inventory-row { padding-left: 12px; padding-right: 12px; }
+            .target-row, .shop-row, .inventory-row {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 6px;
+                padding: 4px 12px 12px;
+            }
+            .inv-card img, .target-card img, .shop-card img { max-width: 42px; height: 42px; }
+            .section-title { padding-left: 12px; padding-right: 12px; }
             .items-row { padding: 12px 12px; gap: 8px; }
             .stage-controls { padding: 0 12px 6px; }
             .top-bar { padding: 10px 12px; }
@@ -695,7 +700,6 @@
 
 <div class="bg-layer"></div>
 
-<!-- ===== ПРОФИЛЬ ===== -->
 <div class="modal" id="profileModal">
     <div class="modal-card">
         <button class="modal-close" onclick="closeModal('profileModal')">✕</button>
@@ -717,7 +721,6 @@
     </div>
 </div>
 
-<!-- ===== АДМИН-ПАНЕЛЬ ===== -->
 <div class="modal" id="adminModal">
     <div class="modal-card wide">
         <button class="modal-close" onclick="closeModal('adminModal')">✕</button>
@@ -762,7 +765,6 @@
     </div>
 </div>
 
-<!-- ===== МОДАЛКА ПОДТВЕРЖДЕНИЯ ОБМЕНА ===== -->
 <div class="modal" id="confirmTradeModal">
     <div class="confirm-modal-card">
         <button class="modal-close" onclick="closeModal('confirmTradeModal')">✕</button>
@@ -849,7 +851,6 @@
         </div>
     </div>
 
-    <!-- ===== АПГРЕЙД ===== -->
     <div class="tab-panel active" id="panelUpgrade">
         <div class="progress-section">
             <div class="progress-wrapper">
@@ -922,7 +923,6 @@
         </div>
     </div>
 
-    <!-- ===== ОБМЕН ===== -->
     <div class="tab-panel" id="panelTrade">
         <div class="trade-page">
             <div class="trade-page-header">
@@ -933,7 +933,6 @@
         </div>
     </div>
 
-    <!-- ===== ПРОМОКОД ===== -->
     <div class="tab-panel" id="panelPromo">
         <div class="promo-panel">
             <h2>🎟️ Активация промокода</h2>
@@ -954,13 +953,17 @@
         { id: 'cupid', name: 'Cupid Wings', price: 34, img: 'https://github.com/forerer-afk/brainroterX/blob/main/cupid-wings.png?raw=true' },
         { id: 'garama', name: 'Garama and Madundung', price: 41, img: 'https://github.com/forerer-afk/brainroterX/blob/main/garama.png?raw=true' },
         { id: 'burguro', name: 'Burguro and Fryuro', price: 70, img: 'https://github.com/forerer-afk/brainroterX/blob/main/burguru.png?raw=true' },
+        { id: 'popcuru', name: 'Popcuru and Fizzuru', price: 87, img: 'https://github.com/forerer-afk/brainroterX/blob/main/popcuru.png?raw=true' },
         { id: 'celestial', name: 'Celestial Pegasus', price: 93, img: 'https://github.com/forerer-afk/brainroterX/blob/main/celestialpegasus.png?raw=true' },
         { id: 'cooki', name: 'Cooki and Milki', price: 130, img: 'https://github.com/forerer-afk/brainroterX/blob/main/cookiandmilki.png?raw=true' },
+        { id: 'jolly', name: 'Jolly Jolly Sahur', price: 132, img: 'https://github.com/forerer-afk/brainroterX/blob/main/jollyjollysahur.png?raw=true' },
         { id: 'cerberus', name: 'Cerberus', price: 155, img: 'https://github.com/forerer-afk/brainroterX/blob/main/cerberus.png?raw=true' },
         { id: 'globba', name: 'Globba Steppa', price: 164, img: 'https://github.com/forerer-afk/brainroterX/blob/main/globastepa.png?raw=true' },
         { id: 'losamigos', name: 'Los Amigos', price: 220, img: 'https://github.com/forerer-afk/brainroterX/blob/main/losamigos.png?raw=true' },
+        { id: 'losadmins', name: 'Los Admins', price: 370, img: 'https://github.com/forerer-afk/brainroterX/blob/main/losadmins.png?raw=true' },
         { id: 'rubiko', name: 'Rubiko and Kubiko', price: 395, img: 'https://github.com/forerer-afk/brainroterX/blob/main/Rubiko_and_Kubiko.webp?raw=true' },
         { id: 'lossecret', name: 'Los Secret Combinasionas', price: 419, img: 'https://github.com/forerer-afk/brainroterX/blob/main/lossecretcombination.png?raw=true' },
+        { id: 'lacasaboo', name: 'La Casa Boo', price: 551, img: 'https://github.com/forerer-afk/brainroterX/blob/main/lacasaboo2.png?raw=true' },
         { id: 'dragon', name: 'Dragon Cannelloni', price: 890, img: 'https://github.com/forerer-afk/brainroterX/blob/main/dragoncannelloni.png?raw=true' },
         { id: 'hydra', name: 'Hydra Dragon Cannelloni', price: 1220, img: 'https://github.com/forerer-afk/brainroterX/blob/main/hydragoncannelloni.png?raw=true' },
         { id: 'kraken', name: 'Kraken', price: 2030, img: 'https://github.com/forerer-afk/brainroterX/blob/main/kraken.png.webp?raw=true' },
@@ -970,20 +973,19 @@
     const API_URL = 'https://ggbrainx.onrender.com';
     const ADMIN_TG = '@clonexx7';
 
-    // ===== ОБМЕН =====
-    // Для каждого предмета можно задать варианты обмена.
-    // Юзер выбирает на что менять в момент подтверждения.
-    // Формат: { from: 'rubiko', to: 'cerberus', count: 2, coins: 85 }
     const TRADE_RECIPES = [
         { from: 'celestial', to: 'garama',   count: 2, coins: 11 },
         { from: 'cooki',     to: 'garama',   count: 2, coins: 48 },
+        { from: 'jolly',     to: 'garama',   count: 3, coins: 9 },
         { from: 'cerberus',  to: 'burguro',  count: 2, coins: 15 },
         { from: 'globba',    to: 'burguro',  count: 2, coins: 24 },
         { from: 'losamigos', to: 'cerberus', count: 1, coins: 65 },
+        { from: 'losadmins', to: 'cerberus', count: 2, coins: 60 },
         { from: 'rubiko',    to: 'cerberus', count: 2, coins: 85 },
         { from: 'rubiko',    to: 'garama',   count: 9, coins: 26 },
         { from: 'lossecret', to: 'cerberus', count: 2, coins: 109 },
         { from: 'lossecret', to: 'garama',   count: 10, coins: 9 },
+        { from: 'lacasaboo', to: 'cerberus', count: 3, coins: 86 },
         { from: 'hydra',     to: 'dragon',   count: 1, coins: 330 },
         { from: 'kraken',    to: 'dragon',   count: 2, coins: 250 }
     ];
@@ -1027,9 +1029,8 @@
     let promoType = 'balance';
     let selectedAdminItem = null;
 
-    // Текущий выбранный рецепт обмена (для подтверждения)
-    let currentTradeOptions = []; // массив вариантов
-    let currentTradeSelected = null; // индекс выбранного варианта
+    let currentTradeOptions = [];
+    let currentTradeSelected = null;
 
     const balanceDisplay = document.getElementById('balanceDisplay');
     const inventoryRow = document.getElementById('inventoryRow');
@@ -1269,7 +1270,7 @@
             <div class="shop-card">
                 <img src="${item.img}" alt="${item.name}" onerror="this.src='https://via.placeholder.com/60?text=?'">
                 <div class="name">${item.name}</div>
-                <div class="price"><img src="${COIN_IMG}" class="price-coin" alt="coin" style="width:12px;height:12px;">${item.price}</div>
+                <div class="price"><img src="${COIN_IMG}" class="price-coin" alt="coin" style="width:10px;height:10px;">${item.price}</div>
                 <button class="buy-btn" onclick="buyItem('${item.id}')" ${balance < item.price || isSpinning ? 'disabled' : ''}>Купить</button>
             </div>
         `).join('');
@@ -1318,7 +1319,7 @@
                     <div class="selectable" onclick="selectSource('${id}')">
                         <img src="${item.img}" alt="${item.name}">
                         <div class="name">${item.name}</div>
-                        <div class="price"><img src="${COIN_IMG}" class="price-coin" alt="coin" style="width:12px;height:12px;">${item.price}${count > 1 ? ` (x${count})` : ''}</div>
+                        <div class="price"><img src="${COIN_IMG}" class="price-coin" alt="coin" style="width:10px;height:10px;">${item.price}${count > 1 ? ` (x${count})` : ''}</div>
                     </div>
                     <button class="sell-btn" onclick="event.stopPropagation(); sellItem('${id}')" ${isSpinning ? 'disabled' : ''}>Продать</button>
                 </div>
@@ -1343,7 +1344,7 @@
                 <div class="target-card ${isSelected ? 'selected' : ''} ${isDisabled ? 'disabled' : ''}" onclick="${isDisabled ? '' : `selectTarget('${item.id}')`}">
                     <img src="${item.img}" alt="${item.name}">
                     <div class="name">${item.name}</div>
-                    <div class="price"><img src="${COIN_IMG}" class="price-coin" alt="coin" style="width:12px;height:12px;">${item.price}</div>
+                    <div class="price"><img src="${COIN_IMG}" class="price-coin" alt="coin" style="width:10px;height:10px;">${item.price}</div>
                 </div>
             `;
         }).join('');
@@ -1358,7 +1359,6 @@
         renderTargets(); updateUpgradeScreen();
     };
 
-    // ===== ШАНС АПГРЕЙДА — формула =====
     function calculateChance() {
         const sourceItem = selectedSourceId ? getItemById(selectedSourceId) : null;
         const targetItem = selectedTargetId ? getItemById(selectedTargetId) : null;
@@ -1495,7 +1495,6 @@
             return;
         }
 
-        // Группируем: for каждого предмета, который есть у юзера, показываем все варианты обмена
         const counts = {};
         inventory.forEach(id => { counts[id] = (counts[id] || 0) + 1; });
 
@@ -1551,7 +1550,6 @@
         }).join('');
     }
 
-    // Открываем модалку подтверждения с выбором
     window.openConfirmTrade = function(fromId) {
         if (isSpinning) return;
         const srcItem = getItemById(fromId);
@@ -1559,7 +1557,6 @@
         const hasCount = inventory.filter(id => id === fromId).length;
         if (hasCount < 1) return;
 
-        // Находим все варианты обмена для этого предмета
         const variants = TRADE_RECIPES
             .map((r, idx) => {
                 if (r.from !== fromId) return null;
@@ -1584,7 +1581,6 @@
         document.getElementById('confirmToCoin').src = COIN_IMG;
         document.getElementById('confirmCoinsCoin').src = COIN_IMG;
 
-        // Если вариантов больше одного — показываем селектор
         const selector = document.getElementById('confirmSelector');
         const optionsContainer = document.getElementById('confirmOptions');
         if (variants.length > 1) {
@@ -1600,9 +1596,7 @@
             selector.style.display = 'none';
         }
 
-        // Отрисовываем первый вариант
         renderConfirmVariant(0);
-
         openModal('confirmTradeModal');
     };
 
@@ -1643,7 +1637,6 @@
         const srcIndex = inventory.indexOf(recipe.from);
         if (srcIndex === -1) { alert('У тебя нет этого браинрота'); return; }
 
-        // Проверяем честность
         const receivePrice = dstItem.price * recipe.count + recipe.coins;
         if (receivePrice > srcItem.price) { alert('Рецепт нечестный'); return; }
 
@@ -1664,7 +1657,6 @@
     function init() {
         updateBalance();
         renderInventory(); renderTargets(); renderShop(); updateUpgradeScreen(); renderAdminGrid();
-        enableWheelScroll(targetRow); enableWheelScroll(shopRow); enableWheelScroll(inventoryRow);
     }
     init();
 
@@ -1672,7 +1664,6 @@
 </script>
 
 <script>
-    // ===== МУЗЫКА =====
     const bgMusic = document.getElementById('bgMusic');
     bgMusic.volume = 0.15;
 
