@@ -16,15 +16,12 @@
             padding: 20px; position: relative; overflow-x: hidden; overflow-y: auto;
         }
 
-        /* ===== ФОНОВОЕ ВИДЕО ===== */
+        /* ===== ФОН БОТА ===== */
         #bgVideo {
-            position: fixed;
-            top: 0; left: 0;
+            position: fixed; top: 0; left: 0;
             width: 100%; height: 100%;
-            object-fit: cover;
-            z-index: -3;
-            opacity: 0.35;
-            pointer-events: none;
+            object-fit: cover; z-index: -3;
+            opacity: 0.35; pointer-events: none;
             transition: opacity 0.5s;
         }
         .bg-layer { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; overflow: hidden; pointer-events: none; }
@@ -37,9 +34,11 @@
         }
         @keyframes bgMove { 0%, 100% { transform: translate(0, 0) rotate(0deg); } 50% { transform: translate(-5%, -5%) rotate(8deg); } }
 
+        :root { --app-opacity: 0.55; }
+
         .app {
             width: 100%; max-width: 100%;
-            background: rgba(20, 20, 26, 0.55);
+            background: rgba(20, 20, 26, var(--app-opacity));
             backdrop-filter: blur(14px);
             border: 1px solid rgba(255, 140, 0, 0.12);
             border-radius: 10px;
@@ -47,11 +46,13 @@
             overflow: hidden; display: flex; flex-direction: column; padding-bottom: 20px;
             position: relative;
             animation: appGlow 5s ease-in-out infinite;
+            transition: background 0.3s;
         }
         @keyframes appGlow {
             0%, 100% { box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6), 0 0 40px rgba(255, 140, 0, 0.06); }
             50% { box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6), 0 0 70px rgba(255, 140, 0, 0.15); }
         }
+
         .top-bar {
             display: flex; justify-content: space-between; align-items: center;
             padding: 14px 22px;
@@ -61,7 +62,7 @@
         }
         .logo-text {
             font-family: 'Orbitron', sans-serif; font-size: 26px; font-weight: 900; letter-spacing: 1px;
-            background: linear-gradient(135deg, #d0d0d0 0%, #ff8c00 50%, #ffaa33 100%);
+            background: linear-gradient(135deg, #d0d0d0 0%, var(--accent, #ff8c00) 50%, var(--accent-bright, #ffaa33) 100%);
             background-size: 200% 200%;
             -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
             filter: drop-shadow(0 0 12px rgba(255, 140, 0, 0.45));
@@ -77,19 +78,14 @@
             display: flex; align-items: center; gap: 8px; color: #fff; font-family: 'Orbitron', sans-serif;
             transition: all 0.3s;
         }
-        .balance.pulse {
-            animation: balancePulse 0.6s ease;
-        }
+        .balance.pulse { animation: balancePulse 0.6s ease; }
         @keyframes balancePulse {
             0% { transform: scale(1); box-shadow: 0 0 0 rgba(255, 140, 0, 0); }
             50% { transform: scale(1.1); box-shadow: 0 0 25px rgba(255, 140, 0, 0.8); }
             100% { transform: scale(1); box-shadow: 0 0 0 rgba(255, 140, 0, 0); }
         }
         .coin-icon { width: 18px; height: 18px; object-fit: contain; filter: drop-shadow(0 0 6px rgba(255, 140, 0, 0.7)); animation: coinSpin 3s linear infinite; }
-        @keyframes coinSpin {
-            0% { transform: rotateY(0deg); }
-            100% { transform: rotateY(360deg); }
-        }
+        @keyframes coinSpin { 0% { transform: rotateY(0deg); } 100% { transform: rotateY(360deg); } }
 
         .music-toggle {
             width: 38px; height: 38px; border-radius: 8px;
@@ -103,7 +99,7 @@
 
         .avatar {
             width: 38px; height: 38px; border-radius: 8px;
-            background: linear-gradient(135deg, #ff8c00, #cc7000);
+            background: linear-gradient(135deg, var(--accent, #ff8c00), var(--accent-deep, #cc7000));
             display: flex; align-items: center; justify-content: center;
             font-family: 'Orbitron', sans-serif; font-weight: 900; font-size: 16px; color: #fff;
             cursor: pointer; overflow: hidden;
@@ -117,6 +113,7 @@
         .avatar:hover { transform: scale(1.08); }
         .avatar img { width: 100%; height: 100%; object-fit: cover; }
 
+        /* ===== ВКЛАДКИ ===== */
         .tabs {
             display: flex;
             justify-content: center;
@@ -125,50 +122,34 @@
             flex-wrap: wrap;
         }
         .tab {
-            flex: 1;
-            min-width: 80px;
-            max-width: 120px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 4px;
-            padding: 10px 6px 8px;
+            flex: 1; min-width: 70px; max-width: 120px;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            gap: 4px; padding: 10px 4px 8px;
             border-radius: 8px;
             border: 1px solid rgba(255, 140, 0, 0.22);
             background: rgba(255, 255, 255, 0.015);
             color: #8a8d9b;
             font-family: 'Orbitron', sans-serif;
-            font-weight: 800;
-            font-size: 10px;
-            letter-spacing: 0.5px;
-            cursor: pointer;
-            transition: all 0.25s;
-            text-transform: uppercase;
-            position: relative;
-            overflow: hidden;
+            font-weight: 800; font-size: 10px; letter-spacing: 0.5px;
+            cursor: pointer; transition: all 0.25s;
+            text-transform: uppercase; position: relative; overflow: hidden;
         }
         .tab::before {
-            content: '';
-            position: absolute;
-            inset: 0;
+            content: ''; position: absolute; inset: 0;
             background: linear-gradient(135deg, transparent, rgba(255, 140, 0, 0.15), transparent);
-            transform: translateX(-100%);
-            transition: transform 0.5s;
+            transform: translateX(-100%); transition: transform 0.5s;
         }
         .tab:hover::before { transform: translateX(100%); }
-        .tab svg { width: 22px; height: 22px; flex-shrink: 0; transition: all 0.25s; }
-        .tab .tab-label { font-size: 9.5px; font-weight: 800; }
+        .tab svg { width: 20px; height: 20px; flex-shrink: 0; transition: all 0.25s; }
+        .tab .tab-label { font-size: 9px; font-weight: 800; }
         .tab:hover {
             background: rgba(255, 140, 0, 0.08);
             border-color: rgba(255, 140, 0, 0.5);
-            color: #ffaa33;
-            transform: translateY(-2px);
+            color: #ffaa33; transform: translateY(-2px);
         }
         .tab.active {
             background: rgba(255, 140, 0, 0.18);
-            border-color: #ff8c00;
-            color: #fff;
+            border-color: #ff8c00; color: #fff;
             box-shadow: 0 0 0 1px rgba(255, 140, 0, 0.4) inset, 0 0 20px rgba(255, 140, 0, 0.3);
         }
         .tab.active svg { filter: drop-shadow(0 0 8px rgba(255, 140, 0, 0.9)); color: #ffaa33; }
@@ -181,6 +162,7 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
+        /* ===== МОДАЛКИ ===== */
         .modal {
             position: fixed; inset: 0; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(6px);
             display: flex; justify-content: center; align-items: center; z-index: 1000;
@@ -188,58 +170,17 @@
         }
         .modal.open { opacity: 1; pointer-events: auto; }
         .modal-card {
-            background: rgba(20, 20, 26, 0.85);
+            background: rgba(20, 20, 26, 0.9);
             backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 140, 0, 0.28);
             border-radius: 10px;
-            padding: 24px 22px; width: 100%; max-width: 360px; text-align: center;
+            padding: 22px 20px; width: 100%; max-width: 380px; text-align: center;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.85);
             transform: scale(0.95); transition: transform 0.25s ease;
             position: relative; max-height: 90vh; overflow-y: auto;
         }
         .modal.open .modal-card { transform: scale(1); }
         .modal-card.wide { max-width: 460px; text-align: left; }
-
-        .profile-header-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 10px;
-        }
-        .profile-header-row .spacer { width: 32px; }
-        .edit-profile-btn {
-            width: 32px;
-            height: 32px;
-            border-radius: 6px;
-            border: 1px solid rgba(255, 140, 0, 0.4);
-            background: rgba(255, 140, 0, 0.12);
-            color: #ffaa33;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s;
-        }
-        .edit-profile-btn:hover {
-            background: rgba(255, 140, 0, 0.25);
-            transform: scale(1.1);
-        }
-        .edit-profile-btn svg { width: 16px; height: 16px; }
-
-        .profile-avatar {
-            width: 100px; height: 100px; border-radius: 10px; object-fit: cover;
-            border: 2px solid #ff8c00;
-            margin-bottom: 14px;
-            animation: avatarGlow 3s ease-in-out infinite;
-        }
-        .profile-nick { font-family: 'Orbitron', sans-serif; font-size: 20px; font-weight: 900; color: #fff; letter-spacing: 1px; margin-bottom: 4px; }
-        .profile-tg { font-size: 13px; color: #ffaa33; font-weight: 700; margin-bottom: 18px; text-decoration: none; display: inline-block; }
-        .profile-balance-label { font-size: 10px; color: #8a8d9b; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 4px; }
-        .profile-balance-value {
-            font-family: 'Orbitron', sans-serif; font-size: 28px; font-weight: 900; color: #ff8c00;
-            display: flex; align-items: center; justify-content: center; gap: 8px;
-        }
-        .profile-balance-value img { width: 24px; height: 24px; object-fit: contain; }
 
         .modal-close {
             position: absolute; top: 10px; right: 10px; width: 30px; height: 30px; border-radius: 6px;
@@ -251,13 +192,7 @@
 
         .modal-title { font-family: 'Orbitron', sans-serif; font-size: 16px; font-weight: 900; color: #fff; margin-bottom: 14px; text-transform: uppercase; letter-spacing: 1px; }
 
-        .admin-badge {
-            display: inline-block; padding: 4px 12px;
-            background: linear-gradient(135deg, #ff8c00, #cc7000); border-radius: 6px;
-            font-size: 10px; font-weight: 800; color: #fff; text-transform: uppercase; letter-spacing: 2px;
-            margin-bottom: 10px; font-family: 'Orbitron', sans-serif;
-        }
-
+        /* ===== ФОРМА ===== */
         .form-group { margin-bottom: 14px; text-align: left; }
         .form-label { display: block; font-size: 10px; color: #8a8d9b; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 6px; }
         .form-input {
@@ -278,10 +213,7 @@
             font-family: 'Orbitron', sans-serif;
         }
         .radio-option:hover { border-color: rgba(255, 140, 0, 0.4); color: #ffaa33; }
-        .radio-option.active {
-            background: rgba(255, 140, 0, 0.18);
-            border-color: #ff8c00; color: #fff;
-        }
+        .radio-option.active { background: rgba(255, 140, 0, 0.18); border-color: #ff8c00; color: #fff; }
 
         .action-btn {
             width: 100%; padding: 14px; border-radius: 8px; border: none;
@@ -298,25 +230,298 @@
         .msg.err { color: #ff6b6b; }
         .msg.wait { color: #ffaa33; }
 
-        .promo-panel { padding: 26px 22px; text-align: center; }
-        .promo-panel h2 { font-family: 'Orbitron', sans-serif; font-size: 18px; font-weight: 900; color: #fff; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 2px; }
-        .promo-panel p { color: #8a8d9b; font-size: 13px; margin-bottom: 18px; }
-        .promo-input-wrap { display: flex; gap: 8px; max-width: 460px; margin: 0 auto; }
-        .promo-input-wrap .form-input { flex: 1; text-transform: uppercase; }
-        .promo-input-wrap .action-btn { width: auto; padding: 12px 22px; margin-top: 0; }
-
-        .promo-list { margin-top: 16px; max-height: 260px; overflow-y: auto; text-align: left; }
-        .promo-list-item {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 10px 12px; background: rgba(255, 255, 255, 0.025);
-            border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 8px;
-            margin-bottom: 6px; font-size: 12px;
+        /* ===== ПРОФИЛЬ ===== */
+        .profile-page { padding: 20px 22px; }
+        .profile-banner {
+            position: relative;
+            width: 100%; height: 180px;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 14px;
+            border: 1px solid rgba(255, 140, 0, 0.25);
         }
-        .promo-list-item .code { font-family: 'Orbitron', sans-serif; font-weight: 800; color: #ffaa33; letter-spacing: 1px; }
-        .promo-list-item .info { color: #8a8d9b; font-size: 10px; font-weight: 600; }
-        .promo-list-item .uses { font-family: 'Orbitron', sans-serif; font-weight: 800; color: #7ed88a; font-size: 11px; }
-        .promo-list-item .uses.empty { color: #ff6b6b; }
+        .profile-banner video {
+            position: absolute; inset: 0;
+            width: 100%; height: 100%;
+            object-fit: cover;
+        }
+        .profile-banner-overlay {
+            position: absolute; inset: 0;
+            background: linear-gradient(180deg, transparent 50%, rgba(0, 0, 0, 0.7) 100%);
+            pointer-events: none;
+        }
+        .profile-banner-name {
+            position: absolute;
+            bottom: 12px;
+            left: 20px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            z-index: 2;
+        }
+        .profile-avatar-wrapper {
+            position: relative;
+            width: 90px; height: 90px;
+            flex-shrink: 0;
+        }
+        .profile-avatar-big {
+            width: 90px; height: 90px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #ff8c00;
+            background: #1a1a20;
+            position: relative; z-index: 2;
+            box-shadow: 0 0 25px rgba(255, 140, 0, 0.6);
+        }
+        .profile-nick-big {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 22px;
+            font-weight: 900;
+            color: #fff;
+            letter-spacing: 1px;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9), 0 0 12px rgba(255, 140, 0, 0.6);
+        }
+        .profile-tg-big {
+            font-size: 13px;
+            color: #ffaa33;
+            font-weight: 700;
+            text-decoration: none;
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9);
+        }
 
+        /* Аватарка с вращающимися брейнротами */
+        .avatar-orbit {
+            position: absolute;
+            top: 50%; left: 50%;
+            width: 90px; height: 90px;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 1;
+        }
+        .avatar-orbit-item {
+            position: absolute;
+            width: 26px; height: 26px;
+            border-radius: 50%;
+            background: rgba(20, 20, 26, 0.9);
+            border: 1px solid rgba(255, 140, 0, 0.5);
+            display: flex; align-items: center; justify-content: center;
+            animation: orbitSpin linear infinite;
+            transform-origin: 0 0;
+        }
+        .avatar-orbit-item img {
+            width: 20px; height: 20px;
+            object-fit: contain;
+        }
+        @keyframes orbitSpin {
+            from { transform: rotate(0deg) translateX(70px) rotate(0deg); }
+            to { transform: rotate(360deg) translateX(70px) rotate(-360deg); }
+        }
+
+        .profile-stat-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+        .profile-stat {
+            padding: 12px 14px;
+            background: rgba(255, 255, 255, 0.025);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 8px;
+        }
+        .profile-stat-label {
+            font-size: 10px;
+            color: #8a8d9b;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+        .profile-stat-value {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 20px;
+            font-weight: 900;
+            color: #fff;
+            display: flex; align-items: center; gap: 6px;
+        }
+        .profile-stat-value img { width: 18px; height: 18px; }
+
+        .profile-action-row {
+            display: flex;
+            gap: 8px;
+        }
+
+        /* ===== КАСТОМИЗАЦИЯ ===== */
+        .customize-page { padding: 20px 22px; }
+        .customize-section {
+            padding: 14px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 8px;
+            margin-bottom: 12px;
+        }
+        .customize-section-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 11px;
+            color: #ffaa33;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .customize-section-title::before {
+            content: ''; width: 3px; height: 12px;
+            background: #ff8c00; border-radius: 1px;
+        }
+
+        /* Слайдер */
+        .slider-row {
+            display: flex; align-items: center; gap: 12px;
+        }
+        .slider-row input[type="range"] {
+            flex: 1;
+            -webkit-appearance: none;
+            appearance: none;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 3px;
+            outline: none;
+        }
+        .slider-row input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px; height: 20px;
+            border-radius: 50%;
+            background: #ff8c00;
+            cursor: pointer;
+            box-shadow: 0 0 12px rgba(255, 140, 0, 0.8);
+        }
+        .slider-row input[type="range"]::-moz-range-thumb {
+            width: 20px; height: 20px;
+            border-radius: 50%;
+            background: #ff8c00;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 0 12px rgba(255, 140, 0, 0.8);
+        }
+        .slider-value {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 800;
+            font-size: 13px;
+            color: #fff;
+            min-width: 50px;
+            text-align: right;
+        }
+
+        /* Цвета */
+        .color-picker-row {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 8px;
+        }
+        .color-swatch {
+            aspect-ratio: 1;
+            border-radius: 8px;
+            cursor: pointer;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.2s;
+            position: relative;
+        }
+        .color-swatch:hover { transform: scale(1.1); }
+        .color-swatch.selected {
+            border-color: #fff;
+            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.5), 0 0 20px currentColor;
+        }
+        .color-swatch.selected::after {
+            content: '✓';
+            position: absolute; inset: 0;
+            display: flex; align-items: center; justify-content: center;
+            color: #fff; font-size: 18px; font-weight: 900;
+            text-shadow: 0 0 6px rgba(0, 0, 0, 0.9);
+        }
+
+        /* Фоны для профиля */
+        .bg-options {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+        }
+        .bg-option {
+            aspect-ratio: 1 / 0.7;
+            border-radius: 8px;
+            border: 2px solid rgba(255, 255, 255, 0.08);
+            background: #1a1a20;
+            cursor: pointer;
+            overflow: hidden;
+            position: relative;
+            transition: all 0.25s;
+        }
+        .bg-option:hover { transform: translateY(-3px); border-color: rgba(255, 140, 0, 0.5); }
+        .bg-option.selected { border-color: #ff8c00; box-shadow: 0 0 0 2px rgba(255, 140, 0, 0.5); }
+        .bg-option video { width: 100%; height: 100%; object-fit: cover; }
+        .bg-option .bg-placeholder {
+            width: 100%; height: 100%;
+            background: linear-gradient(135deg, #1a1a20, #2a2a30);
+            display: flex; align-items: center; justify-content: center;
+            color: #8a8d9b; font-family: 'Orbitron', sans-serif;
+            font-size: 10px; text-align: center; padding: 6px;
+        }
+        .bg-option.selected::after {
+            content: '✓';
+            position: absolute; top: 4px; right: 4px;
+            width: 20px; height: 20px;
+            border-radius: 50%;
+            background: #ff8c00;
+            color: #fff;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 12px; font-weight: 900;
+            box-shadow: 0 0 10px rgba(255, 140, 0, 0.9);
+        }
+
+        /* Орбита */
+        .orbit-picker {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            max-height: 200px;
+            overflow-y: auto;
+            padding: 4px;
+            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.2);
+        }
+        .orbit-item {
+            width: 44px; height: 44px;
+            border-radius: 8px;
+            border: 2px solid rgba(255, 255, 255, 0.06);
+            background: rgba(255, 255, 255, 0.02);
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+        .orbit-item:hover { border-color: rgba(255, 140, 0, 0.5); transform: scale(1.05); }
+        .orbit-item.selected {
+            border-color: #ff8c00;
+            background: rgba(255, 140, 0, 0.15);
+            box-shadow: 0 0 15px rgba(255, 140, 0, 0.4);
+        }
+        .orbit-item.selected::after {
+            content: '✓';
+            position: absolute; top: -4px; right: -4px;
+            width: 16px; height: 16px;
+            border-radius: 50%;
+            background: #ff8c00;
+            color: #fff;
+            font-size: 10px; font-weight: 900;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .orbit-item img { width: 32px; height: 32px; object-fit: contain; }
+
+        /* ===== АПГРЕЙДЕР ===== */
         .progress-section { display: flex; justify-content: center; align-items: center; padding: 24px 0 16px; position: relative; }
         .progress-wrapper { position: relative; width: 320px; height: 320px; }
         .progress-svg { width: 100%; height: 100%; transform: rotate(-90deg); }
@@ -363,8 +568,7 @@
         .items-row { display: flex; justify-content: center; align-items: center; gap: 12px; padding: 16px 22px; }
         .item-box {
             background: rgba(255, 255, 255, 0.02);
-            border-radius: 8px;
-            padding: 14px;
+            border-radius: 8px; padding: 14px;
             display: flex; flex-direction: column; align-items: center;
             border: 1px solid rgba(255, 140, 0, 0.3);
             min-width: 150px;
@@ -373,10 +577,7 @@
         .item-box:hover { border-color: rgba(255, 140, 0, 0.6); box-shadow: 0 0 25px rgba(255, 140, 0, 0.2); }
         .item-box .label { font-size: 10px; color: #8a8d9b; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; }
         .item-box img { width: 72px; height: 72px; object-fit: contain; margin-bottom: 8px; animation: itemBob 3s ease-in-out infinite; }
-        @keyframes itemBob {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-4px); }
-        }
+        @keyframes itemBob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
         .item-box .name { font-size: 12px; font-weight: 700; text-align: center; margin-bottom: 6px; color: #fff; height: 30px; display: flex; align-items: center; }
         .item-box .price { font-family: 'Orbitron', sans-serif; font-size: 13px; font-weight: 800; color: #d0d0d0; display: flex; align-items: center; gap: 4px; }
         .price-coin { width: 14px; height: 14px; object-fit: contain; }
@@ -384,73 +585,40 @@
         .swap-arrow { font-size: 24px; color: #ff8c00; animation: pulseArrow 2s ease-in-out infinite; }
         @keyframes pulseArrow { 0%, 100% { opacity: 0.6; transform: scale(1); } 50% { opacity: 1; transform: scale(1.15); } }
 
-        .stage-controls {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 8px;
-            padding: 0 22px 6px;
-        }
+        .stage-controls { display: flex; justify-content: center; align-items: center; gap: 8px; padding: 0 22px 6px; }
         .upgrade-main-btn {
-            flex: 0 1 260px;
-            padding: 16px 18px;
-            border-radius: 8px;
-            border: none;
+            flex: 0 1 260px; padding: 16px 18px; border-radius: 8px; border: none;
             background: linear-gradient(135deg, #ff8c00 0%, #ffaa33 50%, #ff8c00 100%);
-            background-size: 200% 200%;
-            color: white;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 15px;
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            cursor: pointer;
+            background-size: 200% 200%; color: white;
+            font-family: 'Orbitron', sans-serif; font-size: 15px; font-weight: 900;
+            text-transform: uppercase; letter-spacing: 2px; cursor: pointer;
             transition: all 0.25s;
             animation: gradientShift 3s ease infinite;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            position: relative;
-            overflow: hidden;
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+            position: relative; overflow: hidden;
         }
         .upgrade-main-btn::before {
-            content: '';
-            position: absolute;
-            top: 0; left: -100%;
+            content: ''; position: absolute; top: 0; left: -100%;
             width: 100%; height: 100%;
             background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
             animation: shine 3s infinite;
         }
-        @keyframes shine {
-            0% { left: -100%; }
-            100% { left: 100%; }
-        }
+        @keyframes shine { 0% { left: -100%; } 100% { left: 100%; } }
         @keyframes gradientShift { 0%, 100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
         .upgrade-main-btn:hover:not(:disabled) { transform: translateY(-2px); filter: brightness(1.08); }
         .upgrade-main-btn:disabled { opacity: 0.4; cursor: not-allowed; background: #3a3d4d; animation: none; }
         .upgrade-main-btn svg { width: 18px; height: 18px; }
 
         .fast-btn {
-            width: 50px;
-            height: 50px;
-            border-radius: 8px;
+            width: 50px; height: 50px; border-radius: 8px;
             border: 1px solid rgba(255, 140, 0, 0.5);
-            background: rgba(255, 140, 0, 0.18);
-            color: #fff;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            background: rgba(255, 140, 0, 0.18); color: #fff;
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
             transition: all 0.25s;
         }
         .fast-btn:hover { background: rgba(255, 140, 0, 0.3); transform: translateY(-2px); }
         .fast-btn svg { width: 22px; height: 22px; }
-        .fast-btn.active {
-            background: rgba(163, 230, 53, 0.3);
-            border-color: rgba(163, 230, 53, 0.75);
-            animation: fastPulse 1s ease-in-out infinite;
-        }
+        .fast-btn.active { background: rgba(163, 230, 53, 0.3); border-color: rgba(163, 230, 53, 0.75); animation: fastPulse 1s ease-in-out infinite; }
         @keyframes fastPulse {
             0%, 100% { box-shadow: 0 0 12px rgba(163, 230, 53, 0.5); }
             50% { box-shadow: 0 0 25px rgba(163, 230, 53, 0.9); }
@@ -463,8 +631,7 @@
         }
         .section-title::before {
             content: ''; width: 3px; height: 12px;
-            background: #ff8c00;
-            border-radius: 1px;
+            background: #ff8c00; border-radius: 1px;
             animation: sectionPulse 2s ease-in-out infinite;
         }
         @keyframes sectionPulse {
@@ -474,21 +641,17 @@
         .section-block { margin-top: 20px; }
 
         .target-row, .shop-row, .inventory-row {
-            display: grid;
-            grid-template-columns: repeat(6, 1fr);
-            gap: 8px;
-            padding: 4px 22px 12px;
+            display: grid; grid-template-columns: repeat(6, 1fr);
+            gap: 8px; padding: 4px 22px 12px;
         }
 
         .inv-card, .target-card, .shop-card {
             background: rgba(255, 255, 255, 0.025);
-            border-radius: 8px;
-            padding: 8px 6px;
+            border-radius: 8px; padding: 8px 6px;
             display: flex; flex-direction: column; align-items: center;
             border: 1px solid rgba(255, 255, 255, 0.06);
             transition: all 0.2s;
-            position: relative;
-            min-width: 0;
+            position: relative; min-width: 0;
         }
         .inv-card:hover, .target-card:hover:not(.disabled), .shop-card:hover {
             transform: translateY(-3px) scale(1.03);
@@ -497,8 +660,7 @@
             box-shadow: 0 8px 22px rgba(0, 0, 0, 0.5), 0 0 22px rgba(255, 140, 0, 0.25);
         }
         .inv-card.selected, .target-card.selected {
-            border-color: #ff8c00;
-            background: rgba(255, 140, 0, 0.12);
+            border-color: #ff8c00; background: rgba(255, 140, 0, 0.12);
             animation: cardSelected 1.5s ease-in-out infinite;
         }
         @keyframes cardSelected {
@@ -512,14 +674,11 @@
             height: 52px; object-fit: contain; margin-bottom: 4px; pointer-events: none;
             transition: transform 0.3s;
         }
-        .inv-card:hover img, .target-card:hover:not(.disabled) img, .shop-card:hover img {
-            transform: scale(1.12);
-        }
+        .inv-card:hover img, .target-card:hover:not(.disabled) img, .shop-card:hover img { transform: scale(1.12); }
         .inv-card .name, .target-card .name, .shop-card .name {
             font-size: 9px; font-weight: 700; text-align: center; margin-bottom: 3px;
             height: 22px; overflow: hidden; color: #e5e7ef; pointer-events: none;
-            line-height: 1.1;
-            width: 100%;
+            line-height: 1.1; width: 100%;
         }
         .inv-card .price, .target-card .price, .shop-card .price {
             font-size: 9.5px; color: #ffaa33; font-weight: 800;
@@ -546,403 +705,106 @@
             font-family: 'Orbitron', sans-serif; margin-top: 4px;
             position: relative; z-index: 5;
         }
-        .sell-btn:hover:not(:disabled) {
-            background: rgba(120, 200, 130, 0.25);
-            border-color: rgba(120, 200, 130, 0.6);
-            transform: scale(1.05);
-        }
+        .sell-btn:hover:not(:disabled) { background: rgba(120, 200, 130, 0.25); border-color: rgba(120, 200, 130, 0.6); transform: scale(1.05); }
         .sell-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
         .empty-inv { color: #4a4d5e; font-size: 12px; text-align: center; width: 100%; padding: 18px; font-weight: 600; grid-column: 1 / -1; }
         .selectable { display: flex; flex-direction: column; align-items: center; width: 100%; cursor: pointer; }
         .locked { pointer-events: none !important; opacity: 0.4 !important; filter: grayscale(0.5) !important; }
 
-        .admin-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; max-height: 240px; overflow-y: auto; padding: 4px; margin-bottom: 12px; }
-        .admin-item {
-            background: rgba(255, 255, 255, 0.025); border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: 8px; padding: 8px 4px;
-            display: flex; flex-direction: column; align-items: center; cursor: pointer; transition: all 0.2s;
-        }
-        .admin-item:hover { border-color: rgba(255, 140, 0, 0.5); background: rgba(255, 140, 0, 0.06); transform: translateY(-2px); }
-        .admin-item.selected { border-color: #ff8c00; background: rgba(255, 140, 0, 0.15); box-shadow: 0 0 15px rgba(255, 140, 0, 0.4); }
-        .admin-item img { width: 40px; height: 40px; object-fit: contain; margin-bottom: 4px; }
-        .admin-item .name { font-size: 9px; color: #e5e7ef; font-weight: 700; text-align: center; line-height: 1.2; height: 22px; overflow: hidden; }
-
-        .trade-page { padding: 24px 22px; max-width: 700px; margin: 0 auto; }
-        .trade-page-header { text-align: center; margin-bottom: 20px; }
-        .trade-page-header h2 {
-            font-family: 'Orbitron', sans-serif; font-size: 20px; font-weight: 900;
-            color: #fff; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px;
-        }
-        .trade-page-header p { color: #8a8d9b; font-size: 12px; line-height: 1.5; }
-        .trade-list-page { display: flex; flex-direction: column; gap: 8px; }
-        .trade-item {
-            display: grid; grid-template-columns: 56px 1fr auto;
-            align-items: center; gap: 12px; padding: 12px 14px;
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 140, 0, 0.16);
-            border-radius: 8px;
-            transition: all 0.25s;
-        }
-        .trade-item:hover { border-color: rgba(255, 140, 0, 0.5); background: rgba(255, 140, 0, 0.05); transform: translateX(4px); }
-        .trade-left-img { width: 56px; height: 56px; object-fit: contain; }
-        .trade-info { min-width: 0; }
-        .trade-name { font-size: 12px; font-weight: 700; color: #e5e7ef; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .trade-reward {
-            font-size: 11px; color: #ffaa33; font-weight: 700;
-            display: flex; align-items: center; gap: 5px; flex-wrap: wrap;
-        }
-        .trade-reward img { width: 14px; height: 14px; object-fit: contain; vertical-align: middle; }
-        .trade-reward .arrow { color: #ff8c00; font-weight: 900; margin: 0 3px; }
-        .trade-btn {
-            height: 38px; padding: 0 16px; border-radius: 8px; border: none;
-            background: linear-gradient(135deg, #ff8c00, #cc7000); color: white;
-            font-family: 'Orbitron', sans-serif; font-size: 10px; font-weight: 900;
-            letter-spacing: 1px; text-transform: uppercase; cursor: pointer;
-            transition: all 0.2s;
-        }
-        .trade-btn:hover:not(:disabled) { filter: brightness(1.1); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255, 140, 0, 0.5); }
-        .trade-btn:disabled { opacity: 0.35; cursor: not-allowed; background: #3a3d4d; }
-        .trade-empty { text-align: center; padding: 36px 12px; color: #4a4d5e; font-size: 12px; font-weight: 600; }
-
-        .confirm-modal-card {
-            background: rgba(20, 20, 26, 0.9);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 140, 0, 0.35);
-            border-radius: 10px;
-            padding: 24px 22px;
-            width: 100%;
-            max-width: 420px;
-            text-align: center;
-            position: relative;
-        }
-        .confirm-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 18px;
-            font-weight: 900;
-            color: #fff;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            margin-bottom: 18px;
-            text-shadow: 0 0 12px rgba(255, 140, 0, 0.5);
-        }
-        .confirm-row {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            margin-bottom: 16px;
-        }
-        .confirm-item {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 12px 8px;
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 140, 0, 0.2);
-            border-radius: 8px;
-            min-width: 0;
-        }
-        .confirm-item img.brainrot {
-            width: 64px;
-            height: 64px;
-            object-fit: contain;
-            margin-bottom: 6px;
-        }
-        .confirm-item .cname {
-            font-size: 10px;
-            color: #e5e7ef;
-            font-weight: 700;
-            text-align: center;
-            line-height: 1.2;
-            min-height: 24px;
-            margin-bottom: 4px;
-        }
-        .confirm-item .cprice {
-            font-size: 11px;
-            font-weight: 800;
-            color: #ffaa33;
-            font-family: 'Orbitron', sans-serif;
-            display: flex;
-            align-items: center;
-            gap: 3px;
-        }
-        .confirm-item .cprice img { width: 12px; height: 12px; }
-        .confirm-arrow {
-            color: #ff8c00;
-            font-size: 22px;
-            font-weight: 900;
-            filter: drop-shadow(0 0 8px rgba(255, 140, 0, 0.7));
-        }
-        .confirm-coins {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            margin-top: 8px;
-            font-size: 12px;
-            font-weight: 800;
-            color: #ffaa33;
-            font-family: 'Orbitron', sans-serif;
-        }
-        .confirm-coins img { width: 14px; height: 14px; object-fit: contain; }
-        .confirm-selector {
-            margin: 14px 0;
-            padding: 12px;
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: 8px;
-        }
-        .confirm-selector-label {
-            font-size: 10px;
-            color: #8a8d9b;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 8px;
-        }
-        .confirm-options {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
-            gap: 8px;
-        }
-        .confirm-option {
-            padding: 10px 8px;
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s;
-            text-align: center;
-        }
-        .confirm-option:hover { border-color: rgba(255, 140, 0, 0.5); background: rgba(255, 140, 0, 0.06); transform: translateY(-2px); }
-        .confirm-option.selected {
-            border-color: #ff8c00;
-            background: rgba(255, 140, 0, 0.15);
-            box-shadow: 0 0 15px rgba(255, 140, 0, 0.4);
-        }
-        .confirm-option img {
-            width: 40px;
-            height: 40px;
-            object-fit: contain;
-            margin-bottom: 4px;
-        }
-        .confirm-option .oname {
-            font-size: 9px;
-            color: #e5e7ef;
-            font-weight: 700;
-            line-height: 1.2;
-            margin-bottom: 2px;
-            min-height: 20px;
-        }
-        .confirm-option .oprice {
-            font-size: 10px;
-            color: #ffaa33;
-            font-weight: 800;
-            font-family: 'Orbitron', sans-serif;
-        }
-        .confirm-actions {
-            display: flex;
-            gap: 8px;
-            margin-top: 16px;
-        }
-        .confirm-cancel,
-        .confirm-ok {
-            flex: 1;
-            height: 46px;
-            border-radius: 8px;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 12px;
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            cursor: pointer;
-            transition: all 0.2s;
-            border: none;
-        }
-        .confirm-cancel {
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: #8a8d9b;
-        }
-        .confirm-cancel:hover { background: rgba(255, 80, 80, 0.15); color: #ff6b6b; }
-        .confirm-ok {
-            background: linear-gradient(135deg, #ff8c00, #cc7000);
-            color: #fff;
-        }
-        .confirm-ok:hover { filter: brightness(1.1); }
-        .confirm-ok:disabled { opacity: 0.35; cursor: not-allowed; filter: grayscale(0.5); }
-
         /* ===== РАКЕТКА ===== */
         .rocket-page { padding: 24px 22px; max-width: 900px; margin: 0 auto; }
-        .rocket-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 12px;
-            margin-bottom: 14px;
-        }
+        .rocket-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
         .rocket-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 20px;
-            font-weight: 900;
-            color: #fff;
-            letter-spacing: 3px;
-            text-transform: uppercase;
+            font-family: 'Orbitron', sans-serif; font-size: 20px; font-weight: 900;
+            color: #fff; letter-spacing: 3px; text-transform: uppercase;
             text-shadow: 0 0 15px rgba(255, 140, 0, 0.5);
         }
         .rocket-subtitle { color: #8a8d9b; font-size: 11px; letter-spacing: 1px; }
         .rocket-balance-inline {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-family: 'Orbitron', sans-serif;
-            font-weight: 800;
-            font-size: 14px;
-            color: #fff;
+            display: flex; align-items: center; gap: 6px;
+            font-family: 'Orbitron', sans-serif; font-weight: 800; font-size: 14px; color: #fff;
         }
         .rocket-balance-inline img { width: 16px; height: 16px; }
 
         .rocket-stage {
-            position: relative;
-            width: 100%;
-            height: 340px;
+            position: relative; width: 100%; height: 340px;
             background:
                 radial-gradient(ellipse at 50% 100%, rgba(255, 140, 0, 0.2) 0%, transparent 60%),
                 rgba(10, 10, 15, 0.7);
             border: 1px solid rgba(255, 140, 0, 0.25);
-            border-radius: 10px;
-            overflow: hidden;
-            margin-bottom: 14px;
+            border-radius: 10px; overflow: hidden; margin-bottom: 14px;
         }
         .rocket-stage::before {
-            content: '';
-            position: absolute;
-            inset: 0;
+            content: ''; position: absolute; inset: 0;
             background-image:
                 linear-gradient(rgba(255, 140, 0, 0.05) 1px, transparent 1px),
                 linear-gradient(90deg, rgba(255, 140, 0, 0.05) 1px, transparent 1px);
-            background-size: 40px 40px;
-            pointer-events: none;
+            background-size: 40px 40px; pointer-events: none;
         }
         .rocket-stars { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
         .star {
-            position: absolute;
-            width: 2px;
-            height: 2px;
-            background: #fff;
-            border-radius: 50%;
-            opacity: 0.6;
+            position: absolute; width: 2px; height: 2px;
+            background: #fff; border-radius: 50%; opacity: 0.6;
             animation: starTwinkle 3s ease-in-out infinite;
         }
         @keyframes starTwinkle { 0%, 100% { opacity: 0.2; } 50% { opacity: 0.9; } }
 
         .rocket-sprite {
-            position: absolute;
-            left: 40px;
-            bottom: 40px;
-            width: 52px;
-            height: 52px;
-            z-index: 5;
+            position: absolute; left: 40px; bottom: 40px;
+            width: 52px; height: 52px; z-index: 5;
             transition: left 0.05s linear, bottom 0.05s linear;
             filter: drop-shadow(0 0 14px rgba(255, 140, 0, 0.9));
             user-select: none;
         }
-        .rocket-sprite img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            display: block;
-        }
-        .rocket-sprite.flying img {
-            animation: rocketShake 0.15s ease-in-out infinite alternate;
-        }
+        .rocket-sprite img { width: 100%; height: 100%; object-fit: contain; display: block; }
+        .rocket-sprite.flying img { animation: rocketShake 0.15s ease-in-out infinite alternate; }
         @keyframes rocketShake {
             from { transform: translate(0, 0) rotate(-3deg); }
             to { transform: translate(1px, -1px) rotate(3deg); }
         }
-        .rocket-sprite.crashed img {
-            filter: drop-shadow(0 0 25px rgba(255, 50, 50, 1)) hue-rotate(320deg) saturate(3);
-            transform: rotate(45deg) scale(1.3);
-        }
-        .rocket-sprite.cashed img {
-            filter: drop-shadow(0 0 25px rgba(120, 220, 140, 1));
-        }
+        .rocket-sprite.crashed img { filter: drop-shadow(0 0 25px rgba(255, 50, 50, 1)) hue-rotate(320deg) saturate(3); transform: rotate(45deg) scale(1.3); }
+        .rocket-sprite.cashed img { filter: drop-shadow(0 0 25px rgba(120, 220, 140, 1)); }
 
         .rocket-trail {
-            position: absolute;
-            left: 40px;
-            bottom: 40px;
-            width: 60px;
-            height: 12px;
+            position: absolute; left: 40px; bottom: 40px;
+            width: 60px; height: 12px;
             background: linear-gradient(90deg, transparent, #ffaa33 30%, #ff5500 70%, transparent);
-            border-radius: 6px;
-            filter: blur(4px);
-            opacity: 0;
-            z-index: 3;
+            border-radius: 6px; filter: blur(4px); opacity: 0; z-index: 3;
             transition: opacity 0.2s;
         }
         .rocket-trail.active { opacity: 1; }
 
         .rocket-x-display {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            font-family: 'Orbitron', sans-serif;
-            font-weight: 900;
-            font-size: 44px;
-            color: #ffaa33;
-            text-shadow: 0 0 20px rgba(255, 140, 0, 0.8);
-            z-index: 6;
-            letter-spacing: 1px;
+            position: absolute; top: 20px; right: 20px;
+            font-family: 'Orbitron', sans-serif; font-weight: 900; font-size: 44px;
+            color: #ffaa33; text-shadow: 0 0 20px rgba(255, 140, 0, 0.8);
+            z-index: 6; letter-spacing: 1px;
             transition: color 0.2s;
         }
         .rocket-x-display.crashed { color: #ff5555; text-shadow: 0 0 25px rgba(255, 50, 50, 0.9); }
         .rocket-x-display.cashed { color: #7ed88a; text-shadow: 0 0 25px rgba(120, 220, 140, 0.9); }
 
         .rocket-multiplier-bar {
-            position: absolute;
-            left: 20px;
-            bottom: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-            z-index: 6;
+            position: absolute; left: 20px; bottom: 20px;
+            display: flex; flex-direction: column; gap: 4px; z-index: 6;
         }
         .rocket-bar-label {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 9px;
-            color: #8a8d9b;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
+            font-family: 'Orbitron', sans-serif; font-size: 9px;
+            color: #8a8d9b; letter-spacing: 1.5px; text-transform: uppercase;
         }
-        .rocket-bar-track {
-            width: 220px;
-            height: 6px;
-            background: rgba(255, 255, 255, 0.06);
-            border-radius: 3px;
-            overflow: hidden;
-        }
+        .rocket-bar-track { width: 220px; height: 6px; background: rgba(255, 255, 255, 0.06); border-radius: 3px; overflow: hidden; }
         .rocket-bar-fill {
-            height: 100%;
-            width: 0%;
+            height: 100%; width: 0%;
             background: linear-gradient(90deg, #ffaa33, #ff5500);
             transition: width 0.05s linear;
             box-shadow: 0 0 12px rgba(255, 140, 0, 0.7);
         }
 
         .rocket-status {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 11px;
-            font-weight: 800;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            color: #8a8d9b;
-            z-index: 6;
+            position: absolute; top: 20px; left: 20px;
+            font-family: 'Orbitron', sans-serif; font-size: 11px; font-weight: 800;
+            letter-spacing: 2px; text-transform: uppercase; color: #8a8d9b; z-index: 6;
         }
         .rocket-status.flying { color: #ffaa33; animation: statusBlink 0.6s ease-in-out infinite; }
         .rocket-status.crashed { color: #ff5555; }
@@ -950,36 +812,25 @@
         @keyframes statusBlink { 0%, 100% { opacity: 0.6; } 50% { opacity: 1; } }
 
         .rocket-history {
-            margin-top: 12px;
-            padding: 12px;
+            margin-top: 12px; padding: 12px;
             background: rgba(255, 255, 255, 0.015);
             border: 1px solid rgba(255, 255, 255, 0.05);
             border-radius: 8px;
         }
         .rocket-history-label {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 10px;
-            color: #8a8d9b;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            margin-bottom: 8px;
+            font-family: 'Orbitron', sans-serif; font-size: 10px;
+            color: #8a8d9b; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px;
         }
         .rocket-history-list { display: flex; gap: 6px; flex-wrap: wrap; max-height: 70px; overflow-y: auto; }
         .rocket-history-item {
-            padding: 4px 10px;
-            border-radius: 6px;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 10px;
-            font-weight: 900;
+            padding: 4px 10px; border-radius: 6px;
+            font-family: 'Orbitron', sans-serif; font-size: 10px; font-weight: 900;
             background: rgba(255, 140, 0, 0.1);
             border: 1px solid rgba(255, 140, 0, 0.25);
             color: #ffaa33;
             animation: historyPop 0.3s ease;
         }
-        @keyframes historyPop {
-            from { transform: scale(0.5); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
-        }
+        @keyframes historyPop { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
         .rocket-history-item.crashed { background: rgba(255, 80, 80, 0.1); border-color: rgba(255, 80, 80, 0.3); color: #ff5555; }
         .rocket-history-item.low { color: #8a8d9b; border-color: rgba(255, 255, 255, 0.08); }
 
@@ -1012,13 +863,10 @@
             letter-spacing: 3px; text-transform: uppercase; cursor: pointer;
             transition: all 0.25s;
             box-shadow: 0 10px 30px rgba(255, 140, 0, 0.4);
-            position: relative;
-            overflow: hidden;
+            position: relative; overflow: hidden;
         }
         .rocket-action-btn::before {
-            content: '';
-            position: absolute;
-            top: 0; left: -100%;
+            content: ''; position: absolute; top: 0; left: -100%;
             width: 100%; height: 100%;
             background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
             animation: shine 2.5s infinite;
@@ -1049,8 +897,7 @@
         .rocket-overlay-result.show { opacity: 1; pointer-events: auto; }
         .rocket-result-x {
             font-family: 'Orbitron', sans-serif;
-            font-size: 64px; font-weight: 900;
-            letter-spacing: 2px;
+            font-size: 64px; font-weight: 900; letter-spacing: 2px;
             animation: resultPop 0.5s ease;
         }
         @keyframes resultPop {
@@ -1061,105 +908,160 @@
         .rocket-result-x.win { color: #7ed88a; text-shadow: 0 0 30px rgba(120, 220, 140, 0.9); }
         .rocket-result-x.lose { color: #ff5555; text-shadow: 0 0 30px rgba(255, 80, 80, 0.9); }
         .rocket-result-label {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 14px; letter-spacing: 3px;
-            text-transform: uppercase; color: #fff;
+            font-family: 'Orbitron', sans-serif; font-size: 14px;
+            letter-spacing: 3px; text-transform: uppercase; color: #fff;
         }
         .rocket-result-prize {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 20px; font-weight: 900;
-            color: #ffaa33;
-            display: flex; align-items: center; gap: 6px;
+            font-family: 'Orbitron', sans-serif; font-size: 20px; font-weight: 900;
+            color: #ffaa33; display: flex; align-items: center; gap: 6px;
         }
         .rocket-result-prize img { width: 20px; height: 20px; }
 
-        /* ===== КАСТОМИЗАЦИЯ ===== */
-        .customize-card { max-width: 460px; text-align: left; }
-        .customize-section {
-            padding: 14px;
+        /* ===== ОБМЕН ===== */
+        .trade-page { padding: 24px 22px; max-width: 700px; margin: 0 auto; }
+        .trade-page-header { text-align: center; margin-bottom: 20px; }
+        .trade-page-header h2 {
+            font-family: 'Orbitron', sans-serif; font-size: 20px; font-weight: 900;
+            color: #fff; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px;
+        }
+        .trade-page-header p { color: #8a8d9b; font-size: 12px; line-height: 1.5; }
+        .trade-list-page { display: flex; flex-direction: column; gap: 8px; }
+        .trade-item {
+            display: grid; grid-template-columns: 56px 1fr auto;
+            align-items: center; gap: 12px; padding: 12px 14px;
             background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: 8px;
-            margin-bottom: 12px;
+            border: 1px solid rgba(255, 140, 0, 0.16);
+            border-radius: 8px; transition: all 0.25s;
         }
-        .customize-section-title {
+        .trade-item:hover { border-color: rgba(255, 140, 0, 0.5); background: rgba(255, 140, 0, 0.05); transform: translateX(4px); }
+        .trade-left-img { width: 56px; height: 56px; object-fit: contain; }
+        .trade-info { min-width: 0; }
+        .trade-name { font-size: 12px; font-weight: 700; color: #e5e7ef; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .trade-reward { font-size: 11px; color: #ffaa33; font-weight: 700; display: flex; align-items: center; gap: 5px; flex-wrap: wrap; }
+        .trade-reward img { width: 14px; height: 14px; object-fit: contain; vertical-align: middle; }
+        .trade-reward .arrow { color: #ff8c00; font-weight: 900; margin: 0 3px; }
+        .trade-btn {
+            height: 38px; padding: 0 16px; border-radius: 8px; border: none;
+            background: linear-gradient(135deg, #ff8c00, #cc7000); color: white;
+            font-family: 'Orbitron', sans-serif; font-size: 10px; font-weight: 900;
+            letter-spacing: 1px; text-transform: uppercase; cursor: pointer;
+            transition: all 0.2s;
+        }
+        .trade-btn:hover:not(:disabled) { filter: brightness(1.1); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255, 140, 0, 0.5); }
+        .trade-btn:disabled { opacity: 0.35; cursor: not-allowed; background: #3a3d4d; }
+        .trade-empty { text-align: center; padding: 36px 12px; color: #4a4d5e; font-size: 12px; font-weight: 600; }
+
+        .confirm-modal-card {
+            background: rgba(20, 20, 26, 0.9);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 140, 0, 0.35);
+            border-radius: 10px; padding: 24px 22px;
+            width: 100%; max-width: 420px; text-align: center; position: relative;
+        }
+        .confirm-title {
+            font-family: 'Orbitron', sans-serif; font-size: 18px; font-weight: 900;
+            color: #fff; letter-spacing: 2px; text-transform: uppercase;
+            margin-bottom: 18px; text-shadow: 0 0 12px rgba(255, 140, 0, 0.5);
+        }
+        .confirm-row { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 16px; }
+        .confirm-item {
+            flex: 1; display: flex; flex-direction: column; align-items: center;
+            padding: 12px 8px; background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 140, 0, 0.2); border-radius: 8px; min-width: 0;
+        }
+        .confirm-item img.brainrot { width: 64px; height: 64px; object-fit: contain; margin-bottom: 6px; }
+        .confirm-item .cname {
+            font-size: 10px; color: #e5e7ef; font-weight: 700;
+            text-align: center; line-height: 1.2; min-height: 24px; margin-bottom: 4px;
+        }
+        .confirm-item .cprice {
+            font-size: 11px; font-weight: 800; color: #ffaa33;
             font-family: 'Orbitron', sans-serif;
-            font-size: 11px;
-            color: #ffaa33;
-            font-weight: 800;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            margin-bottom: 10px;
+            display: flex; align-items: center; gap: 3px;
         }
-        .bg-options {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
-        }
-        .bg-option {
-            aspect-ratio: 1 / 1.4;
-            border-radius: 8px;
-            border: 2px solid rgba(255, 255, 255, 0.08);
-            background: #1a1a20;
-            cursor: pointer;
-            overflow: hidden;
-            position: relative;
-            transition: all 0.25s;
-        }
-        .bg-option:hover {
-            transform: translateY(-3px);
-            border-color: rgba(255, 140, 0, 0.5);
-            box-shadow: 0 8px 22px rgba(255, 140, 0, 0.2);
-        }
-        .bg-option.selected {
-            border-color: #ff8c00;
-            box-shadow: 0 0 0 2px rgba(255, 140, 0, 0.5), 0 8px 22px rgba(255, 140, 0, 0.4);
-        }
-        .bg-option video,
-        .bg-option .bg-placeholder {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-        .bg-option .bg-placeholder {
-            background: linear-gradient(135deg, #1a1a20, #2a2a30);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #8a8d9b;
+        .confirm-item .cprice img { width: 12px; height: 12px; }
+        .confirm-arrow { color: #ff8c00; font-size: 22px; font-weight: 900; filter: drop-shadow(0 0 8px rgba(255, 140, 0, 0.7)); }
+        .confirm-coins {
+            display: flex; align-items: center; justify-content: center; gap: 6px;
+            margin-top: 8px; font-size: 12px; font-weight: 800; color: #ffaa33;
             font-family: 'Orbitron', sans-serif;
-            font-size: 11px;
-            text-align: center;
-            padding: 8px;
         }
-        .bg-option.selected::after {
-            content: '✓';
-            position: absolute;
-            top: 6px;
-            right: 6px;
-            width: 22px;
-            height: 22px;
-            border-radius: 50%;
-            background: #ff8c00;
-            color: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 13px;
-            font-weight: 900;
-            box-shadow: 0 0 12px rgba(255, 140, 0, 0.9);
+        .confirm-coins img { width: 14px; height: 14px; object-fit: contain; }
+        .confirm-selector {
+            margin: 14px 0; padding: 12px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 8px;
         }
-        .bg-option-none {
-            background: linear-gradient(135deg, #0a0a0f, #1a1a20);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #8a8d9b;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 10px;
+        .confirm-selector-label {
+            font-size: 10px; color: #8a8d9b; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px;
+        }
+        .confirm-options { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 8px; }
+        .confirm-option {
+            padding: 10px 8px; background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 8px;
+            cursor: pointer; transition: all 0.2s; text-align: center;
+        }
+        .confirm-option:hover { border-color: rgba(255, 140, 0, 0.5); background: rgba(255, 140, 0, 0.06); transform: translateY(-2px); }
+        .confirm-option.selected { border-color: #ff8c00; background: rgba(255, 140, 0, 0.15); box-shadow: 0 0 15px rgba(255, 140, 0, 0.4); }
+        .confirm-option img { width: 40px; height: 40px; object-fit: contain; margin-bottom: 4px; }
+        .confirm-option .oname { font-size: 9px; color: #e5e7ef; font-weight: 700; line-height: 1.2; margin-bottom: 2px; min-height: 20px; }
+        .confirm-option .oprice { font-size: 10px; color: #ffaa33; font-weight: 800; font-family: 'Orbitron', sans-serif; }
+        .confirm-actions { display: flex; gap: 8px; margin-top: 16px; }
+        .confirm-cancel, .confirm-ok {
+            flex: 1; height: 46px; border-radius: 8px;
+            font-family: 'Orbitron', sans-serif; font-size: 12px; font-weight: 900;
+            text-transform: uppercase; letter-spacing: 1px; cursor: pointer;
+            transition: all 0.2s; border: none;
+        }
+        .confirm-cancel {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.1); color: #8a8d9b;
+        }
+        .confirm-cancel:hover { background: rgba(255, 80, 80, 0.15); color: #ff6b6b; }
+        .confirm-ok { background: linear-gradient(135deg, #ff8c00, #cc7000); color: #fff; }
+        .confirm-ok:hover { filter: brightness(1.1); }
+        .confirm-ok:disabled { opacity: 0.35; cursor: not-allowed; filter: grayscale(0.5); }
+
+        /* ===== ПРОМОКОД ===== */
+        .promo-panel { padding: 26px 22px; text-align: center; }
+        .promo-panel h2 { font-family: 'Orbitron', sans-serif; font-size: 18px; font-weight: 900; color: #fff; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 2px; }
+        .promo-panel p { color: #8a8d9b; font-size: 13px; margin-bottom: 18px; }
+        .promo-input-wrap { display: flex; gap: 8px; max-width: 460px; margin: 0 auto; }
+        .promo-input-wrap .form-input { flex: 1; text-transform: uppercase; }
+        .promo-input-wrap .action-btn { width: auto; padding: 12px 22px; margin-top: 0; }
+
+        .admin-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; max-height: 240px; overflow-y: auto; padding: 4px; margin-bottom: 12px; }
+        .admin-item {
+            background: rgba(255, 255, 255, 0.025); border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 8px; padding: 8px 4px;
+            display: flex; flex-direction: column; align-items: center; cursor: pointer; transition: all 0.2s;
+        }
+        .admin-item:hover { border-color: rgba(255, 140, 0, 0.5); background: rgba(255, 140, 0, 0.06); transform: translateY(-2px); }
+        .admin-item.selected { border-color: #ff8c00; background: rgba(255, 140, 0, 0.15); box-shadow: 0 0 15px rgba(255, 140, 0, 0.4); }
+        .admin-item img { width: 40px; height: 40px; object-fit: contain; margin-bottom: 4px; }
+        .admin-item .name { font-size: 9px; color: #e5e7ef; font-weight: 700; text-align: center; line-height: 1.2; height: 22px; overflow: hidden; }
+
+        .admin-badge {
+            display: inline-block; padding: 4px 12px;
+            background: linear-gradient(135deg, #ff8c00, #cc7000); border-radius: 6px;
+            font-size: 10px; font-weight: 800; color: #fff; text-transform: uppercase; letter-spacing: 2px;
+            margin-bottom: 10px; font-family: 'Orbitron', sans-serif;
         }
 
+        .promo-list { margin-top: 16px; max-height: 260px; overflow-y: auto; text-align: left; }
+        .promo-list-item {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 10px 12px; background: rgba(255, 255, 255, 0.025);
+            border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 8px;
+            margin-bottom: 6px; font-size: 12px;
+        }
+        .promo-list-item .code { font-family: 'Orbitron', sans-serif; font-weight: 800; color: #ffaa33; letter-spacing: 1px; }
+        .promo-list-item .info { color: #8a8d9b; font-size: 10px; font-weight: 600; }
+        .promo-list-item .uses { font-family: 'Orbitron', sans-serif; font-weight: 800; color: #7ed88a; font-size: 11px; }
+        .promo-list-item .uses.empty { color: #ff6b6b; }
+
+        /* ===== МОБИЛЬНАЯ ВЕРСИЯ ===== */
         @media (max-width: 900px) {
             .target-row, .shop-row, .inventory-row { grid-template-columns: repeat(5, 1fr); }
         }
@@ -1175,8 +1077,7 @@
             .fast-btn svg { width: 20px; height: 20px; }
             .target-row, .shop-row, .inventory-row {
                 grid-template-columns: repeat(4, 1fr);
-                gap: 6px;
-                padding: 4px 12px 12px;
+                gap: 6px; padding: 4px 12px 12px;
             }
             .inv-card img, .target-card img, .shop-card img { max-width: 42px; height: 42px; }
             .section-title { padding-left: 12px; padding-right: 12px; }
@@ -1184,10 +1085,10 @@
             .stage-controls { padding: 0 12px 6px; }
             .top-bar { padding: 10px 12px; }
             .logo-text { font-size: 20px; }
-            .tabs { padding: 12px 10px 0; gap: 4px; }
-            .tab { min-width: 60px; padding: 8px 2px 6px; gap: 3px; }
-            .tab svg { width: 18px; height: 18px; }
-            .tab .tab-label { font-size: 8px; }
+            .tabs { padding: 12px 8px 0; gap: 4px; }
+            .tab { min-width: 56px; padding: 8px 2px 6px; gap: 3px; }
+            .tab svg { width: 16px; height: 16px; }
+            .tab .tab-label { font-size: 7.5px; }
             .promo-panel { padding: 18px 12px; }
             .promo-input-wrap { flex-direction: column; }
             .promo-input-wrap .action-btn { width: 100%; }
@@ -1208,82 +1109,26 @@
             .rocket-quick-bets { grid-column: 1 / -1; grid-template-columns: repeat(4, 1fr); }
             .rocket-action-btn { grid-column: 1 / -1; }
             .bg-options { grid-template-columns: repeat(2, 1fr); }
+            .color-picker-row { grid-template-columns: repeat(4, 1fr); }
+            .profile-page { padding: 14px 12px; }
+            .profile-banner { height: 140px; }
+            .profile-avatar-wrapper { width: 70px; height: 70px; }
+            .profile-avatar-big { width: 70px; height: 70px; }
+            .profile-nick-big { font-size: 16px; }
+            .orbit-item { width: 40px; height: 40px; }
+            .orbit-item img { width: 28px; height: 28px; }
         }
     </style>
 </head>
 <body>
 
 <video id="bgVideo" autoplay muted loop playsinline></video>
-
 <audio id="bgMusic" loop autoplay>
     <source src="https://raw.githubusercontent.com/saintezz/ggbrainXv2/main/8bit.mp3" type="audio/mpeg">
 </audio>
-
 <div class="bg-layer"></div>
 
-<div class="modal" id="profileModal">
-    <div class="modal-card">
-        <div class="profile-header-row">
-            <button class="edit-profile-btn" onclick="openCustomize()" title="Кастомизация">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M12 20h9"/>
-                    <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
-                </svg>
-            </button>
-            <button class="modal-close" onclick="closeModal('profileModal')">✕</button>
-        </div>
-        <img class="profile-avatar" 
-             id="profileAvatarImg"
-             src="https://raw.githubusercontent.com/saintezz/ggbrainXv2/main/Avatarka.jpg" 
-             alt="Avatar">
-        <div class="profile-nick" id="profileNick">Загрузка...</div>
-        <a class="profile-tg" id="profileTg" href="#" target="_blank">@...</a>
-        <div class="profile-balance-label">Баланс</div>
-        <div class="profile-balance-value">
-            <img src="https://github.com/saintezz/saintbetW/blob/main/%D0%BC%D0%BE%D0%BD%D0%B5%D1%82%D0%B0.png?raw=true" alt="coin">
-            <span id="profileBalance">1 000</span>
-        </div>
-        <div id="adminSection" style="display:none; margin-top: 18px;">
-            <div class="admin-badge">ADMIN</div>
-            <button class="action-btn" onclick="closeModal('profileModal'); openAdminPanel()">Открыть админ-панель</button>
-        </div>
-    </div>
-</div>
-
-<!-- ===== КАСТОМИЗАЦИЯ ===== -->
-<div class="modal" id="customizeModal">
-    <div class="modal-card wide customize-card">
-        <button class="modal-close" onclick="closeModal('customizeModal')">✕</button>
-        <div class="modal-title">Кастомизация</div>
-
-        <div class="customize-section">
-            <div class="customize-section-title">Твой ник</div>
-            <input type="text" class="form-input" id="customizeNickInput" placeholder="Введи свой ник" maxlength="20">
-            <button class="action-btn" onclick="saveCustomNick()">Сохранить ник</button>
-        </div>
-
-        <div class="customize-section">
-            <div class="customize-section-title">Фон</div>
-            <div class="bg-options" id="bgOptions">
-                <div class="bg-option bg-option-none" data-bg="none" onclick="selectBackground('none')">
-                    <div class="bg-placeholder">Без фона</div>
-                </div>
-                <div class="bg-option" data-bg="https://github.com/saintezz/ggbrainXv2/raw/main/1011.mp4" onclick="selectBackground('https://github.com/saintezz/ggbrainXv2/raw/main/1011.mp4')">
-                    <video src="https://github.com/saintezz/ggbrainXv2/raw/main/1011.mp4#t=0.1" muted preload="metadata" playsinline></video>
-                </div>
-                <div class="bg-option" data-bg="https://github.com/saintezz/ggbrainXv2/raw/main/1011%20(1).mp4" onclick="selectBackground('https://github.com/saintezz/ggbrainXv2/raw/main/1011%20(1).mp4')">
-                    <video src="https://github.com/saintezz/ggbrainXv2/raw/main/1011%20(1).mp4#t=0.1" muted preload="metadata" playsinline></video>
-                </div>
-                <div class="bg-option" data-bg="https://github.com/saintezz/ggbrainXv2/raw/main/20341-308852923_medium.mp4" onclick="selectBackground('https://github.com/saintezz/ggbrainXv2/raw/main/20341-308852923_medium.mp4')">
-                    <video src="https://github.com/saintezz/ggbrainXv2/raw/main/20341-308852923_medium.mp4#t=0.1" muted preload="metadata" playsinline></video>
-                </div>
-            </div>
-        </div>
-
-        <div class="msg" id="customizeMsg"></div>
-    </div>
-</div>
-
+<!-- ===== АДМИН ПАНЕЛЬ ===== -->
 <div class="modal" id="adminModal">
     <div class="modal-card wide">
         <button class="modal-close" onclick="closeModal('adminModal')">✕</button>
@@ -1321,6 +1166,7 @@
     </div>
 </div>
 
+<!-- ===== ОБМЕН ПОДТВЕРЖДЕНИЕ ===== -->
 <div class="modal" id="confirmTradeModal">
     <div class="confirm-modal-card">
         <button class="modal-close" onclick="closeModal('confirmTradeModal')">✕</button>
@@ -1361,14 +1207,16 @@
                 <img src="https://github.com/saintezz/saintbetW/blob/main/%D0%BC%D0%BE%D0%BD%D0%B5%D1%82%D0%B0.png?raw=true" alt="coin" class="coin-icon">
                 <span id="balanceDisplay">1 000</span>
             </div>
-            <div class="avatar" onclick="openProfile()">
+            <div class="avatar" onclick="switchTab('profile')">
                 <img id="topAvatarImg" 
-                     src="https://raw.githubusercontent.com/saintezz/ggbrainXv2/main/Avatarka.jpg" 
-                     alt="cat">
+                     src="https://github.com/saintezz/ggbrainXv2/raw/main/avavatarochka.jpg" 
+                     alt="avatar"
+                     onerror="this.src='https://via.placeholder.com/40?text=?'">
             </div>
         </div>
     </div>
 
+    <!-- ===== ВКЛАДКИ ===== -->
     <div class="tabs">
         <div class="tab active" id="tabUpgrade" onclick="switchTab('upgrade')">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -1401,10 +1249,25 @@
                 <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/>
                 <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>
             </svg>
-            <span class="tab-label">Промокод</span>
+            <span class="tab-label">Промо</span>
+        </div>
+        <div class="tab" id="tabCustomize" onclick="switchTab('customize')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 20h9"/>
+                <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+            </svg>
+            <span class="tab-label">Стайл</span>
+        </div>
+        <div class="tab" id="tabProfile" onclick="switchTab('profile')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="8" r="4"/>
+                <path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/>
+            </svg>
+            <span class="tab-label">Профиль</span>
         </div>
     </div>
 
+    <!-- ===== АПГРЕЙД ===== -->
     <div class="tab-panel active" id="panelUpgrade">
         <div class="progress-section">
             <div class="progress-wrapper">
@@ -1427,7 +1290,6 @@
                 </div>
             </div>
         </div>
-
         <div class="items-row">
             <div class="item-box">
                 <div class="label">Твой предмет</div>
@@ -1443,7 +1305,6 @@
                 <div class="price" id="targetPrice"></div>
             </div>
         </div>
-
         <div class="stage-controls">
             <button class="upgrade-main-btn" id="upgradeBtn" onclick="upgrade()" disabled>
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
@@ -1452,44 +1313,39 @@
                 </svg>
                 <span>Апгрейд - 0%</span>
             </button>
-            <button class="fast-btn" id="fastUpgradeBtn" onclick="toggleFastMode()" title="Быстрый режим (1с)">
+            <button class="fast-btn" id="fastUpgradeBtn" onclick="toggleFastMode()" title="Быстрый режим">
                 <svg viewBox="0 0 24 24" fill="currentColor" stroke="none">
                     <path d="M13 2L4 14h6l-1 8 9-12h-6l1-8z"/>
                 </svg>
             </button>
         </div>
-
         <div class="section-block">
             <div class="section-title">Инвентарь</div>
-            <div class="inventory-row" id="inventoryRow">
-                <div class="empty-inv">Инвентарь пуст</div>
-            </div>
+            <div class="inventory-row" id="inventoryRow"><div class="empty-inv">Инвентарь пуст</div></div>
         </div>
-
         <div class="section-block">
             <div class="section-title">Выбери цель</div>
             <div class="target-row" id="targetRow"></div>
         </div>
-
         <div class="section-block">
             <div class="section-title">Магазин</div>
             <div class="shop-row" id="shopRow"></div>
         </div>
     </div>
 
+    <!-- ===== РАКЕТКА ===== -->
     <div class="tab-panel" id="panelRocket">
         <div class="rocket-page">
             <div class="rocket-header">
                 <div>
                     <div class="rocket-title">🚀 Ракетка</div>
-                    <div class="rocket-subtitle">Ставь монеты, забирай на любом X. Не дай ракете взорваться!</div>
+                    <div class="rocket-subtitle">Ставь монеты, забирай на любом X</div>
                 </div>
                 <div class="rocket-balance-inline">
                     <img src="https://github.com/saintezz/saintbetW/blob/main/%D0%BC%D0%BE%D0%BD%D0%B5%D1%82%D0%B0.png?raw=true" alt="coin">
                     <span id="rocketBalanceDisplay">1 000</span>
                 </div>
             </div>
-
             <div class="rocket-stage" id="rocketStage">
                 <div class="rocket-stars" id="rocketStars"></div>
                 <div class="rocket-status" id="rocketStatus">ГОТОВ</div>
@@ -1498,14 +1354,10 @@
                 <div class="rocket-sprite" id="rocketSprite">
                     <img src="https://github.com/saintezz/ggbrainXv2/raw/main/raketa.png" alt="rocket" onerror="this.replaceWith(document.createTextNode('🚀'))">
                 </div>
-
                 <div class="rocket-multiplier-bar">
                     <div class="rocket-bar-label">Прогресс до 150x</div>
-                    <div class="rocket-bar-track">
-                        <div class="rocket-bar-fill" id="rocketBarFill"></div>
-                    </div>
+                    <div class="rocket-bar-track"><div class="rocket-bar-fill" id="rocketBarFill"></div></div>
                 </div>
-
                 <div class="rocket-overlay-result" id="rocketOverlayResult">
                     <div class="rocket-result-x" id="rocketResultX">1.00x</div>
                     <div class="rocket-result-label" id="rocketResultLabel">Ты забрал</div>
@@ -1515,14 +1367,12 @@
                     </div>
                 </div>
             </div>
-
             <div class="rocket-history">
                 <div class="rocket-history-label">История раундов</div>
                 <div class="rocket-history-list" id="rocketHistoryList">
                     <div style="color:#4a4d5e; font-size:11px;">Пока пусто</div>
                 </div>
             </div>
-
             <div class="rocket-controls">
                 <div class="rocket-bet-input-wrap">
                     <input type="number" class="rocket-bet-input" id="rocketBetInput" placeholder="Ставка" min="1" value="100">
@@ -1538,6 +1388,7 @@
         </div>
     </div>
 
+    <!-- ===== ОБМЕН ===== -->
     <div class="tab-panel" id="panelTrade">
         <div class="trade-page">
             <div class="trade-page-header">
@@ -1548,6 +1399,7 @@
         </div>
     </div>
 
+    <!-- ===== ПРОМОКОД ===== -->
     <div class="tab-panel" id="panelPromo">
         <div class="promo-panel">
             <h2>🎟️ Активация промокода</h2>
@@ -1559,14 +1411,113 @@
             <div class="msg" id="promoMsg"></div>
         </div>
     </div>
+
+    <!-- ===== КАСТОМИЗАЦИЯ ===== -->
+    <div class="tab-panel" id="panelCustomize">
+        <div class="customize-page">
+            <div class="customize-section">
+                <div class="customize-section-title">Твой ник</div>
+                <input type="text" class="form-input" id="customizeNickInput" placeholder="Введи свой ник" maxlength="20">
+                <button class="action-btn" onclick="saveCustomNick()">Сохранить ник</button>
+            </div>
+
+            <div class="customize-section">
+                <div class="customize-section-title">Прозрачность сайта</div>
+                <div class="slider-row">
+                    <input type="range" id="opacitySlider" min="10" max="100" value="55" oninput="changeOpacity(this.value)">
+                    <div class="slider-value" id="opacityValue">55%</div>
+                </div>
+            </div>
+
+            <div class="customize-section">
+                <div class="customize-section-title">Цвет сайта</div>
+                <div class="color-picker-row" id="colorPickerRow">
+                    <div class="color-swatch" style="background: #ff8c00;" data-color="#ff8c00" data-deep="#cc7000" data-bright="#ffaa33" onclick="changeAccent(this)"></div>
+                    <div class="color-swatch" style="background: #8b5cf6;" data-color="#8b5cf6" data-deep="#5b21b6" data-bright="#a78bfa" onclick="changeAccent(this)"></div>
+                    <div class="color-swatch" style="background: #22c55e;" data-color="#22c55e" data-deep="#166534" data-bright="#4ade80" onclick="changeAccent(this)"></div>
+                    <div class="color-swatch" style="background: #ef4444;" data-color="#ef4444" data-deep="#991b1b" data-bright="#f87171" onclick="changeAccent(this)"></div>
+                    <div class="color-swatch" style="background: #3b82f6;" data-color="#3b82f6" data-deep="#1e40af" data-bright="#60a5fa" onclick="changeAccent(this)"></div>
+                    <div class="color-swatch" style="background: #ec4899;" data-color="#ec4899" data-deep="#9d174d" data-bright="#f472b6" onclick="changeAccent(this)"></div>
+                </div>
+            </div>
+
+            <div class="customize-section">
+                <div class="customize-section-title">Баннер профиля</div>
+                <div class="bg-options" id="bgOptions">
+                    <div class="bg-option" data-bg="none" onclick="selectProfileBg('none')">
+                        <div class="bg-placeholder">Без баннера</div>
+                    </div>
+                    <div class="bg-option" data-bg="https://github.com/saintezz/ggbrainXv2/raw/main/1011.mp4" onclick="selectProfileBg('https://github.com/saintezz/ggbrainXv2/raw/main/1011.mp4')">
+                        <video src="https://github.com/saintezz/ggbrainXv2/raw/main/1011.mp4#t=0.1" muted preload="metadata" playsinline></video>
+                    </div>
+                    <div class="bg-option" data-bg="https://github.com/saintezz/ggbrainXv2/raw/main/1011%20(1).mp4" onclick="selectProfileBg('https://github.com/saintezz/ggbrainXv2/raw/main/1011%20(1).mp4')">
+                        <video src="https://github.com/saintezz/ggbrainXv2/raw/main/1011%20(1).mp4#t=0.1" muted preload="metadata" playsinline></video>
+                    </div>
+                    <div class="bg-option" data-bg="https://github.com/saintezz/ggbrainXv2/raw/main/20341-308852923_medium.mp4" onclick="selectProfileBg('https://github.com/saintezz/ggbrainXv2/raw/main/20341-308852923_medium.mp4')">
+                        <video src="https://github.com/saintezz/ggbrainXv2/raw/main/20341-308852923_medium.mp4#t=0.1" muted preload="metadata" playsinline></video>
+                    </div>
+                </div>
+            </div>
+
+            <div class="customize-section">
+                <div class="customize-section-title">Брейнроты вокруг аватарки</div>
+                <div class="orbit-picker" id="orbitPicker"></div>
+            </div>
+
+            <div class="msg" id="customizeMsg"></div>
+        </div>
+    </div>
+
+    <!-- ===== ПРОФИЛЬ ===== -->
+    <div class="tab-panel" id="panelProfile">
+        <div class="profile-page">
+            <div class="profile-banner" id="profileBanner">
+                <video id="profileBannerVideo" autoplay muted loop playsinline style="display:none;"></video>
+                <div class="profile-banner-overlay"></div>
+                <div class="profile-banner-name">
+                    <div class="profile-avatar-wrapper">
+                        <div class="avatar-orbit" id="avatarOrbit"></div>
+                        <img class="profile-avatar-big" 
+                             id="profileAvatarImg"
+                             src="https://github.com/saintezz/ggbrainXv2/raw/main/avavatarochka.jpg" 
+                             alt="Avatar"
+                             onerror="this.src='https://via.placeholder.com/90?text=?'">
+                    </div>
+                    <div>
+                        <div class="profile-nick-big" id="profileNick">Загрузка...</div>
+                        <a class="profile-tg-big" id="profileTg" href="#" target="_blank">@...</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-stat-row">
+                <div class="profile-stat">
+                    <div class="profile-stat-label">Баланс</div>
+                    <div class="profile-stat-value">
+                        <img src="https://github.com/saintezz/saintbetW/blob/main/%D0%BC%D0%BE%D0%BD%D0%B5%D1%82%D0%B0.png?raw=true" alt="coin">
+                        <span id="profileBalance">1 000</span>
+                    </div>
+                </div>
+                <div class="profile-stat">
+                    <div class="profile-stat-label">Предметов</div>
+                    <div class="profile-stat-value" id="profileItemsCount">0</div>
+                </div>
+            </div>
+
+            <div class="profile-action-row">
+                <button class="action-btn" id="adminPanelBtn" style="display:none;" onclick="openAdminPanel()">Админ-панель</button>
+                <button class="action-btn" style="background: linear-gradient(135deg, #8b5cf6, #5b21b6);" onclick="switchTab('customize')">Кастомизация</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
     const COIN_IMG = 'https://github.com/saintezz/saintbetW/blob/main/%D0%BC%D0%BE%D0%BD%D0%B5%D1%82%D0%B0.png?raw=true';
-    const CAT_AVATAR = 'https://raw.githubusercontent.com/saintezz/ggbrainXv2/main/Avatarka.jpg';
+    const DEFAULT_AVATAR = 'https://github.com/saintezz/ggbrainXv2/raw/main/avavatarochka.jpg';
     const ROCKET_IMG = 'https://github.com/saintezz/ggbrainXv2/raw/main/raketa.png';
 
-    const BACKGROUNDS = {
+    const PROFILE_BACKGROUNDS = {
         none: null,
         '1011': 'https://github.com/saintezz/ggbrainXv2/raw/main/1011.mp4',
         '1011_1': 'https://github.com/saintezz/ggbrainXv2/raw/main/1011%20(1).mp4',
@@ -1616,7 +1567,12 @@
 
     let USER = { nick: 'Гость', tg: '@guest', tgLink: '#', id: null, username: null, photo: null };
     let customNick = localStorage.getItem('ggbrainx_custom_nick') || null;
-    let selectedBg = localStorage.getItem('ggbrainx_bg') || 'none';
+    let profileBg = localStorage.getItem('ggbrainx_profile_bg') || 'none';
+    let orbitItems = JSON.parse(localStorage.getItem('ggbrainx_orbit') || '[]');
+    let appOpacity = parseFloat(localStorage.getItem('ggbrainx_opacity') || '0.55');
+    let accentColor = localStorage.getItem('ggbrainx_accent') || '#ff8c00';
+    let accentDeep = localStorage.getItem('ggbrainx_accent_deep') || '#cc7000';
+    let accentBright = localStorage.getItem('ggbrainx_accent_bright') || '#ffaa33';
 
     (function initTelegramUser() {
         try {
@@ -1636,19 +1592,10 @@
                 USER.nick = full || 'Гость';
                 USER.tg = full || '@guest';
             }
-            if (u.photo_url) USER.photo = u.photo_url;
         } catch (err) {}
     })();
 
-    function getDisplayNick() {
-        if (customNick) return customNick;
-        return USER.nick;
-    }
-
-    function getDisplayAvatar() {
-        if (USER.photo) return USER.photo;
-        return CAT_AVATAR;
-    }
+    function getDisplayNick() { return customNick || USER.nick; }
 
     const MAX_CHANCE = 70;
     const SPIN_DURATION = 6000;
@@ -1668,6 +1615,7 @@
     let currentTradeOptions = [];
     let currentTradeSelected = null;
 
+    // ===== РАКЕТКА =====
     let rocketState = 'idle';
     let rocketBet = 0;
     let rocketCurrentX = 1.00;
@@ -1694,13 +1642,14 @@
     const targetPrice = document.getElementById('targetPrice');
     const upgradeBtn = document.getElementById('upgradeBtn');
     const profileBalance = document.getElementById('profileBalance');
+    const profileItemsCount = document.getElementById('profileItemsCount');
 
     function applyUserToProfile() {
         document.getElementById('profileNick').textContent = getDisplayNick();
         document.getElementById('profileTg').textContent = USER.tg;
         document.getElementById('profileTg').href = USER.tgLink;
-        document.getElementById('profileAvatarImg').src = getDisplayAvatar();
-        document.getElementById('topAvatarImg').src = getDisplayAvatar();
+        document.getElementById('profileAvatarImg').src = DEFAULT_AVATAR;
+        document.getElementById('topAvatarImg').src = DEFAULT_AVATAR;
     }
     applyUserToProfile();
 
@@ -1708,6 +1657,7 @@
         balanceDisplay.innerText = balance.toLocaleString('ru-RU');
         rocketBalanceDisplay.innerText = balance.toLocaleString('ru-RU');
         profileBalance.innerText = balance.toLocaleString('ru-RU');
+        profileItemsCount.innerText = inventory.length;
         balanceBox.classList.remove('pulse');
         void balanceBox.offsetWidth;
         balanceBox.classList.add('pulse');
@@ -1721,30 +1671,11 @@
         modal.addEventListener('click', (e) => { if (e.target === modal) modal.classList.remove('open'); });
     });
 
-    window.openProfile = function() {
-        const adminUsername = ADMIN_TG.replace('@', '').toLowerCase();
-        const myUsername = (USER.username || '').toLowerCase();
-        if (myUsername === adminUsername) {
-            isAdmin = true;
-            document.getElementById('adminSection').style.display = 'block';
-        } else {
-            isAdmin = false;
-            document.getElementById('adminSection').style.display = 'none';
-        }
-        openModal('profileModal');
-    };
-
     window.openAdminPanel = function() {
         if (!isAdmin) return;
         renderAdminGrid();
         renderPromoList();
         openModal('adminModal');
-    };
-
-    window.openCustomize = function() {
-        document.getElementById('customizeNickInput').value = customNick || USER.nick;
-        renderBgOptions();
-        openModal('customizeModal');
     };
 
     window.switchTab = function(tab) {
@@ -1763,8 +1694,42 @@
         } else if (tab === 'promo') {
             document.getElementById('tabPromo').classList.add('active');
             document.getElementById('panelPromo').classList.add('active');
+        } else if (tab === 'customize') {
+            document.getElementById('tabCustomize').classList.add('active');
+            document.getElementById('panelCustomize').classList.add('active');
+            renderBgOptions();
+            renderOrbitPicker();
+        } else if (tab === 'profile') {
+            document.getElementById('tabProfile').classList.add('active');
+            document.getElementById('panelProfile').classList.add('active');
+            updateProfile();
         }
     };
+
+    function updateProfile() {
+        // Проверяем админа
+        const adminUsername = ADMIN_TG.replace('@', '').toLowerCase();
+        const myUsername = (USER.username || '').toLowerCase();
+        isAdmin = myUsername === adminUsername;
+        document.getElementById('adminPanelBtn').style.display = isAdmin ? 'block' : 'none';
+
+        // Баннер
+        const banner = document.getElementById('profileBanner');
+        const video = document.getElementById('profileBannerVideo');
+        if (profileBg === 'none') {
+            video.style.display = 'none';
+            video.pause();
+            banner.style.background = 'linear-gradient(135deg, #1a1a20, #2a2a30)';
+        } else {
+            video.style.display = 'block';
+            if (video.src !== profileBg) video.src = profileBg;
+            video.play().catch(() => {});
+            banner.style.background = 'transparent';
+        }
+
+        // Орбита
+        renderOrbit();
+    }
 
     window.selectPromoType = function(type) {
         promoType = type;
@@ -1810,8 +1775,7 @@
             if (!selectedAdminItem) { msg.className = 'msg err'; msg.textContent = 'Выбери брейнрот'; return; }
             value = selectedAdminItem;
         }
-        msg.className = 'msg wait';
-        msg.textContent = 'Создаём...';
+        msg.className = 'msg wait'; msg.textContent = 'Создаём...';
         try {
             const res = await fetchWithTimeout(API_URL + '/api/create', {
                 method: 'POST',
@@ -1820,20 +1784,17 @@
             });
             const data = await res.json();
             if (data.ok) {
-                msg.className = 'msg ok';
-                msg.textContent = 'Промокод создан: ' + code;
+                msg.className = 'msg ok'; msg.textContent = 'Промокод создан: ' + code;
                 document.getElementById('adminCode').value = '';
                 document.getElementById('adminUses').value = 1;
                 selectedAdminItem = null;
                 renderAdminGrid();
                 renderPromoList();
             } else {
-                msg.className = 'msg err';
-                msg.textContent = data.error || 'Ошибка';
+                msg.className = 'msg err'; msg.textContent = data.error || 'Ошибка';
             }
         } catch (err) {
-            msg.className = 'msg err';
-            msg.textContent = 'Сервер не отвечает.';
+            msg.className = 'msg err'; msg.textContent = 'Сервер не отвечает.';
         }
     };
 
@@ -1872,8 +1833,7 @@
         const msgTab = document.getElementById('promoMsg');
         const code = inputTab.value.trim().toUpperCase();
         if (!code) { msgTab.className = 'msg err'; msgTab.textContent = 'Введи промокод'; return; }
-        msgTab.className = 'msg wait';
-        msgTab.textContent = 'Проверяем...';
+        msgTab.className = 'msg wait'; msgTab.textContent = 'Проверяем...';
         try {
             const res = await fetchWithTimeout(API_URL + '/api/activate', {
                 method: 'POST',
@@ -1889,32 +1849,19 @@
                     msgTab.textContent = `+${data.value} монет! Осталось: ${data.remaining}`;
                 } else {
                     inventory.push(data.value);
-                    renderInventory();
-                    renderTargets();
-                    renderShop();
-                    updateUpgradeScreen();
+                    renderInventory(); renderTargets(); renderShop(); updateUpgradeScreen();
                     const item = getItemById(data.value);
                     msgTab.className = 'msg ok';
                     msgTab.textContent = `Получен: ${item ? item.name : data.value}! Осталось: ${data.remaining}`;
                 }
                 inputTab.value = '';
             } else {
-                msgTab.className = 'msg err';
-                msgTab.textContent = data.error || 'Ошибка';
+                msgTab.className = 'msg err'; msgTab.textContent = data.error || 'Ошибка';
             }
         } catch (err) {
-            msgTab.className = 'msg err';
-            msgTab.textContent = 'Сервер не отвечает.';
+            msgTab.className = 'msg err'; msgTab.textContent = 'Сервер не отвечает.';
         }
     };
-
-    function enableWheelScroll(el) {
-        el.addEventListener('wheel', (e) => {
-            if (el.scrollWidth <= el.clientWidth) return;
-            e.preventDefault();
-            el.scrollLeft += e.deltaY > 0 ? 300 : -300;
-        }, { passive: false });
-    }
 
     window.toggleFastMode = function() {
         fastModeEnabled = !fastModeEnabled;
@@ -1940,9 +1887,7 @@
         balance -= item.price;
         inventory.push(id);
         updateBalance();
-        renderShop();
-        renderInventory();
-        updateUpgradeScreen();
+        renderShop(); renderInventory(); updateUpgradeScreen();
     }
 
     window.sellItem = function(id) {
@@ -1982,6 +1927,7 @@
                 </div>
             `;
         }).join('');
+        profileItemsCount.innerText = inventory.length;
     }
 
     window.selectSource = function(id) {
@@ -2030,7 +1976,6 @@
     function updateUpgradeScreen() {
         const sourceItem = selectedSourceId ? getItemById(selectedSourceId) : null;
         const targetItem = selectedTargetId ? getItemById(selectedTargetId) : null;
-
         if (sourceItem) {
             sourceImg.src = sourceItem.img;
             sourceImg.style.display = 'block';
@@ -2041,7 +1986,6 @@
             sourceName.innerText = '—';
             sourcePrice.innerHTML = '';
         }
-
         if (targetItem) {
             targetImg.src = targetItem.img;
             targetImg.style.display = 'block';
@@ -2052,18 +1996,13 @@
             targetName.innerText = '—';
             targetPrice.innerHTML = '';
         }
-
         const chance = calculateChance();
         const displayChance = Math.floor(chance);
-
         const offset = CIRCUMFERENCE - (chance / 100) * CIRCUMFERENCE;
         progressBar.style.strokeDashoffset = offset;
-
         const angle = (chance / 100) * 360;
         arrowContainer.style.transform = `rotate(${angle}deg)`;
-
         chanceBig.innerText = displayChance + '%';
-
         if (displayChance >= 45) {
             chanceLabel.innerText = 'ВЫСОКИЙ ШАНС';
             chanceLabel.className = 'chance-label';
@@ -2074,7 +2013,6 @@
             chanceLabel.innerText = '';
             chanceLabel.className = 'chance-label hidden';
         }
-
         if (sourceItem && targetItem && chance > 0 && !isSpinning) {
             upgradeBtn.disabled = false;
             upgradeBtn.querySelector('span').innerText = `Апгрейд - ${displayChance}%`;
@@ -2092,26 +2030,20 @@
         if (targetItem.price <= sourceItem.price) return;
         const chance = calculateChance();
         if (chance <= 0) return;
-
         isSpinning = true;
         upgradeBtn.disabled = true;
         upgradeBtn.querySelector('span').innerText = 'КРУТИМ...';
-
         inventoryRow.classList.add('locked');
         targetRow.classList.add('locked');
         shopRow.classList.add('locked');
-
         const baseRotation = 360 * 8;
         const randomAngle = Math.random() * 360;
         const totalRotation = baseRotation + randomAngle;
-
         arrowContainer.style.transition = `transform ${durationMs}ms cubic-bezier(0.12, 0.8, 0.15, 1)`;
         arrowContainer.style.transform = `rotate(${totalRotation}deg)`;
-
         const successAngle = (chance / 100) * 360;
         const finalAngle = totalRotation % 360;
         const isSuccess = finalAngle <= successAngle;
-
         setTimeout(() => {
             if (isSuccess) {
                 const sourceIndex = inventory.indexOf(selectedSourceId);
@@ -2124,13 +2056,10 @@
             selectedSourceId = null;
             selectedTargetId = null;
             isSpinning = false;
-
             updateBalance();
             renderInventory(); renderTargets(); renderShop(); updateUpgradeScreen();
-
             arrowContainer.style.transition = 'none';
             arrowContainer.style.transform = 'rotate(0deg)';
-
             upgradeBtn.disabled = true;
             inventoryRow.classList.remove('locked');
             targetRow.classList.remove('locked');
@@ -2143,65 +2072,20 @@
         else performUpgrade(SPIN_DURATION);
     };
 
-    // ===== КАСТОМИЗАЦИЯ =====
-    function renderBgOptions() {
-        document.querySelectorAll('#bgOptions .bg-option').forEach(el => {
-            const bg = el.dataset.bg;
-            if (bg === 'none') {
-                el.classList.toggle('selected', selectedBg === 'none');
-            } else {
-                el.classList.toggle('selected', selectedBg === bg);
-            }
-        });
-    }
-
-    window.selectBackground = function(bg) {
-        selectedBg = bg;
-        localStorage.setItem('ggbrainx_bg', bg);
-        applyBackground();
-        renderBgOptions();
-    };
-
-    function applyBackground() {
-        const video = document.getElementById('bgVideo');
-        if (selectedBg === 'none') {
-            video.pause();
-            video.removeAttribute('src');
-            video.style.opacity = 0;
-        } else {
-            video.src = selectedBg;
-            video.style.opacity = 0.35;
-            video.play().catch(() => {});
-        }
-    }
-
-    window.saveCustomNick = function() {
-        const input = document.getElementById('customizeNickInput');
-        const msg = document.getElementById('customizeMsg');
-        const val = input.value.trim();
-        if (!val) {
-            customNick = null;
-            localStorage.removeItem('ggbrainx_custom_nick');
-            msg.className = 'msg ok';
-            msg.textContent = 'Ник сброшен';
-        } else {
-            customNick = val;
-            localStorage.setItem('ggbrainx_custom_nick', val);
-            msg.className = 'msg ok';
-            msg.textContent = 'Ник сохранён: ' + val;
-        }
-        applyUserToProfile();
-    };
-
     // ===== РАКЕТКА =====
+    // Генерация краша: теперь x1.0 ОЧЕНЬ частый (25%), x от 1.0 до 2.0 тоже частый
     function generateCrashX() {
         const r = Math.random();
-        if (r < 0.03) return 1.00;
-        let base = 1 + (-Math.log(1 - Math.random())) * 1.4;
-        if (Math.random() < 0.02) base = 10 + Math.random() * 140;
-        if (base > 150) base = 150;
-        if (base < 1) base = 1;
-        return Math.round(base * 100) / 100;
+        // 25% мгновенный краш (1.0)
+        if (r < 0.25) return 1.00;
+        // 40% краш в диапазоне 1.0-1.5
+        if (r < 0.65) return 1.00 + Math.random() * 0.5;
+        // 20% краш в диапазоне 1.5-2.5
+        if (r < 0.85) return 1.5 + Math.random() * 1.0;
+        // 12% краш в диапазоне 2.5-5
+        if (r < 0.97) return 2.5 + Math.random() * 2.5;
+        // 3% высокие иксы 5-150
+        return 5 + Math.random() * 145;
     }
 
     function rocketSetBet(v) {
@@ -2246,11 +2130,9 @@
         const trail = document.getElementById('rocketTrail');
         const status = document.getElementById('rocketStatus');
         const actionBtn = document.getElementById('rocketActionBtn');
-
         xDisplay.textContent = rocketCurrentX.toFixed(2) + 'x';
         const progress = Math.min(100, (rocketCurrentX / 150) * 100);
         barFill.style.width = progress + '%';
-
         const stage = document.getElementById('rocketStage');
         const w = stage.clientWidth;
         const h = stage.clientHeight;
@@ -2259,12 +2141,10 @@
         const logX = Math.log(rocketCurrentX) / Math.log(150);
         const px = startX + logX * (w - startX - 90);
         const py = startY - logX * (startY - 20);
-
         sprite.style.left = px + 'px';
         sprite.style.bottom = (h - py - 52) + 'px';
         trail.style.left = (px - 50) + 'px';
         trail.style.bottom = (h - py - 52 + 20) + 'px';
-
         if (rocketState === 'flying') {
             sprite.classList.add('flying');
             sprite.classList.remove('crashed', 'cashed');
@@ -2293,7 +2173,6 @@
             status.textContent = 'ГОТОВ';
             xDisplay.className = 'rocket-x-display';
         }
-
         if (rocketState === 'idle') {
             actionBtn.textContent = 'СТАВКА';
             actionBtn.classList.remove('cashout', 'crashed');
@@ -2317,14 +2196,13 @@
         }
     }
 
+    // Ракетка медленнее: коэффициент 0.18 вместо 0.35
     function rocketTick() {
         if (rocketState !== 'flying') return;
         const elapsed = (performance.now() - rocketStartTime) / 1000;
-        rocketCurrentX = Math.exp(0.35 * elapsed);
+        rocketCurrentX = Math.exp(0.18 * elapsed);
         if (rocketCurrentX > 150) rocketCurrentX = 150;
-
         updateRocketUI();
-
         if (rocketCurrentX >= rocketCrashX) {
             rocketState = 'crashed';
             rocketCurrentX = rocketCrashX;
@@ -2368,7 +2246,6 @@
             rocketBet = bet;
             balance -= bet;
             updateBalance();
-
             rocketState = 'flying';
             rocketCurrentX = 1.00;
             rocketCrashX = generateCrashX();
@@ -2395,6 +2272,114 @@
                 }
             }, 2500);
         }
+    };
+
+    // ===== КАСТОМИЗАЦИЯ =====
+    function applyCustomization() {
+        // Прозрачность
+        document.querySelector('.app').style.setProperty('--app-opacity', appOpacity);
+        document.getElementById('opacitySlider').value = Math.round(appOpacity * 100);
+        document.getElementById('opacityValue').textContent = Math.round(appOpacity * 100) + '%';
+
+        // Цвет
+        document.documentElement.style.setProperty('--accent', accentColor);
+        document.documentElement.style.setProperty('--accent-deep', accentDeep);
+        document.documentElement.style.setProperty('--accent-bright', accentBright);
+
+        // Отметки на цветах
+        document.querySelectorAll('.color-swatch').forEach(el => {
+            el.classList.toggle('selected', el.dataset.color === accentColor);
+        });
+    }
+
+    window.changeOpacity = function(val) {
+        appOpacity = val / 100;
+        localStorage.setItem('ggbrainx_opacity', appOpacity);
+        document.querySelector('.app').style.setProperty('--app-opacity', appOpacity);
+        document.getElementById('opacityValue').textContent = val + '%';
+    };
+
+    window.changeAccent = function(el) {
+        accentColor = el.dataset.color;
+        accentDeep = el.dataset.deep;
+        accentBright = el.dataset.bright;
+        localStorage.setItem('ggbrainx_accent', accentColor);
+        localStorage.setItem('ggbrainx_accent_deep', accentDeep);
+        localStorage.setItem('ggbrainx_accent_bright', accentBright);
+        applyCustomization();
+    };
+
+    function renderBgOptions() {
+        document.querySelectorAll('#bgOptions .bg-option').forEach(el => {
+            el.classList.toggle('selected', el.dataset.bg === profileBg);
+        });
+    }
+
+    window.selectProfileBg = function(bg) {
+        profileBg = bg;
+        localStorage.setItem('ggbrainx_profile_bg', bg);
+        renderBgOptions();
+        if (document.getElementById('panelProfile').classList.contains('active')) {
+            updateProfile();
+        }
+    };
+
+    function renderOrbitPicker() {
+        const picker = document.getElementById('orbitPicker');
+        picker.innerHTML = ITEMS.map(item => `
+            <div class="orbit-item ${orbitItems.includes(item.id) ? 'selected' : ''}" onclick="toggleOrbitItem('${item.id}')">
+                <img src="${item.img}" alt="${item.name}" onerror="this.src='https://via.placeholder.com/32?text=?'">
+            </div>
+        `).join('');
+    }
+
+    window.toggleOrbitItem = function(id) {
+        const index = orbitItems.indexOf(id);
+        if (index > -1) orbitItems.splice(index, 1);
+        else {
+            if (orbitItems.length >= 6) {
+                alert('Максимум 6 брейнротов вокруг аватарки');
+                return;
+            }
+            orbitItems.push(id);
+        }
+        localStorage.setItem('ggbrainx_orbit', JSON.stringify(orbitItems));
+        renderOrbitPicker();
+        renderOrbit();
+    };
+
+    function renderOrbit() {
+        const orbit = document.getElementById('avatarOrbit');
+        orbit.innerHTML = '';
+        orbitItems.forEach((id, i) => {
+            const item = getItemById(id);
+            if (!item) return;
+            const el = document.createElement('div');
+            el.className = 'avatar-orbit-item';
+            const duration = 8 + i * 0.5;
+            el.style.animationDuration = duration + 's';
+            el.style.animationDelay = (i * -1.5) + 's';
+            el.innerHTML = `<img src="${item.img}" alt="${item.name}" onerror="this.src='https://via.placeholder.com/20?text=?'">`;
+            orbit.appendChild(el);
+        });
+    }
+
+    window.saveCustomNick = function() {
+        const input = document.getElementById('customizeNickInput');
+        const msg = document.getElementById('customizeMsg');
+        const val = input.value.trim();
+        if (!val) {
+            customNick = null;
+            localStorage.removeItem('ggbrainx_custom_nick');
+            msg.className = 'msg ok';
+            msg.textContent = 'Ник сброшен';
+        } else {
+            customNick = val;
+            localStorage.setItem('ggbrainx_custom_nick', val);
+            msg.className = 'msg ok';
+            msg.textContent = 'Ник сохранён: ' + val;
+        }
+        applyUserToProfile();
     };
 
     // ===== ОБМЕН =====
@@ -2538,11 +2523,12 @@
     };
 
     function init() {
-        applyBackground();
+        applyCustomization();
         updateBalance();
         renderInventory(); renderTargets(); renderShop(); updateUpgradeScreen(); renderAdminGrid();
         renderRocketHistory();
         updateRocketUI();
+        renderOrbitPicker();
     }
     init();
 
