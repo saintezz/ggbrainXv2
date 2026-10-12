@@ -25,7 +25,6 @@
             --glass-bg: rgba(15, 35, 22, 0.45);
             --glass-bg-strong: rgba(15, 35, 22, 0.65);
             --glass-border: rgba(245, 197, 66, 0.25);
-            --glass-border-green: rgba(46, 204, 113, 0.25);
             --glass-highlight: rgba(255, 255, 255, 0.08);
             --app-bg-alpha: 0.35;
             --card-img-size: 52px;
@@ -48,9 +47,11 @@
             font-weight: 700; gap: 14px;
         }
 
-        /* ===== ОСАДКИ ===== */
+        /* ===== ОСАДКИ (скроллятся вместе с сайтом) ===== */
         #weather {
-            position: fixed; inset: 0; pointer-events: none; z-index: 9999;
+            position: absolute; top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none; z-index: 9999;
             overflow: hidden;
         }
         .weather-particle {
@@ -136,10 +137,9 @@
             animation: toastIn 0.3s ease, toastOut 0.3s ease 3.7s forwards;
             max-width: 300px;
             display: flex; align-items: center; gap: 8px;
-            letter-spacing: 0.3px;
         }
-        .toast.ok { border-color: rgba(126, 216, 138, 0.6); }
-        .toast.err { border-color: rgba(255, 107, 107, 0.6); }
+        .toast.ok { border-color: var(--green-bright); }
+        .toast.err { border-color: #ff6b6b; }
         .toast.info { border-color: var(--glass-border); }
         @keyframes toastIn {
             from { opacity: 0; transform: translateX(30px); }
@@ -152,7 +152,7 @@
         /* ===== ОСНОВНОЕ ПРИЛОЖЕНИЕ ===== */
         .app {
             width: 100%; 
-            max-width: 480px;
+            max-width: 560px;
             margin: 0 auto;
             background: var(--glass-bg);
             backdrop-filter: blur(24px) saturate(140%);
@@ -161,7 +161,7 @@
             border-radius: 16px;
             box-shadow: 
                 0 20px 60px rgba(0, 0, 0, 0.6), 
-                0 0 60px rgba(46, 204, 113, 0.1),
+                0 0 60px var(--accent-very-dim),
                 inset 0 1px 0 var(--glass-highlight),
                 inset 0 -1px 0 rgba(0, 0, 0, 0.2);
             overflow: hidden; display: flex; flex-direction: column; padding-bottom: 20px;
@@ -169,7 +169,7 @@
             flex-shrink: 0;
         }
 
-        /* ===== ПРАВАЯ ПАНЕЛЬ КНОПОК ===== */
+        /* ===== ПРАВАЯ ПАНЕЛЬ КНОПОК (как на скрине) ===== */
         .nav-panel {
             position: sticky; top: 20px;
             display: flex; flex-direction: column; gap: 8px;
@@ -205,7 +205,7 @@
         .nav-btn:hover svg { color: var(--accent-bright); }
         .nav-btn:hover .nav-label { opacity: 1; color: var(--accent-bright); }
         .nav-btn.active {
-            background: linear-gradient(135deg, rgba(46, 204, 113, 0.2), rgba(245, 197, 66, 0.2));
+            background: linear-gradient(135deg, var(--accent-very-dim), var(--accent-dim));
             border-color: var(--accent);
             color: #fff;
             box-shadow: 0 0 30px var(--accent-dim), inset 0 1px 0 var(--glass-highlight);
@@ -383,7 +383,7 @@
             letter-spacing: 1px;
         }
         .radio-option.active { 
-            background: linear-gradient(135deg, rgba(46, 204, 113, 0.2), rgba(245, 197, 66, 0.2)); 
+            background: var(--accent-very-dim); 
             border-color: var(--accent); color: #fff; 
             box-shadow: 0 0 20px var(--accent-dim);
         }
@@ -395,16 +395,16 @@
             font-family: 'Orbitron', sans-serif; font-size: 13px; font-weight: 900;
             text-transform: uppercase; letter-spacing: 2px; cursor: pointer;
             transition: all 0.25s; margin-top: 8px;
-            box-shadow: 0 4px 20px rgba(46, 204, 113, 0.3), inset 0 1px 0 var(--glass-highlight);
+            box-shadow: 0 4px 20px var(--green-dim), inset 0 1px 0 var(--glass-highlight);
         }
         .action-btn:hover:not(:disabled) { 
             filter: brightness(1.1); transform: translateY(-2px); 
-            box-shadow: 0 8px 30px rgba(245, 197, 66, 0.4); 
+            box-shadow: 0 8px 30px var(--accent-dim); 
         }
         .action-btn:disabled { opacity: 0.4; cursor: not-allowed; background: #3a3d4d; }
 
         .msg { margin-top: 12px; font-size: 12px; font-weight: 800; min-height: 18px; text-align: center; }
-        .msg.ok { color: #7ed88a; }
+        .msg.ok { color: var(--green-bright); }
         .msg.err { color: #ff6b6b; }
         .msg.wait { color: var(--accent-bright); }
 
@@ -465,7 +465,7 @@
             font-family: 'Orbitron', sans-serif;
             font-size: 12px;
             font-weight: 900;
-            color: #7ed88a;
+            color: var(--green-bright);
             margin-top: 6px;
             letter-spacing: 2px;
         }
@@ -628,7 +628,7 @@
         .deposit-info .dep-key { color: #a8adb8; font-size: 10px; font-weight: 800; }
         .deposit-info .dep-val { color: #fff; font-weight: 800; }
         .deposit-info .dep-val.accent { color: var(--accent-bright); }
-        .deposit-info .dep-val.green { color: #7ed88a; }
+        .deposit-info .dep-val.green { color: var(--green-bright); }
         .deposit-actions { display: flex; flex-direction: column; gap: 4px; }
         .dep-accept, .dep-reject {
             height: 26px; padding: 0 10px; border-radius: 8px; border: none;
@@ -643,82 +643,81 @@
         .deposits-empty { text-align: center; color: #6a6d7e; font-size: 11px; padding: 14px; font-weight: 700; }
 
         /* ===== МЕНЮ ===== */
-        .menu-page { padding: 14px 10px; display: flex; flex-direction: column; min-height: 100vh; }
-        .menu-top-half {
-            flex: 1;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            position: relative; overflow: hidden;
-            min-height: 45vh;
+        .menu-page { padding: 14px 14px; display: flex; flex-direction: column; gap: 12px; }
+        .menu-promo-card {
+            background: rgba(255, 255, 255, 0.04);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 16px;
+            display: flex; flex-direction: column; align-items: center; gap: 10px;
+            box-shadow: inset 0 1px 0 var(--glass-highlight), 0 8px 30px rgba(0,0,0,0.3);
+        }
+        .menu-promo-label-top {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 10px;
+            font-weight: 900;
+            color: #a8adb8;
+            letter-spacing: 3px;
+            text-transform: uppercase;
         }
         .menu-promo-img {
-            width: 100%; height: 100%;
-            max-height: 45vh;
+            width: 100%;
+            max-height: 260px;
             object-fit: contain;
-            filter: drop-shadow(0 0 50px var(--accent-dim)) drop-shadow(0 0 30px var(--green-dim));
+            filter: drop-shadow(0 0 30px var(--accent-dim));
             animation: promoFloat 3s ease-in-out infinite;
-            position: relative; z-index: 2;
         }
         @keyframes promoFloat {
             0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-12px); }
+            50% { transform: translateY(-8px); }
         }
         .menu-promo-percent {
-            font-family: 'Orbitron', sans-serif; font-size: 46px; font-weight: 900;
+            font-family: 'Orbitron', sans-serif; font-size: 40px; font-weight: 900;
             background: linear-gradient(135deg, var(--green-bright), var(--accent-bright));
             -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-            text-shadow: 0 0 50px var(--accent-dim);
-            letter-spacing: 4px;
-            position: relative; z-index: 2;
-            margin-top: -10px;
+            letter-spacing: 3px;
             filter: drop-shadow(0 0 20px var(--accent-dim));
-        }
-        .menu-promo-label {
-            font-size: 13px; color: #a8adb8; font-weight: 800;
-            letter-spacing: 4px; text-transform: uppercase;
-            position: relative; z-index: 2;
             margin-top: -6px;
         }
+        .menu-promo-code-box {
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            padding: 10px 18px;
+            background: rgba(0, 0, 0, 0.35);
+            backdrop-filter: blur(15px);
+            border: 1px dashed var(--accent);
+            border-radius: 12px;
+            font-family: 'Orbitron', sans-serif; font-size: 14px; font-weight: 900;
+            color: var(--accent-bright);
+            letter-spacing: 2px;
+            box-shadow: inset 0 1px 0 var(--glass-highlight), 0 0 20px var(--accent-dim);
+            width: 100%;
+            text-align: center;
+            flex-wrap: wrap;
+        }
         .menu-promo-timer {
-            font-family: 'Orbitron', sans-serif; font-size: 15px; font-weight: 900;
+            font-family: 'Orbitron', sans-serif; font-size: 14px; font-weight: 900;
             color: #fff;
-            padding: 10px 22px;
+            padding: 8px 18px;
             background: rgba(0, 0, 0, 0.35);
             backdrop-filter: blur(15px);
             border: 1px solid var(--glass-border);
-            border-radius: 14px;
-            position: relative; z-index: 2;
-            display: flex; align-items: center; gap: 10px;
-            margin-top: 12px;
-            box-shadow: inset 0 1px 0 var(--glass-highlight), 0 0 25px var(--accent-dim);
+            border-radius: 12px;
+            display: flex; align-items: center; gap: 8px;
+            box-shadow: inset 0 1px 0 var(--glass-highlight);
         }
         .menu-promo-timer .t-icon {
             color: var(--accent-bright);
-            font-size: 18px;
+            font-size: 16px;
             animation: timerPulse 1s ease-in-out infinite;
         }
         @keyframes timerPulse {
             0%, 100% { opacity: 0.7; }
             50% { opacity: 1; }
         }
-        .menu-bottom-half {
-            padding: 14px 8px 8px;
-            display: flex; flex-direction: column; align-items: center; gap: 10px;
-        }
         .menu-promo-hint {
-            font-size: 12px; color: #a8adb8; text-align: center;
-            line-height: 1.6; font-weight: 700;
-        }
-        .menu-promo-code-box {
-            display: flex; align-items: center; gap: 10px;
-            padding: 10px 20px;
-            background: rgba(0, 0, 0, 0.35);
-            backdrop-filter: blur(15px);
-            border: 1px dashed var(--accent);
-            border-radius: 12px;
-            font-family: 'Orbitron', sans-serif; font-size: 16px; font-weight: 900;
-            color: var(--accent-bright);
-            letter-spacing: 4px;
-            box-shadow: inset 0 1px 0 var(--glass-highlight), 0 0 25px var(--accent-dim);
+            font-size: 11px; color: #a8adb8; text-align: center;
+            line-height: 1.5; font-weight: 700;
         }
 
         /* ===== КАСТОМИЗАЦИЯ ===== */
@@ -902,7 +901,7 @@
         .upload-btn {
             flex: 1; padding: 12px 16px; border-radius: 12px;
             border: 1px solid var(--glass-border);
-            background: linear-gradient(135deg, rgba(46, 204, 113, 0.15), rgba(245, 197, 66, 0.15));
+            background: var(--accent-very-dim);
             color: #fff;
             font-family: 'Orbitron', sans-serif; font-size: 11px; font-weight: 900;
             text-transform: uppercase; letter-spacing: 1.5px;
@@ -911,7 +910,7 @@
             backdrop-filter: blur(10px);
         }
         .upload-btn:hover { 
-            background: linear-gradient(135deg, rgba(46, 204, 113, 0.3), rgba(245, 197, 66, 0.3));
+            background: var(--accent-dim);
             border-color: var(--accent);
             transform: translateY(-2px);
             box-shadow: 0 0 20px var(--accent-dim);
@@ -997,9 +996,9 @@
             font-family: 'Orbitron', sans-serif; font-size: 13px; font-weight: 900;
             text-transform: uppercase; letter-spacing: 2px; cursor: pointer;
             transition: all 0.25s; display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 4px 20px rgba(46, 204, 113, 0.3), inset 0 1px 0 var(--glass-highlight);
+            box-shadow: 0 4px 20px var(--green-dim), inset 0 1px 0 var(--glass-highlight);
         }
-        .upgrade-main-btn:hover:not(:disabled) { filter: brightness(1.15); transform: translateY(-2px); box-shadow: 0 8px 30px rgba(245, 197, 66, 0.4); }
+        .upgrade-main-btn:hover:not(:disabled) { filter: brightness(1.15); transform: translateY(-2px); box-shadow: 0 8px 30px var(--accent-dim); }
         .upgrade-main-btn:disabled { opacity: 0.4; cursor: not-allowed; background: #3a3d4d; box-shadow: none; }
         .fast-btn {
             width: 48px; height: 48px; border-radius: 14px;
@@ -1057,13 +1056,13 @@
         }
         .inv-card:hover, .target-card:hover:not(.disabled), .shop-card:hover {
             border-color: var(--accent); 
-            background: rgba(245, 197, 66, 0.08);
+            background: var(--accent-very-dim);
             transform: translateY(-3px);
             box-shadow: 0 8px 30px var(--accent-dim), inset 0 1px 0 var(--glass-highlight);
         }
         .inv-card.selected, .target-card.selected { 
             border-color: var(--accent); 
-            background: linear-gradient(135deg, rgba(46, 204, 113, 0.15), rgba(245, 197, 66, 0.15));
+            background: var(--accent-very-dim);
             box-shadow: 0 0 25px var(--accent-dim), inset 0 1px 0 var(--glass-highlight);
         }
         .target-card.disabled { opacity: 0.2; cursor: not-allowed; filter: grayscale(1); }
@@ -1125,15 +1124,15 @@
         .buy-btn:disabled { opacity: 0.4; cursor: not-allowed; background: #3a3d4d; }
         .sell-btn {
             width: 100%; padding: 6px; border-radius: 8px;
-            border: 1px solid rgba(120, 200, 130, 0.4);
-            background: rgba(120, 200, 130, 0.12); color: #7ed88a;
+            border: 1px solid var(--green-dim);
+            background: var(--accent-very-dim); color: var(--green-bright);
             font-weight: 900; font-size: 9px; cursor: pointer;
             text-transform: uppercase; font-family: 'Orbitron', sans-serif;
             margin-top: 5px; position: relative; z-index: 5;
             letter-spacing: 0.5px;
             backdrop-filter: blur(10px);
         }
-        .sell-btn:hover:not(:disabled) { background: rgba(120, 200, 130, 0.25); transform: scale(1.03); }
+        .sell-btn:hover:not(:disabled) { background: var(--green-dim); transform: scale(1.03); }
         .sell-btn:disabled { opacity: 0.4; cursor: not-allowed; }
         .empty-inv { 
             color: #6a6d7e; font-size: 12px; text-align: center; 
@@ -1185,7 +1184,7 @@
             text-shadow: 0 0 25px var(--accent);
         }
         .rocket-x-display.crashed { color: #ff5555; text-shadow: 0 0 25px #ff5555; }
-        .rocket-x-display.cashed { color: #7ed88a; text-shadow: 0 0 25px #7ed88a; }
+        .rocket-x-display.cashed { color: var(--green-bright); text-shadow: 0 0 25px var(--green-bright); }
         .rocket-multiplier-bar { position: absolute; left: 18px; bottom: 18px; z-index: 6; }
         .rocket-bar-label { font-family: 'Orbitron', sans-serif; font-size: 9px; color: #a8adb8; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 4px; font-weight: 800; }
         .rocket-bar-track { width: 200px; height: 6px; background: rgba(255, 255, 255, 0.06); border-radius: 3px; overflow: hidden; }
@@ -1197,7 +1196,7 @@
         }
         .rocket-status.flying { color: var(--accent-bright); }
         .rocket-status.crashed { color: #ff5555; }
-        .rocket-status.cashed { color: #7ed88a; }
+        .rocket-status.cashed { color: var(--green-bright); }
         .rocket-history { margin-top: 12px; padding: 12px; background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border: 1px solid var(--glass-border); border-radius: 14px; }
         .rocket-history-label { font-family: 'Orbitron', sans-serif; font-size: 10px; color: #a8adb8; letter-spacing: 2.5px; text-transform: uppercase; margin-bottom: 8px; font-weight: 800; }
         .rocket-history-list { display: flex; gap: 6px; flex-wrap: wrap; max-height: 70px; overflow-y: auto; }
@@ -1238,11 +1237,11 @@
             font-family: 'Orbitron', sans-serif; font-size: 16px; font-weight: 900;
             letter-spacing: 3px; text-transform: uppercase; cursor: pointer;
             transition: all 0.25s;
-            box-shadow: 0 4px 25px rgba(46, 204, 113, 0.3), inset 0 1px 0 var(--glass-highlight);
+            box-shadow: 0 4px 25px var(--green-dim), inset 0 1px 0 var(--glass-highlight);
         }
-        .rocket-action-btn:hover:not(:disabled) { filter: brightness(1.15); transform: translateY(-2px); box-shadow: 0 8px 35px rgba(245, 197, 66, 0.4); }
+        .rocket-action-btn:hover:not(:disabled) { filter: brightness(1.15); transform: translateY(-2px); box-shadow: 0 8px 35px var(--accent-dim); }
         .rocket-action-btn:disabled { opacity: 0.4; cursor: not-allowed; background: #3a3d4d; box-shadow: none; }
-        .rocket-action-btn.cashout { background: linear-gradient(135deg, #7ed88a, #10b981); color: #0a1a0f; }
+        .rocket-action-btn.cashout { background: linear-gradient(135deg, var(--green-bright), var(--emerald)); color: #0a1a0f; }
         .rocket-action-btn.crashed { background: #3a3d4d; color: #6b7280; }
         .rocket-overlay-result {
             position: absolute; inset: 0;
@@ -1252,7 +1251,7 @@
         }
         .rocket-overlay-result.show { opacity: 1; }
         .rocket-result-x { font-family: 'Orbitron', sans-serif; font-size: 60px; font-weight: 900; letter-spacing: 3px; }
-        .rocket-result-x.win { color: #7ed88a; text-shadow: 0 0 40px #7ed88a; }
+        .rocket-result-x.win { color: var(--green-bright); text-shadow: 0 0 40px var(--green-bright); }
         .rocket-result-x.lose { color: #ff5555; text-shadow: 0 0 40px #ff5555; }
         .rocket-result-label { font-family: 'Orbitron', sans-serif; font-size: 14px; letter-spacing: 4px; text-transform: uppercase; color: #fff; font-weight: 900; }
         .rocket-result-prize { font-family: 'Orbitron', sans-serif; font-size: 22px; font-weight: 900; color: var(--accent-bright); display: flex; align-items: center; gap: 8px; }
@@ -1325,7 +1324,7 @@
             margin-bottom: 6px; font-size: 12px;
         }
         .promo-list-item .code { font-family: 'Orbitron', sans-serif; font-weight: 900; color: var(--accent-bright); letter-spacing: 2px; font-size: 13px; }
-        .promo-list-item .uses { font-family: 'Orbitron', sans-serif; font-weight: 900; color: #7ed88a; font-size: 11px; }
+        .promo-list-item .uses { font-family: 'Orbitron', sans-serif; font-weight: 900; color: var(--green-bright); font-size: 11px; }
         .promo-list-item .uses.empty { color: #ff6b6b; }
 
         /* ===== АДАПТИВ ===== */
@@ -1335,7 +1334,7 @@
                 position: static;
                 flex-direction: row;
                 width: 100%;
-                max-width: 480px;
+                max-width: 560px;
                 justify-content: center;
                 flex-wrap: wrap;
                 order: 2;
@@ -1381,8 +1380,8 @@
             .profile-nick-big { font-size: 17px; }
             .avatar-orbit-item { width: 22px; height: 22px; margin-left: -11px; margin-top: -11px; transform-origin: 11px 11px; }
             .avatar-orbit-item img { width: 14px; height: 14px; }
-            .menu-promo-img { max-height: 40vh; }
-            .menu-promo-percent { font-size: 38px; }
+            .menu-promo-img { max-height: 200px; }
+            .menu-promo-percent { font-size: 34px; }
             :root { --card-img-size: 44px; --card-name-size: 8px; }
             .color-grid { grid-template-columns: repeat(5, 1fr); }
             @keyframes orbitSpin {
@@ -1407,7 +1406,7 @@
 <!-- Тосты -->
 <div id="toastContainer"></div>
 
-<!-- Осадки -->
+<!-- Осадки (скроллятся вместе с сайтом) -->
 <div id="weather"></div>
 
 <!-- Частицы -->
@@ -1788,20 +1787,18 @@
         </div>
     </div>
 
-    <!-- ===== МЕНЮ ===== -->
+    <!-- ===== МЕНЮ (с промокодом наверху) ===== -->
     <div class="tab-panel active" id="panelMenu">
         <div class="menu-page">
-            <div class="menu-top-half">
+            <div class="menu-promo-card">
+                <div class="menu-promo-label-top">КАРТИНКА ПРОМОКОДА</div>
                 <img class="menu-promo-img" id="menuPromoImg" src="" alt="">
                 <div class="menu-promo-percent" id="menuPromoPercent">+0%</div>
-                <div class="menu-promo-label">к пополнению</div>
-            </div>
-            <div class="menu-bottom-half">
+                <div class="menu-promo-code-box" id="menuPromoCodeBox">•••••••• - 0% к пополнению</div>
                 <div class="menu-promo-timer">
                     <span class="t-icon">T</span>
                     <span>Обновится через: <b id="menuPromoTimer">10:00</b></span>
                 </div>
-                <div class="menu-promo-code-box" id="menuPromoCodeBox">••••••••</div>
                 <div class="menu-promo-hint">
                     Введи активный промокод в окне пополнения,<br>
                     чтобы получить бонус к сумме заявки.
@@ -1917,20 +1914,20 @@
     ];
 
     const COLOR_PALETTE = [
-        { name: 'Золотой',  color: '#f5c542', deep: '#b8860b', bright: '#ffe066' },
-        { name: 'Изумруд',  color: '#10b981', deep: '#065f46', bright: '#34d399' },
-        { name: 'Лайм',     color: '#a3e635', deep: '#4d7c0f', bright: '#bef264' },
-        { name: 'Бирюза',   color: '#14b8a6', deep: '#0f766e', bright: '#5eead4' },
-        { name: 'Голубой',  color: '#06b6d4', deep: '#0e7490', bright: '#67e8f9' },
-        { name: 'Синий',    color: '#3b82f6', deep: '#1e40af', bright: '#60a5fa' },
-        { name: 'Индиго',   color: '#6366f1', deep: '#3730a3', bright: '#818cf8' },
-        { name: 'Фиолет',   color: '#a855f7', deep: '#6b21a8', bright: '#c084fc' },
-        { name: 'Фуксия',   color: '#d946ef', deep: '#86198f', bright: '#e879f9' },
-        { name: 'Розовый',  color: '#ec4899', deep: '#9d174d', bright: '#f472b6' },
-        { name: 'Красный',  color: '#ef4444', deep: '#991b1b', bright: '#f87171' },
-        { name: 'Оранж',    color: '#f97316', deep: '#9a3412', bright: '#fb923c' },
-        { name: 'Амбер',    color: '#f59e0b', deep: '#92400e', bright: '#fbbf24' },
-        { name: 'Жёлтый',   color: '#eab308', deep: '#854d0e', bright: '#facc15' }
+        { name: 'Золотой',  color: '#f5c542', deep: '#b8860b', bright: '#ffe066', green: '#2ecc71', greenBright: '#58d68d', greenDeep: '#1e8449' },
+        { name: 'Изумруд',  color: '#10b981', deep: '#065f46', bright: '#34d399', green: '#22c55e', greenBright: '#4ade80', greenDeep: '#15803d' },
+        { name: 'Лайм',     color: '#a3e635', deep: '#4d7c0f', bright: '#bef264', green: '#84cc16', greenBright: '#a3e635', greenDeep: '#3f6212' },
+        { name: 'Бирюза',   color: '#14b8a6', deep: '#0f766e', bright: '#5eead4', green: '#2dd4bf', greenBright: '#5eead4', greenDeep: '#115e59' },
+        { name: 'Голубой',  color: '#06b6d4', deep: '#0e7490', bright: '#67e8f9', green: '#22d3ee', greenBright: '#67e8f9', greenDeep: '#155e75' },
+        { name: 'Синий',    color: '#3b82f6', deep: '#1e40af', bright: '#60a5fa', green: '#60a5fa', greenBright: '#93c5fd', greenDeep: '#1e40af' },
+        { name: 'Индиго',   color: '#6366f1', deep: '#3730a3', bright: '#818cf8', green: '#818cf8', greenBright: '#a5b4fc', greenDeep: '#3730a3' },
+        { name: 'Фиолет',   color: '#a855f7', deep: '#6b21a8', bright: '#c084fc', green: '#c084fc', greenBright: '#d8b4fe', greenDeep: '#6b21a8' },
+        { name: 'Фуксия',   color: '#d946ef', deep: '#86198f', bright: '#e879f9', green: '#e879f9', greenBright: '#f0abfc', greenDeep: '#86198f' },
+        { name: 'Розовый',  color: '#ec4899', deep: '#9d174d', bright: '#f472b6', green: '#f472b6', greenBright: '#f9a8d4', greenDeep: '#9d174d' },
+        { name: 'Красный',  color: '#ef4444', deep: '#991b1b', bright: '#f87171', green: '#f87171', greenBright: '#fca5a5', greenDeep: '#991b1b' },
+        { name: 'Оранж',    color: '#f97316', deep: '#9a3412', bright: '#fb923c', green: '#fb923c', greenBright: '#fdba74', greenDeep: '#9a3412' },
+        { name: 'Амбер',    color: '#f59e0b', deep: '#92400e', bright: '#fbbf24', green: '#fbbf24', greenBright: '#fcd34d', greenDeep: '#92400e' },
+        { name: 'Жёлтый',   color: '#eab308', deep: '#854d0e', bright: '#facc15', green: '#facc15', greenBright: '#fde047', greenDeep: '#854d0e' }
     ];
 
     function getGlowClass(price) {
@@ -1984,6 +1981,9 @@
     let accentColor = localStorage.getItem('ggbrainx_accent') || '#f5c542';
     let accentDeep = localStorage.getItem('ggbrainx_accent_deep') || '#b8860b';
     let accentBright = localStorage.getItem('ggbrainx_accent_bright') || '#ffe066';
+    let themeGreen = localStorage.getItem('ggbrainx_theme_green') || '#2ecc71';
+    let themeGreenBright = localStorage.getItem('ggbrainx_theme_green_bright') || '#58d68d';
+    let themeGreenDeep = localStorage.getItem('ggbrainx_theme_green_deep') || '#1e8449';
     let currentWeather = localStorage.getItem('ggbrainx_weather') || 'none';
     let customAvatar = localStorage.getItem('ggbrainx_custom_avatar') || null;
 
@@ -2092,15 +2092,22 @@
         }
     }
 
-    // ===== ОСАДКИ =====
+    // ===== ОСАДКИ (внутри body, скроллятся вместе с сайтом) =====
     let weatherInterval = null;
-    let activeWeatherParticles = [];
+
+    function getBodyHeight() {
+        return Math.max(document.body.scrollHeight, document.documentElement.scrollHeight, window.innerHeight);
+    }
+
+    function updateWeatherContainerHeight() {
+        const w = document.getElementById('weather');
+        if (w) w.style.height = getBodyHeight() + 'px';
+    }
 
     function clearWeather() {
         const container = document.getElementById('weather');
         container.innerHTML = '';
         if (weatherInterval) { clearInterval(weatherInterval); weatherInterval = null; }
-        activeWeatherParticles = [];
     }
 
     function spawnWeatherParticle(type) {
@@ -2111,22 +2118,30 @@
         p.style.width = size + 'px';
         p.style.height = size + 'px';
         p.style.left = Math.random() * 100 + '%';
-        const duration = 5 + Math.random() * 6;
+        const duration = 6 + Math.random() * 6;
         p.style.animationDuration = duration + 's';
         p.style.animationDelay = (Math.random() * 2) + 's';
+        p.style.top = '-10vh';
         p.style.opacity = 0.5 + Math.random() * 0.5;
         container.appendChild(p);
-        setTimeout(() => { if (p.parentNode) p.parentNode.removeChild(p); }, (duration + 2) * 1000);
+        setTimeout(() => { if (p.parentNode) p.parentNode.removeChild(p); }, (duration + 3) * 1000);
     }
 
     function startWeather(type) {
         clearWeather();
+        updateWeatherContainerHeight();
         if (type === 'none' || !type) return;
         for (let i = 0; i < 12; i++) {
-            setTimeout(() => spawnWeatherParticle(type), i * 200);
+            setTimeout(() => spawnWeatherParticle(type), i * 180);
         }
-        weatherInterval = setInterval(() => spawnWeatherParticle(type), 400);
+        weatherInterval = setInterval(() => {
+            spawnWeatherParticle(type);
+            if (Math.random() < 0.05) updateWeatherContainerHeight();
+        }, 400);
     }
+
+    window.addEventListener('resize', updateWeatherContainerHeight);
+    window.addEventListener('load', updateWeatherContainerHeight);
 
     function applyAccentColor() {
         document.documentElement.style.setProperty('--accent', accentColor);
@@ -2135,6 +2150,21 @@
         const rgb = hexToRgb(accentColor);
         document.documentElement.style.setProperty('--accent-dim', `rgba(${rgb}, 0.35)`);
         document.documentElement.style.setProperty('--accent-very-dim', `rgba(${rgb}, 0.12)`);
+        document.documentElement.style.setProperty('--green', themeGreen);
+        document.documentElement.style.setProperty('--green-bright', themeGreenBright);
+        document.documentElement.style.setProperty('--green-deep', themeGreenDeep);
+        const rgbG = hexToRgb(themeGreen);
+        document.documentElement.style.setProperty('--green-dim', `rgba(${rgbG}, 0.3)`);
+        document.documentElement.style.setProperty('--lime', accentBright);
+        document.documentElement.style.setProperty('--emerald', themeGreen);
+        document.documentElement.style.setProperty('--teal', accentColor);
+        // Обновляем градиент прогресса
+        const grad = document.getElementById('progressGradient');
+        if (grad) {
+            grad.children[0].setAttribute('stop-color', themeGreen);
+            grad.children[1].setAttribute('stop-color', accentBright);
+            grad.children[2].setAttribute('stop-color', accentColor);
+        }
     }
 
     function hexToRgb(hex) {
@@ -2149,20 +2179,25 @@
         grid.innerHTML = COLOR_PALETTE.map(c => `
             <div class="color-swatch ${c.color === accentColor ? 'selected' : ''}" 
                  style="background: linear-gradient(135deg, ${c.color}, ${c.bright}); color: ${c.color};"
-                 data-color="${c.color}" data-deep="${c.deep}" data-bright="${c.bright}"
-                 onclick="changeAccentColor('${c.color}', '${c.deep}', '${c.bright}')"
+                 onclick="changeAccentColor('${c.color}', '${c.deep}', '${c.bright}', '${c.green}', '${c.greenBright}', '${c.greenDeep}')"
                  title="${c.name}">
             </div>
         `).join('');
     }
 
-    window.changeAccentColor = function(color, deep, bright) {
+    window.changeAccentColor = function(color, deep, bright, green, greenBright, greenDeep) {
         accentColor = color;
         accentDeep = deep;
         accentBright = bright;
+        themeGreen = green;
+        themeGreenBright = greenBright;
+        themeGreenDeep = greenDeep;
         localStorage.setItem('ggbrainx_accent', color);
         localStorage.setItem('ggbrainx_accent_deep', deep);
         localStorage.setItem('ggbrainx_accent_bright', bright);
+        localStorage.setItem('ggbrainx_theme_green', green);
+        localStorage.setItem('ggbrainx_theme_green_bright', greenBright);
+        localStorage.setItem('ggbrainx_theme_green_deep', greenDeep);
         applyAccentColor();
         renderColorGrid();
     };
@@ -2301,6 +2336,7 @@
             document.getElementById('opacitySlider').value = Math.round(appOpacity * 100);
             document.getElementById('opacityValue').textContent = Math.round(appOpacity * 100) + '%';
         }
+        setTimeout(updateWeatherContainerHeight, 100);
     };
 
     function updateProfile() {
@@ -2376,9 +2412,9 @@
     function renderMenuPromo() {
         const promo = getCurrentPromo();
         document.getElementById('menuPromoImg').src = promo.img;
-        document.getElementById('menuPromoImg').onerror = function() { this.src = 'https://via.placeholder.com/220?text=%2B' + promo.percent + '%25'; };
+        document.getElementById('menuPromoImg').onerror = function() { this.src = 'https://via.placeholder.com/280?text=%2B' + promo.percent + '%25'; };
         document.getElementById('menuPromoPercent').textContent = '+' + promo.percent + '%';
-        document.getElementById('menuPromoCodeBox').textContent = '••••••••';
+        document.getElementById('menuPromoCodeBox').textContent = '•••••••• - ' + promo.percent + '% к пополнению';
         updateMenuTimer();
     }
 
@@ -2401,7 +2437,7 @@
                 img.dataset.idx = String(getCurrentPromoIndex());
                 img.src = promo.img;
                 percent.textContent = '+' + promo.percent + '%';
-                codeBox.textContent = '••••••••';
+                codeBox.textContent = '•••••••• - ' + promo.percent + '% к пополнению';
             }
         }
     }, 1000);
@@ -2564,7 +2600,7 @@
             const promoLine = d.promo_code
                 ? `<div class="dep-line"><span class="dep-key">Промо:</span> <span class="dep-val green">${d.promo_code} (+${d.promo_percent}%)</span></div>` : '';
             const priceLine = d.promo_code
-                ? `<div class="dep-line"><span class="dep-key">Цена:</span> <span class="dep-val">${basePrice} → <b style="color:#7ed88a;">${finalPrice}</b></span></div>`
+                ? `<div class="dep-line"><span class="dep-key">Цена:</span> <span class="dep-val">${basePrice} → <b style="color:var(--green-bright);">${finalPrice}</b></span></div>`
                 : `<div class="dep-line"><span class="dep-key">Цена:</span> <span class="dep-val accent">${finalPrice}</span></div>`;
             return `
                 <div class="deposit-item">
@@ -3381,6 +3417,10 @@
         applyCustomAvatar();
         switchTab('menu');
         loadUserFromServer();
+        updateWeatherContainerHeight();
+        // Обновляем высоту осадков при изменении размеров контента
+        const observer = new MutationObserver(updateWeatherContainerHeight);
+        observer.observe(document.querySelector('.app'), { childList: true, subtree: true });
     }
     init();
 
