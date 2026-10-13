@@ -29,6 +29,9 @@
             --app-bg-alpha: 0.35;
             --card-img-size: 52px;
             --card-name-size: 9px;
+            --haunted-primary: #ff6a00;
+            --haunted-secondary: #b30000;
+            --haunted-glow: #ff3300;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; font-family: 'Rubik', sans-serif; font-weight: 700; }
@@ -55,11 +58,7 @@
 
         #bgVideo { position: fixed; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: -4; opacity: 0.3; pointer-events: none; }
         .bg-layer { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -3; overflow: hidden; pointer-events: none; }
-        .bg-layer::before {
-            content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
-            background: radial-gradient(circle at 20% 30%, rgba(46, 204, 113, 0.08) 0%, transparent 40%), radial-gradient(circle at 80% 70%, rgba(245, 197, 66, 0.08) 0%, transparent 40%);
-            animation: bgMove 25s ease-in-out infinite;
-        }
+        .bg-layer::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle at 20% 30%, rgba(46, 204, 113, 0.08) 0%, transparent 40%), radial-gradient(circle at 80% 70%, rgba(245, 197, 66, 0.08) 0%, transparent 40%); animation: bgMove 25s ease-in-out infinite; }
         .bg-grid { position: fixed; inset: 0; z-index: -2; pointer-events: none; background-image: linear-gradient(rgba(46, 204, 113, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(46, 204, 113, 0.03) 1px, transparent 1px); background-size: 40px 40px; mask-image: radial-gradient(circle at 50% 50%, black 30%, transparent 80%); -webkit-mask-image: radial-gradient(circle at 50% 50%, black 30%, transparent 80%); }
         @keyframes bgMove { 0%, 100% { transform: translate(0, 0) rotate(0deg); } 50% { transform: translate(-5%, -5%) rotate(8deg); } }
 
@@ -134,7 +133,6 @@
         .msg.wait { color: var(--accent-bright); }
 
         .admin-header { background: linear-gradient(135deg, rgba(46,204,113,0.15), rgba(245,197,66,0.15)); border: 1px solid var(--glass-border); border-radius: 4px; padding: 16px; margin-bottom: 16px; display: flex; align-items: center; gap: 14px; position: relative; overflow: hidden; }
-        .admin-header::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 20% 50%, var(--accent-very-dim) 0%, transparent 60%); pointer-events: none; }
         .admin-header-icon { width: 46px; height: 46px; border-radius: 3px; background: linear-gradient(135deg, var(--green), var(--accent)); display: flex; align-items: center; justify-content: center; color: #0a1a0f; flex-shrink: 0; box-shadow: 0 0 15px var(--accent-dim); z-index: 1; }
         .admin-header-icon svg { width: 24px; height: 24px; }
         .admin-header-text { z-index: 1; flex: 1; }
@@ -150,26 +148,20 @@
         .admin-preview-value { font-family: 'Orbitron', sans-serif; font-size: 13px; font-weight: 900; color: var(--accent-bright); letter-spacing: 2px; flex: 1; word-break: break-all; }
         .admin-preview-value:empty::after { content: '----'; color: #4a4d5e; }
         .admin-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; max-height: 240px; overflow-y: auto; padding: 4px; margin-bottom: 14px; background: rgba(0, 0, 0, 0.15); border-radius: 3px; border: 1px solid rgba(255, 255, 255, 0.04); }
-        .admin-grid::-webkit-scrollbar { width: 5px; }
-        .admin-grid::-webkit-scrollbar-thumb { background: var(--accent-dim); border-radius: 2px; }
         .admin-item { background: rgba(255, 255, 255, 0.04); backdrop-filter: blur(10px); border: 1px solid var(--glass-border); border-radius: 3px; padding: 8px 4px; display: flex; flex-direction: column; align-items: center; cursor: pointer; transition: all 0.2s; position: relative; }
-        .admin-item:hover { transform: translateY(-2px); border-color: var(--accent); }
         .admin-item.selected { border-color: var(--accent); background: var(--accent-very-dim); box-shadow: 0 0 12px var(--accent-dim); }
         .admin-item.selected::after { content: '✓'; position: absolute; top: 3px; right: 3px; width: 14px; height: 14px; border-radius: 50%; background: linear-gradient(135deg, var(--green), var(--accent)); color: #0a1a0f; font-size: 9px; font-weight: 900; display: flex; align-items: center; justify-content: center; }
         .admin-item img { width: 36px; height: 36px; object-fit: contain; margin-bottom: 4px; }
         .admin-item .name { font-size: 8px; color: #e5e7ef; font-weight: 800; text-align: center; line-height: 1.2; height: 20px; overflow: hidden; }
 
         .promo-list { margin-top: 8px; max-height: 300px; overflow-y: auto; text-align: left; padding-right: 4px; }
-        .promo-list::-webkit-scrollbar { width: 5px; }
-        .promo-list::-webkit-scrollbar-thumb { background: var(--accent-dim); border-radius: 2px; }
         .promo-list-item { display: grid; grid-template-columns: 40px 1fr auto; align-items: center; gap: 10px; padding: 10px 12px; background: rgba(255, 255, 255, 0.04); backdrop-filter: blur(10px); border: 1px solid var(--glass-border); border-radius: 3px; margin-bottom: 6px; transition: all 0.2s; }
-        .promo-list-item:hover { border-color: var(--accent-dim); background: var(--accent-very-dim); }
         .promo-list-item .pl-icon { width: 40px; height: 40px; border-radius: 3px; background: rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center; overflow: hidden; }
         .promo-list-item .pl-icon img { width: 32px; height: 32px; object-fit: contain; }
         .promo-list-item .pl-icon .pl-coin-icon { width: 24px; height: 24px; }
         .promo-list-item .pl-info { min-width: 0; }
-        .promo-list-item .code { font-family: 'Orbitron', sans-serif; font-weight: 900; color: var(--accent-bright); letter-spacing: 1.5px; font-size: 13px; margin-bottom: 3px; text-shadow: 0 0 8px var(--accent-dim); }
-        .promo-list-item .pl-reward { color: #a8adb8; font-size: 10px; font-weight: 700; display: flex; align-items: center; gap: 4px; }
+        .promo-list-item .code { font-family: 'Orbitron', sans-serif; font-weight: 900; color: var(--accent-bright); letter-spacing: 1.5px; font-size: 13px; margin-bottom: 3px; }
+        .promo-list-item .pl-reward { color: #a8adb8; font-size: 10px; font-weight: 700; }
         .promo-list-item .pl-uses { font-family: 'Orbitron', sans-serif; font-weight: 900; color: var(--green-bright); font-size: 12px; text-align: right; min-width: 50px; }
         .promo-list-item .pl-uses.empty { color: #ff6b6b; }
         .promo-list-item .pl-uses-label { font-size: 8px; color: #a8adb8; font-weight: 700; text-align: right; letter-spacing: 0.5px; text-transform: uppercase; margin-top: 2px; }
@@ -179,8 +171,7 @@
         .deposits-block-title::before { content: ''; width: 3px; height: 12px; background: #ffcc33; }
         .deposits-count { font-family: 'Orbitron', sans-serif; font-size: 11px; color: #ffcc33; margin-left: auto; font-weight: 900; background: rgba(255, 200, 0, 0.15); padding: 3px 10px; border-radius: 2px; border: 1px solid rgba(255, 200, 0, 0.4); animation: countPulse 2s ease-in-out infinite; }
         @keyframes countPulse { 0%, 100% { box-shadow: 0 0 0 rgba(255, 200, 0, 0); } 50% { box-shadow: 0 0 12px rgba(255, 200, 0, 0.5); } }
-        .deposit-item { display: grid; grid-template-columns: 48px 1fr auto; gap: 12px; align-items: center; padding: 12px 14px; background: rgba(0, 0, 0, 0.3); backdrop-filter: blur(10px); border: 1px solid rgba(255, 200, 0, 0.25); border-radius: 4px; margin-bottom: 8px; transition: all 0.2s; }
-        .deposit-item:hover { border-color: rgba(255, 200, 0, 0.5); transform: translateY(-1px); }
+        .deposit-item { display: grid; grid-template-columns: 48px 1fr auto; gap: 12px; align-items: center; padding: 12px 14px; background: rgba(0, 0, 0, 0.3); backdrop-filter: blur(10px); border: 1px solid rgba(255, 200, 0, 0.25); border-radius: 4px; margin-bottom: 8px; }
         .deposit-item img { width: 42px; height: 42px; object-fit: contain; }
         .deposit-info { min-width: 0; font-size: 11px; line-height: 1.6; color: #e5e7ef; font-weight: 700; }
         .deposit-info .dep-line { display: flex; gap: 5px; align-items: center; word-break: break-word; }
@@ -190,15 +181,14 @@
         .deposit-info .dep-val.green { color: var(--green-bright); }
         .deposit-actions { display: flex; flex-direction: column; gap: 5px; min-width: 90px; }
         .dep-accept, .dep-reject { height: 30px; padding: 0 12px; border-radius: 3px; border: none; font-family: 'Orbitron', sans-serif; font-size: 9px; font-weight: 900; letter-spacing: 0.5px; cursor: pointer; transition: all 0.2s; text-transform: uppercase; display: flex; align-items: center; justify-content: center; gap: 4px; }
-        .dep-accept { background: linear-gradient(135deg, #22c55e, #16a34a); color: #fff; box-shadow: 0 2px 8px rgba(34,197,94,0.3); }
-        .dep-accept:hover { filter: brightness(1.15); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(34,197,94,0.5); }
+        .dep-accept { background: linear-gradient(135deg, #22c55e, #16a34a); color: #fff; }
+        .dep-accept:hover { filter: brightness(1.15); }
         .dep-reject { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.5); }
-        .dep-reject:hover { background: #ef4444; color: #fff; transform: translateY(-1px); }
+        .dep-reject:hover { background: #ef4444; color: #fff; }
         .deposits-empty { text-align: center; color: #6a6d7e; font-size: 11px; padding: 14px; font-weight: 700; }
 
         .topup-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; max-height: 260px; overflow-y: auto; padding: 6px; background: rgba(0, 0, 0, 0.15); border-radius: 3px; margin-bottom: 12px; border: 1px solid rgba(255, 255, 255, 0.05); }
         .topup-item { padding: 6px 4px; border: 1px solid var(--glass-border); border-radius: 3px; background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); display: flex; flex-direction: column; align-items: center; gap: 3px; cursor: pointer; transition: all 0.2s; text-align: center; }
-        .topup-item:hover { border-color: var(--accent); background: var(--accent-very-dim); }
         .topup-item.selected { border-color: var(--accent); background: var(--accent-very-dim); box-shadow: 0 0 10px var(--accent-dim); }
         .topup-item img { width: 36px; height: 36px; object-fit: contain; }
         .topup-item .ti-name { font-size: 8px; color: #e5e7ef; font-weight: 800; line-height: 1.1; height: 20px; overflow: hidden; }
@@ -207,7 +197,6 @@
         .promo-input-row { display: flex; gap: 8px; align-items: stretch; margin-bottom: 12px; }
         .promo-input-row .form-input { flex: 1; text-transform: uppercase; text-align: center; letter-spacing: 2px; }
         .promo-apply-btn { padding: 0 16px; border-radius: 3px; border: 1px solid var(--glass-border); background: linear-gradient(135deg, var(--green), var(--accent)); color: #0a1a0f; font-family: 'Orbitron', sans-serif; font-size: 12px; font-weight: 900; letter-spacing: 1px; cursor: pointer; transition: all 0.2s; }
-        .promo-apply-btn:hover { filter: brightness(1.1); }
 
         .topup-price-line { display: flex; justify-content: space-between; align-items: center; padding: 10px 12px; background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border: 1px solid var(--glass-border); border-radius: 3px; margin-bottom: 10px; font-size: 12px; }
         .topup-price-line .tpl-label { color: #a8adb8; font-weight: 800; }
@@ -314,22 +303,12 @@
             0%, 100% { opacity: 1; text-shadow: 0 0 15px #ff5500, 0 0 30px #ff2200; }
             50% { opacity: 0.85; text-shadow: 0 0 25px #ff5500, 0 0 50px #ff2200; }
         }
-        .haunted-subtitle {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 10px; font-weight: 800;
-            letter-spacing: 3px;
-            color: #ffb366;
-            margin-top: 6px;
-            opacity: 0.85;
-            position: relative;
-            z-index: 1;
-        }
 
         .haunted-slots {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 10px;
-            margin-bottom: 16px;
+            margin-bottom: 14px;
         }
         .haunted-slot {
             aspect-ratio: 1;
@@ -361,6 +340,16 @@
             box-shadow: 0 0 20px rgba(255, 100, 0, 0.6);
             transform: translateY(-3px);
         }
+        .haunted-slot.filled {
+            border-style: solid;
+            border-color: #ff8c1a;
+            background: rgba(40, 15, 5, 0.8);
+        }
+        .haunted-slot img {
+            width: 80%; height: 80%; object-fit: contain;
+            z-index: 1;
+            filter: drop-shadow(0 0 6px rgba(255, 100, 0, 0.5));
+        }
         .haunted-plus {
             font-family: 'Rubik', sans-serif;
             font-weight: 300;
@@ -377,15 +366,285 @@
             text-shadow: 0 0 20px #ff5500;
         }
 
-        .haunted-hint {
+        .haunted-summary {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 14px;
+        }
+        .haunted-summary-box {
+            background: rgba(0, 0, 0, 0.35);
+            border: 1px solid rgba(255, 140, 0, 0.3);
+            border-radius: 3px;
+            padding: 10px 12px;
             text-align: center;
-            font-size: 11px;
-            color: #a89080;
-            font-weight: 700;
-            letter-spacing: 1px;
-            line-height: 1.6;
-            padding: 10px;
+        }
+        .haunted-summary-label {
+            font-size: 9px; color: #a8adb8; font-weight: 800;
+            text-transform: uppercase; letter-spacing: 1.5px;
+            margin-bottom: 4px;
+        }
+        .haunted-summary-value {
             font-family: 'Orbitron', sans-serif;
+            font-size: 16px; font-weight: 900;
+            color: #ffb366;
+            text-shadow: 0 0 10px rgba(255, 100, 0, 0.5);
+        }
+
+        .haunted-fuse-btn {
+            width: 100%;
+            padding: 16px;
+            border-radius: 4px;
+            border: 1px solid #ff6a00;
+            background: linear-gradient(135deg, #ff6a00, #b30000);
+            color: #fff;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 16px; font-weight: 900;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.25s;
+            box-shadow: 0 4px 20px rgba(255, 100, 0, 0.4), inset 0 1px 0 rgba(255,255,255,0.15);
+            text-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
+        }
+        .haunted-fuse-btn:hover:not(:disabled) {
+            filter: brightness(1.15);
+            box-shadow: 0 6px 30px rgba(255, 100, 0, 0.7), inset 0 1px 0 rgba(255,255,255,0.2);
+            transform: translateY(-2px);
+        }
+        .haunted-fuse-btn:disabled {
+            opacity: 0.35;
+            cursor: not-allowed;
+            background: #3a2a1a;
+            border-color: #4a3a2a;
+        }
+
+        /* ===== HAUNTED ANIMATION OVERLAY ===== */
+        .haunted-anim {
+            position: fixed; inset: 0;
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            background: radial-gradient(circle at 50% 50%, rgba(255, 80, 0, 0.4) 0%, rgba(0, 0, 0, 0.95) 70%);
+            overflow: hidden;
+        }
+        .haunted-anim.show {
+            display: flex;
+            animation: animFadeIn 0.4s ease;
+        }
+        @keyframes animFadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .haunted-anim-bg {
+            position: absolute; inset: 0;
+            background:
+                radial-gradient(circle at 50% 50%, rgba(255, 100, 0, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 20% 80%, rgba(255, 40, 0, 0.25) 0%, transparent 40%),
+                radial-gradient(circle at 80% 20%, rgba(255, 140, 0, 0.2) 0%, transparent 40%);
+            animation: animBg 3s ease-in-out infinite;
+            pointer-events: none;
+        }
+        @keyframes animBg {
+            0%, 100% { opacity: 0.7; transform: scale(1) rotate(0deg); }
+            50% { opacity: 1; transform: scale(1.15) rotate(5deg); }
+        }
+        .haunted-anim-img {
+            width: 260px; max-width: 70vw;
+            height: auto;
+            z-index: 2;
+            filter: drop-shadow(0 0 40px #ff5500) drop-shadow(0 0 80px #ff2200);
+            animation: animImg 2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+        @keyframes animImg {
+            0% { transform: scale(0.3) rotate(-30deg); opacity: 0; }
+            50% { transform: scale(1.15) rotate(10deg); opacity: 1; }
+            70% { transform: scale(1) rotate(-5deg); }
+            100% { transform: scale(1) rotate(0deg); opacity: 1; }
+        }
+        .haunted-anim-text {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 22px; font-weight: 900;
+            letter-spacing: 6px;
+            color: #ffb366;
+            margin-top: 30px;
+            z-index: 2;
+            text-shadow: 0 0 20px #ff5500, 0 0 40px #ff2200;
+            animation: animText 1.2s ease-in-out infinite;
+        }
+        @keyframes animText {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(1.06); }
+        }
+        .haunted-anim-particles {
+            position: absolute; inset: 0;
+            z-index: 1;
+            pointer-events: none;
+        }
+        .haunted-anim-particle {
+            position: absolute;
+            width: 6px; height: 6px;
+            border-radius: 50%;
+            background: #ffb366;
+            box-shadow: 0 0 15px #ff5500, 0 0 30px #ff2200;
+            animation: animParticle linear infinite;
+        }
+        @keyframes animParticle {
+            0% { transform: translate(0, 0) scale(1); opacity: 0; }
+            20% { opacity: 1; }
+            100% { transform: translate(var(--dx), var(--dy)) scale(0.3); opacity: 0; }
+        }
+
+        /* ===== HAUNTED RESULT MODAL ===== */
+        .haunted-result-card {
+            background: linear-gradient(135deg, rgba(20, 8, 3, 0.98), rgba(45, 15, 5, 0.98)) !important;
+            border: 1px solid #ff6a00 !important;
+            box-shadow: 0 0 60px rgba(255, 100, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+            padding: 30px 24px !important;
+            position: relative;
+            overflow: hidden;
+            animation: resultCardPop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        @keyframes resultCardPop {
+            0% { transform: scale(0.7) rotate(-3deg); opacity: 0; }
+            60% { transform: scale(1.05) rotate(1deg); opacity: 1; }
+            100% { transform: scale(1) rotate(0deg); opacity: 1; }
+        }
+        .haunted-result-card::before {
+            content: '';
+            position: absolute; inset: 0;
+            background: radial-gradient(circle at 50% 30%, rgba(255, 100, 0, 0.15) 0%, transparent 60%);
+            pointer-events: none;
+            animation: hauntedBg 4s ease-in-out infinite;
+        }
+        .haunted-result-label {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 12px; font-weight: 900;
+            color: #ffb366;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+            position: relative;
+            z-index: 1;
+        }
+        .haunted-result-img-wrap {
+            position: relative;
+            width: 140px; height: 140px;
+            margin: 0 auto 14px;
+            display: flex; align-items: center; justify-content: center;
+            z-index: 1;
+        }
+        .haunted-result-img-wrap::before {
+            content: '';
+            position: absolute; inset: -20px;
+            background: radial-gradient(circle at 50% 50%, rgba(255, 100, 0, 0.5) 0%, transparent 60%);
+            border-radius: 50%;
+            animation: resultGlow 2s ease-in-out infinite;
+            z-index: -1;
+        }
+        @keyframes resultGlow {
+            0%, 100% { opacity: 0.6; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.15); }
+        }
+        .haunted-result-img-wrap img {
+            width: 100%; height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0 0 20px #ff5500);
+            animation: resultImgFloat 3s ease-in-out infinite;
+        }
+        @keyframes resultImgFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-6px); }
+        }
+        .haunted-result-name {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 15px; font-weight: 900;
+            color: #fff;
+            letter-spacing: 1.5px;
+            margin-bottom: 6px;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            text-shadow: 0 0 12px rgba(255, 100, 0, 0.6);
+        }
+        .haunted-result-price {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 20px; font-weight: 900;
+            color: #ffb366;
+            letter-spacing: 2px;
+            margin-bottom: 18px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            position: relative;
+            z-index: 1;
+            text-shadow: 0 0 15px #ff5500;
+        }
+        .haunted-result-price img {
+            width: 20px; height: 20px;
+            object-fit: contain;
+        }
+        .haunted-result-stats {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding: 14px;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 140, 0, 0.35);
+            border-radius: 3px;
+            position: relative;
+            z-index: 1;
+        }
+        .haunted-result-stats > div {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 12px; font-weight: 900;
+            color: #a8adb8;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+        .haunted-result-stats > div > span {
+            color: #ffb366;
+            font-size: 14px;
+            text-shadow: 0 0 10px rgba(255, 100, 0, 0.6);
+        }
+
+        /* ===== БОЛЬШОЙ БЕЛЫЙ + БЕЗ КРУЖКОВ ===== */
+        .choose-target-btn {
+            margin-top: 8px;
+            width: 64px;
+            height: 64px;
+            border: none;
+            background: transparent;
+            color: #ffffff;
+            font-family: 'Rubik', sans-serif;
+            font-size: 52px;
+            font-weight: 300;
+            line-height: 1;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.25s;
+            padding: 0;
+            margin-left: auto;
+            margin-right: auto;
+            text-shadow: 0 0 10px rgba(255,255,255,0.5);
+        }
+        .choose-target-btn:hover:not(:disabled) {
+            color: var(--accent-bright);
+            transform: scale(1.15);
+            text-shadow: 0 0 25px var(--accent-bright), 0 0 40px var(--accent);
+        }
+        .choose-target-btn:disabled {
+            opacity: 0.2;
+            cursor: not-allowed;
         }
 
         /* ===== АПГРЕЙДЕР ===== */
@@ -408,44 +667,6 @@
         .item-box img { width: 64px; height: 64px; object-fit: contain; margin-bottom: 8px; }
         .item-box .name { font-size: 11px; font-weight: 800; text-align: center; margin-bottom: 6px; color: #fff; height: 30px; display: flex; align-items: center; justify-content: center; }
         .item-box .price { font-family: 'Orbitron', sans-serif; font-size: 12px; font-weight: 900; color: var(--accent-bright); display: flex; align-items: center; gap: 4px; margin-bottom: 6px; }
-
-        /* ===== БОЛЬШОЙ БЕЛЫЙ + ДЛЯ ВЫБОРА ЦЕЛИ ===== */
-        .choose-target-btn {
-            margin-top: 8px;
-            width: 64px;
-            height: 64px;
-            border-radius: 50%;
-            border: 2px dashed var(--glass-border);
-            background: transparent;
-            color: #ffffff;
-            font-family: 'Rubik', sans-serif;
-            font-size: 42px;
-            font-weight: 300;
-            line-height: 1;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.25s;
-            padding: 0;
-            margin-left: auto;
-            margin-right: auto;
-            text-shadow: 0 0 8px rgba(255,255,255,0.4);
-        }
-        .choose-target-btn:hover:not(:disabled) {
-            border-color: var(--accent);
-            border-style: solid;
-            background: var(--accent-very-dim);
-            box-shadow: 0 0 20px var(--accent-dim);
-            color: var(--accent-bright);
-            transform: scale(1.08);
-            text-shadow: 0 0 15px var(--accent-bright);
-        }
-        .choose-target-btn:disabled {
-            opacity: 0.2;
-            cursor: not-allowed;
-        }
-
         .price-coin { width: 14px; height: 14px; object-fit: contain; }
         .swap-arrow { font-size: 24px; color: var(--accent); }
         .stage-controls { display: flex; justify-content: center; align-items: center; gap: 8px; padding: 0 18px 6px; }
@@ -453,7 +674,6 @@
         .upgrade-main-btn:hover:not(:disabled) { filter: brightness(1.1); transform: translateY(-1px); }
         .upgrade-main-btn:disabled { opacity: 0.4; cursor: not-allowed; background: #3a3d4d; box-shadow: none; }
         .fast-btn { width: 48px; height: 48px; border-radius: 3px; border: 1px solid var(--glass-border); background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); color: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.25s; }
-        .fast-btn:hover { background: var(--accent-dim); }
         .fast-btn.active { background: linear-gradient(135deg, var(--green), var(--accent)); border-color: var(--accent-bright); }
         .fast-btn svg { width: 22px; height: 22px; }
 
@@ -491,10 +711,8 @@
         .inv-card .name, .shop-card .name { font-size: var(--card-name-size); font-weight: 800; text-align: center; margin-bottom: 4px; height: 24px; overflow: hidden; color: #fff; pointer-events: none; line-height: 1.15; width: 100%; display: flex; align-items: center; justify-content: center; }
         .inv-card .price, .shop-card .price { font-size: 9px; color: var(--accent-bright); font-weight: 900; display: flex; align-items: center; gap: 3px; font-family: 'Orbitron', sans-serif; pointer-events: none; }
         .buy-btn { width: 100%; padding: 6px; border-radius: 3px; border: 1px solid var(--glass-border); background: linear-gradient(135deg, var(--green), var(--accent)); color: #0a1a0f; font-weight: 900; font-size: 9px; cursor: pointer; transition: all 0.2s; text-transform: uppercase; font-family: 'Orbitron', sans-serif; margin-top: 5px; position: relative; z-index: 5; letter-spacing: 0.5px; }
-        .buy-btn:hover:not(:disabled) { filter: brightness(1.15); }
         .buy-btn:disabled { opacity: 0.4; cursor: not-allowed; background: #3a3d4d; }
-        .sell-btn { width: 100%; padding: 6px; border-radius: 3px; border: 1px solid var(--green-dim); background: var(--accent-very-dim); color: var(--green-bright); font-weight: 900; font-size: 9px; cursor: pointer; text-transform: uppercase; font-family: 'Orbitron', sans-serif; margin-top: 5px; position: relative; z-index: 5; letter-spacing: 0.5px; backdrop-filter: blur(10px); }
-        .sell-btn:hover:not(:disabled) { background: var(--green-dim); }
+        .sell-btn { width: 100%; padding: 6px; border-radius: 3px; border: 1px solid var(--green-dim); background: var(--accent-very-dim); color: var(--green-bright); font-weight: 900; font-size: 9px; cursor: pointer; text-transform: uppercase; font-family: 'Orbitron', sans-serif; margin-top: 5px; position: relative; z-index: 5; letter-spacing: 0.5px; }
         .sell-btn:disabled { opacity: 0.4; cursor: not-allowed; }
         .empty-inv { color: #6a6d7e; font-size: 12px; text-align: center; width: 100%; padding: 22px; font-weight: 800; grid-column: 1 / -1; }
         .selectable { display: flex; flex-direction: column; align-items: center; width: 100%; cursor: pointer; }
@@ -551,9 +769,8 @@
         .rocket-quick-bets { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; }
         .rocket-quick-bet { height: 48px; border-radius: 3px; border: 1px solid var(--glass-border); background: rgba(255, 255, 255, 0.04); backdrop-filter: blur(10px); color: #a8adb8; font-family: 'Orbitron', sans-serif; font-size: 12px; font-weight: 900; cursor: pointer; transition: all 0.2s; }
         .rocket-quick-bet:hover { border-color: var(--accent); color: var(--accent-bright); }
-        .rocket-action-btn { grid-column: 1 / -1; height: 58px; border-radius: 3px; border: 1px solid var(--glass-border); background: linear-gradient(135deg, var(--green), var(--accent)); color: #0a1a0f; font-family: 'Orbitron', sans-serif; font-size: 16px; font-weight: 900; letter-spacing: 3px; text-transform: uppercase; cursor: pointer; transition: all 0.25s; box-shadow: 0 4px 15px var(--green-dim), inset 0 1px 0 var(--glass-highlight); }
-        .rocket-action-btn:hover:not(:disabled) { filter: brightness(1.15); }
-        .rocket-action-btn:disabled { opacity: 0.4; cursor: not-allowed; background: #3a3d4d; box-shadow: none; }
+        .rocket-action-btn { grid-column: 1 / -1; height: 58px; border-radius: 3px; border: 1px solid var(--glass-border); background: linear-gradient(135deg, var(--green), var(--accent)); color: #0a1a0f; font-family: 'Orbitron', sans-serif; font-size: 16px; font-weight: 900; letter-spacing: 3px; text-transform: uppercase; cursor: pointer; transition: all 0.25s; }
+        .rocket-action-btn:disabled { opacity: 0.4; cursor: not-allowed; background: #3a3d4d; }
         .rocket-action-btn.cashout { background: linear-gradient(135deg, var(--green-bright), var(--emerald)); color: #0a1a0f; }
         .rocket-action-btn.crashed { background: #3a3d4d; color: #6b7280; }
         .rocket-overlay-result { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; background: rgba(0, 0, 0, 0.75); backdrop-filter: blur(8px); z-index: 20; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
@@ -578,7 +795,6 @@
         .trade-reward img { width: 14px; height: 14px; object-fit: contain; }
         .trade-reward .arrow { color: var(--accent); font-weight: 900; margin: 0 3px; }
         .trade-btn { height: 38px; padding: 0 16px; border-radius: 3px; border: 1px solid var(--glass-border); background: linear-gradient(135deg, var(--green), var(--accent)); color: #0a1a0f; font-family: 'Orbitron', sans-serif; font-size: 10px; font-weight: 900; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; transition: all 0.2s; }
-        .trade-btn:hover:not(:disabled) { filter: brightness(1.15); }
         .trade-btn:disabled { opacity: 0.35; cursor: not-allowed; background: #3a3d4d; }
         .trade-empty { text-align: center; padding: 36px 12px; color: #6a6d7e; font-size: 12px; font-weight: 700; }
 
@@ -643,10 +859,14 @@
             .deposit-actions { grid-column: 1 / -1; flex-direction: row; }
             .dep-accept, .dep-reject { flex: 1; }
             .haunted-title { font-size: 16px; letter-spacing: 2px; }
-            .haunted-subtitle { font-size: 8px; }
             .haunted-slot { aspect-ratio: 1; }
             .haunted-plus { font-size: 26px; }
-            .choose-target-btn { width: 54px; height: 54px; font-size: 36px; }
+            .choose-target-btn { width: 54px; height: 54px; font-size: 42px; }
+            .haunted-anim-img { width: 180px; }
+            .haunted-anim-text { font-size: 16px; letter-spacing: 4px; }
+            .haunted-result-img-wrap { width: 110px; height: 110px; }
+            .haunted-result-name { font-size: 13px; }
+            .haunted-result-price { font-size: 17px; }
             @keyframes orbitSpin {
                 from { transform: rotate(0deg) translateX(42px) rotate(0deg); }
                 to { transform: rotate(360deg) translateX(42px) rotate(-360deg); }
@@ -674,7 +894,7 @@
 <div class="bg-layer"></div>
 <div class="bg-grid"></div>
 
-<!-- Модалки -->
+<!-- ===== МОДАЛКИ ===== -->
 <div class="modal" id="topupModal">
     <div class="modal-card">
         <button class="modal-close" onclick="closeModal('topupModal')">X</button>
@@ -769,6 +989,35 @@
     </div>
 </div>
 
+<!-- Модалка выбора браинрота в Haunted Fuse слот -->
+<div class="modal" id="hauntedPickModal">
+    <div class="modal-card">
+        <button class="modal-close" onclick="closeModal('hauntedPickModal')">X</button>
+        <div class="modal-title">Выбери браинрота</div>
+        <div class="target-list" id="hauntedPickList"></div>
+    </div>
+</div>
+
+<!-- Модалка результата Haunted Fuse -->
+<div class="modal" id="hauntedResultModal">
+    <div class="modal-card haunted-result-card">
+        <button class="modal-close" onclick="closeModal('hauntedResultModal')">X</button>
+        <div class="haunted-result-label">Ты получил:</div>
+        <div class="haunted-result-img-wrap">
+            <img id="hauntedResultImg" src="" alt="">
+        </div>
+        <div class="haunted-result-name" id="hauntedResultName">—</div>
+        <div class="haunted-result-price" id="hauntedResultPrice">
+            <img src="https://github.com/saintezz/saintbetW/blob/main/%D0%BC%D0%BE%D0%BD%D0%B5%D1%82%D0%B0.png?raw=true" alt="coin">
+            <span>0</span>
+        </div>
+        <div class="haunted-result-stats">
+            <div>ШАНС БЫЛ: <span id="hauntedResultChance">??%</span></div>
+            <div>Множитель: <span id="hauntedResultMultiplier">?x</span></div>
+        </div>
+    </div>
+</div>
+
 <div class="modal" id="confirmTradeModal">
     <div class="modal-card">
         <button class="modal-close" onclick="closeModal('confirmTradeModal')">X</button>
@@ -802,6 +1051,14 @@
             <button onclick="confirmTrade()" style="flex:1;height:46px;border-radius:3px;font-family:'Orbitron',sans-serif;font-size:12px;font-weight:900;text-transform:uppercase;cursor:pointer;border:1px solid var(--glass-border);background:linear-gradient(135deg,var(--green),var(--accent));color:#0a1a0f;">Обменять</button>
         </div>
     </div>
+</div>
+
+<!-- ЭПИЧНАЯ АНИМАЦИЯ HAUNTED FUSE -->
+<div class="haunted-anim" id="hauntedAnim">
+    <div class="haunted-anim-bg"></div>
+    <div class="haunted-anim-particles" id="hauntedAnimParticles"></div>
+    <img class="haunted-anim-img" src="https://github.com/saintezz/ggbrainXv2/blob/main/Haunted.png?raw=true" alt="Haunted Fuse">
+    <div class="haunted-anim-text" id="hauntedAnimText">HAUNTED FUSE...</div>
 </div>
 
 <div class="app">
@@ -889,25 +1146,32 @@
             <div class="haunted-banner">
                 <img src="https://github.com/saintezz/ggbrainXv2/blob/main/HauntedFUSE.png?raw=true" alt="Haunted Fuse">
                 <div class="haunted-title">HAUNTED FUSE</div>
-                <div class="haunted-subtitle">LIMITED HALLOWEEN MODE</div>
             </div>
             <div class="haunted-slots">
-                <div class="haunted-slot" onclick="hauntedSlotClick(1)">
+                <div class="haunted-slot" id="hauntedSlot0" onclick="openHauntedPicker(0)">
                     <div class="haunted-plus">+</div>
                 </div>
-                <div class="haunted-slot" onclick="hauntedSlotClick(2)">
+                <div class="haunted-slot" id="hauntedSlot1" onclick="openHauntedPicker(1)">
                     <div class="haunted-plus">+</div>
                 </div>
-                <div class="haunted-slot" onclick="hauntedSlotClick(3)">
+                <div class="haunted-slot" id="hauntedSlot2" onclick="openHauntedPicker(2)">
                     <div class="haunted-plus">+</div>
                 </div>
-                <div class="haunted-slot" onclick="hauntedSlotClick(4)">
+                <div class="haunted-slot" id="hauntedSlot3" onclick="openHauntedPicker(3)">
                     <div class="haunted-plus">+</div>
                 </div>
             </div>
-            <div class="haunted-hint">
-                Скоро здесь появятся события Хэллоуина...
+            <div class="haunted-summary">
+                <div class="haunted-summary-box">
+                    <div class="haunted-summary-label">Сумма</div>
+                    <div class="haunted-summary-value" id="hauntedSum">0</div>
+                </div>
+                <div class="haunted-summary-box">
+                    <div class="haunted-summary-label">Шанс</div>
+                    <div class="haunted-summary-value" id="hauntedChance">—</div>
+                </div>
             </div>
+            <button class="haunted-fuse-btn" id="hauntedFuseBtn" onclick="runHauntedFuse()" disabled>ФЬЮЗ</button>
         </div>
     </div>
 
@@ -1136,7 +1400,6 @@
     </div>
 </div>
 
-<!-- ===== ПАНЕЛЬ КНОПОК (fixed снизу) ===== -->
 <div class="nav-panel">
     <button class="nav-btn active" id="navMenu" onclick="switchTab('menu')" title="Главная">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -1182,6 +1445,7 @@
 <script>
     const COIN_IMG = 'https://github.com/saintezz/saintbetW/blob/main/%D0%BC%D0%BE%D0%BD%D0%B5%D1%82%D0%B0.png?raw=true';
     const DEFAULT_AVATAR = 'https://github.com/saintezz/ggbrainXv2/raw/main/avavatarochka.jpg';
+    const HAUNTED_IMG = 'https://github.com/saintezz/ggbrainXv2/blob/main/Haunted.png?raw=true';
     const ADMIN_USERNAME = 'clonexx7';
 
     const ITEMS = [
@@ -1280,6 +1544,10 @@
     let themeGreenDeep = localStorage.getItem('ggbrainx_theme_green_deep') || '#1e8449';
     let currentWeather = localStorage.getItem('ggbrainx_weather') || 'none';
     let customAvatar = localStorage.getItem('ggbrainx_custom_avatar') || null;
+
+    // ===== HAUNTED FUSE STATE =====
+    let hauntedSlots = [null, null, null, null]; // индексы в inventory или null
+    let hauntedPickerTargetSlot = null;
 
     function saveLocalCache() {
         localStorage.setItem('ggbrainx_balance', String(balance));
@@ -1397,6 +1665,37 @@
             osc.connect(filter); filter.connect(gain); gain.connect(ctx.destination);
             osc.start(ctx.currentTime);
             osc.stop(ctx.currentTime + 0.6);
+        } catch(e) {}
+    }
+    function playHaunted() {
+        // Эпичный хоррор-звук
+        const ctx = getAudioCtx();
+        if (!ctx) return;
+        try {
+            const osc1 = ctx.createOscillator();
+            const osc2 = ctx.createOscillator();
+            const gain = ctx.createGain();
+            const filter = ctx.createBiquadFilter();
+            filter.type = 'lowpass';
+            filter.frequency.setValueAtTime(400, ctx.currentTime);
+            filter.frequency.exponentialRampToValueAtTime(2500, ctx.currentTime + 0.8);
+            filter.frequency.exponentialRampToValueAtTime(600, ctx.currentTime + 1.5);
+            osc1.type = 'sawtooth';
+            osc2.type = 'square';
+            osc1.frequency.setValueAtTime(80, ctx.currentTime);
+            osc1.frequency.exponentialRampToValueAtTime(240, ctx.currentTime + 0.8);
+            osc1.frequency.exponentialRampToValueAtTime(120, ctx.currentTime + 1.5);
+            osc2.frequency.setValueAtTime(160, ctx.currentTime);
+            osc2.frequency.exponentialRampToValueAtTime(480, ctx.currentTime + 0.8);
+            osc2.frequency.exponentialRampToValueAtTime(240, ctx.currentTime + 1.5);
+            gain.gain.setValueAtTime(0.0001, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.08, ctx.currentTime + 0.1);
+            gain.gain.exponentialRampToValueAtTime(0.06, ctx.currentTime + 0.8);
+            gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 1.8);
+            osc1.connect(filter); osc2.connect(filter);
+            filter.connect(gain); gain.connect(ctx.destination);
+            osc1.start(ctx.currentTime); osc2.start(ctx.currentTime);
+            osc1.stop(ctx.currentTime + 1.9); osc2.stop(ctx.currentTime + 1.9);
         } catch(e) {}
     }
 
@@ -1675,6 +1974,7 @@
         if (tab === 'trade') renderTradeList();
         if (tab === 'profile') updateProfile();
         if (tab === 'menu') renderMenuPromo();
+        if (tab === 'haunted') renderHauntedSlots();
         if (tab === 'customize') {
             renderBgOptions();
             renderOrbitPicker();
@@ -2256,11 +2556,237 @@
         vibrate(15);
     };
 
-    // ===== HAUNTED FUSE SLOTS =====
-    window.hauntedSlotClick = function(n) {
+    // ===== HAUNTED FUSE LOGIC =====
+    window.renderHauntedSlots = function() {
+        for (let i = 0; i < 4; i++) {
+            const slotEl = document.getElementById('hauntedSlot' + i);
+            const idx = hauntedSlots[i];
+            if (idx !== null && inventory[idx]) {
+                const item = getItemById(inventory[idx]);
+                slotEl.classList.add('filled');
+                slotEl.innerHTML = `<img src="${item.img}" alt="${item.name}">`;
+            } else {
+                slotEl.classList.remove('filled');
+                slotEl.innerHTML = '<div class="haunted-plus">+</div>';
+            }
+        }
+        updateHauntedSummary();
+    };
+
+    window.openHauntedPicker = function(slotIndex) {
         playClick();
         vibrate(10);
-        showToast('Слот ' + n + ' — скоро откроется!', 'info');
+        if (!inventory.length) { showToast('Инвентарь пуст', 'err'); return; }
+        hauntedPickerTargetSlot = slotIndex;
+        const list = document.getElementById('hauntedPickList');
+        const counts = {};
+        inventory.forEach((id, i) => { counts[id] = (counts[id] || 0) + 1; });
+        // Показываем все уникальные предметы
+        list.innerHTML = Object.keys(counts).map(id => {
+            const item = getItemById(id);
+            if (!item) return '';
+            const count = counts[id];
+            const glowClass = getGlowClass(item.price);
+            return `
+                <div class="target-list-item ${glowClass}" onclick="pickHauntedItem('${id}')">
+                    <img src="${item.img}" alt="${item.name}">
+                    <div class="tl-info">
+                        <div class="tl-name">${item.name}${count > 1 ? ' x' + count : ''}</div>
+                        <div class="tl-price"><img src="${COIN_IMG}" alt="coin">${item.price}</div>
+                    </div>
+                    <div class="tl-chance" style="color:var(--accent-bright);">${count} шт.</div>
+                </div>
+            `;
+        }).join('');
+        openModal('hauntedPickModal');
+    };
+
+    window.pickHauntedItem = function(itemId) {
+        playClick();
+        vibrate(10);
+        if (hauntedPickerTargetSlot === null) return;
+        // Находим первый индекс в inventory с этим id, который ещё не в слотах
+        const usedIndexes = hauntedSlots.filter(x => x !== null);
+        const idx = inventory.findIndex((id, i) => id === itemId && !usedIndexes.includes(i));
+        if (idx === -1) { showToast('Нет свободных экземпляров', 'err'); return; }
+        hauntedSlots[hauntedPickerTargetSlot] = idx;
+        closeModal('hauntedPickModal');
+        renderHauntedSlots();
+        playCoin();
+    };
+
+    function updateHauntedSummary() {
+        let sum = 0;
+        let count = 0;
+        hauntedSlots.forEach(idx => {
+            if (idx !== null && inventory[idx]) {
+                const item = getItemById(inventory[idx]);
+                if (item) { sum += item.price; count++; }
+            }
+        });
+        document.getElementById('hauntedSum').textContent = sum.toLocaleString('ru-RU');
+        // Шанс успеха: чем больше предметов, тем выше
+        let chance = 0;
+        if (count === 1) chance = 25;
+        else if (count === 2) chance = 45;
+        else if (count === 3) chance = 65;
+        else if (count === 4) chance = 85;
+        document.getElementById('hauntedChance').textContent = count > 0 ? chance + '%' : '—';
+        document.getElementById('hauntedFuseBtn').disabled = count < 1;
+    }
+
+    // Расчёт награды Haunted Fuse
+    function calculateHauntedReward() {
+        let sum = 0;
+        let count = 0;
+        hauntedSlots.forEach(idx => {
+            if (idx !== null && inventory[idx]) {
+                const item = getItemById(inventory[idx]);
+                if (item) { sum += item.price; count++; }
+            }
+        });
+        if (sum <= 0) return null;
+        // Максимальная цель — до 5x от суммы
+        const maxTarget = sum * 5;
+        // Собираем пул целей дороже средней части
+        const potentialTargets = ITEMS.filter(t => t.price > sum * 0.5 && t.price <= maxTarget);
+        if (potentialTargets.length === 0) {
+            // Если ничего нет — вернём случайный из существующих дороже 50%
+            const fallback = ITEMS.filter(t => t.price > sum).sort((a, b) => a.price - b.price);
+            if (fallback.length === 0) return null;
+            const pick = fallback[Math.floor(Math.random() * fallback.length)];
+            return { item: pick, chance: 60, multiplier: (pick.price / sum) };
+        }
+        // Определяем диапазоны с весами
+        const ranges = [
+            { min: sum * 1.0, max: sum * 1.5, weight: 60 },
+            { min: sum * 1.5, max: sum * 2.5, weight: 30 },
+            { min: sum * 2.5, max: sum * 3.5, weight: 8 },
+            { min: sum * 3.5, max: sum * 5.0, weight: 2 }
+        ];
+        // Выбираем диапазон по весу
+        const totalWeight = ranges.reduce((a, r) => a + r.weight, 0);
+        let r = Math.random() * totalWeight;
+        let chosenRange = ranges[0];
+        for (const range of ranges) {
+            if (r < range.weight) { chosenRange = range; break; }
+            r -= range.weight;
+        }
+        // Выбираем цель из диапазона
+        const targetsInRange = potentialTargets.filter(t => t.price >= chosenRange.min && t.price <= chosenRange.max);
+        let pickedItem;
+        if (targetsInRange.length > 0) {
+            pickedItem = targetsInRange[Math.floor(Math.random() * targetsInRange.length)];
+        } else {
+            // Если в диапазоне нет — берём ближайшую
+            const sorted = [...potentialTargets].sort((a, b) => Math.abs(a.price - chosenRange.min) - Math.abs(b.price - chosenRange.min));
+            pickedItem = sorted[0];
+        }
+        const multiplier = pickedItem.price / sum;
+        return { item: pickedItem, chance: chosenRange.weight, multiplier };
+    }
+
+    // Эпичная анимация
+    function playHauntedAnimation() {
+        return new Promise(resolve => {
+            const anim = document.getElementById('hauntedAnim');
+            const particles = document.getElementById('hauntedAnimParticles');
+            const textEl = document.getElementById('hauntedAnimText');
+            anim.classList.add('show');
+            textEl.textContent = 'HAUNTED FUSE...';
+            // Спавним частицы
+            particles.innerHTML = '';
+            for (let i = 0; i < 40; i++) {
+                const p = document.createElement('div');
+                p.className = 'haunted-anim-particle';
+                p.style.left = '50%';
+                p.style.top = '50%';
+                const angle = Math.random() * Math.PI * 2;
+                const dist = 200 + Math.random() * 400;
+                p.style.setProperty('--dx', Math.cos(angle) * dist + 'px');
+                p.style.setProperty('--dy', Math.sin(angle) * dist + 'px');
+                p.style.animationDuration = (1 + Math.random() * 1.5) + 's';
+                p.style.animationDelay = (Math.random() * 0.5) + 's';
+                particles.appendChild(p);
+            }
+            playHaunted();
+            vibratePattern([50, 100, 50, 100, 200]);
+            setTimeout(() => { textEl.textContent = 'ФЬЮЗИМ...'; }, 700);
+            setTimeout(() => { textEl.textContent = 'ГОТОВО!'; }, 1400);
+            setTimeout(() => {
+                anim.classList.remove('show');
+                resolve();
+            }, 2000);
+        });
+    }
+
+    window.runHauntedFuse = async function() {
+        // Проверяем, что все слоты заполнены
+        const filledCount = hauntedSlots.filter(x => x !== null).length;
+        if (filledCount < 1) { showToast('Заполни хотя бы 1 слот', 'err'); playLose(); return; }
+        // Проверяем валидность индексов
+        const validIndexes = hauntedSlots.filter(idx => idx !== null && inventory[idx]);
+        if (validIndexes.length < 1) { showToast('Предметы потеряны', 'err'); return; }
+
+        // Считаем сумму
+        let sum = 0;
+        validIndexes.forEach(idx => {
+            const item = getItemById(inventory[idx]);
+            if (item) sum += item.price;
+        });
+
+        // Рассчитываем награду
+        const reward = calculateHauntedReward();
+        if (!reward) { showToast('Нет подходящей цели', 'err'); playLose(); return; }
+
+        // Визуально отключаем кнопку
+        const fuseBtn = document.getElementById('hauntedFuseBtn');
+        fuseBtn.disabled = true;
+        fuseBtn.textContent = 'ФЬЮЗ...';
+
+        // Запускаем анимацию
+        await playHauntedAnimation();
+
+        // Удаляем выбранные предметы из инвентаря (в порядке убывания индексов)
+        const sortedIdx = [...validIndexes].sort((a, b) => b - a);
+        sortedIndexesToRemove = sortedIdx;
+        // Удаляем сразу
+        sortedIdx.forEach(idx => {
+            inventory.splice(idx, 1);
+        });
+
+        // Добавляем награду
+        inventory.push(reward.item.id);
+
+        // Сбрасываем слоты
+        hauntedSlots = [null, null, null, null];
+        renderHauntedSlots();
+        renderInventory();
+        updateUpgradeScreen();
+        renderProfileInventory();
+
+        // Показываем результат
+        const resultImg = document.getElementById('hauntedResultImg');
+        const resultName = document.getElementById('hauntedResultName');
+        const resultPrice = document.getElementById('hauntedResultPrice');
+        const resultChance = document.getElementById('hauntedResultChance');
+        const resultMultiplier = document.getElementById('hauntedResultMultiplier');
+
+        resultImg.src = reward.item.img;
+        resultName.textContent = reward.item.name;
+        resultPrice.querySelector('span').textContent = reward.item.price;
+        resultChance.textContent = reward.chance + '%';
+        resultMultiplier.textContent = reward.multiplier.toFixed(2) + 'x';
+
+        fuseBtn.textContent = 'ФЬЮЗ';
+        fuseBtn.disabled = false;
+
+        playWin();
+        vibratePattern([30, 50, 30, 50, 100]);
+
+        openModal('hauntedResultModal');
+        saveLocalCache();
+        syncUserToServer();
     };
 
     function calculateChance() {
@@ -2804,6 +3330,7 @@
         renderWeatherOptions();
         startWeather(currentWeather);
         applyCustomAvatar();
+        renderHauntedSlots();
         switchTab('menu');
         loadUserFromServer();
         updateWeatherContainerHeight();
