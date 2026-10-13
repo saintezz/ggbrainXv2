@@ -42,9 +42,9 @@
         html { scroll-behavior: smooth; }
         body {
             background: #050d08; color: #e5e7eb; min-height: 100vh;
-            display: flex; flex-direction: row; align-items: flex-start; justify-content: center;
-            padding: 20px 90px 20px 20px; position: relative; overflow-x: hidden; overflow-y: auto;
-            font-weight: 700; gap: 14px;
+            display: flex; flex-direction: column; align-items: center;
+            padding: 20px 20px 90px 20px; position: relative;
+            overflow-x: hidden; overflow-y: auto; font-weight: 700;
         }
 
         #weather { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9999; overflow: hidden; }
@@ -125,27 +125,36 @@
             position: relative; flex-shrink: 0;
         }
 
-        /* ===== ПАНЕЛЬ КНОПОК (fixed справа на ПК, fixed внизу на мобилке) ===== */
+        /* ===== ПАНЕЛЬ КНОПОК (fixed снизу, всегда на месте) ===== */
         .nav-panel { 
             position: fixed;
-            top: 50%;
-            right: 20px;
-            transform: translateY(-50%);
-            display: flex; flex-direction: column; gap: 6px;
+            bottom: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex; flex-direction: row; gap: 6px;
             z-index: 500;
+            padding: 6px 8px;
+            border-radius: 4px;
+            background: var(--glass-bg-strong);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.5), inset 0 1px 0 var(--glass-highlight);
+            max-width: 96vw;
+            flex-wrap: wrap;
+            justify-content: center;
         }
         .nav-btn {
-            width: 46px; height: 46px; border-radius: 3px;
+            width: 44px; height: 44px; border-radius: 3px;
             border: 1px solid var(--glass-border);
             background: var(--glass-bg-strong);
             backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
             color: #a8adb8; cursor: pointer;
             display: flex; align-items: center; justify-content: center;
             transition: all 0.25s;
-            box-shadow: inset 0 1px 0 var(--glass-highlight), 0 3px 10px rgba(0, 0, 0, 0.25);
+            box-shadow: inset 0 1px 0 var(--glass-highlight);
             padding: 0;
         }
-        .nav-btn svg { width: 22px; height: 22px; flex-shrink: 0; transition: all 0.25s; }
+        .nav-btn svg { width: 21px; height: 21px; flex-shrink: 0; transition: all 0.25s; }
         .nav-btn:hover { background: var(--accent-very-dim); border-color: var(--accent); color: var(--accent-bright); }
         .nav-btn.active {
             background: linear-gradient(135deg, var(--accent-very-dim), var(--accent-dim));
@@ -222,23 +231,23 @@
         @keyframes panelFadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
 
         .modal {
-            position: fixed; inset: 0; background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(8px);
+            position: fixed; inset: 0; background: rgba(0, 0, 0, 0.65); backdrop-filter: blur(10px);
             display: flex; justify-content: center; align-items: center; z-index: 3000;
-            opacity: 0; pointer-events: none; transition: opacity 0.25s ease; padding: 16px;
+            opacity: 0; pointer-events: none; transition: opacity 0.3s ease; padding: 14px;
         }
         .modal.open { opacity: 1; pointer-events: auto; }
         .modal-card {
             background: var(--glass-bg-strong);
-            backdrop-filter: blur(25px) saturate(130%); -webkit-backdrop-filter: blur(25px) saturate(130%);
+            backdrop-filter: blur(30px) saturate(140%); -webkit-backdrop-filter: blur(30px) saturate(140%);
             border: 1px solid var(--glass-border);
             border-radius: 4px;
             padding: 22px 20px; width: 100%; max-width: 420px; text-align: center;
-            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.6), inset 0 1px 0 var(--glass-highlight);
-            transform: scale(0.95); transition: transform 0.25s ease;
-            position: relative; max-height: 90vh; overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7), inset 0 1px 0 var(--glass-highlight);
+            transform: scale(0.94); transition: transform 0.3s ease;
+            position: relative; max-height: 92vh; overflow-y: auto;
         }
         .modal.open .modal-card { transform: scale(1); }
-        .modal-card.wide { max-width: 520px; text-align: left; }
+        .modal-card.wide { max-width: 560px; text-align: left; padding: 24px 22px; }
 
         .modal-close {
             position: absolute; top: 12px; right: 12px; width: 30px; height: 30px; border-radius: 3px;
@@ -247,8 +256,9 @@
             backdrop-filter: blur(10px);
             color: #8a8d9b; font-size: 14px; font-weight: 900; cursor: pointer;
             display: flex; align-items: center; justify-content: center;
+            transition: all 0.2s;
         }
-        .modal-close:hover { background: rgba(255, 80, 80, 0.2); color: #ff6b6b; }
+        .modal-close:hover { background: rgba(255, 80, 80, 0.2); color: #ff6b6b; border-color: rgba(255,80,80,0.4); }
         .modal-title { font-family: 'Orbitron', sans-serif; font-size: 16px; font-weight: 900; color: #fff; margin-bottom: 14px; text-transform: uppercase; letter-spacing: 2px; }
 
         .form-group { margin-bottom: 14px; text-align: left; }
@@ -261,8 +271,9 @@
             color: #fff; font-size: 13px; font-weight: 800;
             font-family: 'Orbitron', sans-serif;
             box-shadow: inset 0 1px 0 var(--glass-highlight);
+            transition: all 0.25s;
         }
-        .form-input:focus { outline: none; border-color: var(--accent); background: var(--accent-very-dim); }
+        .form-input:focus { outline: none; border-color: var(--accent); background: var(--accent-very-dim); box-shadow: 0 0 15px var(--accent-dim), inset 0 1px 0 var(--glass-highlight); }
         .form-input::placeholder { color: #4a4d5e; font-family: 'Rubik', sans-serif; font-weight: 600; }
 
         .radio-row { display: flex; gap: 10px; margin-bottom: 14px; }
@@ -275,7 +286,7 @@
             cursor: pointer; transition: all 0.25s; text-transform: uppercase;
             font-family: 'Orbitron', sans-serif; letter-spacing: 1px;
         }
-        .radio-option.active { background: var(--accent-very-dim); border-color: var(--accent); color: #fff; }
+        .radio-option.active { background: var(--accent-very-dim); border-color: var(--accent); color: #fff; box-shadow: 0 0 12px var(--accent-dim); }
 
         .action-btn {
             width: 100%; padding: 14px; border-radius: 3px; border: 1px solid var(--glass-border);
@@ -286,7 +297,7 @@
             transition: all 0.25s; margin-top: 8px;
             box-shadow: 0 4px 15px var(--green-dim), inset 0 1px 0 var(--glass-highlight);
         }
-        .action-btn:hover:not(:disabled) { filter: brightness(1.1); transform: translateY(-1px); box-shadow: 0 5px 18px var(--accent-dim); }
+        .action-btn:hover:not(:disabled) { filter: brightness(1.1); transform: translateY(-1px); box-shadow: 0 6px 22px var(--accent-dim); }
         .action-btn:disabled { opacity: 0.4; cursor: not-allowed; background: #3a3d4d; }
 
         .msg { margin-top: 12px; font-size: 12px; font-weight: 800; min-height: 18px; text-align: center; }
@@ -294,6 +305,225 @@
         .msg.err { color: #ff6b6b; }
         .msg.wait { color: var(--accent-bright); }
 
+        /* ===== ADM PANEL УЛУЧШЕННАЯ ===== */
+        .admin-header {
+            background: linear-gradient(135deg, rgba(46,204,113,0.15), rgba(245,197,66,0.15));
+            border: 1px solid var(--glass-border);
+            border-radius: 4px;
+            padding: 16px;
+            margin-bottom: 16px;
+            display: flex; align-items: center; gap: 14px;
+            position: relative;
+            overflow: hidden;
+        }
+        .admin-header::before {
+            content: ''; position: absolute; inset: 0;
+            background: radial-gradient(circle at 20% 50%, var(--accent-very-dim) 0%, transparent 60%);
+            pointer-events: none;
+        }
+        .admin-header-icon {
+            width: 46px; height: 46px; border-radius: 3px;
+            background: linear-gradient(135deg, var(--green), var(--accent));
+            display: flex; align-items: center; justify-content: center;
+            color: #0a1a0f; flex-shrink: 0;
+            box-shadow: 0 0 15px var(--accent-dim);
+            z-index: 1;
+        }
+        .admin-header-icon svg { width: 24px; height: 24px; }
+        .admin-header-text { z-index: 1; flex: 1; }
+        .admin-header-title {
+            font-family: 'Orbitron', sans-serif; font-size: 14px; font-weight: 900;
+            color: #fff; letter-spacing: 2.5px; text-transform: uppercase;
+            margin-bottom: 3px;
+            text-shadow: 0 0 10px var(--accent-dim);
+        }
+        .admin-header-sub {
+            font-size: 10px; color: #a8adb8; font-weight: 700;
+            letter-spacing: 0.5px;
+            display: flex; align-items: center; gap: 6px;
+        }
+        .admin-online-dot {
+            width: 6px; height: 6px; border-radius: 50%; background: var(--emerald);
+            box-shadow: 0 0 6px var(--emerald);
+            animation: onlinePulse 1.5s ease-in-out infinite;
+        }
+
+        .admin-section {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
+            border-radius: 4px;
+            padding: 16px 14px;
+            margin-bottom: 14px;
+        }
+        .admin-section-title {
+            font-family: 'Orbitron', sans-serif; font-size: 11px; font-weight: 900;
+            color: var(--accent-bright);
+            letter-spacing: 2px; text-transform: uppercase;
+            margin-bottom: 14px;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .admin-section-title::before {
+            content: ''; width: 3px; height: 12px;
+            background: linear-gradient(180deg, var(--green), var(--accent));
+        }
+
+        .admin-preview {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px dashed var(--accent);
+            border-radius: 3px;
+            padding: 10px 12px;
+            margin-bottom: 14px;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .admin-preview-label {
+            font-size: 9px; color: #a8adb8; font-weight: 800;
+            text-transform: uppercase; letter-spacing: 1.5px;
+            flex-shrink: 0;
+        }
+        .admin-preview-value {
+            font-family: 'Orbitron', sans-serif; font-size: 13px; font-weight: 900;
+            color: var(--accent-bright); letter-spacing: 2px;
+            flex: 1; word-break: break-all;
+        }
+        .admin-preview-value:empty::after {
+            content: '----'; color: #4a4d5e;
+        }
+
+        .admin-grid { 
+            display: grid; grid-template-columns: repeat(4, 1fr); 
+            gap: 6px; max-height: 240px; overflow-y: auto; 
+            padding: 4px; margin-bottom: 14px;
+            background: rgba(0, 0, 0, 0.15); border-radius: 3px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+        }
+        .admin-grid::-webkit-scrollbar { width: 5px; }
+        .admin-grid::-webkit-scrollbar-thumb { background: var(--accent-dim); border-radius: 2px; }
+        .admin-item {
+            background: rgba(255, 255, 255, 0.04); backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 3px; padding: 8px 4px;
+            display: flex; flex-direction: column; align-items: center; cursor: pointer;
+            transition: all 0.2s; position: relative;
+        }
+        .admin-item:hover { transform: translateY(-2px); border-color: var(--accent); }
+        .admin-item.selected { 
+            border-color: var(--accent); background: var(--accent-very-dim); 
+            box-shadow: 0 0 12px var(--accent-dim); 
+        }
+        .admin-item.selected::after {
+            content: '✓'; position: absolute; top: 3px; right: 3px;
+            width: 14px; height: 14px; border-radius: 50%;
+            background: linear-gradient(135deg, var(--green), var(--accent)); color: #0a1a0f;
+            font-size: 9px; font-weight: 900;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .admin-item img { width: 36px; height: 36px; object-fit: contain; margin-bottom: 4px; }
+        .admin-item .name { font-size: 8px; color: #e5e7ef; font-weight: 800; text-align: center; line-height: 1.2; height: 20px; overflow: hidden; }
+
+        .promo-list { margin-top: 8px; max-height: 300px; overflow-y: auto; text-align: left; padding-right: 4px; }
+        .promo-list::-webkit-scrollbar { width: 5px; }
+        .promo-list::-webkit-scrollbar-thumb { background: var(--accent-dim); border-radius: 2px; }
+        .promo-list-item {
+            display: grid; grid-template-columns: 40px 1fr auto;
+            align-items: center; gap: 10px;
+            padding: 10px 12px; 
+            background: rgba(255, 255, 255, 0.04); backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border); border-radius: 3px;
+            margin-bottom: 6px;
+            transition: all 0.2s;
+        }
+        .promo-list-item:hover { border-color: var(--accent-dim); background: var(--accent-very-dim); }
+        .promo-list-item .pl-icon {
+            width: 40px; height: 40px; border-radius: 3px;
+            background: rgba(0,0,0,0.3);
+            display: flex; align-items: center; justify-content: center;
+            overflow: hidden;
+        }
+        .promo-list-item .pl-icon img { width: 32px; height: 32px; object-fit: contain; }
+        .promo-list-item .pl-icon .pl-coin-icon { width: 24px; height: 24px; }
+        .promo-list-item .pl-info { min-width: 0; }
+        .promo-list-item .code { 
+            font-family: 'Orbitron', sans-serif; font-weight: 900; 
+            color: var(--accent-bright); letter-spacing: 1.5px; font-size: 13px; 
+            margin-bottom: 3px;
+            text-shadow: 0 0 8px var(--accent-dim);
+        }
+        .promo-list-item .pl-reward {
+            color: #a8adb8; font-size: 10px; font-weight: 700;
+            display: flex; align-items: center; gap: 4px;
+        }
+        .promo-list-item .pl-uses {
+            font-family: 'Orbitron', sans-serif; font-weight: 900; 
+            color: var(--green-bright); font-size: 12px;
+            text-align: right; min-width: 50px;
+        }
+        .promo-list-item .pl-uses.empty { color: #ff6b6b; }
+        .promo-list-item .pl-uses-label {
+            font-size: 8px; color: #a8adb8; font-weight: 700;
+            text-align: right; letter-spacing: 0.5px;
+            text-transform: uppercase;
+            margin-top: 2px;
+        }
+
+        /* ===== ЗАЯВКИ ===== */
+        .deposits-block { 
+            margin-top: 14px; padding: 14px; 
+            background: rgba(255, 200, 0, 0.06); 
+            backdrop-filter: blur(15px); 
+            border: 1px solid rgba(255, 200, 0, 0.3); 
+            border-radius: 4px; 
+        }
+        .deposits-block-title { 
+            font-family: 'Orbitron', sans-serif; font-size: 12px; font-weight: 900; 
+            color: #ffcc33; letter-spacing: 2px; text-transform: uppercase; 
+            margin-bottom: 12px; display: flex; align-items: center; gap: 8px; 
+        }
+        .deposits-block-title::before { content: ''; width: 3px; height: 12px; background: #ffcc33; }
+        .deposits-count { 
+            font-family: 'Orbitron', sans-serif; font-size: 11px; 
+            color: #ffcc33; margin-left: auto; font-weight: 900;
+            background: rgba(255, 200, 0, 0.15); padding: 3px 10px; border-radius: 2px;
+            border: 1px solid rgba(255, 200, 0, 0.4);
+            animation: countPulse 2s ease-in-out infinite;
+        }
+        @keyframes countPulse {
+            0%, 100% { box-shadow: 0 0 0 rgba(255, 200, 0, 0); }
+            50% { box-shadow: 0 0 12px rgba(255, 200, 0, 0.5); }
+        }
+        .deposit-item { 
+            display: grid; grid-template-columns: 48px 1fr auto; 
+            gap: 12px; align-items: center; 
+            padding: 12px 14px; 
+            background: rgba(0, 0, 0, 0.3); 
+            backdrop-filter: blur(10px); 
+            border: 1px solid rgba(255, 200, 0, 0.25); 
+            border-radius: 4px; margin-bottom: 8px; 
+            transition: all 0.2s;
+        }
+        .deposit-item:hover { border-color: rgba(255, 200, 0, 0.5); transform: translateY(-1px); }
+        .deposit-item img { width: 42px; height: 42px; object-fit: contain; }
+        .deposit-info { min-width: 0; font-size: 11px; line-height: 1.6; color: #e5e7ef; font-weight: 700; }
+        .deposit-info .dep-line { display: flex; gap: 5px; align-items: center; word-break: break-word; }
+        .deposit-info .dep-key { color: #a8adb8; font-size: 10px; font-weight: 800; }
+        .deposit-info .dep-val { color: #fff; font-weight: 800; }
+        .deposit-info .dep-val.accent { color: var(--accent-bright); }
+        .deposit-info .dep-val.green { color: var(--green-bright); }
+        .deposit-actions { display: flex; flex-direction: column; gap: 5px; min-width: 90px; }
+        .dep-accept, .dep-reject { 
+            height: 30px; padding: 0 12px; border-radius: 3px; border: none; 
+            font-family: 'Orbitron', sans-serif; font-size: 9px; font-weight: 900; 
+            letter-spacing: 0.5px; cursor: pointer; transition: all 0.2s; 
+            text-transform: uppercase;
+            display: flex; align-items: center; justify-content: center; gap: 4px;
+        }
+        .dep-accept { background: linear-gradient(135deg, #22c55e, #16a34a); color: #fff; box-shadow: 0 2px 8px rgba(34,197,94,0.3); }
+        .dep-accept:hover { filter: brightness(1.15); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(34,197,94,0.5); }
+        .dep-reject { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.5); }
+        .dep-reject:hover { background: #ef4444; color: #fff; transform: translateY(-1px); }
+        .deposits-empty { text-align: center; color: #6a6d7e; font-size: 11px; padding: 14px; font-weight: 700; }
+
+        /* ===== ПОПОЛНЕНИЕ ===== */
         .topup-grid {
             display: grid; grid-template-columns: repeat(4, 1fr);
             gap: 6px; max-height: 260px; overflow-y: auto;
@@ -335,6 +565,7 @@
         .topup-price-line .tpl-value img { width: 13px; height: 13px; }
         .topup-promo-active { text-align: center; font-family: 'Orbitron', sans-serif; font-size: 12px; font-weight: 900; color: var(--green-bright); margin-top: 6px; letter-spacing: 2px; }
 
+        /* ===== ПРОФИЛЬ ===== */
         .profile-page { padding: 18px 18px; }
         .profile-banner {
             position: relative; width: 100%; height: 200px;
@@ -410,26 +641,7 @@
         .profile-inventory-item .inv-price { font-family: 'Orbitron', sans-serif; font-size: 9px; color: var(--accent-bright); font-weight: 900; }
         .profile-inventory-empty { text-align: center; color: #6a6d7e; font-size: 11px; padding: 18px; font-weight: 700; }
 
-        .deposits-block { margin-top: 14px; padding: 14px; background: rgba(255, 200, 0, 0.06); backdrop-filter: blur(15px); border: 1px solid rgba(255, 200, 0, 0.3); border-radius: 3px; }
-        .deposits-block-title { font-family: 'Orbitron', sans-serif; font-size: 12px; font-weight: 900; color: #ffcc33; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
-        .deposits-block-title::before { content: ''; width: 3px; height: 12px; background: #ffcc33; }
-        .deposits-count { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #ffcc33; margin-left: auto; font-weight: 800; }
-        .deposit-item { display: grid; grid-template-columns: 40px 1fr auto; gap: 10px; align-items: center; padding: 10px 12px; background: rgba(0, 0, 0, 0.25); backdrop-filter: blur(10px); border: 1px solid rgba(255, 200, 0, 0.2); border-radius: 3px; margin-bottom: 8px; }
-        .deposit-item img { width: 36px; height: 36px; object-fit: contain; }
-        .deposit-info { min-width: 0; font-size: 11px; line-height: 1.5; color: #e5e7ef; font-weight: 700; }
-        .deposit-info .dep-line { display: flex; gap: 5px; align-items: center; word-break: break-word; }
-        .deposit-info .dep-key { color: #a8adb8; font-size: 10px; font-weight: 800; }
-        .deposit-info .dep-val { color: #fff; font-weight: 800; }
-        .deposit-info .dep-val.accent { color: var(--accent-bright); }
-        .deposit-info .dep-val.green { color: var(--green-bright); }
-        .deposit-actions { display: flex; flex-direction: column; gap: 4px; }
-        .dep-accept, .dep-reject { height: 26px; padding: 0 10px; border-radius: 3px; border: none; font-family: 'Orbitron', sans-serif; font-size: 9px; font-weight: 900; letter-spacing: 0.5px; cursor: pointer; transition: all 0.2s; text-transform: uppercase; }
-        .dep-accept { background: linear-gradient(135deg, #22c55e, #16a34a); color: #fff; }
-        .dep-accept:hover { filter: brightness(1.15); }
-        .dep-reject { background: rgba(239, 68, 68, 0.25); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.5); }
-        .dep-reject:hover { background: #ef4444; color: #fff; }
-        .deposits-empty { text-align: center; color: #6a6d7e; font-size: 11px; padding: 14px; font-weight: 700; }
-
+        /* ===== МЕНЮ ===== */
         .menu-page { padding: 14px 14px; display: flex; flex-direction: column; gap: 12px; }
         .menu-promo-card {
             background: rgba(255, 255, 255, 0.04); backdrop-filter: blur(20px);
@@ -470,6 +682,7 @@
         @keyframes timerPulse { 0%, 100% { opacity: 0.7; } 50% { opacity: 1; } }
         .menu-promo-hint { font-size: 11px; color: #a8adb8; text-align: center; line-height: 1.5; font-weight: 700; }
 
+        /* ===== КАСТОМ ===== */
         .customize-page { padding: 18px 18px; }
         .customize-section {
             padding: 14px; 
@@ -617,6 +830,7 @@
         }
         .reset-avatar-btn:hover { background: rgba(255, 100, 100, 0.25); }
 
+        /* ===== АПГРЕЙДЕР ===== */
         .progress-section { display: flex; justify-content: center; align-items: center; padding: 22px 0 14px; position: relative; }
         .progress-wrapper { position: relative; width: 300px; height: 300px; }
         .progress-svg { width: 100%; height: 100%; transform: rotate(-90deg); }
@@ -662,13 +876,58 @@
             background: rgba(255, 255, 255, 0.04); backdrop-filter: blur(15px);
             border-radius: 3px; padding: 12px;
             display: flex; flex-direction: column; align-items: center;
-            border: 1px solid var(--glass-border); min-width: 130px;
+            border: 1px solid var(--glass-border); min-width: 150px;
             box-shadow: inset 0 1px 0 var(--glass-highlight);
+            flex: 1;
+            max-width: 180px;
         }
         .item-box .label { font-size: 10px; color: #a8adb8; font-weight: 900; text-transform: uppercase; letter-spacing: 2.5px; margin-bottom: 8px; }
         .item-box img { width: 64px; height: 64px; object-fit: contain; margin-bottom: 8px; }
-        .item-box .name { font-size: 11px; font-weight: 800; text-align: center; margin-bottom: 6px; color: #fff; height: 30px; display: flex; align-items: center; }
-        .item-box .price { font-family: 'Orbitron', sans-serif; font-size: 12px; font-weight: 900; color: var(--accent-bright); display: flex; align-items: center; gap: 4px; }
+        .item-box .name { font-size: 11px; font-weight: 800; text-align: center; margin-bottom: 6px; color: #fff; height: 30px; display: flex; align-items: center; justify-content: center; }
+        .item-box .price { font-family: 'Orbitron', sans-serif; font-size: 12px; font-weight: 900; color: var(--accent-bright); display: flex; align-items: center; gap: 4px; margin-bottom: 6px; }
+
+        /* ===== КНОПКА "ВЫБРАТЬ ЦЕЛЬ +" ===== */
+        .choose-target-btn {
+            margin-top: 8px;
+            width: 100%;
+            padding: 8px 10px;
+            border-radius: 3px;
+            border: 1px solid var(--glass-border);
+            background: transparent;
+            color: #fff;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 9px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.25s;
+            white-space: nowrap;
+        }
+        .choose-target-btn .plus-icon {
+            font-weight: 300;
+            font-size: 18px;
+            line-height: 0.8;
+            color: #fff;
+            font-family: 'Rubik', sans-serif;
+        }
+        .choose-target-btn:hover:not(:disabled) {
+            border-color: var(--accent);
+            background: var(--accent-very-dim);
+            box-shadow: 0 0 12px var(--accent-dim);
+        }
+        .choose-target-btn:hover:not(:disabled) .plus-icon {
+            color: var(--accent-bright);
+        }
+        .choose-target-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
         .price-coin { width: 14px; height: 14px; object-fit: contain; }
         .swap-arrow { font-size: 24px; color: var(--accent); }
         .stage-controls { display: flex; justify-content: center; align-items: center; gap: 8px; padding: 0 18px 6px; }
@@ -741,38 +1000,6 @@
             width: 100%; max-width: var(--card-img-size);
             height: var(--card-img-size); object-fit: contain; margin-bottom: 6px; pointer-events: none;
             transition: filter 0.3s;
-        }
-
-        /* ===== Кнопка + (просто белый плюс без фона) ===== */
-        .inv-card .plus-target-btn {
-            position: absolute; 
-            top: 2px; 
-            right: 4px;
-            width: 20px; 
-            height: 20px;
-            border: none;
-            background: transparent;
-            color: #ffffff;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 20px; 
-            font-weight: 900; 
-            line-height: 1;
-            display: none; 
-            align-items: center; 
-            justify-content: center;
-            cursor: pointer; 
-            z-index: 10; 
-            padding: 0;
-            text-shadow: 0 0 6px rgba(0, 0, 0, 0.9);
-            transition: all 0.2s;
-        }
-        .inv-card.selected .plus-target-btn { 
-            display: flex; 
-        }
-        .inv-card .plus-target-btn:hover {
-            color: #ffffff;
-            transform: scale(1.3);
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.95);
         }
 
         .glow-blue img { filter: drop-shadow(0 0 3px #3b82f6); }
@@ -872,6 +1099,7 @@
             text-align: right;
         }
 
+        /* ===== РАКЕТКА ===== */
         .rocket-page { padding: 20px 18px; max-width: 900px; margin: 0 auto; }
         .rocket-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
         .rocket-title { font-family: 'Orbitron', sans-serif; font-size: 18px; font-weight: 900; color: #fff; letter-spacing: 3px; text-transform: uppercase; }
@@ -979,6 +1207,7 @@
         .rocket-result-prize { font-family: 'Orbitron', sans-serif; font-size: 22px; font-weight: 900; color: var(--accent-bright); display: flex; align-items: center; gap: 8px; }
         .rocket-result-prize img { width: 22px; height: 22px; }
 
+        /* ===== ОБМЕН ===== */
         .trade-page { padding: 20px 18px; max-width: 720px; margin: 0 auto; }
         .trade-page-header { text-align: center; margin-bottom: 18px; }
         .trade-page-header h2 { font-family: 'Orbitron', sans-serif; font-size: 18px; font-weight: 900; color: #fff; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 8px; }
@@ -1007,72 +1236,31 @@
         .trade-btn:disabled { opacity: 0.35; cursor: not-allowed; background: #3a3d4d; }
         .trade-empty { text-align: center; padding: 36px 12px; color: #6a6d7e; font-size: 12px; font-weight: 700; }
 
+        /* ===== ПРОМОКОД ===== */
         .promo-panel { padding: 24px 18px; text-align: center; }
         .promo-panel h2 { font-family: 'Orbitron', sans-serif; font-size: 18px; font-weight: 900; color: #fff; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 3px; }
         .promo-panel p { color: #a8adb8; font-size: 13px; margin-bottom: 18px; font-weight: 700; }
         .promo-input-wrap { display: flex; gap: 10px; max-width: 480px; margin: 0 auto; }
         .promo-input-wrap .form-input { flex: 1; text-transform: uppercase; }
         .promo-input-wrap .action-btn { width: auto; padding: 12px 20px; margin-top: 0; }
-        .admin-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; max-height: 220px; overflow-y: auto; padding: 6px; margin-bottom: 12px; }
-        .admin-item {
-            background: rgba(255, 255, 255, 0.04); backdrop-filter: blur(10px);
-            border: 1px solid var(--glass-border);
-            border-radius: 3px; padding: 8px 4px;
-            display: flex; flex-direction: column; align-items: center; cursor: pointer;
-            transition: all 0.2s;
-        }
-        .admin-item.selected { border-color: var(--accent); background: var(--accent-very-dim); box-shadow: 0 0 10px var(--accent-dim); }
-        .admin-item img { width: 36px; height: 36px; object-fit: contain; margin-bottom: 4px; }
-        .admin-item .name { font-size: 8px; color: #e5e7ef; font-weight: 800; text-align: center; line-height: 1.2; height: 20px; overflow: hidden; }
-        .admin-badge {
-            display: inline-block; padding: 5px 12px;
-            background: linear-gradient(135deg, var(--green), var(--accent));
-            font-size: 10px; font-weight: 900; color: #0a1a0f; text-transform: uppercase; letter-spacing: 2.5px;
-            margin-bottom: 10px; font-family: 'Orbitron', sans-serif; border-radius: 3px;
-        }
-        .promo-list { margin-top: 16px; max-height: 260px; overflow-y: auto; text-align: left; }
-        .promo-list-item {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 10px 12px; 
-            background: rgba(255, 255, 255, 0.04); backdrop-filter: blur(10px);
-            border: 1px solid var(--glass-border); border-radius: 3px;
-            margin-bottom: 6px; font-size: 12px;
-        }
-        .promo-list-item .code { font-family: 'Orbitron', sans-serif; font-weight: 900; color: var(--accent-bright); letter-spacing: 2px; font-size: 13px; }
-        .promo-list-item .uses { font-family: 'Orbitron', sans-serif; font-weight: 900; color: var(--green-bright); font-size: 11px; }
-        .promo-list-item .uses.empty { color: #ff6b6b; }
+
+        .profile-action-row { margin-top: 12px; }
 
         @media (max-width: 900px) {
-            body { flex-direction: column; align-items: center; gap: 10px; padding: 10px 10px 80px 10px; }
-            .nav-panel { 
-                top: auto;
-                bottom: 12px;
-                right: 50%;
-                transform: translateX(50%);
-                flex-direction: row;
-                justify-content: center;
-                flex-wrap: wrap;
-                width: auto;
-                max-width: 96vw;
-                gap: 5px;
-                padding: 6px 8px;
-                border-radius: 4px;
-                background: var(--glass-bg-strong);
-                backdrop-filter: blur(20px);
-                border: 1px solid var(--glass-border);
-            }
-            .nav-btn { width: 42px; height: 42px; }
-            .nav-btn svg { width: 20px; height: 20px; }
+            body { padding: 10px 10px 90px 10px; }
+            .nav-btn { width: 40px; height: 40px; }
+            .nav-btn svg { width: 19px; height: 19px; }
             .inventory-row { grid-template-columns: repeat(auto-fill, minmax(82px, 1fr)); }
             .shop-grid { grid-template-columns: repeat(auto-fill, minmax(82px, 1fr)); }
             .topup-grid { grid-template-columns: repeat(3, 1fr); }
             :root { --card-img-size: 48px; }
+            .admin-grid { grid-template-columns: repeat(3, 1fr); }
         }
         @media (max-width: 600px) {
             .app { border-radius: 0; }
             .progress-wrapper { width: 260px; height: 260px; }
             .chance-big { font-size: 36px; }
-            .item-box { min-width: 110px; padding: 10px; }
+            .item-box { min-width: 0; padding: 10px; max-width: none; }
             .item-box img { width: 52px; height: 52px; }
             .upgrade-main-btn { flex: 0 1 190px; font-size: 12px; padding: 12px; }
             .fast-btn { width: 44px; height: 44px; }
@@ -1105,6 +1293,10 @@
             .menu-promo-percent { font-size: 34px; }
             :root { --card-img-size: 44px; --card-name-size: 8px; }
             .color-grid { grid-template-columns: repeat(5, 1fr); }
+            .admin-grid { grid-template-columns: repeat(2, 1fr); }
+            .deposit-item { grid-template-columns: 40px 1fr; }
+            .deposit-actions { grid-column: 1 / -1; flex-direction: row; }
+            .dep-accept, .dep-reject { flex: 1; }
             @keyframes orbitSpin {
                 from { transform: rotate(0deg) translateX(42px) rotate(0deg); }
                 to { transform: rotate(360deg) translateX(42px) rotate(-360deg); }
@@ -1163,39 +1355,69 @@
     </div>
 </div>
 
+<!-- УЛУЧШЕННАЯ АДМИН ПАНЕЛЬ -->
 <div class="modal" id="adminModal">
     <div class="modal-card wide">
         <button class="modal-close" onclick="closeModal('adminModal')">X</button>
-        <div class="admin-badge">ADMIN PANEL</div>
-        <div class="modal-title">Создать промокод</div>
-        <div class="form-group">
-            <label class="form-label">Название промокода</label>
-            <input type="text" class="form-input" id="adminCode" placeholder="Например: SUPER2025" maxlength="20">
-        </div>
-        <div class="form-group">
-            <label class="form-label">Кол-во активаций</label>
-            <input type="number" class="form-input" id="adminUses" placeholder="10" min="1" value="1">
-        </div>
-        <div class="form-group">
-            <label class="form-label">Тип награды</label>
-            <div class="radio-row">
-                <div class="radio-option active" data-type="balance" onclick="selectPromoType('balance')">Баланс</div>
-                <div class="radio-option" data-type="item" onclick="selectPromoType('item')">Брейнрот</div>
+        
+        <div class="admin-header">
+            <div class="admin-header-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    <path d="M9 12l2 2 4-4"/>
+                </svg>
+            </div>
+            <div class="admin-header-text">
+                <div class="admin-header-title">Admin Panel</div>
+                <div class="admin-header-sub"><span class="admin-online-dot"></span> СИСТЕМА АКТИВНА</div>
             </div>
         </div>
-        <div class="form-group" id="balanceGroup">
-            <label class="form-label">Сумма монет</label>
-            <input type="number" class="form-input" id="adminBalance" placeholder="500" min="1" value="500">
+
+        <div class="admin-section">
+            <div class="admin-section-title">Создание промокода</div>
+            
+            <div class="form-group">
+                <label class="form-label">Название промокода</label>
+                <input type="text" class="form-input" id="adminCode" placeholder="Например: SUPER2025" maxlength="20" oninput="updateAdminPreview()">
+            </div>
+
+            <div class="admin-preview">
+                <div class="admin-preview-label">Превью:</div>
+                <div class="admin-preview-value" id="adminPreviewValue"></div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Кол-во активаций</label>
+                <input type="number" class="form-input" id="adminUses" placeholder="10" min="1" value="1">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Тип награды</label>
+                <div class="radio-row">
+                    <div class="radio-option active" data-type="balance" onclick="selectPromoType('balance')">Баланс</div>
+                    <div class="radio-option" data-type="item" onclick="selectPromoType('item')">Брейнрот</div>
+                </div>
+            </div>
+
+            <div class="form-group" id="balanceGroup">
+                <label class="form-label">Сумма монет</label>
+                <input type="number" class="form-input" id="adminBalance" placeholder="500" min="1" value="500">
+            </div>
+
+            <div class="form-group" id="itemGroup" style="display:none;">
+                <label class="form-label">Выбери брейнрот</label>
+                <div class="admin-grid" id="adminGrid"></div>
+            </div>
+
+            <button class="action-btn" onclick="createPromo()">Создать промокод</button>
+            <div class="msg" id="adminMsg"></div>
         </div>
-        <div class="form-group" id="itemGroup" style="display:none;">
-            <label class="form-label">Выбери брейнрот</label>
-            <div class="admin-grid" id="adminGrid"></div>
-        </div>
-        <button class="action-btn" onclick="createPromo()">Создать промокод</button>
-        <div class="msg" id="adminMsg"></div>
-        <div class="modal-title" style="margin-top: 20px; font-size: 13px;">Существующие промокоды</div>
-        <div class="promo-list" id="promoList">
-            <div style="color:#6a6d7e; font-size:11px; text-align:center; padding:10px; font-weight:700;">Загрузка...</div>
+
+        <div class="admin-section">
+            <div class="admin-section-title">Существующие промокоды</div>
+            <div class="promo-list" id="promoList">
+                <div style="color:#6a6d7e; font-size:11px; text-align:center; padding:10px; font-weight:700;">Загрузка...</div>
+            </div>
         </div>
     </div>
 </div>
@@ -1297,6 +1519,9 @@
                 <img id="targetImg" src="" alt="" style="display:none">
                 <div class="name" id="targetName">—</div>
                 <div class="price" id="targetPrice"></div>
+                <button class="choose-target-btn" id="chooseTargetBtn" onclick="openTargetList()" disabled>
+                    ВЫБРАТЬ ЦЕЛЬ <span class="plus-icon">+</span>
+                </button>
             </div>
         </div>
         <div class="stage-controls">
@@ -1446,7 +1671,7 @@
                 <div id="depositsList"></div>
             </div>
             <div class="profile-action-row">
-                <button class="action-btn" id="adminPanelBtn" style="display:none; background: linear-gradient(135deg, #ef4444, #dc2626);" onclick="openAdminPanel()">Админ-панель</button>
+                <button class="action-btn" id="adminPanelBtn" style="display:none; background: linear-gradient(135deg, #ef4444, #dc2626);" onclick="openAdminPanel()">Открыть админ-панель</button>
             </div>
         </div>
     </div>
@@ -1546,7 +1771,7 @@
     </div>
 </div>
 
-<!-- ===== ПАНЕЛЬ КНОПОК (fixed) ===== -->
+<!-- ===== ПАНЕЛЬ КНОПОК (fixed снизу) ===== -->
 <div class="nav-panel">
     <button class="nav-btn active" id="navMenu" onclick="switchTab('menu')" title="Главная">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -1723,7 +1948,7 @@
     })();
     function getDisplayNick() { return customNick || USER.nick; }
 
-    // ===== ЗВУКИ (мягкие, без писка) =====
+    // ===== МЯГКИЕ ЗВУКИ =====
     let audioCtx = null;
     function getAudioCtx() {
         if (!audioCtx) {
@@ -1781,23 +2006,18 @@
             source.stop(ctx.currentTime + delay + duration + 0.02);
         } catch (e) {}
     }
-
-    // Мягкий клик (низкие частоты)
     function playClick() {
         playNoise(0.05, 0.04, 0, 800);
         playOsc(320, 0.08, 'sine', 0.05, 0, 600);
     }
-    // Тик при прокрутке колеса (мягкий, без писка)
     function playTick() {
         playNoise(0.02, 0.025, 0, 700);
     }
-    // Звон монет (мягкий)
     function playCoin() {
         playOsc(660, 0.12, 'sine', 0.05, 0, 1500);
         playOsc(880, 0.15, 'sine', 0.045, 0.08, 1800);
         playNoise(0.08, 0.015, 0, 1000);
     }
-    // Победа (низкий мажорный аккорд)
     function playWin() {
         playOsc(261, 0.25, 'sine', 0.05, 0, 900);
         playOsc(329, 0.25, 'sine', 0.05, 0.06, 900);
@@ -1805,13 +2025,11 @@
         playOsc(523, 0.4, 'sine', 0.045, 0.2, 1200);
         playOsc(130, 0.55, 'triangle', 0.03, 0, 300);
     }
-    // Проигрыш (низкий нисходящий)
     function playLose() {
         playOsc(220, 0.25, 'triangle', 0.05, 0, 500);
         playOsc(180, 0.3, 'triangle', 0.05, 0.15, 500);
         playOsc(140, 0.45, 'sine', 0.04, 0.32, 400);
     }
-    // Начало апгрейда (восходящий свип низкий)
     function playUpgradeStart() {
         const ctx = getAudioCtx();
         if (!ctx) return;
@@ -1835,7 +2053,6 @@
         } catch(e) {}
     }
 
-    // ===== ВИБРО =====
     function vibrate(ms = 15) {
         try { if (navigator.vibrate) navigator.vibrate(ms); } catch(e) {}
     }
@@ -1882,6 +2099,7 @@
     const targetName = document.getElementById('targetName');
     const targetPrice = document.getElementById('targetPrice');
     const upgradeBtn = document.getElementById('upgradeBtn');
+    const chooseTargetBtn = document.getElementById('chooseTargetBtn');
     const profileBalance = document.getElementById('profileBalance');
     const profileItemsCount = document.getElementById('profileItemsCount');
 
@@ -2399,8 +2617,8 @@
                         <div class="dep-line"><span class="dep-key">Roblox:</span> <span class="dep-val">${d.roblox_name}</span></div>
                     </div>
                     <div class="deposit-actions">
-                        <button class="dep-accept" onclick="processDeposit('${d.id}', 'accepted')">Принять</button>
-                        <button class="dep-reject" onclick="processDeposit('${d.id}', 'rejected')">Отклонить</button>
+                        <button class="dep-accept" onclick="processDeposit('${d.id}', 'accepted')">✓ Принять</button>
+                        <button class="dep-reject" onclick="processDeposit('${d.id}', 'rejected')">✕ Отклонить</button>
                     </div>
                 </div>
             `;
@@ -2426,11 +2644,18 @@
         document.getElementById('balanceGroup').style.display = type === 'balance' ? 'block' : 'none';
         document.getElementById('itemGroup').style.display = type === 'item' ? 'block' : 'none';
     };
+    window.updateAdminPreview = function() {
+        const codeInput = document.getElementById('adminCode');
+        const previewValue = document.getElementById('adminPreviewValue');
+        if (codeInput && previewValue) {
+            previewValue.textContent = codeInput.value.trim().toUpperCase();
+        }
+    };
     function renderAdminGrid() {
         const grid = document.getElementById('adminGrid');
         grid.innerHTML = ITEMS.map(item => `
             <div class="admin-item ${selectedAdminItem === item.id ? 'selected' : ''}" onclick="selectAdminItem('${item.id}')">
-                <img src="${item.img}" alt="${item.name}" onerror="this.src='https://via.placeholder.com/42?text=?'">
+                <img src="${item.img}" alt="${item.name}" onerror="this.src='https://via.placeholder.com/36?text=?'">
                 <div class="name">${item.name}</div>
             </div>
         `).join('');
@@ -2441,6 +2666,7 @@
         playClick();
         renderAdminGrid();
         renderPromoList();
+        updateAdminPreview();
         openModal('adminModal');
     };
     window.createPromo = async function() {
@@ -2473,6 +2699,7 @@
                 document.getElementById('adminCode').value = '';
                 document.getElementById('adminUses').value = 1;
                 selectedAdminItem = null;
+                updateAdminPreview();
                 renderAdminGrid(); renderPromoList();
             } else {
                 msg.className = 'msg err'; msg.textContent = data.error || 'Ошибка';
@@ -2489,25 +2716,36 @@
             if (!data.ok) throw new Error(data.error);
             const codes = Object.values(data.promocodes || {});
             if (codes.length === 0) {
-                list.innerHTML = '<div style="color:#6a6d7e; font-size:11px; text-align:center; padding:10px; font-weight:700;">Промокодов пока нет</div>';
+                list.innerHTML = '<div style="color:#6a6d7e; font-size:11px; text-align:center; padding:16px; font-weight:700;">Промокодов пока нет</div>';
                 return;
             }
             list.innerHTML = codes.map(p => {
                 let rewardText = '';
-                if (p.type === 'balance') rewardText = p.value + ' монет';
-                else { const item = getItemById(p.value); rewardText = item ? item.name : p.value; }
+                let iconHtml = '';
+                if (p.type === 'balance') {
+                    rewardText = p.value + ' монет';
+                    iconHtml = `<img src="${COIN_IMG}" class="pl-coin-icon" alt="coin">`;
+                } else {
+                    const item = getItemById(p.value);
+                    rewardText = item ? item.name : p.value;
+                    iconHtml = item ? `<img src="${item.img}" alt="${item.name}">` : '';
+                }
                 return `
                     <div class="promo-list-item">
-                        <div>
+                        <div class="pl-icon">${iconHtml}</div>
+                        <div class="pl-info">
                             <div class="code">${p.code}</div>
-                            <div style="color:#a8adb8;font-size:10px;font-weight:700;">${rewardText}</div>
+                            <div class="pl-reward">${rewardText}</div>
                         </div>
-                        <div class="uses ${p.uses <= 0 ? 'empty' : ''}">${p.uses} акт.</div>
+                        <div>
+                            <div class="pl-uses ${p.uses <= 0 ? 'empty' : ''}">${p.uses}</div>
+                            <div class="pl-uses-label">активаций</div>
+                        </div>
                     </div>
                 `;
             }).join('');
         } catch (err) {
-            list.innerHTML = '<div style="color:#ff6b6b; font-size:11px; text-align:center; padding:10px; font-weight:700;">Сервер спит</div>';
+            list.innerHTML = '<div style="color:#ff6b6b; font-size:11px; text-align:center; padding:16px; font-weight:700;">Сервер спит</div>';
         }
     }
     window.activatePromo = async function() {
@@ -2620,7 +2858,6 @@
             const glowClass = getGlowClass(item.price);
             return `
                 <div class="inv-card ${isSelected ? 'selected' : ''} ${glowClass}">
-                    <button class="plus-target-btn" onclick="event.stopPropagation(); openTargetList(${index})" title="Выбрать цель">+</button>
                     <div class="selectable" onclick="selectSourceByIndex(${index})">
                         <img src="${item.img}" alt="${item.name}">
                         <div class="name" title="${item.name}">${item.name}</div>
@@ -2642,10 +2879,11 @@
         vibrate(10);
     };
 
-    window.openTargetList = function(sourceIndex) {
+    window.openTargetList = function() {
         if (isSpinning) return;
-        if (sourceIndex < 0 || sourceIndex >= inventory.length) return;
-        const sourceItem = getItemById(inventory[sourceIndex]);
+        if (selectedSourceIndex === null) return;
+        if (selectedSourceIndex < 0 || selectedSourceIndex >= inventory.length) return;
+        const sourceItem = getItemById(inventory[selectedSourceIndex]);
         if (!sourceItem) return;
         const targets = ITEMS.filter(t => t.price > sourceItem.price).sort((a, b) => a.price - b.price);
         const list = document.getElementById('targetList');
@@ -2656,7 +2894,7 @@
                 const chance = Math.min(MAX_CHANCE, Math.max(1, Math.round((100 / (t.price / sourceItem.price)) * 10) / 10));
                 const glowClass = getGlowClass(t.price);
                 return `
-                    <div class="target-list-item ${glowClass}" onclick="pickTargetFromList(${sourceIndex}, '${t.id}')">
+                    <div class="target-list-item ${glowClass}" onclick="pickTargetFromList('${t.id}')">
                         <img src="${t.img}" alt="${t.name}">
                         <div class="tl-info">
                             <div class="tl-name">${t.name}</div>
@@ -2672,14 +2910,13 @@
         vibrate(10);
     };
 
-    window.pickTargetFromList = function(sourceIndex, targetId) {
+    window.pickTargetFromList = function(targetId) {
         if (isSpinning) return;
-        if (sourceIndex < 0 || sourceIndex >= inventory.length) return;
-        const sourceItem = getItemById(inventory[sourceIndex]);
+        if (selectedSourceIndex === null) return;
+        const sourceItem = getItemById(inventory[selectedSourceIndex]);
         const targetItem = getItemById(targetId);
         if (!sourceItem || !targetItem) return;
         if (targetItem.price <= sourceItem.price) return;
-        selectedSourceIndex = sourceIndex;
         selectedTargetId = targetId;
         closeModal('targetModal');
         renderInventory(); updateUpgradeScreen();
@@ -2719,6 +2956,12 @@
             targetImg.style.display = 'none';
             targetName.innerText = '—';
             targetPrice.innerHTML = '';
+        }
+        // Активируем кнопку "Выбрать цель" если выбран источник
+        if (sourceItem && !isSpinning) {
+            chooseTargetBtn.disabled = false;
+        } else {
+            chooseTargetBtn.disabled = true;
         }
         const chance = calculateChance();
         const displayChance = Math.floor(chance);
