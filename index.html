@@ -29,9 +29,6 @@
             --app-bg-alpha: 0.35;
             --card-img-size: 52px;
             --card-name-size: 9px;
-            --haunted-primary: #ff6a00;
-            --haunted-secondary: #b30000;
-            --haunted-glow: #ff3300;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; font-family: 'Rubik', sans-serif; font-weight: 700; }
@@ -39,7 +36,7 @@
         body {
             background: #050d08; color: #e5e7eb; min-height: 100vh;
             display: flex; flex-direction: column; align-items: center;
-            padding: 20px 20px 90px 20px; position: relative;
+            padding: 20px 20px 100px 20px; position: relative;
             overflow-x: hidden; overflow-y: auto; font-weight: 700;
         }
 
@@ -72,8 +69,44 @@
 
         .app { width: 100%; max-width: 560px; background: var(--glass-bg); backdrop-filter: blur(20px) saturate(130%); -webkit-backdrop-filter: blur(20px) saturate(130%); border: 1px solid var(--glass-border); border-radius: 4px; box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5), 0 0 20px var(--accent-very-dim), inset 0 1px 0 var(--glass-highlight); overflow: hidden; display: flex; flex-direction: column; padding-bottom: 20px; position: relative; flex-shrink: 0; }
 
-        .nav-panel { position: fixed; bottom: 12px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: row; gap: 6px; z-index: 500; padding: 6px 8px; border-radius: 4px; background: var(--glass-bg-strong); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid var(--glass-border); box-shadow: 0 8px 25px rgba(0,0,0,0.5), inset 0 1px 0 var(--glass-highlight); max-width: 96vw; flex-wrap: wrap; justify-content: center; }
-        .nav-btn { width: 44px; height: 44px; border-radius: 3px; border: 1px solid var(--glass-border); background: var(--glass-bg-strong); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); color: #a8adb8; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.25s; box-shadow: inset 0 1px 0 var(--glass-highlight); padding: 0; overflow: hidden; }
+        /* ===== ПАНЕЛЬ КНОПОК — ВСЕГДА В ОДНУ СТРОКУ ===== */
+        .nav-panel {
+            position: fixed;
+            bottom: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            gap: 6px;
+            z-index: 500;
+            padding: 6px 8px;
+            border-radius: 4px;
+            background: var(--glass-bg-strong);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.5), inset 0 1px 0 var(--glass-highlight);
+            max-width: calc(100vw - 20px);
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+        .nav-panel::-webkit-scrollbar { display: none; }
+        .nav-btn {
+            width: 44px; height: 44px; min-width: 44px; min-height: 44px;
+            border-radius: 3px;
+            border: 1px solid var(--glass-border);
+            background: var(--glass-bg-strong);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            color: #a8adb8; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            transition: all 0.25s;
+            box-shadow: inset 0 1px 0 var(--glass-highlight);
+            padding: 0;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
         .nav-btn svg { width: 21px; height: 21px; flex-shrink: 0; transition: all 0.25s; }
         .nav-btn img { width: 100%; height: 100%; object-fit: contain; padding: 4px; }
         .nav-btn:hover { background: var(--accent-very-dim); border-color: var(--accent); color: var(--accent-bright); }
@@ -808,9 +841,7 @@
         .profile-action-row { margin-top: 12px; }
 
         @media (max-width: 900px) {
-            body { padding: 10px 10px 90px 10px; }
-            .nav-btn { width: 40px; height: 40px; }
-            .nav-btn svg { width: 19px; height: 19px; }
+            body { padding: 10px 10px 100px 10px; }
             .inventory-row { grid-template-columns: repeat(auto-fill, minmax(82px, 1fr)); }
             .shop-grid { grid-template-columns: repeat(auto-fill, minmax(82px, 1fr)); }
             .topup-grid { grid-template-columns: repeat(3, 1fr); }
@@ -819,6 +850,10 @@
         }
         @media (max-width: 600px) {
             .app { border-radius: 0; }
+            .nav-panel { gap: 4px; padding: 5px 6px; bottom: 8px; }
+            .nav-btn { width: 38px; height: 38px; min-width: 38px; min-height: 38px; }
+            .nav-btn svg { width: 18px; height: 18px; }
+            .nav-btn img { padding: 3px; }
             .progress-wrapper { width: 260px; height: 260px; }
             .chance-big { font-size: 36px; }
             .item-box { min-width: 0; padding: 10px; max-width: none; }
@@ -989,7 +1024,6 @@
     </div>
 </div>
 
-<!-- Модалка выбора браинрота в Haunted Fuse слот -->
 <div class="modal" id="hauntedPickModal">
     <div class="modal-card">
         <button class="modal-close" onclick="closeModal('hauntedPickModal')">X</button>
@@ -998,7 +1032,6 @@
     </div>
 </div>
 
-<!-- Модалка результата Haunted Fuse -->
 <div class="modal" id="hauntedResultModal">
     <div class="modal-card haunted-result-card">
         <button class="modal-close" onclick="closeModal('hauntedResultModal')">X</button>
@@ -1014,6 +1047,7 @@
         <div class="haunted-result-stats">
             <div>ШАНС БЫЛ: <span id="hauntedResultChance">??%</span></div>
             <div>Множитель: <span id="hauntedResultMultiplier">?x</span></div>
+            <div>РЕЗУЛЬТАТ: <span id="hauntedResultLabel2">—</span></div>
         </div>
     </div>
 </div>
@@ -1053,7 +1087,6 @@
     </div>
 </div>
 
-<!-- ЭПИЧНАЯ АНИМАЦИЯ HAUNTED FUSE -->
 <div class="haunted-anim" id="hauntedAnim">
     <div class="haunted-anim-bg"></div>
     <div class="haunted-anim-particles" id="hauntedAnimParticles"></div>
@@ -1140,11 +1173,10 @@
         </div>
     </div>
 
-    <!-- ===== HAUNTED FUSE ===== -->
     <div class="tab-panel" id="panelHaunted">
         <div class="haunted-page">
             <div class="haunted-banner">
-                <img src="https://github.com/saintezz/ggbrainXv2/blob/main/Haunted.png?raw=true" alt="Haunted Fuse">
+                <img src="https://github.com/saintezz/ggbrainXv2/blob/main/HauntedFUSE.png?raw=true" alt="Haunted Fuse">
                 <div class="haunted-title">HAUNTED FUSE</div>
             </div>
             <div class="haunted-slots">
@@ -1445,7 +1477,6 @@
 <script>
     const COIN_IMG = 'https://github.com/saintezz/saintbetW/blob/main/%D0%BC%D0%BE%D0%BD%D0%B5%D1%82%D0%B0.png?raw=true';
     const DEFAULT_AVATAR = 'https://github.com/saintezz/ggbrainXv2/raw/main/avavatarochka.jpg';
-    const HAUNTED_IMG = 'https://github.com/saintezz/ggbrainXv2/blob/main/Haunted.png?raw=true';
     const ADMIN_USERNAME = 'clonexx7';
 
     const ITEMS = [
@@ -1546,7 +1577,7 @@
     let customAvatar = localStorage.getItem('ggbrainx_custom_avatar') || null;
 
     // ===== HAUNTED FUSE STATE =====
-    let hauntedSlots = [null, null, null, null]; // индексы в inventory или null
+    let hauntedSlots = [null, null, null, null];
     let hauntedPickerTargetSlot = null;
 
     function saveLocalCache() {
@@ -1668,7 +1699,6 @@
         } catch(e) {}
     }
     function playHaunted() {
-        // Эпичный хоррор-звук
         const ctx = getAudioCtx();
         if (!ctx) return;
         try {
@@ -2581,7 +2611,6 @@
         const list = document.getElementById('hauntedPickList');
         const counts = {};
         inventory.forEach((id, i) => { counts[id] = (counts[id] || 0) + 1; });
-        // Показываем все уникальные предметы
         list.innerHTML = Object.keys(counts).map(id => {
             const item = getItemById(id);
             if (!item) return '';
@@ -2605,7 +2634,6 @@
         playClick();
         vibrate(10);
         if (hauntedPickerTargetSlot === null) return;
-        // Находим первый индекс в inventory с этим id, который ещё не в слотах
         const usedIndexes = hauntedSlots.filter(x => x !== null);
         const idx = inventory.findIndex((id, i) => id === itemId && !usedIndexes.includes(i));
         if (idx === -1) { showToast('Нет свободных экземпляров', 'err'); return; }
@@ -2625,7 +2653,6 @@
             }
         });
         document.getElementById('hauntedSum').textContent = sum.toLocaleString('ru-RU');
-        // Шанс успеха: чем больше предметов, тем выше
         let chance = 0;
         if (count === 1) chance = 25;
         else if (count === 2) chance = 45;
@@ -2635,7 +2662,7 @@
         document.getElementById('hauntedFuseBtn').disabled = count < 1;
     }
 
-    // Расчёт награды Haunted Fuse
+    // ===== НОВЫЙ РАСЧЁТ HAUNTED FUSE (можно дойти до x5, сбалансированные шансы) =====
     function calculateHauntedReward() {
         let sum = 0;
         let count = 0;
@@ -2646,47 +2673,44 @@
             }
         });
         if (sum <= 0) return null;
-        // Максимальная цель — до 5x от суммы
-        const maxTarget = sum * 5;
-        // Собираем пул целей дороже средней части
-        const potentialTargets = ITEMS.filter(t => t.price > sum * 0.5 && t.price <= maxTarget);
-        if (potentialTargets.length === 0) {
-            // Если ничего нет — вернём случайный из существующих дороже 50%
-            const fallback = ITEMS.filter(t => t.price > sum).sort((a, b) => a.price - b.price);
-            if (fallback.length === 0) return null;
-            const pick = fallback[Math.floor(Math.random() * fallback.length)];
-            return { item: pick, chance: 60, multiplier: (pick.price / sum) };
-        }
-        // Определяем диапазоны с весами
-        const ranges = [
-            { min: sum * 1.0, max: sum * 1.5, weight: 60 },
-            { min: sum * 1.5, max: sum * 2.5, weight: 30 },
-            { min: sum * 2.5, max: sum * 3.5, weight: 8 },
-            { min: sum * 3.5, max: sum * 5.0, weight: 2 }
+
+        // Диапазоны множителей с весами (от 0.1x до 5x)
+        const multiplierRanges = [
+            { minMult: 0.1, maxMult: 0.5, weight: 25, label: 'ЛУЗ' },
+            { minMult: 0.5, maxMult: 0.9, weight: 18, label: 'Малый луз' },
+            { minMult: 0.9, maxMult: 1.1, weight: 15, label: 'Около нуля' },
+            { minMult: 1.1, maxMult: 1.8, weight: 16, label: 'Малый плюс' },
+            { minMult: 1.8, maxMult: 2.8, weight: 13, label: 'Средний плюс' },
+            { minMult: 2.8, maxMult: 4.0, weight: 8,  label: 'Большой плюс' },
+            { minMult: 4.0, maxMult: 5.0, weight: 5,  label: 'ДЖЕКПОТ' }
         ];
-        // Выбираем диапазон по весу
-        const totalWeight = ranges.reduce((a, r) => a + r.weight, 0);
+
+        const totalWeight = multiplierRanges.reduce((a, r) => a + r.weight, 0);
         let r = Math.random() * totalWeight;
-        let chosenRange = ranges[0];
-        for (const range of ranges) {
+        let chosenRange = multiplierRanges[0];
+        for (const range of multiplierRanges) {
             if (r < range.weight) { chosenRange = range; break; }
             r -= range.weight;
         }
-        // Выбираем цель из диапазона
-        const targetsInRange = potentialTargets.filter(t => t.price >= chosenRange.min && t.price <= chosenRange.max);
-        let pickedItem;
-        if (targetsInRange.length > 0) {
-            pickedItem = targetsInRange[Math.floor(Math.random() * targetsInRange.length)];
-        } else {
-            // Если в диапазоне нет — берём ближайшую
-            const sorted = [...potentialTargets].sort((a, b) => Math.abs(a.price - chosenRange.min) - Math.abs(b.price - chosenRange.min));
-            pickedItem = sorted[0];
+
+        const mult = chosenRange.minMult + Math.random() * (chosenRange.maxMult - chosenRange.minMult);
+        const targetPrice = Math.max(1, Math.round(sum * mult));
+
+        let bestItem = ITEMS[0];
+        let bestDiff = Math.abs(bestItem.price - targetPrice);
+        for (const item of ITEMS) {
+            const diff = Math.abs(item.price - targetPrice);
+            if (diff < bestDiff) {
+                bestDiff = diff;
+                bestItem = item;
+            }
         }
-        const multiplier = pickedItem.price / sum;
-        return { item: pickedItem, chance: chosenRange.weight, multiplier };
+
+        const realMultiplier = bestItem.price / sum;
+        const chance = Math.round((chosenRange.weight / totalWeight) * 100);
+        return { item: bestItem, chance: chance, multiplier: realMultiplier, label: chosenRange.label };
     }
 
-    // Эпичная анимация
     function playHauntedAnimation() {
         return new Promise(resolve => {
             const anim = document.getElementById('hauntedAnim');
@@ -2694,7 +2718,6 @@
             const textEl = document.getElementById('hauntedAnimText');
             anim.classList.add('show');
             textEl.textContent = 'HAUNTED FUSE...';
-            // Спавним частицы
             particles.innerHTML = '';
             for (let i = 0; i < 40; i++) {
                 const p = document.createElement('div');
@@ -2721,68 +2744,63 @@
     }
 
     window.runHauntedFuse = async function() {
-        // Проверяем, что все слоты заполнены
         const filledCount = hauntedSlots.filter(x => x !== null).length;
         if (filledCount < 1) { showToast('Заполни хотя бы 1 слот', 'err'); playLose(); return; }
-        // Проверяем валидность индексов
         const validIndexes = hauntedSlots.filter(idx => idx !== null && inventory[idx]);
         if (validIndexes.length < 1) { showToast('Предметы потеряны', 'err'); return; }
 
-        // Считаем сумму
         let sum = 0;
         validIndexes.forEach(idx => {
             const item = getItemById(inventory[idx]);
             if (item) sum += item.price;
         });
 
-        // Рассчитываем награду
         const reward = calculateHauntedReward();
         if (!reward) { showToast('Нет подходящей цели', 'err'); playLose(); return; }
 
-        // Визуально отключаем кнопку
         const fuseBtn = document.getElementById('hauntedFuseBtn');
         fuseBtn.disabled = true;
         fuseBtn.textContent = 'ФЬЮЗ...';
 
-        // Запускаем анимацию
         await playHauntedAnimation();
 
-        // Удаляем выбранные предметы из инвентаря (в порядке убывания индексов)
         const sortedIdx = [...validIndexes].sort((a, b) => b - a);
-        sortedIndexesToRemove = sortedIdx;
-        // Удаляем сразу
         sortedIdx.forEach(idx => {
             inventory.splice(idx, 1);
         });
 
-        // Добавляем награду
         inventory.push(reward.item.id);
 
-        // Сбрасываем слоты
         hauntedSlots = [null, null, null, null];
         renderHauntedSlots();
         renderInventory();
         updateUpgradeScreen();
         renderProfileInventory();
 
-        // Показываем результат
         const resultImg = document.getElementById('hauntedResultImg');
         const resultName = document.getElementById('hauntedResultName');
         const resultPrice = document.getElementById('hauntedResultPrice');
         const resultChance = document.getElementById('hauntedResultChance');
         const resultMultiplier = document.getElementById('hauntedResultMultiplier');
+        const resultLabel2 = document.getElementById('hauntedResultLabel2');
 
         resultImg.src = reward.item.img;
         resultName.textContent = reward.item.name;
         resultPrice.querySelector('span').textContent = reward.item.price;
         resultChance.textContent = reward.chance + '%';
         resultMultiplier.textContent = reward.multiplier.toFixed(2) + 'x';
+        if (resultLabel2) resultLabel2.textContent = reward.label || '—';
 
         fuseBtn.textContent = 'ФЬЮЗ';
         fuseBtn.disabled = false;
 
-        playWin();
-        vibratePattern([30, 50, 30, 50, 100]);
+        if (reward.multiplier >= 1.1) {
+            playWin();
+            vibratePattern([30, 50, 30, 50, 100]);
+        } else {
+            playLose();
+            vibratePattern([50, 30, 100]);
+        }
 
         openModal('hauntedResultModal');
         saveLocalCache();
