@@ -69,7 +69,7 @@
 
         .app { width: 100%; max-width: 560px; background: var(--glass-bg); backdrop-filter: blur(20px) saturate(130%); -webkit-backdrop-filter: blur(20px) saturate(130%); border: 1px solid var(--glass-border); border-radius: 4px; box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5), 0 0 20px var(--accent-very-dim), inset 0 1px 0 var(--glass-highlight); overflow: hidden; display: flex; flex-direction: column; padding-bottom: 20px; position: relative; flex-shrink: 0; }
 
-        /* ===== ПАНЕЛЬ КНОПОК — ВСЕГДА В ОДНУ СТРОКУ ===== */
+        /* ===== ПАНЕЛЬ КНОПОК — FUSE В ПРАВОЙ ЧАСТИ ===== */
         .nav-panel {
             position: fixed;
             bottom: 12px;
@@ -90,6 +90,7 @@
             max-width: calc(100vw - 20px);
             overflow-x: auto;
             scrollbar-width: none;
+            align-items: flex-end;
         }
         .nav-panel::-webkit-scrollbar { display: none; }
         .nav-btn {
@@ -112,6 +113,51 @@
         .nav-btn:hover { background: var(--accent-very-dim); border-color: var(--accent); color: var(--accent-bright); }
         .nav-btn.active { background: linear-gradient(135deg, var(--accent-very-dim), var(--accent-dim)); border-color: var(--accent); color: #fff; box-shadow: 0 0 12px var(--accent-dim), inset 0 1px 0 var(--glass-highlight); }
         .nav-btn.active svg { color: var(--accent-bright); }
+
+        /* Специальная Fuse-кнопка — больше, оранжевая подпись */
+        .nav-btn-fuse {
+            position: relative;
+            width: 58px; height: 58px; min-width: 58px; min-height: 58px;
+            border-radius: 6px;
+            border: 1px solid #ff6a00;
+            background: linear-gradient(135deg, rgba(255, 106, 0, 0.25), rgba(179, 0, 0, 0.35));
+            box-shadow: 0 0 20px rgba(255, 100, 0, 0.4), inset 0 1px 0 rgba(255,255,255,0.15);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 2px;
+            padding: 3px;
+            overflow: visible;
+        }
+        .nav-btn-fuse img {
+            width: 42px; height: 42px; object-fit: contain;
+            filter: drop-shadow(0 0 6px #ff5500);
+            animation: fusePulse 2s ease-in-out infinite;
+        }
+        @keyframes fusePulse {
+            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 6px #ff5500); }
+            50% { transform: scale(1.08); filter: drop-shadow(0 0 12px #ff5500) drop-shadow(0 0 20px #ff2200); }
+        }
+        .nav-btn-fuse .fuse-label {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 8px;
+            font-weight: 900;
+            color: #ff8c1a;
+            letter-spacing: 1.5px;
+            text-shadow: 0 0 6px #ff5500;
+            line-height: 1;
+        }
+        .nav-btn-fuse:hover {
+            background: linear-gradient(135deg, rgba(255, 106, 0, 0.4), rgba(179, 0, 0, 0.5));
+            box-shadow: 0 0 30px rgba(255, 100, 0, 0.7), inset 0 1px 0 rgba(255,255,255,0.2);
+        }
+        .nav-btn-fuse.active {
+            background: linear-gradient(135deg, #ff6a00, #b30000);
+            border-color: #ffb366;
+            box-shadow: 0 0 35px rgba(255, 100, 0, 0.9), inset 0 1px 0 rgba(255,255,255,0.25);
+        }
+        .nav-btn-fuse.active .fuse-label { color: #fff; text-shadow: 0 0 10px #fff; }
 
         .top-bar { display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(15px); border-bottom: 1px solid var(--glass-border); position: relative; }
         .top-bar::after { content: ''; position: absolute; bottom: -1px; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, var(--green), var(--accent), transparent); opacity: 0.4; }
@@ -281,6 +327,373 @@
         @keyframes timerPulse { 0%, 100% { opacity: 0.7; } 50% { opacity: 1; } }
         .menu-promo-hint { font-size: 11px; color: #a8adb8; text-align: center; line-height: 1.5; font-weight: 700; }
 
+        /* ===== КАСТОМИЗАЦИЯ В ПРОФИЛЕ ===== */
+        .customize-in-profile { margin-top: 16px; }
+
+        .customize-section {
+            padding: 14px; 
+            background: rgba(255, 255, 255, 0.04); backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
+            border-radius: 3px; margin-bottom: 12px;
+        }
+        .customize-section-title {
+            font-family: 'Orbitron', sans-serif; font-size: 11px;
+            color: var(--accent-bright); font-weight: 900;
+            letter-spacing: 2.5px; text-transform: uppercase; margin-bottom: 10px;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .customize-section-title::before { content: ''; width: 3px; height: 12px; background: linear-gradient(180deg, var(--green), var(--accent)); }
+        .slider-row { display: flex; align-items: center; gap: 12px; }
+        .slider-row input[type="range"] {
+            flex: 1; -webkit-appearance: none; appearance: none;
+            height: 8px; background: rgba(255, 255, 255, 0.08);
+            border-radius: 2px; outline: none;
+        }
+        .slider-row input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none; appearance: none;
+            width: 22px; height: 22px; border-radius: 3px;
+            background: linear-gradient(135deg, var(--green), var(--accent)); cursor: pointer;
+        }
+        .slider-row input[type="range"]::-moz-range-thumb {
+            width: 22px; height: 22px; border-radius: 3px;
+            background: linear-gradient(135deg, var(--green), var(--accent)); cursor: pointer; border: none;
+        }
+        .slider-value { font-family: 'Orbitron', sans-serif; font-weight: 900; font-size: 13px; color: #fff; min-width: 50px; text-align: right; }
+        .bg-options { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+        .bg-option {
+            aspect-ratio: 1 / 0.7; border-radius: 3px;
+            border: 1px solid var(--glass-border);
+            background: rgba(10, 26, 15, 0.6); cursor: pointer; overflow: hidden;
+            position: relative; transition: all 0.25s;
+            backdrop-filter: blur(10px);
+        }
+        .bg-option:hover { border-color: var(--accent); }
+        .bg-option.selected { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent-dim); }
+        .bg-option video { width: 100%; height: 100%; object-fit: cover; }
+        .bg-option .bg-placeholder {
+            width: 100%; height: 100%;
+            background: linear-gradient(135deg, rgba(10, 26, 15, 0.8), rgba(26, 58, 31, 0.8));
+            display: flex; align-items: center; justify-content: center;
+            color: #a8adb8; font-family: 'Orbitron', sans-serif;
+            font-size: 10px; text-align: center; padding: 6px; font-weight: 800;
+        }
+        .bg-option.selected::after {
+            content: 'OK'; position: absolute; top: 4px; right: 4px;
+            width: 22px; height: 22px; border-radius: 3px;
+            background: linear-gradient(135deg, var(--green), var(--accent)); color: #0a1a0f;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 9px; font-weight: 900;
+        }
+        .orbit-picker {
+            display: flex; flex-wrap: wrap; gap: 6px;
+            max-height: 200px; overflow-y: auto;
+            padding: 6px; border-radius: 3px;
+            background: rgba(0, 0, 0, 0.2);
+        }
+        .orbit-item {
+            width: 46px; height: 46px; border-radius: 3px;
+            border: 1px solid var(--glass-border);
+            background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px);
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; transition: all 0.2s; position: relative;
+        }
+        .orbit-item:hover { border-color: var(--accent); }
+        .orbit-item.selected { border-color: var(--accent); background: var(--accent-very-dim); box-shadow: 0 0 10px var(--accent-dim); }
+        .orbit-item.selected::after {
+            content: 'OK'; position: absolute; top: -5px; right: -5px;
+            width: 16px; height: 16px; border-radius: 3px;
+            background: linear-gradient(135deg, var(--green), var(--accent)); color: #0a1a0f;
+            font-size: 7px; font-weight: 900;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .orbit-item img { width: 34px; height: 34px; object-fit: contain; }
+
+        .color-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; }
+        .color-swatch {
+            aspect-ratio: 1; border-radius: 3px;
+            cursor: pointer; border: 2px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.2s; position: relative;
+        }
+        .color-swatch:hover { transform: scale(1.1); box-shadow: 0 0 10px currentColor; }
+        .color-swatch.selected { 
+            border-color: #fff; 
+            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.5), 0 0 12px currentColor;
+            transform: scale(1.05);
+        }
+        .color-swatch.selected::after {
+            content: 'OK'; position: absolute; inset: 0;
+            display: flex; align-items: center; justify-content: center;
+            color: #fff; font-size: 10px; font-weight: 900;
+            text-shadow: 0 0 6px rgba(0, 0, 0, 0.9);
+        }
+
+        .weather-options { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+        .weather-option {
+            aspect-ratio: 1 / 0.7; border-radius: 3px;
+            border: 1px solid var(--glass-border);
+            background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px);
+            cursor: pointer; transition: all 0.25s;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            gap: 6px; padding: 8px; position: relative;
+        }
+        .weather-option:hover { border-color: var(--accent); }
+        .weather-option.selected { border-color: var(--accent); background: var(--accent-very-dim); box-shadow: 0 0 0 1px var(--accent-dim); }
+        .weather-option img { width: 42px; height: 42px; object-fit: contain; }
+        .weather-option .wo-label { font-family: 'Orbitron', sans-serif; font-size: 9px; font-weight: 900; color: #fff; letter-spacing: 1px; text-transform: uppercase; }
+        .weather-option.selected::after {
+            content: 'OK'; position: absolute; top: 4px; right: 4px;
+            width: 22px; height: 22px; border-radius: 3px;
+            background: linear-gradient(135deg, var(--green), var(--accent)); color: #0a1a0f;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 9px; font-weight: 900;
+        }
+        .weather-option.none-option { grid-column: span 3; aspect-ratio: auto; padding: 12px; flex-direction: row; }
+        .weather-option.none-option .wo-label { font-size: 11px; }
+
+        .avatar-upload-row { display: flex; align-items: center; gap: 12px; }
+        .avatar-preview { width: 64px; height: 64px; border-radius: 3px; border: 2px solid var(--accent); object-fit: cover; background: #0a1a0f; flex-shrink: 0; }
+        .upload-btn {
+            flex: 1; padding: 12px 16px; border-radius: 3px;
+            border: 1px solid var(--glass-border);
+            background: var(--accent-very-dim);
+            color: #fff;
+            font-family: 'Orbitron', sans-serif; font-size: 11px; font-weight: 900;
+            text-transform: uppercase; letter-spacing: 1.5px;
+            cursor: pointer; transition: all 0.2s;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            backdrop-filter: blur(10px);
+        }
+        .upload-btn:hover { background: var(--accent-dim); border-color: var(--accent); }
+        .upload-btn svg { width: 18px; height: 18px; }
+        .reset-avatar-btn {
+            padding: 8px 12px; border-radius: 3px;
+            border: 1px solid rgba(255, 100, 100, 0.4);
+            background: rgba(255, 100, 100, 0.12);
+            color: #ff8a8a;
+            font-family: 'Orbitron', sans-serif; font-size: 10px; font-weight: 900;
+            cursor: pointer; transition: all 0.2s;
+            text-transform: uppercase;
+        }
+        .reset-avatar-btn:hover { background: rgba(255, 100, 100, 0.25); }
+
+        /* ===== БОЛЬШОЙ БЕЛЫЙ + БЕЗ КРУЖКОВ ===== */
+        .choose-target-wrap {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            margin-top: 8px;
+            width: 100%;
+        }
+        .choose-target-label {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 9px;
+            font-weight: 900;
+            color: #a8adb8;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+        .choose-target-minus {
+            background: transparent;
+            border: none;
+            color: #ffffff;
+            font-family: 'Rubik', sans-serif;
+            font-size: 22px;
+            font-weight: 300;
+            line-height: 1;
+            cursor: default;
+            padding: 0;
+            opacity: 0.6;
+            user-select: none;
+        }
+        .choose-target-btn {
+            width: 38px;
+            height: 38px;
+            border: none;
+            background: transparent;
+            color: #ffffff;
+            font-family: 'Rubik', sans-serif;
+            font-size: 30px;
+            font-weight: 300;
+            line-height: 1;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.25s;
+            padding: 0;
+            text-shadow: 0 0 8px rgba(255,255,255,0.5);
+        }
+        .choose-target-btn:hover:not(:disabled) {
+            color: var(--accent-bright);
+            transform: scale(1.15);
+            text-shadow: 0 0 20px var(--accent-bright), 0 0 35px var(--accent);
+        }
+        .choose-target-btn:disabled {
+            opacity: 0.2;
+            cursor: not-allowed;
+        }
+
+        /* ===== АПГРЕЙДЕР ===== */
+        .progress-section { display: flex; justify-content: center; align-items: center; padding: 22px 0 14px; position: relative; }
+        .progress-wrapper { position: relative; width: 300px; height: 300px; }
+        .progress-svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+        .progress-bg { fill: none; stroke: rgba(30, 30, 38, 0.7); stroke-width: 22; }
+        .progress-bar { fill: none; stroke: url(#progressGradient); stroke-width: 22; stroke-linecap: butt; stroke-dasharray: 816; stroke-dashoffset: 816; transition: stroke-dashoffset 0.3s ease; filter: drop-shadow(0 0 5px var(--accent-dim)); }
+        .arrow-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; justify-content: center; align-items: flex-start; pointer-events: none; z-index: 5; transition: transform 6s cubic-bezier(0.12, 0.8, 0.15, 1); transform-origin: center center; }
+        .arrow-pointer { width: 0; height: 0; border-left: 12px solid transparent; border-right: 12px solid transparent; border-top: 26px solid var(--accent); margin-top: 18px; position: relative; }
+        .arrow-pointer::after { content: ''; position: absolute; top: -32px; left: -5px; width: 10px; height: 10px; background: var(--accent-bright); border-radius: 50%; animation: pointerPulse 1s ease-in-out infinite; box-shadow: 0 0 6px var(--accent); }
+        @keyframes pointerPulse { 0%, 100% { transform: scale(1); opacity: 0.8; } 50% { transform: scale(1.4); opacity: 1; } }
+        .progress-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; z-index: 10; }
+        .chance-big { font-family: 'Orbitron', sans-serif; font-size: 42px; font-weight: 900; background: linear-gradient(135deg, var(--green-bright), var(--accent-bright)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; line-height: 1; }
+        .chance-label { font-size: 12px; color: var(--accent-bright); font-weight: 900; text-transform: uppercase; letter-spacing: 4px; margin-top: 6px; min-height: 16px; }
+        .chance-label.hidden { visibility: hidden; }
+        .items-row { display: flex; justify-content: center; align-items: center; gap: 12px; padding: 14px 18px; }
+        .item-box { background: rgba(255, 255, 255, 0.04); backdrop-filter: blur(15px); border-radius: 3px; padding: 12px; display: flex; flex-direction: column; align-items: center; border: 1px solid var(--glass-border); min-width: 150px; box-shadow: inset 0 1px 0 var(--glass-highlight); flex: 1; max-width: 180px; }
+        .item-box .label { font-size: 10px; color: #a8adb8; font-weight: 900; text-transform: uppercase; letter-spacing: 2.5px; margin-bottom: 8px; }
+        .item-box img { width: 64px; height: 64px; object-fit: contain; margin-bottom: 8px; }
+        .item-box .name { font-size: 11px; font-weight: 800; text-align: center; margin-bottom: 6px; color: #fff; height: 30px; display: flex; align-items: center; justify-content: center; }
+        .item-box .price { font-family: 'Orbitron', sans-serif; font-size: 12px; font-weight: 900; color: var(--accent-bright); display: flex; align-items: center; gap: 4px; margin-bottom: 6px; }
+        .price-coin { width: 14px; height: 14px; object-fit: contain; }
+        .swap-arrow { font-size: 24px; color: var(--accent); }
+        .stage-controls { display: flex; justify-content: center; align-items: center; gap: 8px; padding: 0 18px 6px; }
+        .upgrade-main-btn { flex: 0 1 220px; padding: 14px 18px; border-radius: 3px; border: 1px solid var(--glass-border); background: linear-gradient(135deg, var(--green), var(--accent)); color: #0a1a0f; font-family: 'Orbitron', sans-serif; font-size: 13px; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; cursor: pointer; transition: all 0.25s; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px var(--green-dim), inset 0 1px 0 var(--glass-highlight); }
+        .upgrade-main-btn:hover:not(:disabled) { filter: brightness(1.1); transform: translateY(-1px); }
+        .upgrade-main-btn:disabled { opacity: 0.4; cursor: not-allowed; background: #3a3d4d; box-shadow: none; }
+        .fast-btn { width: 48px; height: 48px; border-radius: 3px; border: 1px solid var(--glass-border); background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); color: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.25s; }
+        .fast-btn.active { background: linear-gradient(135deg, var(--green), var(--accent)); border-color: var(--accent-bright); }
+        .fast-btn svg { width: 22px; height: 22px; }
+
+        .section-title { font-family: 'Orbitron', sans-serif; font-size: 12px; font-weight: 900; color: var(--accent-bright); text-transform: uppercase; letter-spacing: 2.5px; margin-bottom: 10px; padding: 0 18px; display: flex; align-items: center; gap: 10px; }
+        .section-title::before { content: ''; width: 4px; height: 14px; background: linear-gradient(180deg, var(--green), var(--accent)); }
+        .section-block { margin-top: 18px; }
+
+        .inventory-row { display: grid; grid-template-columns: repeat(auto-fill, minmax(88px, 1fr)); gap: 8px; padding: 4px 18px 12px; }
+        .shop-scroll { max-height: 400px; overflow-y: auto; padding: 4px 18px 12px; scrollbar-width: thin; scrollbar-color: var(--accent-dim) transparent; }
+        .shop-scroll::-webkit-scrollbar { width: 6px; }
+        .shop-scroll::-webkit-scrollbar-thumb { background: var(--accent-dim); border-radius: 2px; }
+        .shop-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(88px, 1fr)); gap: 8px; }
+
+        .inv-card, .shop-card { background: rgba(255, 255, 255, 0.04); backdrop-filter: blur(15px); border-radius: 3px; padding: 10px 6px; display: flex; flex-direction: column; align-items: center; border: 1px solid var(--glass-border); transition: all 0.25s; position: relative; min-width: 0; overflow: hidden; box-shadow: inset 0 1px 0 var(--glass-highlight); }
+        .inv-card:hover, .shop-card:hover { border-color: var(--accent); background: var(--accent-very-dim); transform: translateY(-2px); box-shadow: 0 4px 12px var(--accent-dim), inset 0 1px 0 var(--glass-highlight); }
+        .inv-card.selected { border-color: var(--accent); background: var(--accent-very-dim); box-shadow: 0 0 12px var(--accent-dim), inset 0 1px 0 var(--glass-highlight); }
+
+        .inv-card img, .shop-card img { width: 100%; max-width: var(--card-img-size); height: var(--card-img-size); object-fit: contain; margin-bottom: 6px; pointer-events: none; transition: filter 0.3s; }
+
+        .glow-blue img { filter: drop-shadow(0 0 3px #3b82f6); }
+        .glow-green img { filter: drop-shadow(0 0 3px #22c55e); }
+        .glow-red img { filter: drop-shadow(0 0 3px #ef4444); }
+        .glow-purple img { filter: drop-shadow(0 0 4px #a855f7); }
+        .glow-rainbow img { animation: rainbowGlow 3s linear infinite; }
+        @keyframes rainbowGlow {
+            0%   { filter: drop-shadow(0 0 3px #ff0000); }
+            16%  { filter: drop-shadow(0 0 3px #ff8800); }
+            33%  { filter: drop-shadow(0 0 3px #ffff00); }
+            50%  { filter: drop-shadow(0 0 3px #00ff00); }
+            66%  { filter: drop-shadow(0 0 3px #00ffff); }
+            83%  { filter: drop-shadow(0 0 3px #8800ff); }
+            100% { filter: drop-shadow(0 0 3px #ff0000); }
+        }
+
+        .inv-card .name, .shop-card .name { font-size: var(--card-name-size); font-weight: 800; text-align: center; margin-bottom: 4px; height: 24px; overflow: hidden; color: #fff; pointer-events: none; line-height: 1.15; width: 100%; display: flex; align-items: center; justify-content: center; }
+        .inv-card .price, .shop-card .price { font-size: 9px; color: var(--accent-bright); font-weight: 900; display: flex; align-items: center; gap: 3px; font-family: 'Orbitron', sans-serif; pointer-events: none; }
+        .buy-btn { width: 100%; padding: 6px; border-radius: 3px; border: 1px solid var(--glass-border); background: linear-gradient(135deg, var(--green), var(--accent)); color: #0a1a0f; font-weight: 900; font-size: 9px; cursor: pointer; transition: all 0.2s; text-transform: uppercase; font-family: 'Orbitron', sans-serif; margin-top: 5px; position: relative; z-index: 5; letter-spacing: 0.5px; }
+        .buy-btn:disabled { opacity: 0.4; cursor: not-allowed; background: #3a3d4d; }
+        .sell-btn { width: 100%; padding: 6px; border-radius: 3px; border: 1px solid var(--green-dim); background: var(--accent-very-dim); color: var(--green-bright); font-weight: 900; font-size: 9px; cursor: pointer; text-transform: uppercase; font-family: 'Orbitron', sans-serif; margin-top: 5px; position: relative; z-index: 5; letter-spacing: 0.5px; }
+        .sell-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+        .empty-inv { color: #6a6d7e; font-size: 12px; text-align: center; width: 100%; padding: 22px; font-weight: 800; grid-column: 1 / -1; }
+        .selectable { display: flex; flex-direction: column; align-items: center; width: 100%; cursor: pointer; }
+        .locked { pointer-events: none !important; opacity: 0.4 !important; filter: grayscale(0.5) !important; }
+
+        .target-list { display: flex; flex-direction: column; gap: 6px; max-height: 60vh; overflow-y: auto; padding: 4px; }
+        .target-list-item { display: grid; grid-template-columns: 48px 1fr auto; align-items: center; gap: 12px; padding: 10px 12px; background: rgba(255, 255, 255, 0.04); backdrop-filter: blur(10px); border: 1px solid var(--glass-border); border-radius: 3px; cursor: pointer; transition: all 0.2s; }
+        .target-list-item:hover { border-color: var(--accent); background: var(--accent-very-dim); transform: translateX(3px); }
+        .target-list-item img { width: 48px; height: 48px; object-fit: contain; }
+        .target-list-item .tl-info { min-width: 0; text-align: left; }
+        .target-list-item .tl-name { font-size: 12px; font-weight: 800; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 3px; }
+        .target-list-item .tl-price { font-family: 'Orbitron', sans-serif; font-size: 11px; font-weight: 900; color: var(--accent-bright); display: flex; align-items: center; gap: 4px; }
+        .target-list-item .tl-price img { width: 12px; height: 12px; }
+        .target-list-item .tl-chance { font-family: 'Orbitron', sans-serif; font-size: 11px; font-weight: 900; color: var(--green-bright); text-align: right; }
+
+        .rocket-page { padding: 20px 18px; max-width: 900px; margin: 0 auto; }
+        .rocket-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
+        .rocket-title { font-family: 'Orbitron', sans-serif; font-size: 18px; font-weight: 900; color: #fff; letter-spacing: 3px; text-transform: uppercase; }
+        .rocket-subtitle { color: #a8adb8; font-size: 11px; letter-spacing: 1px; font-weight: 700; }
+        .rocket-balance-inline { display: flex; align-items: center; gap: 5px; font-family: 'Orbitron', sans-serif; font-weight: 900; font-size: 13px; color: #fff; }
+        .rocket-balance-inline img { width: 16px; height: 16px; }
+        .rocket-balance-wrap { display: flex; align-items: center; background: rgba(255, 255, 255, 0.06); backdrop-filter: blur(15px); border: 1px solid var(--glass-border); border-radius: 3px; overflow: hidden; }
+        .rocket-balance-wrap .rocket-balance-inline { padding: 6px 12px; }
+        .rocket-stage { position: relative; width: 100%; height: 320px; background: rgba(5, 15, 8, 0.7); backdrop-filter: blur(10px); border: 1px solid var(--glass-border); border-radius: 3px; overflow: hidden; margin-bottom: 14px; }
+        .rocket-stars { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+        .star { position: absolute; width: 2px; height: 2px; background: #fff; border-radius: 50%; animation: starTwinkle 3s ease-in-out infinite; }
+        @keyframes starTwinkle { 0%, 100% { opacity: 0.2; } 50% { opacity: 0.7; } }
+        .rocket-sprite { position: absolute; left: 40px; bottom: 40px; width: 50px; height: 50px; z-index: 5; transition: left 0.05s linear, bottom 0.05s linear; }
+        .rocket-sprite img { width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 0 5px var(--accent-dim)); }
+        .rocket-sprite.flying img { animation: rocketShake 0.15s ease-in-out infinite alternate; }
+        @keyframes rocketShake { from { transform: translate(0, 0) rotate(-3deg); } to { transform: translate(1px, -1px) rotate(3deg); } }
+        .rocket-sprite.crashed img { filter: brightness(0.4) hue-rotate(-40deg); transform: rotate(45deg) scale(1.3); }
+        .rocket-sprite.cashed img { filter: brightness(1.2); }
+        .rocket-x-display { position: absolute; top: 18px; right: 18px; font-family: 'Orbitron', sans-serif; font-weight: 900; font-size: 40px; color: var(--accent-bright); z-index: 6; }
+        .rocket-x-display.crashed { color: #ff5555; }
+        .rocket-x-display.cashed { color: var(--green-bright); }
+        .rocket-multiplier-bar { position: absolute; left: 18px; bottom: 18px; z-index: 6; }
+        .rocket-bar-label { font-family: 'Orbitron', sans-serif; font-size: 9px; color: #a8adb8; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 4px; font-weight: 800; }
+        .rocket-bar-track { width: 200px; height: 6px; background: rgba(255, 255, 255, 0.06); border-radius: 2px; overflow: hidden; }
+        .rocket-bar-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--green), var(--accent)); transition: width 0.05s linear; }
+        .rocket-status { position: absolute; top: 18px; left: 18px; font-family: 'Orbitron', sans-serif; font-size: 11px; font-weight: 900; letter-spacing: 2.5px; text-transform: uppercase; color: #a8adb8; z-index: 6; }
+        .rocket-status.flying { color: var(--accent-bright); }
+        .rocket-status.crashed { color: #ff5555; }
+        .rocket-status.cashed { color: var(--green-bright); }
+        .rocket-history { margin-top: 12px; padding: 12px; background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border: 1px solid var(--glass-border); border-radius: 3px; }
+        .rocket-history-label { font-family: 'Orbitron', sans-serif; font-size: 10px; color: #a8adb8; letter-spacing: 2.5px; text-transform: uppercase; margin-bottom: 8px; font-weight: 800; }
+        .rocket-history-list { display: flex; gap: 6px; flex-wrap: wrap; max-height: 70px; overflow-y: auto; }
+        .rocket-history-item { padding: 4px 10px; border-radius: 3px; font-family: 'Orbitron', sans-serif; font-size: 10px; font-weight: 900; background: var(--accent-very-dim); border: 1px solid var(--glass-border); color: var(--accent-bright); }
+        .rocket-history-item.crashed { background: rgba(255, 80, 80, 0.15); border-color: #ff5555; color: #ff5555; }
+        .rocket-history-item.low { color: #a8adb8; border-color: rgba(255, 255, 255, 0.1); }
+        .rocket-controls { margin-top: 12px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .rocket-bet-input-wrap { display: flex; gap: 6px; }
+        .rocket-bet-input { flex: 1; height: 48px; padding: 0 14px; border-radius: 3px; border: 1px solid var(--glass-border); background: rgba(255, 255, 255, 0.04); backdrop-filter: blur(10px); color: #fff; font-family: 'Orbitron', sans-serif; font-weight: 900; font-size: 14px; text-align: center; outline: none; }
+        .rocket-quick-bets { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; }
+        .rocket-quick-bet { height: 48px; border-radius: 3px; border: 1px solid var(--glass-border); background: rgba(255, 255, 255, 0.04); backdrop-filter: blur(10px); color: #a8adb8; font-family: 'Orbitron', sans-serif; font-size: 12px; font-weight: 900; cursor: pointer; transition: all 0.2s; }
+        .rocket-quick-bet:hover { border-color: var(--accent); color: var(--accent-bright); }
+        .rocket-action-btn { grid-column: 1 / -1; height: 58px; border-radius: 3px; border: 1px solid var(--glass-border); background: linear-gradient(135deg, var(--green), var(--accent)); color: #0a1a0f; font-family: 'Orbitron', sans-serif; font-size: 16px; font-weight: 900; letter-spacing: 3px; text-transform: uppercase; cursor: pointer; transition: all 0.25s; }
+        .rocket-action-btn:disabled { opacity: 0.4; cursor: not-allowed; background: #3a3d4d; }
+        .rocket-action-btn.cashout { background: linear-gradient(135deg, var(--green-bright), var(--emerald)); color: #0a1a0f; }
+        .rocket-action-btn.crashed { background: #3a3d4d; color: #6b7280; }
+        .rocket-overlay-result { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; background: rgba(0, 0, 0, 0.75); backdrop-filter: blur(8px); z-index: 20; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+        .rocket-overlay-result.show { opacity: 1; }
+        .rocket-result-x { font-family: 'Orbitron', sans-serif; font-size: 60px; font-weight: 900; letter-spacing: 3px; }
+        .rocket-result-x.win { color: var(--green-bright); }
+        .rocket-result-x.lose { color: #ff5555; }
+        .rocket-result-label { font-family: 'Orbitron', sans-serif; font-size: 14px; letter-spacing: 4px; text-transform: uppercase; color: #fff; font-weight: 900; }
+        .rocket-result-prize { font-family: 'Orbitron', sans-serif; font-size: 22px; font-weight: 900; color: var(--accent-bright); display: flex; align-items: center; gap: 8px; }
+        .rocket-result-prize img { width: 22px; height: 22px; }
+
+        .trade-page { padding: 20px 18px; max-width: 720px; margin: 0 auto; }
+        .trade-page-header { text-align: center; margin-bottom: 18px; }
+        .trade-page-header h2 { font-family: 'Orbitron', sans-serif; font-size: 18px; font-weight: 900; color: #fff; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 8px; }
+        .trade-page-header p { color: #a8adb8; font-size: 12px; line-height: 1.6; font-weight: 700; }
+        .trade-list-page { display: flex; flex-direction: column; gap: 8px; }
+        .trade-item { display: grid; grid-template-columns: 56px 1fr auto; align-items: center; gap: 12px; padding: 12px 14px; background: rgba(255, 255, 255, 0.04); backdrop-filter: blur(15px); border: 1px solid var(--glass-border); border-radius: 3px; }
+        .trade-left-img { width: 56px; height: 56px; object-fit: contain; }
+        .trade-info { min-width: 0; }
+        .trade-name { font-size: 12px; font-weight: 800; color: #fff; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .trade-reward { font-size: 11px; color: var(--accent-bright); font-weight: 800; display: flex; align-items: center; gap: 5px; flex-wrap: wrap; }
+        .trade-reward img { width: 14px; height: 14px; object-fit: contain; }
+        .trade-reward .arrow { color: var(--accent); font-weight: 900; margin: 0 3px; }
+        .trade-btn { height: 38px; padding: 0 16px; border-radius: 3px; border: 1px solid var(--glass-border); background: linear-gradient(135deg, var(--green), var(--accent)); color: #0a1a0f; font-family: 'Orbitron', sans-serif; font-size: 10px; font-weight: 900; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; transition: all 0.2s; }
+        .trade-btn:disabled { opacity: 0.35; cursor: not-allowed; background: #3a3d4d; }
+        .trade-empty { text-align: center; padding: 36px 12px; color: #6a6d7e; font-size: 12px; font-weight: 700; }
+
+        .promo-panel { padding: 24px 18px; text-align: center; }
+        .promo-panel h2 { font-family: 'Orbitron', sans-serif; font-size: 18px; font-weight: 900; color: #fff; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 3px; }
+        .promo-panel p { color: #a8adb8; font-size: 13px; margin-bottom: 18px; font-weight: 700; }
+        .promo-input-wrap { display: flex; gap: 10px; max-width: 480px; margin: 0 auto; }
+        .promo-input-wrap .form-input { flex: 1; text-transform: uppercase; }
+        .promo-input-wrap .action-btn { width: auto; padding: 12px 20px; margin-top: 0; }
+
+        .profile-action-row { margin-top: 12px; }
+
         /* ===== HAUNTED FUSE PAGE ===== */
         .haunted-page { padding: 16px 14px; }
         .haunted-banner {
@@ -401,7 +814,7 @@
 
         .haunted-summary {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1fr;
             gap: 8px;
             margin-bottom: 14px;
         }
@@ -648,198 +1061,6 @@
             text-shadow: 0 0 10px rgba(255, 100, 0, 0.6);
         }
 
-        /* ===== БОЛЬШОЙ БЕЛЫЙ + БЕЗ КРУЖКОВ ===== */
-        .choose-target-btn {
-            margin-top: 8px;
-            width: 64px;
-            height: 64px;
-            border: none;
-            background: transparent;
-            color: #ffffff;
-            font-family: 'Rubik', sans-serif;
-            font-size: 52px;
-            font-weight: 300;
-            line-height: 1;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.25s;
-            padding: 0;
-            margin-left: auto;
-            margin-right: auto;
-            text-shadow: 0 0 10px rgba(255,255,255,0.5);
-        }
-        .choose-target-btn:hover:not(:disabled) {
-            color: var(--accent-bright);
-            transform: scale(1.15);
-            text-shadow: 0 0 25px var(--accent-bright), 0 0 40px var(--accent);
-        }
-        .choose-target-btn:disabled {
-            opacity: 0.2;
-            cursor: not-allowed;
-        }
-
-        /* ===== АПГРЕЙДЕР ===== */
-        .progress-section { display: flex; justify-content: center; align-items: center; padding: 22px 0 14px; position: relative; }
-        .progress-wrapper { position: relative; width: 300px; height: 300px; }
-        .progress-svg { width: 100%; height: 100%; transform: rotate(-90deg); }
-        .progress-bg { fill: none; stroke: rgba(30, 30, 38, 0.7); stroke-width: 22; }
-        .progress-bar { fill: none; stroke: url(#progressGradient); stroke-width: 22; stroke-linecap: butt; stroke-dasharray: 816; stroke-dashoffset: 816; transition: stroke-dashoffset 0.3s ease; filter: drop-shadow(0 0 5px var(--accent-dim)); }
-        .arrow-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; justify-content: center; align-items: flex-start; pointer-events: none; z-index: 5; transition: transform 6s cubic-bezier(0.12, 0.8, 0.15, 1); transform-origin: center center; }
-        .arrow-pointer { width: 0; height: 0; border-left: 12px solid transparent; border-right: 12px solid transparent; border-top: 26px solid var(--accent); margin-top: 18px; position: relative; }
-        .arrow-pointer::after { content: ''; position: absolute; top: -32px; left: -5px; width: 10px; height: 10px; background: var(--accent-bright); border-radius: 50%; animation: pointerPulse 1s ease-in-out infinite; box-shadow: 0 0 6px var(--accent); }
-        @keyframes pointerPulse { 0%, 100% { transform: scale(1); opacity: 0.8; } 50% { transform: scale(1.4); opacity: 1; } }
-        .progress-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; z-index: 10; }
-        .chance-big { font-family: 'Orbitron', sans-serif; font-size: 42px; font-weight: 900; background: linear-gradient(135deg, var(--green-bright), var(--accent-bright)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; line-height: 1; }
-        .chance-label { font-size: 12px; color: var(--accent-bright); font-weight: 900; text-transform: uppercase; letter-spacing: 4px; margin-top: 6px; min-height: 16px; }
-        .chance-label.hidden { visibility: hidden; }
-        .items-row { display: flex; justify-content: center; align-items: center; gap: 12px; padding: 14px 18px; }
-        .item-box { background: rgba(255, 255, 255, 0.04); backdrop-filter: blur(15px); border-radius: 3px; padding: 12px; display: flex; flex-direction: column; align-items: center; border: 1px solid var(--glass-border); min-width: 150px; box-shadow: inset 0 1px 0 var(--glass-highlight); flex: 1; max-width: 180px; }
-        .item-box .label { font-size: 10px; color: #a8adb8; font-weight: 900; text-transform: uppercase; letter-spacing: 2.5px; margin-bottom: 8px; }
-        .item-box img { width: 64px; height: 64px; object-fit: contain; margin-bottom: 8px; }
-        .item-box .name { font-size: 11px; font-weight: 800; text-align: center; margin-bottom: 6px; color: #fff; height: 30px; display: flex; align-items: center; justify-content: center; }
-        .item-box .price { font-family: 'Orbitron', sans-serif; font-size: 12px; font-weight: 900; color: var(--accent-bright); display: flex; align-items: center; gap: 4px; margin-bottom: 6px; }
-        .price-coin { width: 14px; height: 14px; object-fit: contain; }
-        .swap-arrow { font-size: 24px; color: var(--accent); }
-        .stage-controls { display: flex; justify-content: center; align-items: center; gap: 8px; padding: 0 18px 6px; }
-        .upgrade-main-btn { flex: 0 1 220px; padding: 14px 18px; border-radius: 3px; border: 1px solid var(--glass-border); background: linear-gradient(135deg, var(--green), var(--accent)); color: #0a1a0f; font-family: 'Orbitron', sans-serif; font-size: 13px; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; cursor: pointer; transition: all 0.25s; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px var(--green-dim), inset 0 1px 0 var(--glass-highlight); }
-        .upgrade-main-btn:hover:not(:disabled) { filter: brightness(1.1); transform: translateY(-1px); }
-        .upgrade-main-btn:disabled { opacity: 0.4; cursor: not-allowed; background: #3a3d4d; box-shadow: none; }
-        .fast-btn { width: 48px; height: 48px; border-radius: 3px; border: 1px solid var(--glass-border); background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); color: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.25s; }
-        .fast-btn.active { background: linear-gradient(135deg, var(--green), var(--accent)); border-color: var(--accent-bright); }
-        .fast-btn svg { width: 22px; height: 22px; }
-
-        .section-title { font-family: 'Orbitron', sans-serif; font-size: 12px; font-weight: 900; color: var(--accent-bright); text-transform: uppercase; letter-spacing: 2.5px; margin-bottom: 10px; padding: 0 18px; display: flex; align-items: center; gap: 10px; }
-        .section-title::before { content: ''; width: 4px; height: 14px; background: linear-gradient(180deg, var(--green), var(--accent)); }
-        .section-block { margin-top: 18px; }
-
-        .inventory-row { display: grid; grid-template-columns: repeat(auto-fill, minmax(88px, 1fr)); gap: 8px; padding: 4px 18px 12px; }
-        .shop-scroll { max-height: 400px; overflow-y: auto; padding: 4px 18px 12px; scrollbar-width: thin; scrollbar-color: var(--accent-dim) transparent; }
-        .shop-scroll::-webkit-scrollbar { width: 6px; }
-        .shop-scroll::-webkit-scrollbar-thumb { background: var(--accent-dim); border-radius: 2px; }
-        .shop-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(88px, 1fr)); gap: 8px; }
-
-        .inv-card, .shop-card { background: rgba(255, 255, 255, 0.04); backdrop-filter: blur(15px); border-radius: 3px; padding: 10px 6px; display: flex; flex-direction: column; align-items: center; border: 1px solid var(--glass-border); transition: all 0.25s; position: relative; min-width: 0; overflow: hidden; box-shadow: inset 0 1px 0 var(--glass-highlight); }
-        .inv-card:hover, .shop-card:hover { border-color: var(--accent); background: var(--accent-very-dim); transform: translateY(-2px); box-shadow: 0 4px 12px var(--accent-dim), inset 0 1px 0 var(--glass-highlight); }
-        .inv-card.selected { border-color: var(--accent); background: var(--accent-very-dim); box-shadow: 0 0 12px var(--accent-dim), inset 0 1px 0 var(--glass-highlight); }
-
-        .inv-card img, .shop-card img { width: 100%; max-width: var(--card-img-size); height: var(--card-img-size); object-fit: contain; margin-bottom: 6px; pointer-events: none; transition: filter 0.3s; }
-
-        .glow-blue img { filter: drop-shadow(0 0 3px #3b82f6); }
-        .glow-green img { filter: drop-shadow(0 0 3px #22c55e); }
-        .glow-red img { filter: drop-shadow(0 0 3px #ef4444); }
-        .glow-purple img { filter: drop-shadow(0 0 4px #a855f7); }
-        .glow-rainbow img { animation: rainbowGlow 3s linear infinite; }
-        @keyframes rainbowGlow {
-            0%   { filter: drop-shadow(0 0 3px #ff0000); }
-            16%  { filter: drop-shadow(0 0 3px #ff8800); }
-            33%  { filter: drop-shadow(0 0 3px #ffff00); }
-            50%  { filter: drop-shadow(0 0 3px #00ff00); }
-            66%  { filter: drop-shadow(0 0 3px #00ffff); }
-            83%  { filter: drop-shadow(0 0 3px #8800ff); }
-            100% { filter: drop-shadow(0 0 3px #ff0000); }
-        }
-
-        .inv-card .name, .shop-card .name { font-size: var(--card-name-size); font-weight: 800; text-align: center; margin-bottom: 4px; height: 24px; overflow: hidden; color: #fff; pointer-events: none; line-height: 1.15; width: 100%; display: flex; align-items: center; justify-content: center; }
-        .inv-card .price, .shop-card .price { font-size: 9px; color: var(--accent-bright); font-weight: 900; display: flex; align-items: center; gap: 3px; font-family: 'Orbitron', sans-serif; pointer-events: none; }
-        .buy-btn { width: 100%; padding: 6px; border-radius: 3px; border: 1px solid var(--glass-border); background: linear-gradient(135deg, var(--green), var(--accent)); color: #0a1a0f; font-weight: 900; font-size: 9px; cursor: pointer; transition: all 0.2s; text-transform: uppercase; font-family: 'Orbitron', sans-serif; margin-top: 5px; position: relative; z-index: 5; letter-spacing: 0.5px; }
-        .buy-btn:disabled { opacity: 0.4; cursor: not-allowed; background: #3a3d4d; }
-        .sell-btn { width: 100%; padding: 6px; border-radius: 3px; border: 1px solid var(--green-dim); background: var(--accent-very-dim); color: var(--green-bright); font-weight: 900; font-size: 9px; cursor: pointer; text-transform: uppercase; font-family: 'Orbitron', sans-serif; margin-top: 5px; position: relative; z-index: 5; letter-spacing: 0.5px; }
-        .sell-btn:disabled { opacity: 0.4; cursor: not-allowed; }
-        .empty-inv { color: #6a6d7e; font-size: 12px; text-align: center; width: 100%; padding: 22px; font-weight: 800; grid-column: 1 / -1; }
-        .selectable { display: flex; flex-direction: column; align-items: center; width: 100%; cursor: pointer; }
-        .locked { pointer-events: none !important; opacity: 0.4 !important; filter: grayscale(0.5) !important; }
-
-        .target-list { display: flex; flex-direction: column; gap: 6px; max-height: 60vh; overflow-y: auto; padding: 4px; }
-        .target-list-item { display: grid; grid-template-columns: 48px 1fr auto; align-items: center; gap: 12px; padding: 10px 12px; background: rgba(255, 255, 255, 0.04); backdrop-filter: blur(10px); border: 1px solid var(--glass-border); border-radius: 3px; cursor: pointer; transition: all 0.2s; }
-        .target-list-item:hover { border-color: var(--accent); background: var(--accent-very-dim); transform: translateX(3px); }
-        .target-list-item img { width: 48px; height: 48px; object-fit: contain; }
-        .target-list-item .tl-info { min-width: 0; text-align: left; }
-        .target-list-item .tl-name { font-size: 12px; font-weight: 800; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 3px; }
-        .target-list-item .tl-price { font-family: 'Orbitron', sans-serif; font-size: 11px; font-weight: 900; color: var(--accent-bright); display: flex; align-items: center; gap: 4px; }
-        .target-list-item .tl-price img { width: 12px; height: 12px; }
-        .target-list-item .tl-chance { font-family: 'Orbitron', sans-serif; font-size: 11px; font-weight: 900; color: var(--green-bright); text-align: right; }
-
-        .rocket-page { padding: 20px 18px; max-width: 900px; margin: 0 auto; }
-        .rocket-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
-        .rocket-title { font-family: 'Orbitron', sans-serif; font-size: 18px; font-weight: 900; color: #fff; letter-spacing: 3px; text-transform: uppercase; }
-        .rocket-subtitle { color: #a8adb8; font-size: 11px; letter-spacing: 1px; font-weight: 700; }
-        .rocket-balance-inline { display: flex; align-items: center; gap: 5px; font-family: 'Orbitron', sans-serif; font-weight: 900; font-size: 13px; color: #fff; }
-        .rocket-balance-inline img { width: 16px; height: 16px; }
-        .rocket-balance-wrap { display: flex; align-items: center; background: rgba(255, 255, 255, 0.06); backdrop-filter: blur(15px); border: 1px solid var(--glass-border); border-radius: 3px; overflow: hidden; }
-        .rocket-balance-wrap .rocket-balance-inline { padding: 6px 12px; }
-        .rocket-stage { position: relative; width: 100%; height: 320px; background: rgba(5, 15, 8, 0.7); backdrop-filter: blur(10px); border: 1px solid var(--glass-border); border-radius: 3px; overflow: hidden; margin-bottom: 14px; }
-        .rocket-stars { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
-        .star { position: absolute; width: 2px; height: 2px; background: #fff; border-radius: 50%; animation: starTwinkle 3s ease-in-out infinite; }
-        @keyframes starTwinkle { 0%, 100% { opacity: 0.2; } 50% { opacity: 0.7; } }
-        .rocket-sprite { position: absolute; left: 40px; bottom: 40px; width: 50px; height: 50px; z-index: 5; transition: left 0.05s linear, bottom 0.05s linear; }
-        .rocket-sprite img { width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 0 5px var(--accent-dim)); }
-        .rocket-sprite.flying img { animation: rocketShake 0.15s ease-in-out infinite alternate; }
-        @keyframes rocketShake { from { transform: translate(0, 0) rotate(-3deg); } to { transform: translate(1px, -1px) rotate(3deg); } }
-        .rocket-sprite.crashed img { filter: brightness(0.4) hue-rotate(-40deg); transform: rotate(45deg) scale(1.3); }
-        .rocket-sprite.cashed img { filter: brightness(1.2); }
-        .rocket-x-display { position: absolute; top: 18px; right: 18px; font-family: 'Orbitron', sans-serif; font-weight: 900; font-size: 40px; color: var(--accent-bright); z-index: 6; }
-        .rocket-x-display.crashed { color: #ff5555; }
-        .rocket-x-display.cashed { color: var(--green-bright); }
-        .rocket-multiplier-bar { position: absolute; left: 18px; bottom: 18px; z-index: 6; }
-        .rocket-bar-label { font-family: 'Orbitron', sans-serif; font-size: 9px; color: #a8adb8; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 4px; font-weight: 800; }
-        .rocket-bar-track { width: 200px; height: 6px; background: rgba(255, 255, 255, 0.06); border-radius: 2px; overflow: hidden; }
-        .rocket-bar-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--green), var(--accent)); transition: width 0.05s linear; }
-        .rocket-status { position: absolute; top: 18px; left: 18px; font-family: 'Orbitron', sans-serif; font-size: 11px; font-weight: 900; letter-spacing: 2.5px; text-transform: uppercase; color: #a8adb8; z-index: 6; }
-        .rocket-status.flying { color: var(--accent-bright); }
-        .rocket-status.crashed { color: #ff5555; }
-        .rocket-status.cashed { color: var(--green-bright); }
-        .rocket-history { margin-top: 12px; padding: 12px; background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border: 1px solid var(--glass-border); border-radius: 3px; }
-        .rocket-history-label { font-family: 'Orbitron', sans-serif; font-size: 10px; color: #a8adb8; letter-spacing: 2.5px; text-transform: uppercase; margin-bottom: 8px; font-weight: 800; }
-        .rocket-history-list { display: flex; gap: 6px; flex-wrap: wrap; max-height: 70px; overflow-y: auto; }
-        .rocket-history-item { padding: 4px 10px; border-radius: 3px; font-family: 'Orbitron', sans-serif; font-size: 10px; font-weight: 900; background: var(--accent-very-dim); border: 1px solid var(--glass-border); color: var(--accent-bright); }
-        .rocket-history-item.crashed { background: rgba(255, 80, 80, 0.15); border-color: #ff5555; color: #ff5555; }
-        .rocket-history-item.low { color: #a8adb8; border-color: rgba(255, 255, 255, 0.1); }
-        .rocket-controls { margin-top: 12px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .rocket-bet-input-wrap { display: flex; gap: 6px; }
-        .rocket-bet-input { flex: 1; height: 48px; padding: 0 14px; border-radius: 3px; border: 1px solid var(--glass-border); background: rgba(255, 255, 255, 0.04); backdrop-filter: blur(10px); color: #fff; font-family: 'Orbitron', sans-serif; font-weight: 900; font-size: 14px; text-align: center; outline: none; }
-        .rocket-quick-bets { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; }
-        .rocket-quick-bet { height: 48px; border-radius: 3px; border: 1px solid var(--glass-border); background: rgba(255, 255, 255, 0.04); backdrop-filter: blur(10px); color: #a8adb8; font-family: 'Orbitron', sans-serif; font-size: 12px; font-weight: 900; cursor: pointer; transition: all 0.2s; }
-        .rocket-quick-bet:hover { border-color: var(--accent); color: var(--accent-bright); }
-        .rocket-action-btn { grid-column: 1 / -1; height: 58px; border-radius: 3px; border: 1px solid var(--glass-border); background: linear-gradient(135deg, var(--green), var(--accent)); color: #0a1a0f; font-family: 'Orbitron', sans-serif; font-size: 16px; font-weight: 900; letter-spacing: 3px; text-transform: uppercase; cursor: pointer; transition: all 0.25s; }
-        .rocket-action-btn:disabled { opacity: 0.4; cursor: not-allowed; background: #3a3d4d; }
-        .rocket-action-btn.cashout { background: linear-gradient(135deg, var(--green-bright), var(--emerald)); color: #0a1a0f; }
-        .rocket-action-btn.crashed { background: #3a3d4d; color: #6b7280; }
-        .rocket-overlay-result { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; background: rgba(0, 0, 0, 0.75); backdrop-filter: blur(8px); z-index: 20; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
-        .rocket-overlay-result.show { opacity: 1; }
-        .rocket-result-x { font-family: 'Orbitron', sans-serif; font-size: 60px; font-weight: 900; letter-spacing: 3px; }
-        .rocket-result-x.win { color: var(--green-bright); }
-        .rocket-result-x.lose { color: #ff5555; }
-        .rocket-result-label { font-family: 'Orbitron', sans-serif; font-size: 14px; letter-spacing: 4px; text-transform: uppercase; color: #fff; font-weight: 900; }
-        .rocket-result-prize { font-family: 'Orbitron', sans-serif; font-size: 22px; font-weight: 900; color: var(--accent-bright); display: flex; align-items: center; gap: 8px; }
-        .rocket-result-prize img { width: 22px; height: 22px; }
-
-        .trade-page { padding: 20px 18px; max-width: 720px; margin: 0 auto; }
-        .trade-page-header { text-align: center; margin-bottom: 18px; }
-        .trade-page-header h2 { font-family: 'Orbitron', sans-serif; font-size: 18px; font-weight: 900; color: #fff; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 8px; }
-        .trade-page-header p { color: #a8adb8; font-size: 12px; line-height: 1.6; font-weight: 700; }
-        .trade-list-page { display: flex; flex-direction: column; gap: 8px; }
-        .trade-item { display: grid; grid-template-columns: 56px 1fr auto; align-items: center; gap: 12px; padding: 12px 14px; background: rgba(255, 255, 255, 0.04); backdrop-filter: blur(15px); border: 1px solid var(--glass-border); border-radius: 3px; }
-        .trade-left-img { width: 56px; height: 56px; object-fit: contain; }
-        .trade-info { min-width: 0; }
-        .trade-name { font-size: 12px; font-weight: 800; color: #fff; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .trade-reward { font-size: 11px; color: var(--accent-bright); font-weight: 800; display: flex; align-items: center; gap: 5px; flex-wrap: wrap; }
-        .trade-reward img { width: 14px; height: 14px; object-fit: contain; }
-        .trade-reward .arrow { color: var(--accent); font-weight: 900; margin: 0 3px; }
-        .trade-btn { height: 38px; padding: 0 16px; border-radius: 3px; border: 1px solid var(--glass-border); background: linear-gradient(135deg, var(--green), var(--accent)); color: #0a1a0f; font-family: 'Orbitron', sans-serif; font-size: 10px; font-weight: 900; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; transition: all 0.2s; }
-        .trade-btn:disabled { opacity: 0.35; cursor: not-allowed; background: #3a3d4d; }
-        .trade-empty { text-align: center; padding: 36px 12px; color: #6a6d7e; font-size: 12px; font-weight: 700; }
-
-        .promo-panel { padding: 24px 18px; text-align: center; }
-        .promo-panel h2 { font-family: 'Orbitron', sans-serif; font-size: 18px; font-weight: 900; color: #fff; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 3px; }
-        .promo-panel p { color: #a8adb8; font-size: 13px; margin-bottom: 18px; font-weight: 700; }
-        .promo-input-wrap { display: flex; gap: 10px; max-width: 480px; margin: 0 auto; }
-        .promo-input-wrap .form-input { flex: 1; text-transform: uppercase; }
-        .promo-input-wrap .action-btn { width: auto; padding: 12px 20px; margin-top: 0; }
-
-        .profile-action-row { margin-top: 12px; }
-
         @media (max-width: 900px) {
             body { padding: 10px 10px 100px 10px; }
             .inventory-row { grid-template-columns: repeat(auto-fill, minmax(82px, 1fr)); }
@@ -854,6 +1075,9 @@
             .nav-btn { width: 38px; height: 38px; min-width: 38px; min-height: 38px; }
             .nav-btn svg { width: 18px; height: 18px; }
             .nav-btn img { padding: 3px; }
+            .nav-btn-fuse { width: 50px; height: 50px; min-width: 50px; min-height: 50px; }
+            .nav-btn-fuse img { width: 34px; height: 34px; }
+            .nav-btn-fuse .fuse-label { font-size: 6px; }
             .progress-wrapper { width: 260px; height: 260px; }
             .chance-big { font-size: 36px; }
             .item-box { min-width: 0; padding: 10px; max-width: none; }
@@ -896,7 +1120,9 @@
             .haunted-title { font-size: 16px; letter-spacing: 2px; }
             .haunted-slot { aspect-ratio: 1; }
             .haunted-plus { font-size: 26px; }
-            .choose-target-btn { width: 54px; height: 54px; font-size: 42px; }
+            .choose-target-btn { width: 34px; height: 34px; font-size: 26px; }
+            .choose-target-minus { font-size: 18px; }
+            .choose-target-label { font-size: 7px; }
             .haunted-anim-img { width: 180px; }
             .haunted-anim-text { font-size: 16px; letter-spacing: 4px; }
             .haunted-result-img-wrap { width: 110px; height: 110px; }
@@ -1148,7 +1374,11 @@
                 <img id="targetImg" src="" alt="" style="display:none">
                 <div class="name" id="targetName">—</div>
                 <div class="price" id="targetPrice"></div>
-                <button class="choose-target-btn" id="chooseTargetBtn" onclick="openTargetList()" disabled title="Выбрать цель">+</button>
+                <div class="choose-target-wrap">
+                    <div class="choose-target-label">ВЫБРАТЬ ЦЕЛЬ</div>
+                    <button class="choose-target-minus" disabled>-</button>
+                    <button class="choose-target-btn" id="chooseTargetBtn" onclick="openTargetList()" disabled title="Выбрать цель">+</button>
+                </div>
             </div>
         </div>
         <div class="stage-controls">
@@ -1198,12 +1428,8 @@
                     <div class="haunted-summary-label">Сумма</div>
                     <div class="haunted-summary-value" id="hauntedSum">0</div>
                 </div>
-                <div class="haunted-summary-box">
-                    <div class="haunted-summary-label">Шанс</div>
-                    <div class="haunted-summary-value" id="hauntedChance">—</div>
-                </div>
             </div>
-            <button class="haunted-fuse-btn" id="hauntedFuseBtn" onclick="runHauntedFuse()" disabled>ЗАПУСТИТЬ FUSE/button>
+            <button class="haunted-fuse-btn" id="hauntedFuseBtn" onclick="runHauntedFuse()" disabled>ЗАПУСТИТЬ FUSE</button>
         </div>
     </div>
 
@@ -1334,6 +1560,80 @@
             <div class="profile-action-row">
                 <button class="action-btn" id="adminPanelBtn" style="display:none; background: linear-gradient(135deg, #ef4444, #dc2626);" onclick="openAdminPanel()">Открыть админ-панель</button>
             </div>
+
+            <!-- ===== КАСТОМИЗАЦИЯ В ПРОФИЛЕ ===== -->
+            <div class="customize-in-profile">
+                <div class="customize-section">
+                    <div class="customize-section-title">Цвет проекта</div>
+                    <div class="color-grid" id="colorGrid"></div>
+                </div>
+                <div class="customize-section">
+                    <div class="customize-section-title">Осадки</div>
+                    <div class="weather-options" id="weatherOptions">
+                        <div class="weather-option none-option" data-weather="none" onclick="selectWeather('none')">
+                            <span class="wo-label">Без осадков</span>
+                        </div>
+                        <div class="weather-option" data-weather="snow" onclick="selectWeather('snow')">
+                            <img src="https://github.com/saintezz/saintbetW/blob/main/cneg.png?raw=true" alt="snow">
+                            <span class="wo-label">Снег</span>
+                        </div>
+                        <div class="weather-option" data-weather="leaf" onclick="selectWeather('leaf')">
+                            <img src="https://github.com/saintezz/saintbetW/blob/main/LISTOK.png?raw=true" alt="leaf">
+                            <span class="wo-label">Листья</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="customize-section">
+                    <div class="customize-section-title">Аватарка</div>
+                    <div class="avatar-upload-row">
+                        <img class="avatar-preview" id="avatarPreview" src="https://github.com/saintezz/ggbrainXv2/raw/main/avavatarochka.jpg" alt="preview">
+                        <label class="upload-btn" for="avatarFileInput">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                <polyline points="17 8 12 3 7 8"/>
+                                <line x1="12" y1="3" x2="12" y2="15"/>
+                            </svg>
+                            Загрузить
+                        </label>
+                        <input type="file" id="avatarFileInput" accept="image/*" style="display:none;" onchange="handleAvatarUpload(event)">
+                    </div>
+                    <button class="reset-avatar-btn" onclick="resetAvatar()" style="margin-top:10px; width:100%;">Сбросить аватарку</button>
+                </div>
+                <div class="customize-section">
+                    <div class="customize-section-title">Твой ник</div>
+                    <input type="text" class="form-input" id="customizeNickInput" placeholder="Введи свой ник" maxlength="20">
+                    <button class="action-btn" onclick="saveCustomNick()">Сохранить ник</button>
+                </div>
+                <div class="customize-section">
+                    <div class="customize-section-title">Прозрачность</div>
+                    <div class="slider-row">
+                        <input type="range" id="opacitySlider" min="5" max="100" value="55" oninput="changeOpacity(this.value)">
+                        <div class="slider-value" id="opacityValue">55%</div>
+                    </div>
+                </div>
+                <div class="customize-section">
+                    <div class="customize-section-title">Баннер профиля</div>
+                    <div class="bg-options" id="bgOptions">
+                        <div class="bg-option" data-bg="none" onclick="selectProfileBg('none')">
+                            <div class="bg-placeholder">Без баннера</div>
+                        </div>
+                        <div class="bg-option" data-bg="https://github.com/saintezz/ggbrainXv2/raw/main/1011.mp4" onclick="selectProfileBg('https://github.com/saintezz/ggbrainXv2/raw/main/1011.mp4')">
+                            <video src="https://github.com/saintezz/ggbrainXv2/raw/main/1011.mp4#t=0.1" muted preload="metadata" playsinline></video>
+                        </div>
+                        <div class="bg-option" data-bg="https://github.com/saintezz/ggbrainXv2/raw/main/1011%20(1).mp4" onclick="selectProfileBg('https://github.com/saintezz/ggbrainXv2/raw/main/1011%20(1).mp4')">
+                            <video src="https://github.com/saintezz/ggbrainXv2/raw/main/1011%20(1).mp4#t=0.1" muted preload="metadata" playsinline></video>
+                        </div>
+                        <div class="bg-option" data-bg="https://github.com/saintezz/ggbrainXv2/raw/main/20341-308852923_medium.mp4" onclick="selectProfileBg('https://github.com/saintezz/ggbrainXv2/raw/main/20341-308852923_medium.mp4')">
+                            <video src="https://github.com/saintezz/ggbrainXv2/raw/main/20341-308852923_medium.mp4#t=0.1" muted preload="metadata" playsinline></video>
+                        </div>
+                    </div>
+                </div>
+                <div class="customize-section">
+                    <div class="customize-section-title">Брейнроты вокруг аватарки</div>
+                    <div class="orbit-picker" id="orbitPicker"></div>
+                </div>
+                <div class="msg" id="customizeMsg"></div>
+            </div>
         </div>
     </div>
 
@@ -1355,81 +1655,6 @@
             </div>
         </div>
     </div>
-
-    <div class="tab-panel" id="panelCustomize">
-        <div class="customize-page">
-            <div class="customize-section">
-                <div class="customize-section-title">Цвет проекта</div>
-                <div class="color-grid" id="colorGrid"></div>
-            </div>
-            <div class="customize-section">
-                <div class="customize-section-title">Осадки</div>
-                <div class="weather-options" id="weatherOptions">
-                    <div class="weather-option none-option" data-weather="none" onclick="selectWeather('none')">
-                        <span class="wo-label">Без осадков</span>
-                    </div>
-                    <div class="weather-option" data-weather="snow" onclick="selectWeather('snow')">
-                        <img src="https://github.com/saintezz/saintbetW/blob/main/cneg.png?raw=true" alt="snow">
-                        <span class="wo-label">Снег</span>
-                    </div>
-                    <div class="weather-option" data-weather="leaf" onclick="selectWeather('leaf')">
-                        <img src="https://github.com/saintezz/saintbetW/blob/main/LISTOK.png?raw=true" alt="leaf">
-                        <span class="wo-label">Листья</span>
-                    </div>
-                </div>
-            </div>
-            <div class="customize-section">
-                <div class="customize-section-title">Аватарка</div>
-                <div class="avatar-upload-row">
-                    <img class="avatar-preview" id="avatarPreview" src="https://github.com/saintezz/ggbrainXv2/raw/main/avavatarochka.jpg" alt="preview">
-                    <label class="upload-btn" for="avatarFileInput">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                            <polyline points="17 8 12 3 7 8"/>
-                            <line x1="12" y1="3" x2="12" y2="15"/>
-                        </svg>
-                        Загрузить с ПК
-                    </label>
-                    <input type="file" id="avatarFileInput" accept="image/*" style="display:none;" onchange="handleAvatarUpload(event)">
-                </div>
-                <button class="reset-avatar-btn" onclick="resetAvatar()" style="margin-top:10px; width:100%;">Сбросить аватарку</button>
-            </div>
-            <div class="customize-section">
-                <div class="customize-section-title">Твой ник</div>
-                <input type="text" class="form-input" id="customizeNickInput" placeholder="Введи свой ник" maxlength="20">
-                <button class="action-btn" onclick="saveCustomNick()">Сохранить ник</button>
-            </div>
-            <div class="customize-section">
-                <div class="customize-section-title">Прозрачность сайта</div>
-                <div class="slider-row">
-                    <input type="range" id="opacitySlider" min="5" max="100" value="55" oninput="changeOpacity(this.value)">
-                    <div class="slider-value" id="opacityValue">55%</div>
-                </div>
-            </div>
-            <div class="customize-section">
-                <div class="customize-section-title">Баннер профиля</div>
-                <div class="bg-options" id="bgOptions">
-                    <div class="bg-option" data-bg="none" onclick="selectProfileBg('none')">
-                        <div class="bg-placeholder">Без баннера</div>
-                    </div>
-                    <div class="bg-option" data-bg="https://github.com/saintezz/ggbrainXv2/raw/main/1011.mp4" onclick="selectProfileBg('https://github.com/saintezz/ggbrainXv2/raw/main/1011.mp4')">
-                        <video src="https://github.com/saintezz/ggbrainXv2/raw/main/1011.mp4#t=0.1" muted preload="metadata" playsinline></video>
-                    </div>
-                    <div class="bg-option" data-bg="https://github.com/saintezz/ggbrainXv2/raw/main/1011%20(1).mp4" onclick="selectProfileBg('https://github.com/saintezz/ggbrainXv2/raw/main/1011%20(1).mp4')">
-                        <video src="https://github.com/saintezz/ggbrainXv2/raw/main/1011%20(1).mp4#t=0.1" muted preload="metadata" playsinline></video>
-                    </div>
-                    <div class="bg-option" data-bg="https://github.com/saintezz/ggbrainXv2/raw/main/20341-308852923_medium.mp4" onclick="selectProfileBg('https://github.com/saintezz/ggbrainXv2/raw/main/20341-308852923_medium.mp4')">
-                        <video src="https://github.com/saintezz/ggbrainXv2/raw/main/20341-308852923_medium.mp4#t=0.1" muted preload="metadata" playsinline></video>
-                    </div>
-                </div>
-            </div>
-            <div class="customize-section">
-                <div class="customize-section-title">Брейнроты вокруг аватарки</div>
-                <div class="orbit-picker" id="orbitPicker"></div>
-            </div>
-            <div class="msg" id="customizeMsg"></div>
-        </div>
-    </div>
 </div>
 
 <div class="nav-panel">
@@ -1442,9 +1667,6 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/>
         </svg>
-    </button>
-    <button class="nav-btn" id="navHaunted" onclick="switchTab('haunted')" title="Haunted Fuse">
-        <img src="https://github.com/saintezz/ggbrainXv2/blob/main/Haunted.png?raw=true" alt="Haunted">
     </button>
     <button class="nav-btn" id="navRocket" onclick="switchTab('rocket')" title="Ракетка">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -1467,10 +1689,9 @@
             <circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/>
         </svg>
     </button>
-    <button class="nav-btn" id="navCustomize" onclick="switchTab('customize')" title="Кастом">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
-        </svg>
+    <button class="nav-btn nav-btn-fuse" id="navHaunted" onclick="switchTab('haunted')" title="Haunted Fuse">
+        <img src="https://github.com/saintezz/ggbrainXv2/blob/main/Haunted.png?raw=true" alt="Haunted">
+        <span class="fuse-label">FUSE</span>
     </button>
 </div>
 
@@ -1485,6 +1706,7 @@
         { id: 'burguro', name: 'Burguro and Fryuro', price: 70, img: 'https://github.com/forerer-afk/brainroterX/blob/main/burguru.png?raw=true' },
         { id: 'popcuru', name: 'Popcuru and Fizzuru', price: 87, img: 'https://github.com/forerer-afk/brainroterX/blob/main/popcuru.png?raw=true' },
         { id: 'celestial', name: 'Celestial Pegasus', price: 93, img: 'https://github.com/forerer-afk/brainroterX/blob/main/celestialpegasus.png?raw=true' },
+        { id: 'lafoodcombinasion', name: 'La Food Combinasion', price: 103, img: 'https://github.com/forerer-afk/brainroterX/blob/main/lafoodcombinasion.png?raw=true' },
         { id: 'cooki', name: 'Cooki and Milki', price: 130, img: 'https://github.com/forerer-afk/brainroterX/blob/main/cookiandmilki.png?raw=true' },
         { id: 'jolly', name: 'Jolly Jolly Sahur', price: 132, img: 'https://github.com/forerer-afk/brainroterX/blob/main/jollyjollysahur.png?raw=true' },
         { id: 'cerberus', name: 'Cerberus', price: 155, img: 'https://github.com/forerer-afk/brainroterX/blob/main/cerberus.png?raw=true' },
@@ -1493,13 +1715,18 @@
         { id: 'losadmins', name: 'Los Admins', price: 370, img: 'https://github.com/forerer-afk/brainroterX/blob/main/losadmins.png?raw=true' },
         { id: 'rubiko', name: 'Rubiko and Kubiko', price: 395, img: 'https://github.com/forerer-afk/brainroterX/blob/main/Rubiko_and_Kubiko.webp?raw=true' },
         { id: 'lossecret', name: 'Los Secret Combinasionas', price: 419, img: 'https://github.com/forerer-afk/brainroterX/blob/main/lossecretcombination.png?raw=true' },
+        { id: 'roseyandteddy', name: 'Rosey and Teddy', price: 501, img: 'https://github.com/forerer-afk/brainroterX/blob/main/roseyandteddy.png?raw=true' },
         { id: 'lacasaboo', name: 'La Casa Boo', price: 551, img: 'https://github.com/forerer-afk/brainroterX/blob/main/lacasaboo2.png?raw=true' },
         { id: 'dragon', name: 'Dragon Cannelloni', price: 890, img: 'https://github.com/forerer-afk/brainroterX/blob/main/dragoncannelloni.png?raw=true' },
         { id: 'hydra', name: 'Hydra Dragon Cannelloni', price: 1220, img: 'https://github.com/forerer-afk/brainroterX/blob/main/hydragoncannelloni.png?raw=true' },
+        { id: 'tirilikalika', name: 'Tirilikalika Tirilikalaka', price: 1255, img: 'https://github.com/forerer-afk/brainroterX/blob/main/Tirilikalika_Tirilikalako.webp?raw=true' },
         { id: 'kraken', name: 'Kraken', price: 2030, img: 'https://github.com/forerer-afk/brainroterX/blob/main/kraken.png.webp?raw=true' },
+        { id: 'dragonaquanini', name: 'Dragon Aquanini', price: 3701, img: 'https://github.com/forerer-afk/brainroterX/blob/main/dragon-aquanatini.png?raw=true' },
         { id: 'lovelovebear', name: 'Love Love Bear', price: 5540, img: 'https://github.com/forerer-afk/brainroterX/blob/main/lovelovebear.png?raw=true' },
+        { id: 'antonio', name: 'Antonio', price: 5549, img: 'https://github.com/forerer-afk/brainroterX/blob/main/antonio.png?raw=true' },
         { id: 'skibidi', name: 'Skibidi Toilet', price: 13154, img: 'https://github.com/forerer-afk/brainroterX/blob/main/skibidi-toilet.png?raw=true' },
         { id: 'meowl', name: 'Meowl', price: 16839, img: 'https://github.com/forerer-afk/brainroterX/blob/main/meowl.png?raw=true' },
+        { id: 'signorecarapace', name: 'Signore Carapace', price: 35000, img: 'https://github.com/forerer-afk/brainroterX/blob/main/singore-carapace.png?raw=true' },
         { id: 'strawberryelephant', name: 'Strawberry Elephant', price: 41400, img: 'https://github.com/forerer-afk/brainroterX/blob/main/strawberry-elefanto.png?raw=true' }
     ];
 
@@ -1576,7 +1803,6 @@
     let currentWeather = localStorage.getItem('ggbrainx_weather') || 'none';
     let customAvatar = localStorage.getItem('ggbrainx_custom_avatar') || null;
 
-    // ===== HAUNTED FUSE STATE =====
     let hauntedSlots = [null, null, null, null];
     let hauntedPickerTargetSlot = null;
 
@@ -1615,7 +1841,6 @@
     })();
     function getDisplayNick() { return customNick || USER.nick; }
 
-    // ===== МЯГКИЕ ЗВУКИ =====
     let audioCtx = null;
     function getAudioCtx() {
         if (!audioCtx) {
@@ -2002,19 +2227,19 @@
         if (panel) panel.classList.add('active');
         if (navBtn) navBtn.classList.add('active');
         if (tab === 'trade') renderTradeList();
-        if (tab === 'profile') updateProfile();
-        if (tab === 'menu') renderMenuPromo();
-        if (tab === 'haunted') renderHauntedSlots();
-        if (tab === 'customize') {
+        if (tab === 'profile') {
+            updateProfile();
+            renderColorGrid();
+            renderWeatherOptions();
             renderBgOptions();
             renderOrbitPicker();
             renderOrbit();
-            renderColorGrid();
-            renderWeatherOptions();
             document.getElementById('customizeNickInput').value = customNick || USER.nick;
             document.getElementById('opacitySlider').value = Math.round(appOpacity * 100);
             document.getElementById('opacityValue').textContent = Math.round(appOpacity * 100) + '%';
         }
+        if (tab === 'menu') renderMenuPromo();
+        if (tab === 'haunted') renderHauntedSlots();
         setTimeout(updateWeatherContainerHeight, 100);
     };
     function updateProfile() {
@@ -2586,7 +2811,6 @@
         vibrate(15);
     };
 
-    // ===== HAUNTED FUSE LOGIC =====
     window.renderHauntedSlots = function() {
         for (let i = 0; i < 4; i++) {
             const slotEl = document.getElementById('hauntedSlot' + i);
@@ -2653,16 +2877,9 @@
             }
         });
         document.getElementById('hauntedSum').textContent = sum.toLocaleString('ru-RU');
-        let chance = 0;
-        if (count === 1) chance = 25;
-        else if (count === 2) chance = 45;
-        else if (count === 3) chance = 65;
-        else if (count === 4) chance = 85;
-        document.getElementById('hauntedChance').textContent = count > 0 ? chance + '%' : '—';
         document.getElementById('hauntedFuseBtn').disabled = count < 1;
     }
 
-    // ===== НОВЫЙ РАСЧЁТ HAUNTED FUSE (можно дойти до x5, сбалансированные шансы) =====
     function calculateHauntedReward() {
         let sum = 0;
         let count = 0;
@@ -2674,15 +2891,15 @@
         });
         if (sum <= 0) return null;
 
-        // Диапазоны множителей с весами (от 0.1x до 5x)
+        // Увеличенный шанс на луз
         const multiplierRanges = [
-            { minMult: 0.1, maxMult: 0.5, weight: 25, label: 'ЛУЗ' },
-            { minMult: 0.5, maxMult: 0.9, weight: 18, label: 'Малый луз' },
-            { minMult: 0.9, maxMult: 1.1, weight: 15, label: 'Около нуля' },
-            { minMult: 1.1, maxMult: 1.8, weight: 16, label: 'Малый плюс' },
-            { minMult: 1.8, maxMult: 2.8, weight: 13, label: 'Средний плюс' },
-            { minMult: 2.8, maxMult: 4.0, weight: 8,  label: 'Большой плюс' },
-            { minMult: 4.0, maxMult: 5.0, weight: 5,  label: 'ДЖЕКПОТ' }
+            { minMult: 0.1, maxMult: 0.5, weight: 35, label: 'ЛУЗ' },
+            { minMult: 0.5, maxMult: 0.9, weight: 22, label: 'Малый луз' },
+            { minMult: 0.9, maxMult: 1.1, weight: 13, label: 'Около нуля' },
+            { minMult: 1.1, maxMult: 1.8, weight: 12, label: 'Малый плюс' },
+            { minMult: 1.8, maxMult: 2.8, weight: 9,  label: 'Средний плюс' },
+            { minMult: 2.8, maxMult: 4.0, weight: 6,  label: 'Большой плюс' },
+            { minMult: 4.0, maxMult: 5.0, weight: 3,  label: 'ДЖЕКПОТ' }
         ];
 
         const totalWeight = multiplierRanges.reduce((a, r) => a + r.weight, 0);
@@ -2791,7 +3008,7 @@
         resultMultiplier.textContent = reward.multiplier.toFixed(2) + 'x';
         if (resultLabel2) resultLabel2.textContent = reward.label || '—';
 
-        fuseBtn.textContent = 'ФЬЮЗ';
+        fuseBtn.textContent = 'ЗАПУСТИТЬ FUSE';
         fuseBtn.disabled = false;
 
         if (reward.multiplier >= 1.1) {
