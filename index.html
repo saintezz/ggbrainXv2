@@ -43,7 +43,7 @@
         body {
             background: #050d08; color: #e5e7eb; min-height: 100vh;
             display: flex; flex-direction: row; align-items: flex-start; justify-content: center;
-            padding: 20px; position: relative; overflow-x: hidden; overflow-y: auto;
+            padding: 20px 90px 20px 20px; position: relative; overflow-x: hidden; overflow-y: auto;
             font-weight: 700; gap: 14px;
         }
 
@@ -125,7 +125,15 @@
             position: relative; flex-shrink: 0;
         }
 
-        .nav-panel { display: flex; flex-direction: column; gap: 6px; align-self: flex-start; position: sticky; top: 20px; }
+        /* ===== ПАНЕЛЬ КНОПОК (fixed справа на ПК, fixed внизу на мобилке) ===== */
+        .nav-panel { 
+            position: fixed;
+            top: 50%;
+            right: 20px;
+            transform: translateY(-50%);
+            display: flex; flex-direction: column; gap: 6px;
+            z-index: 500;
+        }
         .nav-btn {
             width: 46px; height: 46px; border-radius: 3px;
             border: 1px solid var(--glass-border);
@@ -138,7 +146,7 @@
             padding: 0;
         }
         .nav-btn svg { width: 22px; height: 22px; flex-shrink: 0; transition: all 0.25s; }
-        .nav-btn:hover { background: var(--accent-very-dim); border-color: var(--accent); color: var(--accent-bright); transform: translateX(-3px); }
+        .nav-btn:hover { background: var(--accent-very-dim); border-color: var(--accent); color: var(--accent-bright); }
         .nav-btn.active {
             background: linear-gradient(135deg, var(--accent-very-dim), var(--accent-dim));
             border-color: var(--accent); color: #fff;
@@ -695,7 +703,7 @@
         .section-title::before { content: ''; width: 4px; height: 14px; background: linear-gradient(180deg, var(--green), var(--accent)); }
         .section-block { margin-top: 18px; }
 
-        .inventory-row, .target-row {
+        .inventory-row {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(88px, 1fr));
             gap: 8px; padding: 4px 18px 12px;
@@ -710,7 +718,7 @@
         .shop-scroll::-webkit-scrollbar-thumb { background: var(--accent-dim); border-radius: 2px; }
         .shop-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(88px, 1fr)); gap: 8px; }
 
-        .inv-card, .target-card, .shop-card {
+        .inv-card, .shop-card {
             background: rgba(255, 255, 255, 0.04); backdrop-filter: blur(15px);
             border-radius: 3px; padding: 10px 6px;
             display: flex; flex-direction: column; align-items: center;
@@ -719,42 +727,52 @@
             overflow: hidden;
             box-shadow: inset 0 1px 0 var(--glass-highlight);
         }
-        .inv-card:hover, .target-card:hover:not(.disabled), .shop-card:hover {
+        .inv-card:hover, .shop-card:hover {
             border-color: var(--accent); background: var(--accent-very-dim);
             transform: translateY(-2px);
             box-shadow: 0 4px 12px var(--accent-dim), inset 0 1px 0 var(--glass-highlight);
         }
-        .inv-card.selected, .target-card.selected { 
+        .inv-card.selected { 
             border-color: var(--accent); background: var(--accent-very-dim);
             box-shadow: 0 0 12px var(--accent-dim), inset 0 1px 0 var(--glass-highlight);
         }
-        .target-card.disabled { opacity: 0.2; cursor: not-allowed; filter: grayscale(1); }
 
-        .inv-card img, .target-card img, .shop-card img {
+        .inv-card img, .shop-card img {
             width: 100%; max-width: var(--card-img-size);
             height: var(--card-img-size); object-fit: contain; margin-bottom: 6px; pointer-events: none;
             transition: filter 0.3s;
         }
 
-        /* ===== Кнопка + на карточке выбранного браинрота ===== */
+        /* ===== Кнопка + (просто белый плюс без фона) ===== */
         .inv-card .plus-target-btn {
-            position: absolute; top: 4px; right: 4px;
-            width: 22px; height: 22px; border-radius: 3px;
-            border: 1px solid var(--accent);
-            background: rgba(245, 197, 66, 0.15);
-            backdrop-filter: blur(10px);
-            color: var(--accent-bright);
+            position: absolute; 
+            top: 2px; 
+            right: 4px;
+            width: 20px; 
+            height: 20px;
+            border: none;
+            background: transparent;
+            color: #ffffff;
             font-family: 'Orbitron', sans-serif;
-            font-size: 16px; font-weight: 900; line-height: 1;
-            display: none; align-items: center; justify-content: center;
-            cursor: pointer; z-index: 10; padding: 0;
+            font-size: 20px; 
+            font-weight: 900; 
+            line-height: 1;
+            display: none; 
+            align-items: center; 
+            justify-content: center;
+            cursor: pointer; 
+            z-index: 10; 
+            padding: 0;
+            text-shadow: 0 0 6px rgba(0, 0, 0, 0.9);
             transition: all 0.2s;
         }
-        .inv-card.selected .plus-target-btn { display: flex; }
+        .inv-card.selected .plus-target-btn { 
+            display: flex; 
+        }
         .inv-card .plus-target-btn:hover {
-            background: var(--accent); color: #0a1a0f;
-            transform: scale(1.1);
-            box-shadow: 0 0 10px var(--accent-dim);
+            color: #ffffff;
+            transform: scale(1.3);
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.95);
         }
 
         .glow-blue img { filter: drop-shadow(0 0 3px #3b82f6); }
@@ -772,13 +790,13 @@
             100% { filter: drop-shadow(0 0 3px #ff0000); }
         }
 
-        .inv-card .name, .target-card .name, .shop-card .name {
+        .inv-card .name, .shop-card .name {
             font-size: var(--card-name-size); font-weight: 800; text-align: center; margin-bottom: 4px;
             height: 24px; overflow: hidden; color: #fff; pointer-events: none;
             line-height: 1.15; width: 100%;
             display: flex; align-items: center; justify-content: center;
         }
-        .inv-card .price, .target-card .price, .shop-card .price {
+        .inv-card .price, .shop-card .price {
             font-size: 9px; color: var(--accent-bright); font-weight: 900;
             display: flex; align-items: center; gap: 3px;
             font-family: 'Orbitron', sans-serif; pointer-events: none;
@@ -813,7 +831,6 @@
         .selectable { display: flex; flex-direction: column; align-items: center; width: 100%; cursor: pointer; }
         .locked { pointer-events: none !important; opacity: 0.4 !important; filter: grayscale(0.5) !important; }
 
-        /* ===== TARGET LIST MODAL ===== */
         .target-list {
             display: flex; flex-direction: column; gap: 6px;
             max-height: 60vh; overflow-y: auto;
@@ -1026,11 +1043,27 @@
         .promo-list-item .uses.empty { color: #ff6b6b; }
 
         @media (max-width: 900px) {
-            body { flex-direction: column; align-items: center; gap: 10px; padding: 10px; }
-            .nav-panel { position: static; flex-direction: row; width: 100%; max-width: 560px; justify-content: center; flex-wrap: wrap; margin-top: 0; }
-            .nav-btn { width: 46px; height: 46px; }
-            .nav-btn:hover { transform: translateY(-2px); }
-            .inventory-row, .target-row { grid-template-columns: repeat(auto-fill, minmax(82px, 1fr)); }
+            body { flex-direction: column; align-items: center; gap: 10px; padding: 10px 10px 80px 10px; }
+            .nav-panel { 
+                top: auto;
+                bottom: 12px;
+                right: 50%;
+                transform: translateX(50%);
+                flex-direction: row;
+                justify-content: center;
+                flex-wrap: wrap;
+                width: auto;
+                max-width: 96vw;
+                gap: 5px;
+                padding: 6px 8px;
+                border-radius: 4px;
+                background: var(--glass-bg-strong);
+                backdrop-filter: blur(20px);
+                border: 1px solid var(--glass-border);
+            }
+            .nav-btn { width: 42px; height: 42px; }
+            .nav-btn svg { width: 20px; height: 20px; }
+            .inventory-row { grid-template-columns: repeat(auto-fill, minmax(82px, 1fr)); }
             .shop-grid { grid-template-columns: repeat(auto-fill, minmax(82px, 1fr)); }
             .topup-grid { grid-template-columns: repeat(3, 1fr); }
             :root { --card-img-size: 48px; }
@@ -1043,7 +1076,7 @@
             .item-box img { width: 52px; height: 52px; }
             .upgrade-main-btn { flex: 0 1 190px; font-size: 12px; padding: 12px; }
             .fast-btn { width: 44px; height: 44px; }
-            .inventory-row, .target-row { grid-template-columns: repeat(auto-fill, minmax(76px, 1fr)); gap: 6px; padding: 4px 12px 10px; }
+            .inventory-row { grid-template-columns: repeat(auto-fill, minmax(76px, 1fr)); gap: 6px; padding: 4px 12px 10px; }
             .shop-grid { grid-template-columns: repeat(auto-fill, minmax(76px, 1fr)); gap: 6px; }
             .shop-scroll { padding: 4px 12px 10px; max-height: 340px; }
             .section-title { padding-left: 12px; padding-right: 12px; font-size: 11px; }
@@ -1167,7 +1200,6 @@
     </div>
 </div>
 
-<!-- Модалка выбора цели -->
 <div class="modal" id="targetModal">
     <div class="modal-card">
         <button class="modal-close" onclick="closeModal('targetModal')">X</button>
@@ -1514,7 +1546,7 @@
     </div>
 </div>
 
-<!-- ===== ПАНЕЛЬ КНОПОК (справа на ПК, внизу на мобилке) ===== -->
+<!-- ===== ПАНЕЛЬ КНОПОК (fixed) ===== -->
 <div class="nav-panel">
     <button class="nav-btn active" id="navMenu" onclick="switchTab('menu')" title="Главная">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -1640,8 +1672,6 @@
     let profileBg = localStorage.getItem('ggbrainx_profile_bg') || 'none';
     let orbitItems = JSON.parse(localStorage.getItem('ggbrainx_orbit') || '[]');
     let appOpacity = parseFloat(localStorage.getItem('ggbrainx_opacity') || '0.55');
-
-    // ===== СТАРТОВЫЙ БАЛАНС 1000 =====
     let balance = parseFloat(localStorage.getItem('ggbrainx_balance') || '1000');
     let inventory = JSON.parse(localStorage.getItem('ggbrainx_inventory') || '[]');
     let deposits = [];
@@ -1693,7 +1723,7 @@
     })();
     function getDisplayNick() { return customNick || USER.nick; }
 
-    // ===== УЛУЧШЕННЫЕ ЗВУКИ =====
+    // ===== ЗВУКИ (мягкие, без писка) =====
     let audioCtx = null;
     function getAudioCtx() {
         if (!audioCtx) {
@@ -1702,14 +1732,14 @@
         if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume().catch(()=>{});
         return audioCtx;
     }
-    function playOsc(freq, duration, type = 'sine', volume = 0.06, delay = 0, filterFreq = null) {
+    function playOsc(freq, duration, type = 'sine', volume = 0.05, delay = 0, filterFreq = null) {
         const ctx = getAudioCtx();
         if (!ctx) return;
         try {
             const osc = ctx.createOscillator();
             const gain = ctx.createGain();
             osc.type = type;
-            osc.frequency.value = freq;
+            osc.frequency.setValueAtTime(freq, ctx.currentTime + delay);
             let lastNode = osc;
             if (filterFreq) {
                 const filter = ctx.createBiquadFilter();
@@ -1719,80 +1749,89 @@
                 lastNode = filter;
             }
             gain.gain.setValueAtTime(0.0001, ctx.currentTime + delay);
-            gain.gain.exponentialRampToValueAtTime(volume, ctx.currentTime + delay + 0.008);
+            gain.gain.exponentialRampToValueAtTime(volume, ctx.currentTime + delay + 0.02);
             gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + delay + duration);
             lastNode.connect(gain);
             gain.connect(ctx.destination);
             osc.start(ctx.currentTime + delay);
-            osc.stop(ctx.currentTime + delay + duration + 0.03);
+            osc.stop(ctx.currentTime + delay + duration + 0.05);
         } catch (e) {}
     }
-    function playNoise(duration, volume = 0.02, delay = 0, filterFreq = 3000) {
+    function playNoise(duration, volume = 0.02, delay = 0, filterFreq = 1200) {
         const ctx = getAudioCtx();
         if (!ctx) return;
         try {
-            const bufferSize = ctx.sampleRate * duration;
+            const bufferSize = Math.max(1, Math.floor(ctx.sampleRate * duration));
             const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
             const data = buffer.getChannelData(0);
-            for (let i = 0; i < bufferSize; i++) data[i] = (Math.random() * 2 - 1) * 0.5;
+            for (let i = 0; i < bufferSize; i++) data[i] = (Math.random() * 2 - 1) * 0.4;
             const source = ctx.createBufferSource();
             source.buffer = buffer;
             const filter = ctx.createBiquadFilter();
             filter.type = 'lowpass';
             filter.frequency.value = filterFreq;
             const gain = ctx.createGain();
-            gain.gain.setValueAtTime(volume, ctx.currentTime + delay);
+            gain.gain.setValueAtTime(0.0001, ctx.currentTime + delay);
+            gain.gain.exponentialRampToValueAtTime(volume, ctx.currentTime + delay + 0.01);
             gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + delay + duration);
             source.connect(filter);
             filter.connect(gain);
             gain.connect(ctx.destination);
             source.start(ctx.currentTime + delay);
-            source.stop(ctx.currentTime + delay + duration);
+            source.stop(ctx.currentTime + delay + duration + 0.02);
         } catch (e) {}
     }
+
+    // Мягкий клик (низкие частоты)
     function playClick() {
-        playNoise(0.03, 0.03, 0, 4000);
-        playOsc(1400, 0.05, 'sine', 0.04, 0, 2500);
+        playNoise(0.05, 0.04, 0, 800);
+        playOsc(320, 0.08, 'sine', 0.05, 0, 600);
     }
+    // Тик при прокрутке колеса (мягкий, без писка)
     function playTick() {
-        playNoise(0.015, 0.015, 0, 5000);
-        playOsc(900 + Math.random() * 400, 0.02, 'sine', 0.025);
+        playNoise(0.02, 0.025, 0, 700);
     }
+    // Звон монет (мягкий)
     function playCoin() {
-        playOsc(1046, 0.08, 'sine', 0.05, 0, 3000);
-        playOsc(1568, 0.12, 'sine', 0.05, 0.05, 4000);
-        playNoise(0.05, 0.02, 0, 6000);
+        playOsc(660, 0.12, 'sine', 0.05, 0, 1500);
+        playOsc(880, 0.15, 'sine', 0.045, 0.08, 1800);
+        playNoise(0.08, 0.015, 0, 1000);
     }
+    // Победа (низкий мажорный аккорд)
     function playWin() {
-        playOsc(523, 0.15, 'sine', 0.06);
-        playOsc(659, 0.15, 'sine', 0.06, 0.09);
-        playOsc(784, 0.18, 'sine', 0.07, 0.18);
-        playOsc(1046, 0.3, 'sine', 0.06, 0.28);
-        playOsc(1318, 0.4, 'sine', 0.04, 0.38);
-        playOsc(130, 0.5, 'triangle', 0.03, 0, 400);
+        playOsc(261, 0.25, 'sine', 0.05, 0, 900);
+        playOsc(329, 0.25, 'sine', 0.05, 0.06, 900);
+        playOsc(392, 0.3, 'sine', 0.05, 0.12, 900);
+        playOsc(523, 0.4, 'sine', 0.045, 0.2, 1200);
+        playOsc(130, 0.55, 'triangle', 0.03, 0, 300);
     }
+    // Проигрыш (низкий нисходящий)
     function playLose() {
-        playOsc(330, 0.2, 'triangle', 0.05, 0, 800);
-        playOsc(220, 0.35, 'triangle', 0.05, 0.15, 600);
-        playOsc(160, 0.5, 'sine', 0.04, 0.32, 400);
-        playNoise(0.15, 0.02, 0, 800);
+        playOsc(220, 0.25, 'triangle', 0.05, 0, 500);
+        playOsc(180, 0.3, 'triangle', 0.05, 0.15, 500);
+        playOsc(140, 0.45, 'sine', 0.04, 0.32, 400);
     }
+    // Начало апгрейда (восходящий свип низкий)
     function playUpgradeStart() {
         const ctx = getAudioCtx();
         if (!ctx) return;
         try {
             const osc = ctx.createOscillator();
             const gain = ctx.createGain();
+            const filter = ctx.createBiquadFilter();
+            filter.type = 'lowpass';
+            filter.frequency.value = 1200;
             osc.type = 'triangle';
-            osc.frequency.setValueAtTime(200, ctx.currentTime);
-            osc.frequency.exponentialRampToValueAtTime(800, ctx.currentTime + 0.4);
+            osc.frequency.setValueAtTime(140, ctx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(420, ctx.currentTime + 0.5);
             gain.gain.setValueAtTime(0.0001, ctx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.05, ctx.currentTime + 0.05);
-            gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.5);
-            osc.connect(gain);
+            gain.gain.exponentialRampToValueAtTime(0.04, ctx.currentTime + 0.06);
+            gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.55);
+            osc.connect(filter);
+            filter.connect(gain);
             gain.connect(ctx.destination);
             osc.start(ctx.currentTime);
-            osc.stop(ctx.currentTime + 0.55);
+            osc.stop(ctx.currentTime + 0.6);
         } catch(e) {}
     }
 
@@ -1831,7 +1870,6 @@
     const balanceBox = document.getElementById('balanceBox');
     const rocketBalanceDisplay = document.getElementById('rocketBalanceDisplay');
     const inventoryRow = document.getElementById('inventoryRow');
-    const targetRow = document.getElementById('targetRow');
     const shopRow = document.getElementById('shopRow');
     const progressBar = document.getElementById('progressBar');
     const arrowContainer = document.getElementById('arrowContainer');
@@ -2604,13 +2642,11 @@
         vibrate(10);
     };
 
-    // ===== ОТКРЫТЬ СПИСОК ЦЕЛЕЙ =====
     window.openTargetList = function(sourceIndex) {
         if (isSpinning) return;
         if (sourceIndex < 0 || sourceIndex >= inventory.length) return;
         const sourceItem = getItemById(inventory[sourceIndex]);
         if (!sourceItem) return;
-        // Только те, что дороже
         const targets = ITEMS.filter(t => t.price > sourceItem.price).sort((a, b) => a.price - b.price);
         const list = document.getElementById('targetList');
         if (!targets.length) {
