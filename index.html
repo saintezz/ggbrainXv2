@@ -69,7 +69,7 @@
 
         .app { width: 100%; max-width: 560px; background: var(--glass-bg); backdrop-filter: blur(20px) saturate(130%); -webkit-backdrop-filter: blur(20px) saturate(130%); border: 1px solid var(--glass-border); border-radius: 4px; box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5), 0 0 20px var(--accent-very-dim), inset 0 1px 0 var(--glass-highlight); overflow: hidden; display: flex; flex-direction: column; padding-bottom: 20px; position: relative; flex-shrink: 0; }
 
-        /* ===== ПАНЕЛЬ КНОПОК — FUSE В ПРАВОЙ ЧАСТИ ===== */
+        /* ===== ПАНЕЛЬ КНОПОК ===== */
         .nav-panel {
             position: fixed;
             bottom: 12px;
@@ -114,7 +114,7 @@
         .nav-btn.active { background: linear-gradient(135deg, var(--accent-very-dim), var(--accent-dim)); border-color: var(--accent); color: #fff; box-shadow: 0 0 12px var(--accent-dim), inset 0 1px 0 var(--glass-highlight); }
         .nav-btn.active svg { color: var(--accent-bright); }
 
-        /* Специальная Fuse-кнопка — больше, оранжевая подпись */
+        /* Fuse-кнопка */
         .nav-btn-fuse {
             position: relative;
             width: 58px; height: 58px; min-width: 58px; min-height: 58px;
@@ -158,6 +158,51 @@
             box-shadow: 0 0 35px rgba(255, 100, 0, 0.9), inset 0 1px 0 rgba(255,255,255,0.25);
         }
         .nav-btn-fuse.active .fuse-label { color: #fff; text-shadow: 0 0 10px #fff; }
+
+        /* Кнопка кейсов */
+        .nav-btn-cases {
+            position: relative;
+            width: 58px; height: 58px; min-width: 58px; min-height: 58px;
+            border-radius: 6px;
+            border: 1px solid #a855f7;
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.25), rgba(88, 28, 135, 0.35));
+            box-shadow: 0 0 20px rgba(168, 85, 247, 0.4), inset 0 1px 0 rgba(255,255,255,0.15);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 2px;
+            padding: 3px;
+            overflow: visible;
+        }
+        .nav-btn-cases img {
+            width: 42px; height: 42px; object-fit: contain;
+            filter: drop-shadow(0 0 6px #a855f7);
+            animation: casePulse 2s ease-in-out infinite;
+        }
+        @keyframes casePulse {
+            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 6px #a855f7); }
+            50% { transform: scale(1.08); filter: drop-shadow(0 0 12px #a855f7) drop-shadow(0 0 20px #7c3aed); }
+        }
+        .nav-btn-cases .case-label {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 8px;
+            font-weight: 900;
+            color: #c084fc;
+            letter-spacing: 1.5px;
+            text-shadow: 0 0 6px #a855f7;
+            line-height: 1;
+        }
+        .nav-btn-cases:hover {
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.4), rgba(88, 28, 135, 0.5));
+            box-shadow: 0 0 30px rgba(168, 85, 247, 0.7), inset 0 1px 0 rgba(255,255,255,0.2);
+        }
+        .nav-btn-cases.active {
+            background: linear-gradient(135deg, #a855f7, #6b21a8);
+            border-color: #c084fc;
+            box-shadow: 0 0 35px rgba(168, 85, 247, 0.9), inset 0 1px 0 rgba(255,255,255,0.25);
+        }
+        .nav-btn-cases.active .case-label { color: #fff; text-shadow: 0 0 10px #fff; }
 
         .top-bar { display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(15px); border-bottom: 1px solid var(--glass-border); position: relative; }
         .top-bar::after { content: ''; position: absolute; bottom: -1px; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, var(--green), var(--accent), transparent); opacity: 0.4; }
@@ -211,6 +256,375 @@
         .msg.err { color: #ff6b6b; }
         .msg.wait { color: var(--accent-bright); }
 
+        /* ===== CASES PAGE ===== */
+        .cases-page { padding: 16px 14px; }
+        .cases-header { text-align: center; margin-bottom: 20px; }
+        .cases-title { font-family: 'Orbitron', sans-serif; font-size: 22px; font-weight: 900; color: #fff; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 6px; text-shadow: 0 0 20px rgba(168, 85, 247, 0.5); }
+        .cases-subtitle { color: #a8adb8; font-size: 11px; font-weight: 700; letter-spacing: 1px; }
+
+        .cases-grid { display: grid; grid-template-columns: 1fr; gap: 14px; }
+
+        .case-card {
+            position: relative;
+            border-radius: 4px;
+            border: 1px solid var(--glass-border);
+            background: rgba(255, 255, 255, 0.04);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            overflow: hidden;
+            transition: all 0.3s;
+            box-shadow: inset 0 1px 0 var(--glass-highlight);
+        }
+        .case-card:hover { border-color: var(--accent); box-shadow: 0 0 25px var(--accent-dim), inset 0 1px 0 var(--glass-highlight); transform: translateY(-2px); }
+
+        .case-card-inner {
+            display: grid;
+            grid-template-columns: 110px 1fr;
+            gap: 12px;
+            padding: 14px;
+            align-items: center;
+        }
+        .case-img-wrap {
+            position: relative;
+            width: 110px;
+            height: 110px;
+            border-radius: 4px;
+            overflow: hidden;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .case-img-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            transition: transform 0.4s ease;
+            filter: drop-shadow(0 0 10px rgba(168, 85, 247, 0.4));
+        }
+        .case-card:hover .case-img-wrap img { transform: scale(1.08) rotate(-2deg); }
+
+        .case-info { min-width: 0; }
+        .case-name {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 15px;
+            font-weight: 900;
+            color: #fff;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+        .case-price {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 13px;
+            font-weight: 900;
+            color: var(--accent-bright);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-bottom: 8px;
+        }
+        .case-price img { width: 15px; height: 15px; }
+        .case-price .free-tag {
+            background: linear-gradient(135deg, var(--green), var(--accent));
+            color: #0a1a0f;
+            padding: 2px 10px;
+            border-radius: 2px;
+            font-size: 10px;
+            letter-spacing: 1px;
+        }
+        .case-price .cooldown-tag {
+            font-size: 10px;
+            color: #a8adb8;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+        }
+
+        .case-actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+        .case-open-btn {
+            padding: 10px 20px;
+            border-radius: 3px;
+            border: 1px solid var(--glass-border);
+            background: linear-gradient(135deg, #a855f7, #6b21a8);
+            color: #fff;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 11px;
+            font-weight: 900;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.25s;
+            box-shadow: 0 4px 15px rgba(168, 85, 247, 0.3), inset 0 1px 0 rgba(255,255,255,0.1);
+        }
+        .case-open-btn:hover:not(:disabled) { filter: brightness(1.15); transform: translateY(-1px); box-shadow: 0 6px 22px rgba(168, 85, 247, 0.5); }
+        .case-open-btn:disabled { opacity: 0.35; cursor: not-allowed; background: #3a3d4d; box-shadow: none; }
+
+        .case-qty-selector {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--glass-border);
+            border-radius: 3px;
+            padding: 3px;
+        }
+        .case-qty-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 2px;
+            border: 1px solid transparent;
+            background: transparent;
+            color: #a8adb8;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 13px;
+            font-weight: 900;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .case-qty-btn:hover { color: #fff; background: rgba(255,255,255,0.06); }
+        .case-qty-btn.active { background: var(--accent-very-dim); border-color: var(--accent); color: var(--accent-bright); }
+        .case-qty-label {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 11px;
+            font-weight: 900;
+            color: #fff;
+            min-width: 20px;
+            text-align: center;
+        }
+
+        /* ===== CASE OPENING ANIMATION ===== */
+        .case-anim-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle at 50% 50%, rgba(168, 85, 247, 0.25) 0%, rgba(0, 0, 0, 0.95) 70%);
+            overflow: hidden;
+        }
+        .case-anim-overlay.show {
+            display: flex;
+            animation: caseFadeIn 0.4s ease;
+        }
+        @keyframes caseFadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .case-anim-bg {
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(circle at 30% 40%, rgba(168, 85, 247, 0.2) 0%, transparent 50%),
+                radial-gradient(circle at 70% 60%, rgba(124, 58, 237, 0.15) 0%, transparent 50%);
+            animation: caseBgPulse 3s ease-in-out infinite;
+            pointer-events: none;
+        }
+        @keyframes caseBgPulse { 0%, 100% { opacity: 0.6; transform: scale(1); } 50% { opacity: 1; transform: scale(1.1); } }
+
+        .case-anim-box {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            z-index: 2;
+            animation: caseBoxShake 0.5s ease-in-out infinite alternate;
+        }
+        @keyframes caseBoxShake {
+            from { transform: rotate(-4deg) scale(1); }
+            to { transform: rotate(4deg) scale(1.05); }
+        }
+        .case-anim-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0 0 30px #a855f7) drop-shadow(0 0 60px #7c3aed);
+        }
+        .case-anim-box.opened { animation: caseBoxOpen 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+        @keyframes caseBoxOpen {
+            0% { transform: scale(1) rotate(0deg); opacity: 1; }
+            50% { transform: scale(1.3) rotate(10deg); opacity: 1; }
+            100% { transform: scale(0.2) rotate(25deg); opacity: 0; }
+        }
+
+        .case-anim-text {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 20px;
+            font-weight: 900;
+            letter-spacing: 6px;
+            color: #c084fc;
+            margin-top: 30px;
+            z-index: 2;
+            text-shadow: 0 0 20px #a855f7, 0 0 40px #7c3aed;
+            animation: caseTextPulse 1.2s ease-in-out infinite;
+        }
+        @keyframes caseTextPulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.6; transform: scale(1.06); } }
+
+        .case-anim-particles {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            pointer-events: none;
+        }
+        .case-anim-particle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #c084fc;
+            box-shadow: 0 0 15px #a855f7, 0 0 30px #7c3aed;
+            animation: caseParticleAnim linear infinite;
+        }
+        @keyframes caseParticleAnim {
+            0% { transform: translate(0, 0) scale(1); opacity: 0; }
+            20% { opacity: 1; }
+            100% { transform: translate(var(--dx), var(--dy)) scale(0.3); opacity: 0; }
+        }
+
+        /* ===== CASE RESULT MODAL ===== */
+        .case-result-card {
+            background: linear-gradient(135deg, rgba(20, 8, 3, 0.98), rgba(45, 15, 5, 0.98)) !important;
+            border: 1px solid #a855f7 !important;
+            box-shadow: 0 0 60px rgba(168, 85, 247, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+            padding: 30px 24px !important;
+            position: relative;
+            overflow: hidden;
+            animation: resultCardPop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        @keyframes resultCardPop {
+            0% { transform: scale(0.7) rotate(-3deg); opacity: 0; }
+            60% { transform: scale(1.05) rotate(1deg); opacity: 1; }
+            100% { transform: scale(1) rotate(0deg); opacity: 1; }
+        }
+        .case-result-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 50% 30%, rgba(168, 85, 247, 0.15) 0%, transparent 60%);
+            pointer-events: none;
+            animation: caseBgPulse 4s ease-in-out infinite;
+        }
+        .case-result-label {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 12px;
+            font-weight: 900;
+            color: #c084fc;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+            position: relative;
+            z-index: 1;
+        }
+        .case-result-img-wrap {
+            position: relative;
+            width: 140px;
+            height: 140px;
+            margin: 0 auto 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1;
+        }
+        .case-result-img-wrap::before {
+            content: '';
+            position: absolute;
+            inset: -20px;
+            background: radial-gradient(circle at 50% 50%, rgba(168, 85, 247, 0.5) 0%, transparent 60%);
+            border-radius: 50%;
+            animation: caseResultGlow 2s ease-in-out infinite;
+            z-index: -1;
+        }
+        @keyframes caseResultGlow { 0%, 100% { opacity: 0.6; transform: scale(1); } 50% { opacity: 1; transform: scale(1.15); } }
+        .case-result-img-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0 0 20px #a855f7);
+            animation: caseResultImgFloat 3s ease-in-out infinite;
+        }
+        @keyframes caseResultImgFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+        .case-result-name {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 15px;
+            font-weight: 900;
+            color: #fff;
+            letter-spacing: 1.5px;
+            margin-bottom: 6px;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            text-shadow: 0 0 12px rgba(168, 85, 247, 0.6);
+        }
+        .case-result-price {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 20px;
+            font-weight: 900;
+            color: #c084fc;
+            letter-spacing: 2px;
+            margin-bottom: 18px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            position: relative;
+            z-index: 1;
+            text-shadow: 0 0 15px #a855f7;
+        }
+        .case-result-price img { width: 20px; height: 20px; object-fit: contain; }
+
+        /* Множественные результаты */
+        .case-multi-results {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+            position: relative;
+            z-index: 1;
+        }
+        .case-multi-item {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(168, 85, 247, 0.35);
+            border-radius: 3px;
+            padding: 8px 4px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            animation: multiItemPop 0.4s ease backwards;
+        }
+        @keyframes multiItemPop { from { opacity: 0; transform: scale(0.7); } to { opacity: 1; transform: scale(1); } }
+        .case-multi-item img { width: 44px; height: 44px; object-fit: contain; filter: drop-shadow(0 0 6px rgba(168, 85, 247, 0.5)); }
+        .case-multi-item .multi-name { font-size: 8px; color: #e5e7ef; font-weight: 800; text-align: center; line-height: 1.1; height: 18px; overflow: hidden; }
+        .case-multi-item .multi-price { font-family: 'Orbitron', sans-serif; font-size: 10px; color: var(--accent-bright); font-weight: 900; display: flex; align-items: center; gap: 3px; }
+        .case-multi-item .multi-price img { width: 10px; height: 10px; }
+
+        .case-multi-summary {
+            margin-top: 14px;
+            padding: 12px;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(168, 85, 247, 0.35);
+            border-radius: 3px;
+            position: relative;
+            z-index: 1;
+        }
+        .case-multi-summary > div {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 12px;
+            font-weight: 900;
+            color: #a8adb8;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            padding: 4px 0;
+        }
+        .case-multi-summary > div > span { color: #c084fc; font-size: 14px; text-shadow: 0 0 10px rgba(168, 85, 247, 0.6); }
+
+        /* Admin / deposit etc */
         .admin-header { background: linear-gradient(135deg, rgba(46,204,113,0.15), rgba(245,197,66,0.15)); border: 1px solid var(--glass-border); border-radius: 4px; padding: 16px; margin-bottom: 16px; display: flex; align-items: center; gap: 14px; position: relative; overflow: hidden; }
         .admin-header-icon { width: 46px; height: 46px; border-radius: 3px; background: linear-gradient(135deg, var(--green), var(--accent)); display: flex; align-items: center; justify-content: center; color: #0a1a0f; flex-shrink: 0; box-shadow: 0 0 15px var(--accent-dim); z-index: 1; }
         .admin-header-icon svg { width: 24px; height: 24px; }
@@ -327,214 +741,60 @@
         @keyframes timerPulse { 0%, 100% { opacity: 0.7; } 50% { opacity: 1; } }
         .menu-promo-hint { font-size: 11px; color: #a8adb8; text-align: center; line-height: 1.5; font-weight: 700; }
 
-        /* ===== КАСТОМИЗАЦИЯ В ПРОФИЛЕ ===== */
         .customize-in-profile { margin-top: 16px; }
-
-        .customize-section {
-            padding: 14px; 
-            background: rgba(255, 255, 255, 0.04); backdrop-filter: blur(15px);
-            border: 1px solid var(--glass-border);
-            border-radius: 3px; margin-bottom: 12px;
-        }
-        .customize-section-title {
-            font-family: 'Orbitron', sans-serif; font-size: 11px;
-            color: var(--accent-bright); font-weight: 900;
-            letter-spacing: 2.5px; text-transform: uppercase; margin-bottom: 10px;
-            display: flex; align-items: center; gap: 10px;
-        }
+        .customize-section { padding: 14px; background: rgba(255, 255, 255, 0.04); backdrop-filter: blur(15px); border: 1px solid var(--glass-border); border-radius: 3px; margin-bottom: 12px; }
+        .customize-section-title { font-family: 'Orbitron', sans-serif; font-size: 11px; color: var(--accent-bright); font-weight: 900; letter-spacing: 2.5px; text-transform: uppercase; margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
         .customize-section-title::before { content: ''; width: 3px; height: 12px; background: linear-gradient(180deg, var(--green), var(--accent)); }
         .slider-row { display: flex; align-items: center; gap: 12px; }
-        .slider-row input[type="range"] {
-            flex: 1; -webkit-appearance: none; appearance: none;
-            height: 8px; background: rgba(255, 255, 255, 0.08);
-            border-radius: 2px; outline: none;
-        }
-        .slider-row input[type="range"]::-webkit-slider-thumb {
-            -webkit-appearance: none; appearance: none;
-            width: 22px; height: 22px; border-radius: 3px;
-            background: linear-gradient(135deg, var(--green), var(--accent)); cursor: pointer;
-        }
-        .slider-row input[type="range"]::-moz-range-thumb {
-            width: 22px; height: 22px; border-radius: 3px;
-            background: linear-gradient(135deg, var(--green), var(--accent)); cursor: pointer; border: none;
-        }
+        .slider-row input[type="range"] { flex: 1; -webkit-appearance: none; appearance: none; height: 8px; background: rgba(255, 255, 255, 0.08); border-radius: 2px; outline: none; }
+        .slider-row input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 22px; height: 22px; border-radius: 3px; background: linear-gradient(135deg, var(--green), var(--accent)); cursor: pointer; }
+        .slider-row input[type="range"]::-moz-range-thumb { width: 22px; height: 22px; border-radius: 3px; background: linear-gradient(135deg, var(--green), var(--accent)); cursor: pointer; border: none; }
         .slider-value { font-family: 'Orbitron', sans-serif; font-weight: 900; font-size: 13px; color: #fff; min-width: 50px; text-align: right; }
         .bg-options { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-        .bg-option {
-            aspect-ratio: 1 / 0.7; border-radius: 3px;
-            border: 1px solid var(--glass-border);
-            background: rgba(10, 26, 15, 0.6); cursor: pointer; overflow: hidden;
-            position: relative; transition: all 0.25s;
-            backdrop-filter: blur(10px);
-        }
+        .bg-option { aspect-ratio: 1 / 0.7; border-radius: 3px; border: 1px solid var(--glass-border); background: rgba(10, 26, 15, 0.6); cursor: pointer; overflow: hidden; position: relative; transition: all 0.25s; backdrop-filter: blur(10px); }
         .bg-option:hover { border-color: var(--accent); }
         .bg-option.selected { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent-dim); }
         .bg-option video { width: 100%; height: 100%; object-fit: cover; }
-        .bg-option .bg-placeholder {
-            width: 100%; height: 100%;
-            background: linear-gradient(135deg, rgba(10, 26, 15, 0.8), rgba(26, 58, 31, 0.8));
-            display: flex; align-items: center; justify-content: center;
-            color: #a8adb8; font-family: 'Orbitron', sans-serif;
-            font-size: 10px; text-align: center; padding: 6px; font-weight: 800;
-        }
-        .bg-option.selected::after {
-            content: 'OK'; position: absolute; top: 4px; right: 4px;
-            width: 22px; height: 22px; border-radius: 3px;
-            background: linear-gradient(135deg, var(--green), var(--accent)); color: #0a1a0f;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 9px; font-weight: 900;
-        }
-        .orbit-picker {
-            display: flex; flex-wrap: wrap; gap: 6px;
-            max-height: 200px; overflow-y: auto;
-            padding: 6px; border-radius: 3px;
-            background: rgba(0, 0, 0, 0.2);
-        }
-        .orbit-item {
-            width: 46px; height: 46px; border-radius: 3px;
-            border: 1px solid var(--glass-border);
-            background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px);
-            display: flex; align-items: center; justify-content: center;
-            cursor: pointer; transition: all 0.2s; position: relative;
-        }
+        .bg-option .bg-placeholder { width: 100%; height: 100%; background: linear-gradient(135deg, rgba(10, 26, 15, 0.8), rgba(26, 58, 31, 0.8)); display: flex; align-items: center; justify-content: center; color: #a8adb8; font-family: 'Orbitron', sans-serif; font-size: 10px; text-align: center; padding: 6px; font-weight: 800; }
+        .bg-option.selected::after { content: 'OK'; position: absolute; top: 4px; right: 4px; width: 22px; height: 22px; border-radius: 3px; background: linear-gradient(135deg, var(--green), var(--accent)); color: #0a1a0f; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 900; }
+        .orbit-picker { display: flex; flex-wrap: wrap; gap: 6px; max-height: 200px; overflow-y: auto; padding: 6px; border-radius: 3px; background: rgba(0, 0, 0, 0.2); }
+        .orbit-item { width: 46px; height: 46px; border-radius: 3px; border: 1px solid var(--glass-border); background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; position: relative; }
         .orbit-item:hover { border-color: var(--accent); }
         .orbit-item.selected { border-color: var(--accent); background: var(--accent-very-dim); box-shadow: 0 0 10px var(--accent-dim); }
-        .orbit-item.selected::after {
-            content: 'OK'; position: absolute; top: -5px; right: -5px;
-            width: 16px; height: 16px; border-radius: 3px;
-            background: linear-gradient(135deg, var(--green), var(--accent)); color: #0a1a0f;
-            font-size: 7px; font-weight: 900;
-            display: flex; align-items: center; justify-content: center;
-        }
+        .orbit-item.selected::after { content: 'OK'; position: absolute; top: -5px; right: -5px; width: 16px; height: 16px; border-radius: 3px; background: linear-gradient(135deg, var(--green), var(--accent)); color: #0a1a0f; font-size: 7px; font-weight: 900; display: flex; align-items: center; justify-content: center; }
         .orbit-item img { width: 34px; height: 34px; object-fit: contain; }
 
         .color-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; }
-        .color-swatch {
-            aspect-ratio: 1; border-radius: 3px;
-            cursor: pointer; border: 2px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.2s; position: relative;
-        }
+        .color-swatch { aspect-ratio: 1; border-radius: 3px; cursor: pointer; border: 2px solid rgba(255, 255, 255, 0.1); transition: all 0.2s; position: relative; }
         .color-swatch:hover { transform: scale(1.1); box-shadow: 0 0 10px currentColor; }
-        .color-swatch.selected { 
-            border-color: #fff; 
-            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.5), 0 0 12px currentColor;
-            transform: scale(1.05);
-        }
-        .color-swatch.selected::after {
-            content: 'OK'; position: absolute; inset: 0;
-            display: flex; align-items: center; justify-content: center;
-            color: #fff; font-size: 10px; font-weight: 900;
-            text-shadow: 0 0 6px rgba(0, 0, 0, 0.9);
-        }
+        .color-swatch.selected { border-color: #fff; box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.5), 0 0 12px currentColor; transform: scale(1.05); }
+        .color-swatch.selected::after { content: 'OK'; position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 10px; font-weight: 900; text-shadow: 0 0 6px rgba(0, 0, 0, 0.9); }
 
         .weather-options { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-        .weather-option {
-            aspect-ratio: 1 / 0.7; border-radius: 3px;
-            border: 1px solid var(--glass-border);
-            background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px);
-            cursor: pointer; transition: all 0.25s;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            gap: 6px; padding: 8px; position: relative;
-        }
+        .weather-option { aspect-ratio: 1 / 0.7; border-radius: 3px; border: 1px solid var(--glass-border); background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); cursor: pointer; transition: all 0.25s; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; padding: 8px; position: relative; }
         .weather-option:hover { border-color: var(--accent); }
         .weather-option.selected { border-color: var(--accent); background: var(--accent-very-dim); box-shadow: 0 0 0 1px var(--accent-dim); }
         .weather-option img { width: 42px; height: 42px; object-fit: contain; }
         .weather-option .wo-label { font-family: 'Orbitron', sans-serif; font-size: 9px; font-weight: 900; color: #fff; letter-spacing: 1px; text-transform: uppercase; }
-        .weather-option.selected::after {
-            content: 'OK'; position: absolute; top: 4px; right: 4px;
-            width: 22px; height: 22px; border-radius: 3px;
-            background: linear-gradient(135deg, var(--green), var(--accent)); color: #0a1a0f;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 9px; font-weight: 900;
-        }
+        .weather-option.selected::after { content: 'OK'; position: absolute; top: 4px; right: 4px; width: 22px; height: 22px; border-radius: 3px; background: linear-gradient(135deg, var(--green), var(--accent)); color: #0a1a0f; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 900; }
         .weather-option.none-option { grid-column: span 3; aspect-ratio: auto; padding: 12px; flex-direction: row; }
         .weather-option.none-option .wo-label { font-size: 11px; }
 
         .avatar-upload-row { display: flex; align-items: center; gap: 12px; }
         .avatar-preview { width: 64px; height: 64px; border-radius: 3px; border: 2px solid var(--accent); object-fit: cover; background: #0a1a0f; flex-shrink: 0; }
-        .upload-btn {
-            flex: 1; padding: 12px 16px; border-radius: 3px;
-            border: 1px solid var(--glass-border);
-            background: var(--accent-very-dim);
-            color: #fff;
-            font-family: 'Orbitron', sans-serif; font-size: 11px; font-weight: 900;
-            text-transform: uppercase; letter-spacing: 1.5px;
-            cursor: pointer; transition: all 0.2s;
-            display: flex; align-items: center; justify-content: center; gap: 8px;
-            backdrop-filter: blur(10px);
-        }
+        .upload-btn { flex: 1; padding: 12px 16px; border-radius: 3px; border: 1px solid var(--glass-border); background: var(--accent-very-dim); color: #fff; font-family: 'Orbitron', sans-serif; font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: 1.5px; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; backdrop-filter: blur(10px); }
         .upload-btn:hover { background: var(--accent-dim); border-color: var(--accent); }
         .upload-btn svg { width: 18px; height: 18px; }
-        .reset-avatar-btn {
-            padding: 8px 12px; border-radius: 3px;
-            border: 1px solid rgba(255, 100, 100, 0.4);
-            background: rgba(255, 100, 100, 0.12);
-            color: #ff8a8a;
-            font-family: 'Orbitron', sans-serif; font-size: 10px; font-weight: 900;
-            cursor: pointer; transition: all 0.2s;
-            text-transform: uppercase;
-        }
+        .reset-avatar-btn { padding: 8px 12px; border-radius: 3px; border: 1px solid rgba(255, 100, 100, 0.4); background: rgba(255, 100, 100, 0.12); color: #ff8a8a; font-family: 'Orbitron', sans-serif; font-size: 10px; font-weight: 900; cursor: pointer; transition: all 0.2s; text-transform: uppercase; }
         .reset-avatar-btn:hover { background: rgba(255, 100, 100, 0.25); }
 
-        /* ===== БОЛЬШОЙ БЕЛЫЙ + БЕЗ КРУЖКОВ ===== */
-        .choose-target-wrap {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 4px;
-            margin-top: 8px;
-            width: 100%;
-        }
-        .choose-target-label {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 9px;
-            font-weight: 900;
-            color: #a8adb8;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-        }
-        .choose-target-minus {
-            background: transparent;
-            border: none;
-            color: #ffffff;
-            font-family: 'Rubik', sans-serif;
-            font-size: 22px;
-            font-weight: 300;
-            line-height: 1;
-            cursor: default;
-            padding: 0;
-            opacity: 0.6;
-            user-select: none;
-        }
-        .choose-target-btn {
-            width: 38px;
-            height: 38px;
-            border: none;
-            background: transparent;
-            color: #ffffff;
-            font-family: 'Rubik', sans-serif;
-            font-size: 30px;
-            font-weight: 300;
-            line-height: 1;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.25s;
-            padding: 0;
-            text-shadow: 0 0 8px rgba(255,255,255,0.5);
-        }
-        .choose-target-btn:hover:not(:disabled) {
-            color: var(--accent-bright);
-            transform: scale(1.15);
-            text-shadow: 0 0 20px var(--accent-bright), 0 0 35px var(--accent);
-        }
-        .choose-target-btn:disabled {
-            opacity: 0.2;
-            cursor: not-allowed;
-        }
+        .choose-target-wrap { display: flex; flex-direction: column; align-items: center; gap: 4px; margin-top: 8px; width: 100%; }
+        .choose-target-label { font-family: 'Orbitron', sans-serif; font-size: 9px; font-weight: 900; color: #a8adb8; letter-spacing: 1.5px; text-transform: uppercase; }
+        .choose-target-minus { background: transparent; border: none; color: #ffffff; font-family: 'Rubik', sans-serif; font-size: 22px; font-weight: 300; line-height: 1; cursor: default; padding: 0; opacity: 0.6; user-select: none; }
+        .choose-target-btn { width: 38px; height: 38px; border: none; background: transparent; color: #ffffff; font-family: 'Rubik', sans-serif; font-size: 30px; font-weight: 300; line-height: 1; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.25s; padding: 0; text-shadow: 0 0 8px rgba(255,255,255,0.5); }
+        .choose-target-btn:hover:not(:disabled) { color: var(--accent-bright); transform: scale(1.15); text-shadow: 0 0 20px var(--accent-bright), 0 0 35px var(--accent); }
+        .choose-target-btn:disabled { opacity: 0.2; cursor: not-allowed; }
 
-        /* ===== АПГРЕЙДЕР ===== */
         .progress-section { display: flex; justify-content: center; align-items: center; padding: 22px 0 14px; position: relative; }
         .progress-wrapper { position: relative; width: 300px; height: 300px; }
         .progress-svg { width: 100%; height: 100%; transform: rotate(-90deg); }
@@ -577,24 +837,7 @@
         .inv-card, .shop-card { background: rgba(255, 255, 255, 0.04); backdrop-filter: blur(15px); border-radius: 3px; padding: 10px 6px; display: flex; flex-direction: column; align-items: center; border: 1px solid var(--glass-border); transition: all 0.25s; position: relative; min-width: 0; overflow: hidden; box-shadow: inset 0 1px 0 var(--glass-highlight); }
         .inv-card:hover, .shop-card:hover { border-color: var(--accent); background: var(--accent-very-dim); transform: translateY(-2px); box-shadow: 0 4px 12px var(--accent-dim), inset 0 1px 0 var(--glass-highlight); }
         .inv-card.selected { border-color: var(--accent); background: var(--accent-very-dim); box-shadow: 0 0 12px var(--accent-dim), inset 0 1px 0 var(--glass-highlight); }
-
         .inv-card img, .shop-card img { width: 100%; max-width: var(--card-img-size); height: var(--card-img-size); object-fit: contain; margin-bottom: 6px; pointer-events: none; transition: filter 0.3s; }
-
-        .glow-blue img { filter: drop-shadow(0 0 3px #3b82f6); }
-        .glow-green img { filter: drop-shadow(0 0 3px #22c55e); }
-        .glow-red img { filter: drop-shadow(0 0 3px #ef4444); }
-        .glow-purple img { filter: drop-shadow(0 0 4px #a855f7); }
-        .glow-rainbow img { animation: rainbowGlow 3s linear infinite; }
-        @keyframes rainbowGlow {
-            0%   { filter: drop-shadow(0 0 3px #ff0000); }
-            16%  { filter: drop-shadow(0 0 3px #ff8800); }
-            33%  { filter: drop-shadow(0 0 3px #ffff00); }
-            50%  { filter: drop-shadow(0 0 3px #00ff00); }
-            66%  { filter: drop-shadow(0 0 3px #00ffff); }
-            83%  { filter: drop-shadow(0 0 3px #8800ff); }
-            100% { filter: drop-shadow(0 0 3px #ff0000); }
-        }
-
         .inv-card .name, .shop-card .name { font-size: var(--card-name-size); font-weight: 800; text-align: center; margin-bottom: 4px; height: 24px; overflow: hidden; color: #fff; pointer-events: none; line-height: 1.15; width: 100%; display: flex; align-items: center; justify-content: center; }
         .inv-card .price, .shop-card .price { font-size: 9px; color: var(--accent-bright); font-weight: 900; display: flex; align-items: center; gap: 3px; font-family: 'Orbitron', sans-serif; pointer-events: none; }
         .buy-btn { width: 100%; padding: 6px; border-radius: 3px; border: 1px solid var(--glass-border); background: linear-gradient(135deg, var(--green), var(--accent)); color: #0a1a0f; font-weight: 900; font-size: 9px; cursor: pointer; transition: all 0.2s; text-transform: uppercase; font-family: 'Orbitron', sans-serif; margin-top: 5px; position: relative; z-index: 5; letter-spacing: 0.5px; }
@@ -694,372 +937,60 @@
 
         .profile-action-row { margin-top: 12px; }
 
-        /* ===== HAUNTED FUSE PAGE ===== */
+        /* Haunted */
         .haunted-page { padding: 16px 14px; }
-        .haunted-banner {
-            position: relative;
-            width: 100%;
-            border-radius: 4px;
-            overflow: hidden;
-            border: 1px solid rgba(255, 140, 0, 0.4);
-            background: linear-gradient(135deg, rgba(20, 8, 3, 0.9), rgba(45, 15, 5, 0.9));
-            margin-bottom: 18px;
-            box-shadow: 0 0 30px rgba(255, 100, 0, 0.25), inset 0 1px 0 rgba(255,255,255,0.06);
-            padding: 20px 10px;
-            text-align: center;
-            overflow: hidden;
-        }
-        .haunted-banner::before {
-            content: '';
-            position: absolute; inset: 0;
-            background:
-                radial-gradient(circle at 15% 25%, rgba(255, 80, 0, 0.2) 0%, transparent 40%),
-                radial-gradient(circle at 85% 75%, rgba(255, 40, 0, 0.15) 0%, transparent 40%);
-            animation: hauntedBg 6s ease-in-out infinite;
-            pointer-events: none;
-        }
-        @keyframes hauntedBg {
-            0%, 100% { opacity: 0.6; transform: scale(1); }
-            50% { opacity: 1; transform: scale(1.05); }
-        }
-        .haunted-banner img {
-            width: 100%; max-width: 300px; height: auto;
-            object-fit: contain;
-            filter: drop-shadow(0 0 25px rgba(255, 100, 0, 0.7));
-            animation: hauntedFloat 3s ease-in-out infinite;
-            position: relative;
-            z-index: 1;
-        }
-        @keyframes hauntedFloat {
-            0%, 100% { transform: translateY(0) rotate(-1deg); }
-            50% { transform: translateY(-10px) rotate(1deg); }
-        }
-        .haunted-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 22px; font-weight: 900;
-            letter-spacing: 4px;
-            color: #ff8c1a;
-            text-shadow: 0 0 15px #ff5500, 0 0 30px #ff2200, 0 0 45px rgba(255, 50, 0, 0.5);
-            margin-top: 12px;
-            animation: hauntedPulse 2s ease-in-out infinite;
-            position: relative;
-            z-index: 1;
-        }
-        @keyframes hauntedPulse {
-            0%, 100% { opacity: 1; text-shadow: 0 0 15px #ff5500, 0 0 30px #ff2200; }
-            50% { opacity: 0.85; text-shadow: 0 0 25px #ff5500, 0 0 50px #ff2200; }
-        }
+        .haunted-banner { position: relative; width: 100%; border-radius: 4px; overflow: hidden; border: 1px solid rgba(255, 140, 0, 0.4); background: linear-gradient(135deg, rgba(20, 8, 3, 0.9), rgba(45, 15, 5, 0.9)); margin-bottom: 18px; box-shadow: 0 0 30px rgba(255, 100, 0, 0.25), inset 0 1px 0 rgba(255,255,255,0.06); padding: 20px 10px; text-align: center; overflow: hidden; }
+        .haunted-banner::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 15% 25%, rgba(255, 80, 0, 0.2) 0%, transparent 40%), radial-gradient(circle at 85% 75%, rgba(255, 40, 0, 0.15) 0%, transparent 40%); animation: hauntedBg 6s ease-in-out infinite; pointer-events: none; }
+        @keyframes hauntedBg { 0%, 100% { opacity: 0.6; transform: scale(1); } 50% { opacity: 1; transform: scale(1.05); } }
+        .haunted-banner img { width: 100%; max-width: 300px; height: auto; object-fit: contain; filter: drop-shadow(0 0 25px rgba(255, 100, 0, 0.7)); animation: hauntedFloat 3s ease-in-out infinite; position: relative; z-index: 1; }
+        @keyframes hauntedFloat { 0%, 100% { transform: translateY(0) rotate(-1deg); } 50% { transform: translateY(-10px) rotate(1deg); } }
+        .haunted-title { font-family: 'Orbitron', sans-serif; font-size: 22px; font-weight: 900; letter-spacing: 4px; color: #ff8c1a; text-shadow: 0 0 15px #ff5500, 0 0 30px #ff2200, 0 0 45px rgba(255, 50, 0, 0.5); margin-top: 12px; animation: hauntedPulse 2s ease-in-out infinite; position: relative; z-index: 1; }
+        @keyframes hauntedPulse { 0%, 100% { opacity: 1; text-shadow: 0 0 15px #ff5500, 0 0 30px #ff2200; } 50% { opacity: 0.85; text-shadow: 0 0 25px #ff5500, 0 0 50px #ff2200; } }
+        .haunted-slots { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 14px; }
+        .haunted-slot { aspect-ratio: 1; border-radius: 4px; border: 1px dashed rgba(255, 140, 0, 0.5); background: rgba(30, 12, 4, 0.5); backdrop-filter: blur(10px); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.25s; position: relative; overflow: hidden; }
+        .haunted-slot::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 50% 50%, rgba(255, 100, 0, 0.2), transparent 70%); animation: hauntedGhost 4s ease-in-out infinite; pointer-events: none; }
+        @keyframes hauntedGhost { 0%, 100% { opacity: 0.3; transform: scale(1); } 50% { opacity: 0.8; transform: scale(1.2); } }
+        .haunted-slot:hover { border-color: #ff8c1a; border-style: solid; background: rgba(55, 20, 5, 0.7); box-shadow: 0 0 20px rgba(255, 100, 0, 0.6); transform: translateY(-3px); }
+        .haunted-slot.filled { border-style: solid; border-color: #ff8c1a; background: rgba(40, 15, 5, 0.8); }
+        .haunted-slot img { width: 80%; height: 80%; object-fit: contain; z-index: 1; filter: drop-shadow(0 0 6px rgba(255, 100, 0, 0.5)); }
+        .haunted-plus { font-family: 'Rubik', sans-serif; font-weight: 300; font-size: 36px; color: #ffb366; line-height: 1; transition: all 0.25s; z-index: 1; text-shadow: 0 0 10px rgba(255, 100, 0, 0.6); }
+        .haunted-slot:hover .haunted-plus { color: #ffdd99; transform: scale(1.15); text-shadow: 0 0 20px #ff5500; }
+        .haunted-summary { display: grid; grid-template-columns: 1fr; gap: 8px; margin-bottom: 14px; }
+        .haunted-summary-box { background: rgba(0, 0, 0, 0.35); border: 1px solid rgba(255, 140, 0, 0.3); border-radius: 3px; padding: 10px 12px; text-align: center; }
+        .haunted-summary-label { font-size: 9px; color: #a8adb8; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 4px; }
+        .haunted-summary-value { font-family: 'Orbitron', sans-serif; font-size: 16px; font-weight: 900; color: #ffb366; text-shadow: 0 0 10px rgba(255, 100, 0, 0.5); }
+        .haunted-fuse-btn { width: 100%; padding: 16px; border-radius: 4px; border: 1px solid #ff6a00; background: linear-gradient(135deg, #ff6a00, #b30000); color: #fff; font-family: 'Orbitron', sans-serif; font-size: 16px; font-weight: 900; letter-spacing: 4px; text-transform: uppercase; cursor: pointer; transition: all 0.25s; box-shadow: 0 4px 20px rgba(255, 100, 0, 0.4), inset 0 1px 0 rgba(255,255,255,0.15); text-shadow: 0 0 10px rgba(0, 0, 0, 0.6); }
+        .haunted-fuse-btn:hover:not(:disabled) { filter: brightness(1.15); box-shadow: 0 6px 30px rgba(255, 100, 0, 0.7), inset 0 1px 0 rgba(255,255,255,0.2); transform: translateY(-2px); }
+        .haunted-fuse-btn:disabled { opacity: 0.35; cursor: not-allowed; background: #3a2a1a; border-color: #4a3a2a; }
 
-        .haunted-slots {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
-            margin-bottom: 14px;
-        }
-        .haunted-slot {
-            aspect-ratio: 1;
-            border-radius: 4px;
-            border: 1px dashed rgba(255, 140, 0, 0.5);
-            background: rgba(30, 12, 4, 0.5);
-            backdrop-filter: blur(10px);
-            display: flex; align-items: center; justify-content: center;
-            cursor: pointer;
-            transition: all 0.25s;
-            position: relative;
-            overflow: hidden;
-        }
-        .haunted-slot::before {
-            content: '';
-            position: absolute; inset: 0;
-            background: radial-gradient(circle at 50% 50%, rgba(255, 100, 0, 0.2), transparent 70%);
-            animation: hauntedGhost 4s ease-in-out infinite;
-            pointer-events: none;
-        }
-        @keyframes hauntedGhost {
-            0%, 100% { opacity: 0.3; transform: scale(1); }
-            50% { opacity: 0.8; transform: scale(1.2); }
-        }
-        .haunted-slot:hover {
-            border-color: #ff8c1a;
-            border-style: solid;
-            background: rgba(55, 20, 5, 0.7);
-            box-shadow: 0 0 20px rgba(255, 100, 0, 0.6);
-            transform: translateY(-3px);
-        }
-        .haunted-slot.filled {
-            border-style: solid;
-            border-color: #ff8c1a;
-            background: rgba(40, 15, 5, 0.8);
-        }
-        .haunted-slot img {
-            width: 80%; height: 80%; object-fit: contain;
-            z-index: 1;
-            filter: drop-shadow(0 0 6px rgba(255, 100, 0, 0.5));
-        }
-        .haunted-plus {
-            font-family: 'Rubik', sans-serif;
-            font-weight: 300;
-            font-size: 36px;
-            color: #ffb366;
-            line-height: 1;
-            transition: all 0.25s;
-            z-index: 1;
-            text-shadow: 0 0 10px rgba(255, 100, 0, 0.6);
-        }
-        .haunted-slot:hover .haunted-plus {
-            color: #ffdd99;
-            transform: scale(1.15);
-            text-shadow: 0 0 20px #ff5500;
-        }
+        .haunted-anim { position: fixed; inset: 0; z-index: 9999; display: none; align-items: center; justify-content: center; flex-direction: column; background: radial-gradient(circle at 50% 50%, rgba(255, 80, 0, 0.4) 0%, rgba(0, 0, 0, 0.95) 70%); overflow: hidden; }
+        .haunted-anim.show { display: flex; animation: animFadeIn 0.4s ease; }
+        @keyframes animFadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .haunted-anim-bg { position: absolute; inset: 0; background: radial-gradient(circle at 50% 50%, rgba(255, 100, 0, 0.3) 0%, transparent 50%), radial-gradient(circle at 20% 80%, rgba(255, 40, 0, 0.25) 0%, transparent 40%), radial-gradient(circle at 80% 20%, rgba(255, 140, 0, 0.2) 0%, transparent 40%); animation: animBg 3s ease-in-out infinite; pointer-events: none; }
+        @keyframes animBg { 0%, 100% { opacity: 0.7; transform: scale(1) rotate(0deg); } 50% { opacity: 1; transform: scale(1.15) rotate(5deg); } }
+        .haunted-anim-img { width: 260px; max-width: 70vw; height: auto; z-index: 2; filter: drop-shadow(0 0 40px #ff5500) drop-shadow(0 0 80px #ff2200); animation: animImg 2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+        @keyframes animImg { 0% { transform: scale(0.3) rotate(-30deg); opacity: 0; } 50% { transform: scale(1.15) rotate(10deg); opacity: 1; } 70% { transform: scale(1) rotate(-5deg); } 100% { transform: scale(1) rotate(0deg); opacity: 1; } }
+        .haunted-anim-text { font-family: 'Orbitron', sans-serif; font-size: 22px; font-weight: 900; letter-spacing: 6px; color: #ffb366; margin-top: 30px; z-index: 2; text-shadow: 0 0 20px #ff5500, 0 0 40px #ff2200; animation: animText 1.2s ease-in-out infinite; }
+        @keyframes animText { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.6; transform: scale(1.06); } }
+        .haunted-anim-particles { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
+        .haunted-anim-particle { position: absolute; width: 6px; height: 6px; border-radius: 50%; background: #ffb366; box-shadow: 0 0 15px #ff5500, 0 0 30px #ff2200; animation: animParticle linear infinite; }
+        @keyframes animParticle { 0% { transform: translate(0, 0) scale(1); opacity: 0; } 20% { opacity: 1; } 100% { transform: translate(var(--dx), var(--dy)) scale(0.3); opacity: 0; } }
 
-        .haunted-summary {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 8px;
-            margin-bottom: 14px;
-        }
-        .haunted-summary-box {
-            background: rgba(0, 0, 0, 0.35);
-            border: 1px solid rgba(255, 140, 0, 0.3);
-            border-radius: 3px;
-            padding: 10px 12px;
-            text-align: center;
-        }
-        .haunted-summary-label {
-            font-size: 9px; color: #a8adb8; font-weight: 800;
-            text-transform: uppercase; letter-spacing: 1.5px;
-            margin-bottom: 4px;
-        }
-        .haunted-summary-value {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 16px; font-weight: 900;
-            color: #ffb366;
-            text-shadow: 0 0 10px rgba(255, 100, 0, 0.5);
-        }
-
-        .haunted-fuse-btn {
-            width: 100%;
-            padding: 16px;
-            border-radius: 4px;
-            border: 1px solid #ff6a00;
-            background: linear-gradient(135deg, #ff6a00, #b30000);
-            color: #fff;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 16px; font-weight: 900;
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            cursor: pointer;
-            transition: all 0.25s;
-            box-shadow: 0 4px 20px rgba(255, 100, 0, 0.4), inset 0 1px 0 rgba(255,255,255,0.15);
-            text-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
-        }
-        .haunted-fuse-btn:hover:not(:disabled) {
-            filter: brightness(1.15);
-            box-shadow: 0 6px 30px rgba(255, 100, 0, 0.7), inset 0 1px 0 rgba(255,255,255,0.2);
-            transform: translateY(-2px);
-        }
-        .haunted-fuse-btn:disabled {
-            opacity: 0.35;
-            cursor: not-allowed;
-            background: #3a2a1a;
-            border-color: #4a3a2a;
-        }
-
-        /* ===== HAUNTED ANIMATION OVERLAY ===== */
-        .haunted-anim {
-            position: fixed; inset: 0;
-            z-index: 9999;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            background: radial-gradient(circle at 50% 50%, rgba(255, 80, 0, 0.4) 0%, rgba(0, 0, 0, 0.95) 70%);
-            overflow: hidden;
-        }
-        .haunted-anim.show {
-            display: flex;
-            animation: animFadeIn 0.4s ease;
-        }
-        @keyframes animFadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        .haunted-anim-bg {
-            position: absolute; inset: 0;
-            background:
-                radial-gradient(circle at 50% 50%, rgba(255, 100, 0, 0.3) 0%, transparent 50%),
-                radial-gradient(circle at 20% 80%, rgba(255, 40, 0, 0.25) 0%, transparent 40%),
-                radial-gradient(circle at 80% 20%, rgba(255, 140, 0, 0.2) 0%, transparent 40%);
-            animation: animBg 3s ease-in-out infinite;
-            pointer-events: none;
-        }
-        @keyframes animBg {
-            0%, 100% { opacity: 0.7; transform: scale(1) rotate(0deg); }
-            50% { opacity: 1; transform: scale(1.15) rotate(5deg); }
-        }
-        .haunted-anim-img {
-            width: 260px; max-width: 70vw;
-            height: auto;
-            z-index: 2;
-            filter: drop-shadow(0 0 40px #ff5500) drop-shadow(0 0 80px #ff2200);
-            animation: animImg 2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-        }
-        @keyframes animImg {
-            0% { transform: scale(0.3) rotate(-30deg); opacity: 0; }
-            50% { transform: scale(1.15) rotate(10deg); opacity: 1; }
-            70% { transform: scale(1) rotate(-5deg); }
-            100% { transform: scale(1) rotate(0deg); opacity: 1; }
-        }
-        .haunted-anim-text {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 22px; font-weight: 900;
-            letter-spacing: 6px;
-            color: #ffb366;
-            margin-top: 30px;
-            z-index: 2;
-            text-shadow: 0 0 20px #ff5500, 0 0 40px #ff2200;
-            animation: animText 1.2s ease-in-out infinite;
-        }
-        @keyframes animText {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.6; transform: scale(1.06); }
-        }
-        .haunted-anim-particles {
-            position: absolute; inset: 0;
-            z-index: 1;
-            pointer-events: none;
-        }
-        .haunted-anim-particle {
-            position: absolute;
-            width: 6px; height: 6px;
-            border-radius: 50%;
-            background: #ffb366;
-            box-shadow: 0 0 15px #ff5500, 0 0 30px #ff2200;
-            animation: animParticle linear infinite;
-        }
-        @keyframes animParticle {
-            0% { transform: translate(0, 0) scale(1); opacity: 0; }
-            20% { opacity: 1; }
-            100% { transform: translate(var(--dx), var(--dy)) scale(0.3); opacity: 0; }
-        }
-
-        /* ===== HAUNTED RESULT MODAL ===== */
-        .haunted-result-card {
-            background: linear-gradient(135deg, rgba(20, 8, 3, 0.98), rgba(45, 15, 5, 0.98)) !important;
-            border: 1px solid #ff6a00 !important;
-            box-shadow: 0 0 60px rgba(255, 100, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
-            padding: 30px 24px !important;
-            position: relative;
-            overflow: hidden;
-            animation: resultCardPop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-        @keyframes resultCardPop {
-            0% { transform: scale(0.7) rotate(-3deg); opacity: 0; }
-            60% { transform: scale(1.05) rotate(1deg); opacity: 1; }
-            100% { transform: scale(1) rotate(0deg); opacity: 1; }
-        }
-        .haunted-result-card::before {
-            content: '';
-            position: absolute; inset: 0;
-            background: radial-gradient(circle at 50% 30%, rgba(255, 100, 0, 0.15) 0%, transparent 60%);
-            pointer-events: none;
-            animation: hauntedBg 4s ease-in-out infinite;
-        }
-        .haunted-result-label {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 12px; font-weight: 900;
-            color: #ffb366;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            margin-bottom: 16px;
-            position: relative;
-            z-index: 1;
-        }
-        .haunted-result-img-wrap {
-            position: relative;
-            width: 140px; height: 140px;
-            margin: 0 auto 14px;
-            display: flex; align-items: center; justify-content: center;
-            z-index: 1;
-        }
-        .haunted-result-img-wrap::before {
-            content: '';
-            position: absolute; inset: -20px;
-            background: radial-gradient(circle at 50% 50%, rgba(255, 100, 0, 0.5) 0%, transparent 60%);
-            border-radius: 50%;
-            animation: resultGlow 2s ease-in-out infinite;
-            z-index: -1;
-        }
-        @keyframes resultGlow {
-            0%, 100% { opacity: 0.6; transform: scale(1); }
-            50% { opacity: 1; transform: scale(1.15); }
-        }
-        .haunted-result-img-wrap img {
-            width: 100%; height: 100%;
-            object-fit: contain;
-            filter: drop-shadow(0 0 20px #ff5500);
-            animation: resultImgFloat 3s ease-in-out infinite;
-        }
-        @keyframes resultImgFloat {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-6px); }
-        }
-        .haunted-result-name {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 15px; font-weight: 900;
-            color: #fff;
-            letter-spacing: 1.5px;
-            margin-bottom: 6px;
-            text-align: center;
-            position: relative;
-            z-index: 1;
-            text-shadow: 0 0 12px rgba(255, 100, 0, 0.6);
-        }
-        .haunted-result-price {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 20px; font-weight: 900;
-            color: #ffb366;
-            letter-spacing: 2px;
-            margin-bottom: 18px;
-            text-align: center;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            position: relative;
-            z-index: 1;
-            text-shadow: 0 0 15px #ff5500;
-        }
-        .haunted-result-price img {
-            width: 20px; height: 20px;
-            object-fit: contain;
-        }
-        .haunted-result-stats {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            padding: 14px;
-            background: rgba(0, 0, 0, 0.4);
-            border: 1px solid rgba(255, 140, 0, 0.35);
-            border-radius: 3px;
-            position: relative;
-            z-index: 1;
-        }
-        .haunted-result-stats > div {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 12px; font-weight: 900;
-            color: #a8adb8;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-        }
-        .haunted-result-stats > div > span {
-            color: #ffb366;
-            font-size: 14px;
-            text-shadow: 0 0 10px rgba(255, 100, 0, 0.6);
-        }
+        .haunted-result-card { background: linear-gradient(135deg, rgba(20, 8, 3, 0.98), rgba(45, 15, 5, 0.98)) !important; border: 1px solid #ff6a00 !important; box-shadow: 0 0 60px rgba(255, 100, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1) !important; padding: 30px 24px !important; position: relative; overflow: hidden; animation: resultCardPop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        @keyframes resultCardPop { 0% { transform: scale(0.7) rotate(-3deg); opacity: 0; } 60% { transform: scale(1.05) rotate(1deg); opacity: 1; } 100% { transform: scale(1) rotate(0deg); opacity: 1; } }
+        .haunted-result-card::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 50% 30%, rgba(255, 100, 0, 0.15) 0%, transparent 60%); pointer-events: none; animation: hauntedBg 4s ease-in-out infinite; }
+        .haunted-result-label { font-family: 'Orbitron', sans-serif; font-size: 12px; font-weight: 900; color: #ffb366; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 16px; position: relative; z-index: 1; }
+        .haunted-result-img-wrap { position: relative; width: 140px; height: 140px; margin: 0 auto 14px; display: flex; align-items: center; justify-content: center; z-index: 1; }
+        .haunted-result-img-wrap::before { content: ''; position: absolute; inset: -20px; background: radial-gradient(circle at 50% 50%, rgba(255, 100, 0, 0.5) 0%, transparent 60%); border-radius: 50%; animation: resultGlow 2s ease-in-out infinite; z-index: -1; }
+        @keyframes resultGlow { 0%, 100% { opacity: 0.6; transform: scale(1); } 50% { opacity: 1; transform: scale(1.15); } }
+        .haunted-result-img-wrap img { width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 0 20px #ff5500); animation: resultImgFloat 3s ease-in-out infinite; }
+        @keyframes resultImgFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+        .haunted-result-name { font-family: 'Orbitron', sans-serif; font-size: 15px; font-weight: 900; color: #fff; letter-spacing: 1.5px; margin-bottom: 6px; text-align: center; position: relative; z-index: 1; text-shadow: 0 0 12px rgba(255, 100, 0, 0.6); }
+        .haunted-result-price { font-family: 'Orbitron', sans-serif; font-size: 20px; font-weight: 900; color: #ffb366; letter-spacing: 2px; margin-bottom: 18px; text-align: center; display: flex; align-items: center; justify-content: center; gap: 6px; position: relative; z-index: 1; text-shadow: 0 0 15px #ff5500; }
+        .haunted-result-price img { width: 20px; height: 20px; object-fit: contain; }
+        .haunted-result-stats { display: flex; flex-direction: column; gap: 8px; padding: 14px; background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(255, 140, 0, 0.35); border-radius: 3px; position: relative; z-index: 1; }
+        .haunted-result-stats > div { display: flex; justify-content: space-between; align-items: center; font-family: 'Orbitron', sans-serif; font-size: 12px; font-weight: 900; color: #a8adb8; letter-spacing: 1.5px; text-transform: uppercase; }
+        .haunted-result-stats > div > span { color: #ffb366; font-size: 14px; text-shadow: 0 0 10px rgba(255, 100, 0, 0.6); }
 
         @media (max-width: 900px) {
             body { padding: 10px 10px 100px 10px; }
@@ -1078,6 +1009,9 @@
             .nav-btn-fuse { width: 50px; height: 50px; min-width: 50px; min-height: 50px; }
             .nav-btn-fuse img { width: 34px; height: 34px; }
             .nav-btn-fuse .fuse-label { font-size: 6px; }
+            .nav-btn-cases { width: 50px; height: 50px; min-width: 50px; min-height: 50px; }
+            .nav-btn-cases img { width: 34px; height: 34px; }
+            .nav-btn-cases .case-label { font-size: 6px; }
             .progress-wrapper { width: 260px; height: 260px; }
             .chance-big { font-size: 36px; }
             .item-box { min-width: 0; padding: 10px; max-width: none; }
@@ -1132,6 +1066,20 @@
                 from { transform: rotate(0deg) translateX(42px) rotate(0deg); }
                 to { transform: rotate(360deg) translateX(42px) rotate(-360deg); }
             }
+            .case-card-inner { grid-template-columns: 90px 1fr; gap: 10px; padding: 10px; }
+            .case-img-wrap { width: 90px; height: 90px; }
+            .case-name { font-size: 13px; }
+            .case-price { font-size: 11px; }
+            .case-open-btn { padding: 8px 14px; font-size: 9px; }
+            .case-qty-btn { width: 26px; height: 26px; font-size: 11px; }
+            .case-qty-label { font-size: 9px; min-width: 16px; }
+            .case-anim-box { width: 150px; height: 150px; }
+            .case-anim-text { font-size: 15px; letter-spacing: 4px; }
+            .case-result-img-wrap { width: 110px; height: 110px; }
+            .case-result-name { font-size: 13px; }
+            .case-result-price { font-size: 17px; }
+            .case-multi-results { grid-template-columns: repeat(auto-fill, minmax(75px, 1fr)); gap: 6px; }
+            .case-multi-item img { width: 36px; height: 36px; }
         }
     </style>
 </head>
@@ -1278,6 +1226,15 @@
     </div>
 </div>
 
+<!-- CASE RESULT MODAL -->
+<div class="modal" id="caseResultModal">
+    <div class="modal-card case-result-card">
+        <button class="modal-close" onclick="closeModal('caseResultModal')">X</button>
+        <div class="case-result-label">Результат открытия:</div>
+        <div id="caseResultContent"></div>
+    </div>
+</div>
+
 <div class="modal" id="confirmTradeModal">
     <div class="modal-card">
         <button class="modal-close" onclick="closeModal('confirmTradeModal')">X</button>
@@ -1318,6 +1275,16 @@
     <div class="haunted-anim-particles" id="hauntedAnimParticles"></div>
     <img class="haunted-anim-img" src="https://github.com/saintezz/ggbrainXv2/blob/main/Haunted.png?raw=true" alt="Haunted Fuse">
     <div class="haunted-anim-text" id="hauntedAnimText">HAUNTED FUSE...</div>
+</div>
+
+<!-- CASE OPENING OVERLAY -->
+<div class="case-anim-overlay" id="caseAnimOverlay">
+    <div class="case-anim-bg"></div>
+    <div class="case-anim-particles" id="caseAnimParticles"></div>
+    <div class="case-anim-box" id="caseAnimBox">
+        <img src="" alt="case" id="caseAnimImg">
+    </div>
+    <div class="case-anim-text" id="caseAnimText">ОТКРЫВАЕМ...</div>
 </div>
 
 <div class="app">
@@ -1484,6 +1451,17 @@
                 </div>
                 <button class="rocket-action-btn" id="rocketActionBtn" onclick="rocketAction()">СТАВКА</button>
             </div>
+        </div>
+    </div>
+
+    <!-- ===== CASES PANEL ===== -->
+    <div class="tab-panel" id="panelCases">
+        <div class="cases-page">
+            <div class="cases-header">
+                <div class="cases-title">КЕЙСЫ</div>
+                <div class="cases-subtitle">Открывай кейсы и получай брейнротов и монеты</div>
+            </div>
+            <div class="cases-grid" id="casesGrid"></div>
         </div>
     </div>
 
@@ -1674,6 +1652,11 @@
             <path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/>
         </svg>
     </button>
+    <!-- CASES NAV BUTTON -->
+    <button class="nav-btn nav-btn-cases" id="navCases" onclick="switchTab('cases')" title="Кейсы">
+        <img src="https://github.com/saintezz/ggbrainXv2/blob/main/OGCASE.jpg?raw=true" alt="Cases">
+        <span class="case-label">CASE</span>
+    </button>
     <button class="nav-btn" id="navTrade" onclick="switchTab('trade')" title="Обмен">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M4 7h13l-3-3"/><path d="M20 17H7l3 3"/>
@@ -1728,6 +1711,88 @@
         { id: 'meowl', name: 'Meowl', price: 16839, img: 'https://github.com/forerer-afk/brainroterX/blob/main/meowl.png?raw=true' },
         { id: 'signorecarapace', name: 'Signore Carapace', price: 35000, img: 'https://github.com/forerer-afk/brainroterX/blob/main/singore-carapace.png?raw=true' },
         { id: 'strawberryelephant', name: 'Strawberry Elephant', price: 41400, img: 'https://github.com/forerer-afk/brainroterX/blob/main/strawberry-elefanto.png?raw=true' }
+    ];
+
+    // ===== КЕЙСЫ =====
+    const CASES = [
+        {
+            id: 'og',
+            name: 'OG CASE',
+            price: 12000,
+            img: 'https://github.com/saintezz/ggbrainXv2/blob/main/OGCASE.jpg?raw=true',
+            rewards: [
+                { itemId: 'antonio', chance: 70 },
+                { itemId: 'skibidi', chance: 20 },
+                { itemId: 'meowl', chance: 7 },
+                { itemId: 'signorecarapace', chance: 2 },
+                { itemId: 'strawberryelephant', chance: 1 }
+            ]
+        },
+        {
+            id: 'tacos',
+            name: 'TACOS CASE',
+            price: 169,
+            img: 'https://github.com/saintezz/ggbrainXv2/blob/main/TacosCase.jpg?raw=true',
+            rewards: [
+                { itemId: 'garama', chance: 60 },
+                { itemId: 'burguro', chance: 30 },
+                { itemId: 'globba', chance: 6 },
+                { itemId: 'losamigos', chance: 2 },
+                { itemId: 'dragon', chance: 1 }
+            ]
+        },
+        {
+            id: 'free',
+            name: 'FREE CASE',
+            price: 0,
+            freeCooldown: 24 * 60 * 60 * 1000, // 24 часа
+            img: 'https://github.com/saintezz/ggbrainXv2/blob/main/freecase.jpg?raw=true',
+            rewards: [
+                { balance: 3, chance: 70 },
+                { balance: 5, chance: 20 },
+                { balance: 10, chance: 5 },
+                { itemId: 'cupid', chance: 3 },
+                { itemId: 'garama', chance: 1 }
+            ]
+        },
+        {
+            id: 'easter',
+            name: 'EASTER CASE',
+            price: 45,
+            img: 'https://github.com/saintezz/ggbrainXv2/blob/main/EasteCase.jpg?raw=true',
+            rewards: [
+                { balance: 17, chance: 40 },
+                { balance: 20, chance: 40 },
+                { itemId: 'cupid', chance: 20 },
+                { itemId: 'garama', chance: 18 },
+                { itemId: 'tirilikalika', chance: 1 },
+                { itemId: 'dragon', chance: 1 }
+            ]
+        },
+        {
+            id: 'newyear',
+            name: 'NEW YEAR CASE',
+            price: 241,
+            img: 'https://github.com/saintezz/ggbrainXv2/blob/main/NewYearCase.jpg?raw=true',
+            rewards: [
+                { itemId: 'jolly', chance: 60 },
+                { itemId: 'losamigos', chance: 20 },
+                { itemId: 'rubiko', chance: 10 },
+                { itemId: 'roseyandteddy', chance: 9 },
+                { itemId: 'dragon', chance: 1 }
+            ]
+        },
+        {
+            id: 'fusing',
+            name: 'FUSING CASE',
+            price: 1830,
+            img: 'https://github.com/saintezz/ggbrainXv2/blob/main/FusingCase.jpg?raw=true',
+            rewards: [
+                { itemId: 'dragon', chance: 70 },
+                { itemId: 'hydra', chance: 20 },
+                { itemId: 'kraken', chance: 10 }
+            ]
+        }
     ];
 
     const COLOR_PALETTE = [
@@ -1805,6 +1870,16 @@
 
     let hauntedSlots = [null, null, null, null];
     let hauntedPickerTargetSlot = null;
+
+    // Free case cooldown
+    let freeCaseLastOpen = parseFloat(localStorage.getItem('ggbrainx_free_case_last') || '0');
+
+    // Case quantity selection
+    let caseQuantities = {};
+    CASES.forEach(c => caseQuantities[c.id] = 1);
+
+    // Case opening state
+    let isCaseOpening = false;
 
     function saveLocalCache() {
         localStorage.setItem('ggbrainx_balance', String(balance));
@@ -1952,6 +2027,12 @@
             osc1.start(ctx.currentTime); osc2.start(ctx.currentTime);
             osc1.stop(ctx.currentTime + 1.9); osc2.stop(ctx.currentTime + 1.9);
         } catch(e) {}
+    }
+    function playCaseOpen() {
+        playOsc(200, 0.3, 'sawtooth', 0.04, 0, 600);
+        playOsc(300, 0.4, 'square', 0.03, 0.1, 800);
+        playOsc(400, 0.5, 'triangle', 0.04, 0.2, 1000);
+        playNoise(0.3, 0.03, 0.3, 600);
     }
 
     function vibrate(ms = 15) { try { if (navigator.vibrate) navigator.vibrate(ms); } catch(e) {} }
@@ -2227,6 +2308,7 @@
         if (panel) panel.classList.add('active');
         if (navBtn) navBtn.classList.add('active');
         if (tab === 'trade') renderTradeList();
+        if (tab === 'cases') renderCases();
         if (tab === 'profile') {
             updateProfile();
             renderColorGrid();
@@ -2891,7 +2973,6 @@
         });
         if (sum <= 0) return null;
 
-        // Увеличенный шанс на луз
         const multiplierRanges = [
             { minMult: 0.1, maxMult: 0.5, weight: 35, label: 'ЛУЗ' },
             { minMult: 0.5, maxMult: 0.9, weight: 22, label: 'Малый луз' },
@@ -3023,6 +3104,271 @@
         saveLocalCache();
         syncUserToServer();
     };
+
+    // ===== CASES =====
+    function renderCases() {
+        const grid = document.getElementById('casesGrid');
+        if (!grid) return;
+        const now = Date.now();
+        grid.innerHTML = CASES.map(c => {
+            const qty = caseQuantities[c.id] || 1;
+            let priceHtml = '';
+            let canOpen = true;
+            let openLabel = 'ОТКРЫТЬ';
+            if (c.id === 'free') {
+                const timeLeft = c.freeCooldown - (now - freeCaseLastOpen);
+                if (timeLeft > 0) {
+                    const hours = Math.floor(timeLeft / 3600000);
+                    const mins = Math.floor((timeLeft % 3600000) / 60000);
+                    priceHtml = `<span class="free-tag">FREE</span> <span class="cooldown-tag">через ${hours}ч ${mins}м</span>`;
+                    canOpen = false;
+                    openLabel = 'ЖДИ';
+                } else {
+                    priceHtml = `<span class="free-tag">FREE</span>`;
+                    canOpen = true;
+                }
+            } else {
+                priceHtml = `${c.price} <img src="${COIN_IMG}" alt="coin">`;
+                if (balance < c.price * qty) canOpen = false;
+            }
+            // Check if can open multiple
+            const totalPrice = c.id === 'free' ? 0 : c.price * qty;
+            if (c.id !== 'free' && balance < totalPrice) canOpen = false;
+            if (c.id === 'free' && qty > 1) { canOpen = false; openLabel = '1 ШТ'; }
+            const isDisabled = !canOpen || isCaseOpening;
+            return `
+                <div class="case-card">
+                    <div class="case-card-inner">
+                        <div class="case-img-wrap">
+                            <img src="${c.img}" alt="${c.name}" onerror="this.src='https://via.placeholder.com/100?text=?'">
+                        </div>
+                        <div class="case-info">
+                            <div class="case-name">${c.name}</div>
+                            <div class="case-price">${priceHtml}</div>
+                            <div class="case-actions">
+                                <div class="case-qty-selector">
+                                    ${[1,2,3,4].map(n => `
+                                        <button class="case-qty-btn ${qty === n ? 'active' : ''}" 
+                                                onclick="setCaseQty('${c.id}', ${n})" 
+                                                ${c.id === 'free' && n > 1 ? 'disabled style="opacity:0.25;cursor:not-allowed;"' : ''}>
+                                            ${n}
+                                        </button>
+                                    `).join('')}
+                                </div>
+                                <button class="case-open-btn" onclick="openCase('${c.id}')" ${isDisabled ? 'disabled' : ''}>
+                                    ${openLabel}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    window.setCaseQty = function(caseId, qty) {
+        if (isCaseOpening) return;
+        playClick();
+        vibrate(8);
+        const c = CASES.find(x => x.id === caseId);
+        if (c && c.id === 'free' && qty > 1) return;
+        caseQuantities[caseId] = qty;
+        renderCases();
+    };
+
+    function pickCaseReward(c) {
+        const totalChance = c.rewards.reduce((sum, r) => sum + r.chance, 0);
+        let rand = Math.random() * totalChance;
+        for (const r of c.rewards) {
+            if (rand < r.chance) return r;
+            rand -= r.chance;
+        }
+        return c.rewards[0];
+    }
+
+    function openCaseAnimation(caseImg) {
+        return new Promise(resolve => {
+            const overlay = document.getElementById('caseAnimOverlay');
+            const img = document.getElementById('caseAnimImg');
+            const text = document.getElementById('caseAnimText');
+            const particles = document.getElementById('caseAnimParticles');
+            const box = document.getElementById('caseAnimBox');
+            img.src = caseImg;
+            overlay.classList.add('show');
+            box.classList.remove('opened');
+            text.textContent = 'ОТКРЫВАЕМ...';
+            particles.innerHTML = '';
+            for (let i = 0; i < 40; i++) {
+                const p = document.createElement('div');
+                p.className = 'case-anim-particle';
+                p.style.left = '50%';
+                p.style.top = '50%';
+                const angle = Math.random() * Math.PI * 2;
+                const dist = 150 + Math.random() * 400;
+                p.style.setProperty('--dx', Math.cos(angle) * dist + 'px');
+                p.style.setProperty('--dy', Math.sin(angle) * dist + 'px');
+                p.style.animationDuration = (1 + Math.random() * 1.5) + 's';
+                p.style.animationDelay = (Math.random() * 0.6) + 's';
+                particles.appendChild(p);
+            }
+            playCaseOpen();
+            vibratePattern([30, 60, 30, 60, 100]);
+            setTimeout(() => {
+                box.classList.add('opened');
+                text.textContent = 'ОТКРЫТО!';
+                playWin();
+                vibrate(50);
+            }, 1200);
+            setTimeout(() => {
+                overlay.classList.remove('show');
+                box.classList.remove('opened');
+                resolve();
+            }, 2200);
+        });
+    }
+
+    window.openCase = async function(caseId) {
+        if (isCaseOpening) return;
+        const c = CASES.find(x => x.id === caseId);
+        if (!c) return;
+        const qty = caseQuantities[caseId] || 1;
+
+        // Free case cooldown check
+        if (c.id === 'free') {
+            const now = Date.now();
+            const timeLeft = c.freeCooldown - (now - freeCaseLastOpen);
+            if (timeLeft > 0) {
+                showToast('Кейс ещё не остыл', 'err');
+                playLose();
+                return;
+            }
+            if (qty > 1) { showToast('Бесплатный кейс можно открыть только 1 раз', 'err'); return; }
+        }
+
+        const totalPrice = c.id === 'free' ? 0 : c.price * qty;
+        if (c.id !== 'free' && balance < totalPrice) {
+            showToast('Недостаточно монет', 'err');
+            playLose();
+            vibrate(30);
+            return;
+        }
+
+        isCaseOpening = true;
+        renderCases();
+
+        // Deduct balance
+        if (c.id !== 'free') {
+            balance -= totalPrice;
+            updateBalance();
+        } else {
+            freeCaseLastOpen = Date.now();
+            localStorage.setItem('ggbrainx_free_case_last', String(freeCaseLastOpen));
+        }
+
+        // Open each case
+        const results = [];
+        for (let i = 0; i < qty; i++) {
+            const reward = pickCaseReward(c);
+            results.push(reward);
+        }
+
+        // Animation (use first case image)
+        await openCaseAnimation(c.img);
+
+        // Apply rewards
+        let totalCoins = 0;
+        const itemsWon = [];
+        results.forEach(r => {
+            if (r.balance) {
+                totalCoins += r.balance;
+            } else if (r.itemId) {
+                inventory.push(r.itemId);
+                itemsWon.push(r.itemId);
+            }
+        });
+        if (totalCoins > 0) balance += totalCoins;
+        updateBalance();
+        renderInventory();
+        renderShop();
+        updateUpgradeScreen();
+        renderProfileInventory();
+        saveLocalCache();
+        syncUserToServer();
+
+        // Show result modal
+        showCaseResult(results, c, qty);
+
+        isCaseOpening = false;
+        renderCases();
+    };
+
+    function showCaseResult(results, c, qty) {
+        const content = document.getElementById('caseResultContent');
+        const totalCoins = results.filter(r => r.balance).reduce((s, r) => s + r.balance, 0);
+        const itemsWon = results.filter(r => r.itemId);
+
+        if (qty === 1) {
+            const r = results[0];
+            if (r.balance) {
+                content.innerHTML = `
+                    <div class="case-result-img-wrap">
+                        <img src="${COIN_IMG}" alt="coin" style="width:80px;height:80px;">
+                    </div>
+                    <div class="case-result-name">Монеты</div>
+                    <div class="case-result-price">
+                        <img src="${COIN_IMG}" alt="coin"> +${r.balance}
+                    </div>
+                `;
+            } else {
+                const item = getItemById(r.itemId);
+                content.innerHTML = `
+                    <div class="case-result-img-wrap">
+                        <img src="${item.img}" alt="${item.name}">
+                    </div>
+                    <div class="case-result-name">${item.name}</div>
+                    <div class="case-result-price">
+                        <img src="${COIN_IMG}" alt="coin"> ${item.price}
+                    </div>
+                `;
+            }
+        } else {
+            // Multiple results
+            let html = '<div class="case-multi-results">';
+            results.forEach((r, i) => {
+                if (r.balance) {
+                    html += `
+                        <div class="case-multi-item" style="animation-delay:${i * 0.08}s">
+                            <img src="${COIN_IMG}" alt="coin" style="width:36px;height:36px;">
+                            <div class="multi-name">Монеты</div>
+                            <div class="multi-price"><img src="${COIN_IMG}"> +${r.balance}</div>
+                        </div>
+                    `;
+                } else {
+                    const item = getItemById(r.itemId);
+                    html += `
+                        <div class="case-multi-item" style="animation-delay:${i * 0.08}s">
+                            <img src="${item.img}" alt="${item.name}">
+                            <div class="multi-name">${item.name}</div>
+                            <div class="multi-price"><img src="${COIN_IMG}"> ${item.price}</div>
+                        </div>
+                    `;
+                }
+            });
+            html += '</div>';
+            let totalValue = totalCoins;
+            itemsWon.forEach(r => { totalValue += getItemById(r.itemId).price; });
+            html += `
+                <div class="case-multi-summary">
+                    <div>Открыто кейсов: <span>${qty}</span></div>
+                    <div>Получено монет: <span>+${totalCoins}</span></div>
+                    <div>Получено предметов: <span>${itemsWon.length}</span></div>
+                    <div>Общая ценность: <span>${totalValue}</span></div>
+                </div>
+            `;
+            content.innerHTML = html;
+        }
+        openModal('caseResultModal');
+    }
 
     function calculateChance() {
         const sourceItem = selectedSourceIndex !== null ? getItemById(inventory[selectedSourceIndex]) : null;
@@ -3566,6 +3912,7 @@
         startWeather(currentWeather);
         applyCustomAvatar();
         renderHauntedSlots();
+        renderCases();
         switchTab('menu');
         loadUserFromServer();
         updateWeatherContainerHeight();
