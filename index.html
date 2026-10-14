@@ -2008,7 +2008,8 @@
         { id: 'meowl', name: 'Meowl', price: 16839, img: 'https://github.com/forerer-afk/brainroterX/blob/main/meowl.png?raw=true' },
         { id: 'signorecarapace', name: 'Signore Carapace', price: 35000, img: 'https://github.com/forerer-afk/brainroterX/blob/main/singore-carapace.png?raw=true' },
         { id: 'polaroidini', name: 'Polaroidini', price: 40000, img: 'https://github.com/saintezz/ggbrainXv2/blob/main/Polaroidini.png?raw=true' },
-        { id: 'strawberryelephant', name: 'Strawberry Elephant', price: 41400, img: 'https://github.com/forerer-afk/brainroterX/blob/main/strawberry-elefanto.png?raw=true' }
+        { id: 'strawberryelephant', name: 'Strawberry Elephant', price: 41400, img: 'https://github.com/forerer-afk/brainroterX/blob/main/strawberry-elefanto.png?raw=true' },
+        { id: 'headless', name: 'Headless Horseman', price: 235000, img: 'https://github.com/saintezz/ggbrainXv2/blob/main/Headless.webp?raw=true' }
     ];
 
     // ===== КЕЙСЫ =====
@@ -2021,9 +2022,11 @@
             rewards: [
                 { itemId: 'antonio', chance: 70 },
                 { itemId: 'skibidi', chance: 20 },
-                { itemId: 'meowl', chance: 7 },
-                { itemId: 'signorecarapace', chance: 2 },
-                { itemId: 'strawberryelephant', chance: 1 }
+                { itemId: 'meowl', chance: 15 },
+                { itemId: 'cyberskibidi', chance: 5 },
+                { itemId: 'yinyangmeowl', chance: 4.5 },
+                { itemId: 'goldstrawberry', chance: 0.4 },
+                { itemId: 'lavastrawberry', chance: 0.1 }
             ]
         },
         {
@@ -2094,7 +2097,7 @@
         {
             id: 'winter',
             name: 'WINTER CASE',
-            price: 109,
+            price: 49,
             img: 'https://github.com/saintezz/ggbrainXv2/blob/main/WINTERCASE.png?raw=true',
             rewards: [
                 { balance: 49, chance: 99.9 },
@@ -2102,6 +2105,21 @@
             ]
         }
     ];
+
+    // Color brainrots (only available in cases, but can be fused)
+    const COLOR_ITEMS = [
+        { id: 'cyberskibidi', name: 'Cyber Skibidi Toilet', price: 31000, img: 'https://github.com/saintezz/ggbrainXv2/blob/main/CyberSkibidi.webp?raw=true' },
+        { id: 'yinyangmeowl', name: 'YinYang Meowl', price: 35000, img: 'https://github.com/saintezz/ggbrainXv2/blob/main/YinYangMeowl.webp?raw=true' },
+        { id: 'goldstrawberry', name: 'Gold Strawberry Elephant', price: 45000, img: 'https://github.com/saintezz/ggbrainXv2/blob/main/GoldStrawberryeleph.webp?raw=true' },
+        { id: 'lavastrawberry', name: 'Lava Strawberry Elephant', price: 56000, img: 'https://github.com/saintezz/ggbrainXv2/blob/main/LavaStrawberry.webp?raw=true' }
+    ];
+
+    // Add color items to ITEMS list so they can be referenced
+    COLOR_ITEMS.forEach(item => {
+        if (!ITEMS.find(i => i.id === item.id)) {
+            ITEMS.push(item);
+        }
+    });
 
     const COLOR_PALETTE = [
         { name: 'Золотой',  color: '#f5c542', deep: '#b8860b', bright: '#ffe066', green: '#2ecc71', greenBright: '#58d68d', greenDeep: '#1e8449' },
@@ -2121,9 +2139,9 @@
     ];
 
     function getGlowClass(price) {
-        if (price >= 10000) return 'glow-rainbow';
-        if (price >= 1000) return 'glow-purple';
-        if (price >= 500) return 'glow-red';
+        if (price >= 100000) return 'glow-rainbow';
+        if (price >= 20000) return 'glow-purple';
+        if (price >= 5000) return 'glow-red';
         if (price >= 200) return 'glow-green';
         if (price >= 34) return 'glow-blue';
         return '';
@@ -3387,7 +3405,6 @@
         // Build roulette rows
         const container = document.getElementById('caseRouletteContainer');
         container.innerHTML = '';
-        const numRows = 1; // Will be updated by qty
         buildRouletteRows(c, 1);
 
         // Build possible rewards (sorted by price ascending)
@@ -3437,7 +3454,6 @@
             track.className = 'case-roulette-track';
             track.dataset.track = r;
 
-            // Build items: repeat rewards many times
             const scrollItems = [];
             for (let k = 0; k < 40; k++) {
                 c.rewards.forEach(rew => {
@@ -3470,7 +3486,6 @@
             }).join('');
             row.appendChild(track);
 
-            // Pointer
             const pointer = document.createElement('div');
             pointer.className = 'case-roulette-pointer';
             row.appendChild(pointer);
@@ -3534,10 +3549,7 @@
         return c.rewards[0];
     }
 
-    // Determine the index in the track where the pointer lands
     function getRewardIndexInTrack(c, reward) {
-        // The track has 40 cycles of c.rewards
-        // We want the index of the reward in the first cycle, then add random cycle offset
         let baseIndex = 0;
         let found = false;
         for (let i = 0; i < c.rewards.length; i++) {
@@ -3549,19 +3561,16 @@
             }
         }
         if (!found) baseIndex = 0;
-        // Total items per cycle
         const perCycle = c.rewards.length;
-        // We want to land in the middle cycles, e.g. cycle 20-30
         const cycleOffset = 20 + Math.floor(Math.random() * 10);
         return cycleOffset * perCycle + baseIndex;
     }
 
     function animateRoulette(trackEl, targetIndex, duration) {
         return new Promise(resolve => {
-            const itemWidth = 130; // px, matches CSS
+            const itemWidth = 130;
             const containerWidth = trackEl.parentElement.clientWidth;
             const targetX = -(targetIndex * itemWidth) + (containerWidth / 2) - (itemWidth / 2);
-            // Add slight random offset within the item
             const randomOffset = (Math.random() - 0.5) * (itemWidth * 0.5);
             const finalX = targetX + randomOffset;
 
@@ -3580,7 +3589,6 @@
         if (!c) return;
         const qty = caseOpenQty;
 
-        // Free case cooldown check
         if (c.id === 'free') {
             const now = Date.now();
             const timeLeft = c.freeCooldown - (now - freeCaseLastOpen);
@@ -3602,7 +3610,6 @@
 
         isCaseOpening = true;
 
-        // Deduct balance
         if (c.id !== 'free') {
             balance -= totalPrice;
             updateBalance();
@@ -3611,33 +3618,28 @@
             localStorage.setItem('ggbrainx_free_case_last', String(freeCaseLastOpen));
         }
 
-        // Determine rewards for each row
         const rewards = [];
         for (let i = 0; i < qty; i++) {
             rewards.push(pickCaseReward(c));
         }
 
-        // Animate each roulette
         const animPromises = [];
         const tracks = document.querySelectorAll('.case-roulette-track');
         rewards.forEach((reward, idx) => {
             const track = tracks[idx];
             if (!track) return;
             const targetIndex = getRewardIndexInTrack(c, reward);
-            const duration = 7000; // 7 seconds
+            const duration = 7000;
             const promise = animateRoulette(track, targetIndex, duration);
             animPromises.push(promise);
-            // Play tick sounds during animation
             const tickCount = 50;
             for (let t = 0; t < tickCount; t++) {
                 setTimeout(() => playTick(), t * (duration / tickCount));
             }
         });
 
-        // Wait for all animations
         await Promise.all(animPromises);
 
-        // Apply rewards
         let totalCoins = 0;
         const itemsWon = [];
         rewards.forEach(r => {
@@ -3657,7 +3659,6 @@
         saveLocalCache();
         syncUserToServer();
 
-        // Show result modal
         const totalSpent = c.id === 'free' ? 0 : c.price * qty;
         showCaseResult(rewards, c, qty, totalSpent);
 
