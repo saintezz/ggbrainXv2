@@ -1285,6 +1285,27 @@
         .haunted-result-stats > div { display: flex; justify-content: space-between; align-items: center; font-family: 'Orbitron', sans-serif; font-size: 12px; font-weight: 900; color: #a8adb8; letter-spacing: 1.5px; text-transform: uppercase; }
         .haunted-result-stats > div > span { color: #ffb366; font-size: 14px; text-shadow: 0 0 10px rgba(255, 100, 0, 0.6); }
 
+        /* Mutation badge */
+        .mutation-badge {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 22px;
+            height: 22px;
+            object-fit: contain;
+            z-index: 10;
+            filter: drop-shadow(0 0 4px rgba(0,0,0,0.8));
+            pointer-events: none;
+        }
+        .mutation-badge-large {
+            width: 28px;
+            height: 28px;
+            object-fit: contain;
+            vertical-align: middle;
+            margin-left: 6px;
+            filter: drop-shadow(0 0 6px rgba(0,0,0,0.8));
+        }
+
         @media (max-width: 900px) {
             body { padding: 10px 10px 100px 10px; }
             .inventory-row { grid-template-columns: repeat(auto-fill, minmax(82px, 1fr)); }
@@ -1767,7 +1788,7 @@
         </div>
     </div>
 
-    <!-- ===== CASES PANEL — теперь без отдельной вкладки ===== -->
+    <!-- ===== CASES PANEL ===== -->
     <div class="tab-panel" id="panelCases" style="display:none;">
         <div class="cases-page">
             <div class="cases-header">
@@ -1980,6 +2001,14 @@
     const DEFAULT_AVATAR = 'https://github.com/saintezz/ggbrainXv2/raw/main/avavatarochka.jpg';
     const ADMIN_USERNAME = 'clonexx7';
 
+    // Mutation icons
+    const MUTATION_ICONS = {
+        cyber: 'https://github.com/saintezz/SaintGLOSSARY/raw/main/mutation/Cyber_Mutation_Icon.webp',
+        yinyang: 'https://github.com/saintezz/SaintGLOSSARY/raw/main/mutation/Yin_Yang_Mutation_Icon.webp',
+        gold: 'https://github.com/saintezz/SaintGLOSSARY/raw/main/mutation/Gold_Mutation_Icon.webp',
+        lava: 'https://github.com/saintezz/SaintGLOSSARY/raw/main/mutation/Lava_Mutation_Icon.webp'
+    };
+
     const ITEMS = [
         { id: 'cupid', name: 'Cupid Wings', price: 34, img: 'https://github.com/forerer-afk/brainroterX/blob/main/cupid-wings.png?raw=true' },
         { id: 'garama', name: 'Garama and Madundung', price: 41, img: 'https://github.com/forerer-afk/brainroterX/blob/main/garama.png?raw=true' },
@@ -2011,6 +2040,21 @@
         { id: 'strawberryelephant', name: 'Strawberry Elephant', price: 41400, img: 'https://github.com/forerer-afk/brainroterX/blob/main/strawberry-elefanto.png?raw=true' },
         { id: 'headless', name: 'Headless Horseman', price: 235000, img: 'https://github.com/saintezz/ggbrainXv2/blob/main/Headless.webp?raw=true' }
     ];
+
+    // Color brainrots (only available in cases, but can be fused)
+    const COLOR_ITEMS = [
+        { id: 'cyberskibidi', name: 'Cyber Skibidi Toilet', price: 31000, img: 'https://github.com/saintezz/ggbrainXv2/blob/main/CyberSkibidi.webp?raw=true', mutation: 'cyber' },
+        { id: 'yinyangmeowl', name: 'YinYang Meowl', price: 35000, img: 'https://github.com/saintezz/ggbrainXv2/blob/main/YinYangMeowl.webp?raw=true', mutation: 'yinyang' },
+        { id: 'goldstrawberry', name: 'Gold Strawberry Elephant', price: 45000, img: 'https://github.com/saintezz/ggbrainXv2/blob/main/GoldStrawberryeleph.webp?raw=true', mutation: 'gold' },
+        { id: 'lavastrawberry', name: 'Lava Strawberry Elephant', price: 56000, img: 'https://github.com/saintezz/ggbrainXv2/blob/main/LavaStrawberry.webp?raw=true', mutation: 'lava' }
+    ];
+
+    // Add color items to ITEMS list so they can be referenced
+    COLOR_ITEMS.forEach(item => {
+        if (!ITEMS.find(i => i.id === item.id)) {
+            ITEMS.push(item);
+        }
+    });
 
     // ===== КЕЙСЫ =====
     const CASES = [
@@ -2105,21 +2149,6 @@
             ]
         }
     ];
-
-    // Color brainrots (only available in cases, but can be fused)
-    const COLOR_ITEMS = [
-        { id: 'cyberskibidi', name: 'Cyber Skibidi Toilet', price: 31000, img: 'https://github.com/saintezz/ggbrainXv2/blob/main/CyberSkibidi.webp?raw=true' },
-        { id: 'yinyangmeowl', name: 'YinYang Meowl', price: 35000, img: 'https://github.com/saintezz/ggbrainXv2/blob/main/YinYangMeowl.webp?raw=true' },
-        { id: 'goldstrawberry', name: 'Gold Strawberry Elephant', price: 45000, img: 'https://github.com/saintezz/ggbrainXv2/blob/main/GoldStrawberryeleph.webp?raw=true' },
-        { id: 'lavastrawberry', name: 'Lava Strawberry Elephant', price: 56000, img: 'https://github.com/saintezz/ggbrainXv2/blob/main/LavaStrawberry.webp?raw=true' }
-    ];
-
-    // Add color items to ITEMS list so they can be referenced
-    COLOR_ITEMS.forEach(item => {
-        if (!ITEMS.find(i => i.id === item.id)) {
-            ITEMS.push(item);
-        }
-    });
 
     const COLOR_PALETTE = [
         { name: 'Золотой',  color: '#f5c542', deep: '#b8860b', bright: '#ffe066', green: '#2ecc71', greenBright: '#58d68d', greenDeep: '#1e8449' },
@@ -2685,8 +2714,10 @@
             const item = getItemById(id);
             if (!item) return '';
             const glowClass = getGlowClass(item.price);
+            const mutationIcon = item.mutation ? `<img class="mutation-badge" src="${MUTATION_ICONS[item.mutation]}" alt="mutation">` : '';
             return `
-                <div class="profile-inventory-item ${glowClass}">
+                <div class="profile-inventory-item ${glowClass}" style="position:relative;">
+                    ${mutationIcon}
                     <img src="${item.img}" alt="${item.name}" onerror="this.src='https://via.placeholder.com/44?text=?'">
                     <div class="inv-name">${item.name}</div>
                     <div class="inv-price">${item.price}</div>
@@ -3041,8 +3072,10 @@
             if (!item) return '';
             const isSelected = selectedSourceIndex === index;
             const glowClass = getGlowClass(item.price);
+            const mutationIcon = item.mutation ? `<img class="mutation-badge" src="${MUTATION_ICONS[item.mutation]}" alt="mutation">` : '';
             return `
-                <div class="inv-card ${isSelected ? 'selected' : ''} ${glowClass}">
+                <div class="inv-card ${isSelected ? 'selected' : ''} ${glowClass}" style="position:relative;">
+                    ${mutationIcon}
                     <div class="selectable" onclick="selectSourceByIndex(${index})">
                         <img src="${item.img}" alt="${item.name}">
                         <div class="name" title="${item.name}">${item.name}</div>
@@ -3078,8 +3111,10 @@
             list.innerHTML = targets.map(t => {
                 const chance = Math.min(MAX_CHANCE, Math.max(1, Math.round((100 / (t.price / sourceItem.price)) * 10) / 10));
                 const glowClass = getGlowClass(t.price);
+                const mutationIcon = t.mutation ? `<img class="mutation-badge" src="${MUTATION_ICONS[t.mutation]}" alt="mutation" style="width:18px;height:18px;top:4px;left:4px;">` : '';
                 return `
-                    <div class="target-list-item ${glowClass}" onclick="pickTargetFromList('${t.id}')">
+                    <div class="target-list-item ${glowClass}" onclick="pickTargetFromList('${t.id}')" style="position:relative;">
+                        ${mutationIcon}
                         <img src="${t.img}" alt="${t.name}">
                         <div class="tl-info">
                             <div class="tl-name">${t.name}</div>
@@ -3138,8 +3173,10 @@
             if (!item) return '';
             const count = counts[id];
             const glowClass = getGlowClass(item.price);
+            const mutationIcon = item.mutation ? `<img class="mutation-badge" src="${MUTATION_ICONS[item.mutation]}" alt="mutation" style="width:18px;height:18px;top:4px;left:4px;">` : '';
             return `
-                <div class="target-list-item ${glowClass}" onclick="pickHauntedItem('${id}')">
+                <div class="target-list-item ${glowClass}" onclick="pickHauntedItem('${id}')" style="position:relative;">
+                    ${mutationIcon}
                     <img src="${item.img}" alt="${item.name}">
                     <div class="tl-info">
                         <div class="tl-name">${item.name}${count > 1 ? ' x' + count : ''}</div>
@@ -3418,8 +3455,10 @@
             if (rew.itemId) {
                 const item = getItemById(rew.itemId);
                 if (!item) return '';
+                const mutationIcon = item.mutation ? `<img class="mutation-badge" src="${MUTATION_ICONS[item.mutation]}" alt="mutation" style="width:18px;height:18px;top:2px;left:2px;">` : '';
                 return `
-                    <div class="case-possible-item">
+                    <div class="case-possible-item" style="position:relative;">
+                        ${mutationIcon}
                         <img src="${item.img}" alt="${item.name}" onerror="this.src='https://via.placeholder.com/32?text=?'">
                         <div class="cp-name">${item.name}</div>
                         <div class="cp-price"><img src="${COIN_IMG}"> ${item.price}</div>
@@ -3467,8 +3506,10 @@
             }
             track.innerHTML = scrollItems.map((si, idx) => {
                 if (si.type === 'item') {
+                    const mutationIcon = si.item.mutation ? `<img class="mutation-badge" src="${MUTATION_ICONS[si.item.mutation]}" alt="mutation" style="width:16px;height:16px;top:2px;left:2px;">` : '';
                     return `
-                        <div class="case-roulette-item" data-index="${idx}">
+                        <div class="case-roulette-item" data-index="${idx}" style="position:relative;">
+                            ${mutationIcon}
                             <img src="${si.item.img}" alt="${si.item.name}" onerror="this.src='https://via.placeholder.com/40?text=?'">
                             <div class="roulette-name">${si.item.name}</div>
                             <div class="roulette-price"><img src="${COIN_IMG}"> ${si.item.price}</div>
@@ -3696,8 +3737,10 @@
                 `;
             } else {
                 const item = getItemById(r.itemId);
+                const mutationIcon = item.mutation ? `<img class="mutation-badge" src="${MUTATION_ICONS[item.mutation]}" alt="mutation" style="width:24px;height:24px;top:0px;left:0px;">` : '';
                 content.innerHTML = `
-                    <div class="case-result-img-wrap">
+                    <div class="case-result-img-wrap" style="position:relative;">
+                        ${mutationIcon}
                         <img src="${item.img}" alt="${item.name}">
                     </div>
                     <div class="case-result-name">${item.name}</div>
@@ -3724,8 +3767,10 @@
                     `;
                 } else {
                     const item = getItemById(r.itemId);
+                    const mutationIcon = item.mutation ? `<img class="mutation-badge" src="${MUTATION_ICONS[item.mutation]}" alt="mutation" style="width:16px;height:16px;top:2px;left:2px;">` : '';
                     html += `
-                        <div class="case-multi-item" style="animation-delay:${i * 0.08}s">
+                        <div class="case-multi-item" style="animation-delay:${i * 0.08}s;position:relative;">
+                            ${mutationIcon}
                             <img src="${item.img}" alt="${item.name}">
                             <div class="multi-name">${item.name}</div>
                             <div class="multi-price"><img src="${COIN_IMG}"> ${item.price}</div>
