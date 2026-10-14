@@ -159,50 +159,26 @@
         }
         .nav-btn-fuse.active .fuse-label { color: #fff; text-shadow: 0 0 10px #fff; }
 
-        /* Кнопка кейсов */
+        /* Кнопка кейсов — обычная, без фиолетового */
         .nav-btn-cases {
             position: relative;
-            width: 58px; height: 58px; min-width: 58px; min-height: 58px;
-            border-radius: 6px;
-            border: 1px solid #a855f7;
-            background: linear-gradient(135deg, rgba(168, 85, 247, 0.25), rgba(88, 28, 135, 0.35));
-            box-shadow: 0 0 20px rgba(168, 85, 247, 0.4), inset 0 1px 0 rgba(255,255,255,0.15);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 2px;
-            padding: 3px;
-            overflow: visible;
+            width: 44px; height: 44px; min-width: 44px; min-height: 44px;
+            border-radius: 3px;
+            border: 1px solid var(--glass-border);
+            background: var(--glass-bg-strong);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            color: #a8adb8; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            transition: all 0.25s;
+            box-shadow: inset 0 1px 0 var(--glass-highlight);
+            padding: 0;
+            overflow: hidden;
+            flex-shrink: 0;
         }
-        .nav-btn-cases img {
-            width: 42px; height: 42px; object-fit: contain;
-            filter: drop-shadow(0 0 6px #a855f7);
-            animation: casePulse 2s ease-in-out infinite;
-        }
-        @keyframes casePulse {
-            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 6px #a855f7); }
-            50% { transform: scale(1.08); filter: drop-shadow(0 0 12px #a855f7) drop-shadow(0 0 20px #7c3aed); }
-        }
-        .nav-btn-cases .case-label {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 8px;
-            font-weight: 900;
-            color: #c084fc;
-            letter-spacing: 1.5px;
-            text-shadow: 0 0 6px #a855f7;
-            line-height: 1;
-        }
-        .nav-btn-cases:hover {
-            background: linear-gradient(135deg, rgba(168, 85, 247, 0.4), rgba(88, 28, 135, 0.5));
-            box-shadow: 0 0 30px rgba(168, 85, 247, 0.7), inset 0 1px 0 rgba(255,255,255,0.2);
-        }
-        .nav-btn-cases.active {
-            background: linear-gradient(135deg, #a855f7, #6b21a8);
-            border-color: #c084fc;
-            box-shadow: 0 0 35px rgba(168, 85, 247, 0.9), inset 0 1px 0 rgba(255,255,255,0.25);
-        }
-        .nav-btn-cases.active .case-label { color: #fff; text-shadow: 0 0 10px #fff; }
+        .nav-btn-cases img { width: 100%; height: 100%; object-fit: contain; padding: 4px; }
+        .nav-btn-cases:hover { background: var(--accent-very-dim); border-color: var(--accent); color: var(--accent-bright); }
+        .nav-btn-cases.active { background: linear-gradient(135deg, var(--accent-very-dim), var(--accent-dim)); border-color: var(--accent); color: #fff; box-shadow: 0 0 12px var(--accent-dim), inset 0 1px 0 var(--glass-highlight); }
 
         .top-bar { display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(15px); border-bottom: 1px solid var(--glass-border); position: relative; }
         .top-bar::after { content: ''; position: absolute; bottom: -1px; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, var(--green), var(--accent), transparent); opacity: 0.4; }
@@ -256,145 +232,422 @@
         .msg.err { color: #ff6b6b; }
         .msg.wait { color: var(--accent-bright); }
 
-        /* ===== CASES PAGE ===== */
-        .cases-page { padding: 16px 14px; }
-        .cases-header { text-align: center; margin-bottom: 20px; }
-        .cases-title { font-family: 'Orbitron', sans-serif; font-size: 22px; font-weight: 900; color: #fff; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 6px; text-shadow: 0 0 20px rgba(168, 85, 247, 0.5); }
-        .cases-subtitle { color: #a8adb8; font-size: 11px; font-weight: 700; letter-spacing: 1px; }
+        /* ===== CASES PAGE — НОВЫЙ СТИЛЬ ===== */
+        .cases-page { padding: 0 0 20px 0; }
+        .cases-header { display: flex; flex-direction: column; gap: 12px; padding: 16px 14px 10px; }
+        .cases-search {
+            width: 100%;
+            padding: 12px 16px;
+            border-radius: 3px;
+            border: 1px solid var(--glass-border);
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            color: #fff;
+            font-size: 13px;
+            font-weight: 700;
+            font-family: 'Rubik', sans-serif;
+            outline: none;
+            transition: all 0.25s;
+        }
+        .cases-search:focus { border-color: var(--accent); background: var(--accent-very-dim); }
+        .cases-search::placeholder { color: #4a4d5e; }
 
-        .cases-grid { display: grid; grid-template-columns: 1fr; gap: 14px; }
+        .cases-title-main {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 20px;
+            font-weight: 900;
+            color: #fff;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            text-align: center;
+            padding: 8px 0 4px;
+            text-shadow: 0 0 20px rgba(245, 197, 66, 0.3);
+        }
+        .cases-subtitle-main {
+            color: #a8adb8;
+            font-size: 11px;
+            font-weight: 700;
+            text-align: center;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .cases-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            padding: 0 12px;
+        }
+        @media (min-width: 500px) {
+            .cases-grid { grid-template-columns: repeat(3, 1fr); }
+        }
 
         .case-card {
             position: relative;
             border-radius: 4px;
             border: 1px solid var(--glass-border);
-            background: rgba(255, 255, 255, 0.04);
+            background: rgba(255, 255, 255, 0.03);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             overflow: hidden;
-            transition: all 0.3s;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             box-shadow: inset 0 1px 0 var(--glass-highlight);
+            cursor: pointer;
         }
-        .case-card:hover { border-color: var(--accent); box-shadow: 0 0 25px var(--accent-dim), inset 0 1px 0 var(--glass-highlight); transform: translateY(-2px); }
-
+        .case-card:hover {
+            border-color: var(--accent);
+            box-shadow: 0 0 25px var(--accent-dim), inset 0 1px 0 var(--glass-highlight);
+            transform: translateY(-3px);
+        }
         .case-card-inner {
-            display: grid;
-            grid-template-columns: 110px 1fr;
-            gap: 12px;
-            padding: 14px;
+            display: flex;
+            flex-direction: column;
+            padding: 12px 10px 10px;
             align-items: center;
+            gap: 8px;
         }
         .case-img-wrap {
             position: relative;
-            width: 110px;
-            height: 110px;
+            width: 100%;
+            aspect-ratio: 1;
             border-radius: 4px;
             overflow: hidden;
             background: rgba(0, 0, 0, 0.3);
-            border: 1px solid var(--glass-border);
+            border: 1px solid rgba(255,255,255,0.06);
             display: flex;
             align-items: center;
             justify-content: center;
         }
         .case-img-wrap img {
-            width: 100%;
-            height: 100%;
+            width: 85%;
+            height: 85%;
             object-fit: contain;
             transition: transform 0.4s ease;
-            filter: drop-shadow(0 0 10px rgba(168, 85, 247, 0.4));
+            filter: drop-shadow(0 4px 12px rgba(0,0,0,0.5));
         }
         .case-card:hover .case-img-wrap img { transform: scale(1.08) rotate(-2deg); }
 
-        .case-info { min-width: 0; }
+        .case-info { width: 100%; text-align: center; }
         .case-name {
             font-family: 'Orbitron', sans-serif;
-            font-size: 15px;
+            font-size: 11px;
             font-weight: 900;
             color: #fff;
-            letter-spacing: 2px;
+            letter-spacing: 1.5px;
             text-transform: uppercase;
             margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
         .case-price {
             font-family: 'Orbitron', sans-serif;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 900;
             color: var(--accent-bright);
             display: flex;
             align-items: center;
-            gap: 5px;
-            margin-bottom: 8px;
+            justify-content: center;
+            gap: 4px;
         }
-        .case-price img { width: 15px; height: 15px; }
+        .case-price img { width: 14px; height: 14px; }
         .case-price .free-tag {
             background: linear-gradient(135deg, var(--green), var(--accent));
             color: #0a1a0f;
-            padding: 2px 10px;
+            padding: 1px 8px;
             border-radius: 2px;
-            font-size: 10px;
+            font-size: 9px;
             letter-spacing: 1px;
         }
         .case-price .cooldown-tag {
-            font-size: 10px;
+            font-size: 9px;
             color: #a8adb8;
             font-weight: 800;
-            letter-spacing: 0.5px;
+        }
+        .case-items-count {
+            font-size: 9px;
+            color: #6a6d7e;
+            font-weight: 700;
+            margin-top: 2px;
         }
 
-        .case-actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-        .case-open-btn {
-            padding: 10px 20px;
+        /* ===== CASE OPENING MODAL ===== */
+        .case-open-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 4000;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            background: radial-gradient(circle at 50% 0%, rgba(30, 40, 60, 0.95) 0%, rgba(5, 8, 12, 0.98) 100%);
+            backdrop-filter: blur(20px);
+            overflow-y: auto;
+            padding: 20px 0 30px;
+        }
+        .case-open-modal.show { display: flex; animation: caseModalIn 0.4s ease; }
+        @keyframes caseModalIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .case-open-header {
+            width: 100%;
+            max-width: 900px;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .case-back-btn {
+            padding: 8px 18px;
             border-radius: 3px;
             border: 1px solid var(--glass-border);
-            background: linear-gradient(135deg, #a855f7, #6b21a8);
-            color: #fff;
+            background: rgba(255,255,255,0.05);
+            color: #a8adb8;
             font-family: 'Orbitron', sans-serif;
             font-size: 11px;
             font-weight: 900;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.2s;
+            backdrop-filter: blur(10px);
+        }
+        .case-back-btn:hover { border-color: var(--accent); color: var(--accent-bright); background: var(--accent-very-dim); }
+        .case-open-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 16px;
+            font-weight: 900;
+            color: #fff;
             letter-spacing: 2px;
             text-transform: uppercase;
-            cursor: pointer;
-            transition: all 0.25s;
-            box-shadow: 0 4px 15px rgba(168, 85, 247, 0.3), inset 0 1px 0 rgba(255,255,255,0.1);
+            text-align: center;
         }
-        .case-open-btn:hover:not(:disabled) { filter: brightness(1.15); transform: translateY(-1px); box-shadow: 0 6px 22px rgba(168, 85, 247, 0.5); }
-        .case-open-btn:disabled { opacity: 0.35; cursor: not-allowed; background: #3a3d4d; box-shadow: none; }
-
-        .case-qty-selector {
+        .case-open-balance {
             display: flex;
             align-items: center;
-            gap: 4px;
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid var(--glass-border);
-            border-radius: 3px;
-            padding: 3px;
-        }
-        .case-qty-btn {
-            width: 30px;
-            height: 30px;
-            border-radius: 2px;
-            border: 1px solid transparent;
-            background: transparent;
-            color: #a8adb8;
+            gap: 5px;
             font-family: 'Orbitron', sans-serif;
             font-size: 13px;
             font-weight: 900;
-            cursor: pointer;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            color: #fff;
+            padding: 6px 12px;
+            background: rgba(0,0,0,0.4);
+            border-radius: 3px;
+            border: 1px solid var(--glass-border);
         }
-        .case-qty-btn:hover { color: #fff; background: rgba(255,255,255,0.06); }
-        .case-qty-btn.active { background: var(--accent-very-dim); border-color: var(--accent); color: var(--accent-bright); }
-        .case-qty-label {
+        .case-open-balance img { width: 16px; height: 16px; }
+
+        /* Case main image */
+        .case-open-main-img {
+            width: 200px;
+            height: 200px;
+            object-fit: contain;
+            margin: 10px auto 6px;
+            filter: drop-shadow(0 0 40px rgba(245, 197, 66, 0.3));
+            animation: caseMainFloat 3s ease-in-out infinite;
+        }
+        @keyframes caseMainFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+        .case-open-name {
             font-family: 'Orbitron', sans-serif;
-            font-size: 11px;
+            font-size: 18px;
             font-weight: 900;
             color: #fff;
-            min-width: 20px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
             text-align: center;
+            margin-bottom: 16px;
+            text-shadow: 0 0 20px rgba(245, 197, 66, 0.4);
         }
+
+        /* Scroll bar of items */
+        .case-scroll-container {
+            width: 100%;
+            max-width: 900px;
+            position: relative;
+            margin-bottom: 14px;
+            padding: 0 10px;
+        }
+        .case-scroll-viewport {
+            width: 100%;
+            overflow: hidden;
+            position: relative;
+            height: 130px;
+            border-radius: 3px;
+            background: rgba(0,0,0,0.4);
+            border: 1px solid var(--glass-border);
+        }
+        .case-scroll-track {
+            display: flex;
+            align-items: center;
+            height: 100%;
+            gap: 0;
+            will-change: transform;
+            transition: transform 0.1s linear;
+        }
+        .case-scroll-item {
+            flex: 0 0 110px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            padding: 6px;
+            border-right: 1px solid rgba(255,255,255,0.05);
+        }
+        .case-scroll-item img {
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+            filter: drop-shadow(0 0 6px rgba(0,0,0,0.5));
+        }
+        .case-scroll-item .scroll-name {
+            font-size: 8px;
+            font-weight: 800;
+            color: #e5e7ef;
+            text-align: center;
+            line-height: 1.1;
+            height: 20px;
+            overflow: hidden;
+            width: 100%;
+        }
+        .case-scroll-item .scroll-price {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 9px;
+            font-weight: 900;
+            color: var(--accent-bright);
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+        .case-scroll-item .scroll-price img { width: 10px; height: 10px; }
+
+        /* Center pointer */
+        .case-scroll-pointer {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 100%;
+            background: linear-gradient(180deg, transparent, var(--accent), transparent);
+            z-index: 10;
+            pointer-events: none;
+            box-shadow: 0 0 15px var(--accent);
+        }
+        .case-scroll-pointer::before {
+            content: '';
+            position: absolute;
+            top: -6px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-top: 10px solid var(--accent);
+            filter: drop-shadow(0 0 6px var(--accent));
+        }
+        .case-scroll-pointer::after {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-bottom: 10px solid var(--accent);
+            filter: drop-shadow(0 0 6px var(--accent));
+        }
+
+        /* Quantity buttons */
+        .case-qty-row {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 14px;
+            width: 100%;
+            max-width: 500px;
+            padding: 0 20px;
+        }
+        .case-qty-btn-big {
+            flex: 1;
+            padding: 14px 10px;
+            border-radius: 3px;
+            border: 1px solid var(--glass-border);
+            background: rgba(255,255,255,0.04);
+            backdrop-filter: blur(10px);
+            color: #a8adb8;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 16px;
+            font-weight: 900;
+            cursor: pointer;
+            transition: all 0.25s;
+        }
+        .case-qty-btn-big:hover { border-color: var(--accent); color: var(--accent-bright); }
+        .case-qty-btn-big.active {
+            background: linear-gradient(135deg, var(--accent), var(--amber));
+            border-color: var(--accent-bright);
+            color: #0a1a0f;
+            box-shadow: 0 0 15px var(--accent-dim);
+        }
+
+        /* Open button */
+        .case-open-action-btn {
+            width: 100%;
+            max-width: 500px;
+            padding: 16px;
+            border-radius: 3px;
+            border: 1px solid var(--glass-border);
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: #fff;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 15px;
+            font-weight: 900;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.25s;
+            box-shadow: 0 4px 20px rgba(59, 130, 246, 0.4), inset 0 1px 0 rgba(255,255,255,0.1);
+            margin-bottom: 20px;
+        }
+        .case-open-action-btn:hover:not(:disabled) { filter: brightness(1.15); transform: translateY(-2px); box-shadow: 0 6px 30px rgba(59, 130, 246, 0.6); }
+        .case-open-action-btn:disabled { opacity: 0.4; cursor: not-allowed; background: #3a3d4d; box-shadow: none; }
+
+        /* Possible rewards */
+        .case-possible-title {
+            width: 100%;
+            max-width: 900px;
+            padding: 0 20px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 10px;
+            font-weight: 900;
+            color: #a8adb8;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+        .case-possible-grid {
+            width: 100%;
+            max-width: 900px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(85px, 1fr));
+            gap: 6px;
+            padding: 0 16px;
+        }
+        .case-possible-item {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid var(--glass-border);
+            border-radius: 3px;
+            padding: 6px 4px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3px;
+        }
+        .case-possible-item img { width: 40px; height: 40px; object-fit: contain; }
+        .case-possible-item .cp-name { font-size: 7px; color: #e5e7ef; font-weight: 800; text-align: center; line-height: 1.1; height: 18px; overflow: hidden; }
+        .case-possible-item .cp-price { font-family: 'Orbitron', sans-serif; font-size: 9px; color: var(--accent-bright); font-weight: 900; display: flex; align-items: center; gap: 2px; }
+        .case-possible-item .cp-price img { width: 10px; height: 10px; }
 
         /* ===== CASE OPENING ANIMATION ===== */
         .case-anim-overlay {
@@ -405,7 +658,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            background: radial-gradient(circle at 50% 50%, rgba(168, 85, 247, 0.25) 0%, rgba(0, 0, 0, 0.95) 70%);
+            background: radial-gradient(circle at 50% 50%, rgba(59, 130, 246, 0.25) 0%, rgba(0, 0, 0, 0.95) 70%);
             overflow: hidden;
         }
         .case-anim-overlay.show {
@@ -418,8 +671,8 @@
             position: absolute;
             inset: 0;
             background:
-                radial-gradient(circle at 30% 40%, rgba(168, 85, 247, 0.2) 0%, transparent 50%),
-                radial-gradient(circle at 70% 60%, rgba(124, 58, 237, 0.15) 0%, transparent 50%);
+                radial-gradient(circle at 30% 40%, rgba(59, 130, 246, 0.2) 0%, transparent 50%),
+                radial-gradient(circle at 70% 60%, rgba(29, 78, 216, 0.15) 0%, transparent 50%);
             animation: caseBgPulse 3s ease-in-out infinite;
             pointer-events: none;
         }
@@ -440,7 +693,7 @@
             width: 100%;
             height: 100%;
             object-fit: contain;
-            filter: drop-shadow(0 0 30px #a855f7) drop-shadow(0 0 60px #7c3aed);
+            filter: drop-shadow(0 0 30px #3b82f6) drop-shadow(0 0 60px #1d4ed8);
         }
         .case-anim-box.opened { animation: caseBoxOpen 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
         @keyframes caseBoxOpen {
@@ -454,10 +707,10 @@
             font-size: 20px;
             font-weight: 900;
             letter-spacing: 6px;
-            color: #c084fc;
+            color: #60a5fa;
             margin-top: 30px;
             z-index: 2;
-            text-shadow: 0 0 20px #a855f7, 0 0 40px #7c3aed;
+            text-shadow: 0 0 20px #3b82f6, 0 0 40px #1d4ed8;
             animation: caseTextPulse 1.2s ease-in-out infinite;
         }
         @keyframes caseTextPulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.6; transform: scale(1.06); } }
@@ -473,8 +726,8 @@
             width: 6px;
             height: 6px;
             border-radius: 50%;
-            background: #c084fc;
-            box-shadow: 0 0 15px #a855f7, 0 0 30px #7c3aed;
+            background: #60a5fa;
+            box-shadow: 0 0 15px #3b82f6, 0 0 30px #1d4ed8;
             animation: caseParticleAnim linear infinite;
         }
         @keyframes caseParticleAnim {
@@ -485,9 +738,9 @@
 
         /* ===== CASE RESULT MODAL ===== */
         .case-result-card {
-            background: linear-gradient(135deg, rgba(20, 8, 3, 0.98), rgba(45, 15, 5, 0.98)) !important;
-            border: 1px solid #a855f7 !important;
-            box-shadow: 0 0 60px rgba(168, 85, 247, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+            background: linear-gradient(135deg, rgba(10, 20, 40, 0.98), rgba(20, 30, 60, 0.98)) !important;
+            border: 1px solid #3b82f6 !important;
+            box-shadow: 0 0 60px rgba(59, 130, 246, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
             padding: 30px 24px !important;
             position: relative;
             overflow: hidden;
@@ -502,7 +755,7 @@
             content: '';
             position: absolute;
             inset: 0;
-            background: radial-gradient(circle at 50% 30%, rgba(168, 85, 247, 0.15) 0%, transparent 60%);
+            background: radial-gradient(circle at 50% 30%, rgba(59, 130, 246, 0.15) 0%, transparent 60%);
             pointer-events: none;
             animation: caseBgPulse 4s ease-in-out infinite;
         }
@@ -510,7 +763,7 @@
             font-family: 'Orbitron', sans-serif;
             font-size: 12px;
             font-weight: 900;
-            color: #c084fc;
+            color: #60a5fa;
             letter-spacing: 3px;
             text-transform: uppercase;
             margin-bottom: 16px;
@@ -531,7 +784,7 @@
             content: '';
             position: absolute;
             inset: -20px;
-            background: radial-gradient(circle at 50% 50%, rgba(168, 85, 247, 0.5) 0%, transparent 60%);
+            background: radial-gradient(circle at 50% 50%, rgba(59, 130, 246, 0.5) 0%, transparent 60%);
             border-radius: 50%;
             animation: caseResultGlow 2s ease-in-out infinite;
             z-index: -1;
@@ -541,7 +794,7 @@
             width: 100%;
             height: 100%;
             object-fit: contain;
-            filter: drop-shadow(0 0 20px #a855f7);
+            filter: drop-shadow(0 0 20px #3b82f6);
             animation: caseResultImgFloat 3s ease-in-out infinite;
         }
         @keyframes caseResultImgFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
@@ -555,13 +808,13 @@
             text-align: center;
             position: relative;
             z-index: 1;
-            text-shadow: 0 0 12px rgba(168, 85, 247, 0.6);
+            text-shadow: 0 0 12px rgba(59, 130, 246, 0.6);
         }
         .case-result-price {
             font-family: 'Orbitron', sans-serif;
             font-size: 20px;
             font-weight: 900;
-            color: #c084fc;
+            color: #60a5fa;
             letter-spacing: 2px;
             margin-bottom: 18px;
             text-align: center;
@@ -571,11 +824,10 @@
             gap: 6px;
             position: relative;
             z-index: 1;
-            text-shadow: 0 0 15px #a855f7;
+            text-shadow: 0 0 15px #3b82f6;
         }
         .case-result-price img { width: 20px; height: 20px; object-fit: contain; }
 
-        /* Множественные результаты */
         .case-multi-results {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
@@ -586,7 +838,7 @@
         }
         .case-multi-item {
             background: rgba(0, 0, 0, 0.4);
-            border: 1px solid rgba(168, 85, 247, 0.35);
+            border: 1px solid rgba(59, 130, 246, 0.35);
             border-radius: 3px;
             padding: 8px 4px;
             display: flex;
@@ -596,7 +848,7 @@
             animation: multiItemPop 0.4s ease backwards;
         }
         @keyframes multiItemPop { from { opacity: 0; transform: scale(0.7); } to { opacity: 1; transform: scale(1); } }
-        .case-multi-item img { width: 44px; height: 44px; object-fit: contain; filter: drop-shadow(0 0 6px rgba(168, 85, 247, 0.5)); }
+        .case-multi-item img { width: 44px; height: 44px; object-fit: contain; filter: drop-shadow(0 0 6px rgba(59, 130, 246, 0.5)); }
         .case-multi-item .multi-name { font-size: 8px; color: #e5e7ef; font-weight: 800; text-align: center; line-height: 1.1; height: 18px; overflow: hidden; }
         .case-multi-item .multi-price { font-family: 'Orbitron', sans-serif; font-size: 10px; color: var(--accent-bright); font-weight: 900; display: flex; align-items: center; gap: 3px; }
         .case-multi-item .multi-price img { width: 10px; height: 10px; }
@@ -605,7 +857,7 @@
             margin-top: 14px;
             padding: 12px;
             background: rgba(0, 0, 0, 0.4);
-            border: 1px solid rgba(168, 85, 247, 0.35);
+            border: 1px solid rgba(59, 130, 246, 0.35);
             border-radius: 3px;
             position: relative;
             z-index: 1;
@@ -622,7 +874,7 @@
             text-transform: uppercase;
             padding: 4px 0;
         }
-        .case-multi-summary > div > span { color: #c084fc; font-size: 14px; text-shadow: 0 0 10px rgba(168, 85, 247, 0.6); }
+        .case-multi-summary > div > span { color: #60a5fa; font-size: 14px; text-shadow: 0 0 10px rgba(59, 130, 246, 0.6); }
 
         /* Admin / deposit etc */
         .admin-header { background: linear-gradient(135deg, rgba(46,204,113,0.15), rgba(245,197,66,0.15)); border: 1px solid var(--glass-border); border-radius: 4px; padding: 16px; margin-bottom: 16px; display: flex; align-items: center; gap: 14px; position: relative; overflow: hidden; }
@@ -1009,9 +1261,8 @@
             .nav-btn-fuse { width: 50px; height: 50px; min-width: 50px; min-height: 50px; }
             .nav-btn-fuse img { width: 34px; height: 34px; }
             .nav-btn-fuse .fuse-label { font-size: 6px; }
-            .nav-btn-cases { width: 50px; height: 50px; min-width: 50px; min-height: 50px; }
-            .nav-btn-cases img { width: 34px; height: 34px; }
-            .nav-btn-cases .case-label { font-size: 6px; }
+            .nav-btn-cases { width: 38px; height: 38px; min-width: 38px; min-height: 38px; }
+            .nav-btn-cases img { padding: 3px; }
             .progress-wrapper { width: 260px; height: 260px; }
             .chance-big { font-size: 36px; }
             .item-box { min-width: 0; padding: 10px; max-width: none; }
@@ -1066,13 +1317,20 @@
                 from { transform: rotate(0deg) translateX(42px) rotate(0deg); }
                 to { transform: rotate(360deg) translateX(42px) rotate(-360deg); }
             }
-            .case-card-inner { grid-template-columns: 90px 1fr; gap: 10px; padding: 10px; }
-            .case-img-wrap { width: 90px; height: 90px; }
-            .case-name { font-size: 13px; }
-            .case-price { font-size: 11px; }
-            .case-open-btn { padding: 8px 14px; font-size: 9px; }
-            .case-qty-btn { width: 26px; height: 26px; font-size: 11px; }
-            .case-qty-label { font-size: 9px; min-width: 16px; }
+            .case-card-inner { padding: 10px 8px 8px; }
+            .case-name { font-size: 9px; }
+            .case-price { font-size: 10px; }
+            .case-img-wrap img { width: 75%; height: 75%; }
+            .cases-grid { gap: 8px; padding: 0 8px; }
+            .case-open-main-img { width: 140px; height: 140px; }
+            .case-open-name { font-size: 14px; }
+            .case-scroll-item { flex: 0 0 90px; }
+            .case-scroll-item img { width: 48px; height: 48px; }
+            .case-scroll-viewport { height: 110px; }
+            .case-qty-btn-big { padding: 12px 6px; font-size: 14px; }
+            .case-open-action-btn { padding: 14px; font-size: 13px; letter-spacing: 2px; }
+            .case-possible-grid { grid-template-columns: repeat(auto-fill, minmax(70px, 1fr)); gap: 5px; padding: 0 10px; }
+            .case-possible-item img { width: 32px; height: 32px; }
             .case-anim-box { width: 150px; height: 150px; }
             .case-anim-text { font-size: 15px; letter-spacing: 4px; }
             .case-result-img-wrap { width: 110px; height: 110px; }
@@ -1112,19 +1370,10 @@
             <label class="form-label">Выбери предмет для пополнения</label>
             <div class="topup-grid" id="topupGrid"></div>
         </div>
-        <div class="form-group">
-            <label class="form-label">Промокод (только активный)</label>
-            <div class="promo-input-row">
-                <input type="text" class="form-input" id="topupPromoInput" placeholder="ПРОМОКОД" maxlength="30">
-                <button class="promo-apply-btn" onclick="applyTopupPromo()">ОК</button>
-            </div>
-            <div class="msg" id="topupPromoMsg"></div>
-        </div>
         <div class="topup-price-line" id="topupPriceLine" style="display:none;">
             <div class="tpl-label">Цена:</div>
             <div class="tpl-value" id="topupPriceValue">0</div>
         </div>
-        <div class="topup-promo-active" id="topupPromoActive"></div>
         <div class="form-group" style="margin-top: 12px;">
             <label class="form-label">Твой Roblox ник</label>
             <input type="text" class="form-input" id="topupRoblox" placeholder="Введи ник в Roblox" maxlength="40">
@@ -1285,6 +1534,40 @@
         <img src="" alt="case" id="caseAnimImg">
     </div>
     <div class="case-anim-text" id="caseAnimText">ОТКРЫВАЕМ...</div>
+</div>
+
+<!-- CASE OPEN MODAL (Detail view) -->
+<div class="case-open-modal" id="caseOpenModal">
+    <div class="case-open-header">
+        <button class="case-back-btn" onclick="closeCaseOpen()">← Назад к кейсам</button>
+        <div class="case-open-balance">
+            <img src="https://github.com/saintezz/saintbetW/blob/main/%D0%BC%D0%BE%D0%BD%D0%B5%D1%82%D0%B0.png?raw=true" alt="coin">
+            <span id="caseOpenBalance">0</span>
+        </div>
+    </div>
+    <img class="case-open-main-img" id="caseOpenImg" src="" alt="case">
+    <div class="case-open-name" id="caseOpenName">—</div>
+
+    <!-- Scroll animation -->
+    <div class="case-scroll-container">
+        <div class="case-scroll-viewport">
+            <div class="case-scroll-track" id="caseScrollTrack"></div>
+            <div class="case-scroll-pointer"></div>
+        </div>
+    </div>
+
+    <!-- Quantity selector -->
+    <div class="case-qty-row">
+        <button class="case-qty-btn-big active" data-qty="1" onclick="setCaseOpenQty(1)">1</button>
+        <button class="case-qty-btn-big" data-qty="2" onclick="setCaseOpenQty(2)">2</button>
+        <button class="case-qty-btn-big" data-qty="3" onclick="setCaseOpenQty(3)">3</button>
+        <button class="case-qty-btn-big" data-qty="4" onclick="setCaseOpenQty(4)">5</button>
+    </div>
+
+    <button class="case-open-action-btn" id="caseOpenActionBtn" onclick="confirmOpenCase()">ОТКРЫТЬ КЕЙС</button>
+
+    <div class="case-possible-title">ЧТО МОЖЕТ ВЫПАСТЬ</div>
+    <div class="case-possible-grid" id="casePossibleGrid"></div>
 </div>
 
 <div class="app">
@@ -1458,9 +1741,10 @@
     <div class="tab-panel" id="panelCases">
         <div class="cases-page">
             <div class="cases-header">
-                <div class="cases-title">КЕЙСЫ</div>
-                <div class="cases-subtitle">Открывай кейсы и получай брейнротов и монеты</div>
+                <input type="text" class="cases-search" id="caseSearchInput" placeholder="Поиск кейса" oninput="filterCases(this.value)">
             </div>
+            <div class="cases-title-main">КЕЙСЫ</div>
+            <div class="cases-subtitle-main">Открывай кейсы и получай брейнротов и монеты</div>
             <div class="cases-grid" id="casesGrid"></div>
         </div>
     </div>
@@ -1618,18 +1902,11 @@
     <div class="tab-panel active" id="panelMenu">
         <div class="menu-page">
             <div class="menu-promo-card">
-                <div class="menu-promo-label-top">КАРТИНКА ПРОМОКОДА</div>
-                <img class="menu-promo-img" id="menuPromoImg" src="" alt="">
-                <div class="menu-promo-percent" id="menuPromoPercent">+0%</div>
-                <div class="menu-promo-code-box" id="menuPromoCodeBox">•••••••• - 0% к пополнению</div>
-                <div class="menu-promo-timer">
-                    <span class="t-icon">T</span>
-                    <span>Обновится через: <b id="menuPromoTimer">10:00</b></span>
-                </div>
-                <div class="menu-promo-hint">
-                    Введи активный промокод в окне пополнения,<br>
-                    чтобы получить бонус к сумме заявки.
-                </div>
+                <div class="menu-promo-label-top">КЕЙСЫ</div>
+                <img class="menu-promo-img" id="menuCaseImg" src="https://github.com/saintezz/ggbrainXv2/blob/main/OGCASE.jpg?raw=true" alt="case">
+                <div class="menu-promo-percent" id="menuCaseTitle">OG CASE</div>
+                <div class="menu-promo-code-box" id="menuCaseDesc">Открой кейс и получи редкого брейнрота</div>
+                <button class="action-btn" onclick="switchTab('cases')" style="margin-top:8px;">ПЕРЕЙТИ К КЕЙСАМ</button>
             </div>
         </div>
     </div>
@@ -1652,10 +1929,9 @@
             <path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/>
         </svg>
     </button>
-    <!-- CASES NAV BUTTON -->
+    <!-- CASES NAV BUTTON — обычная, без фиолетового -->
     <button class="nav-btn nav-btn-cases" id="navCases" onclick="switchTab('cases')" title="Кейсы">
         <img src="https://github.com/saintezz/ggbrainXv2/blob/main/OGCASE.jpg?raw=true" alt="Cases">
-        <span class="case-label">CASE</span>
     </button>
     <button class="nav-btn" id="navTrade" onclick="switchTab('trade')" title="Обмен">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -1710,7 +1986,8 @@
         { id: 'skibidi', name: 'Skibidi Toilet', price: 13154, img: 'https://github.com/forerer-afk/brainroterX/blob/main/skibidi-toilet.png?raw=true' },
         { id: 'meowl', name: 'Meowl', price: 16839, img: 'https://github.com/forerer-afk/brainroterX/blob/main/meowl.png?raw=true' },
         { id: 'signorecarapace', name: 'Signore Carapace', price: 35000, img: 'https://github.com/forerer-afk/brainroterX/blob/main/singore-carapace.png?raw=true' },
-        { id: 'strawberryelephant', name: 'Strawberry Elephant', price: 41400, img: 'https://github.com/forerer-afk/brainroterX/blob/main/strawberry-elefanto.png?raw=true' }
+        { id: 'strawberryelephant', name: 'Strawberry Elephant', price: 41400, img: 'https://github.com/forerer-afk/brainroterX/blob/main/strawberry-elefanto.png?raw=true' },
+        { id: 'polaroidini', name: 'Polaroidini', price: 40000, img: 'https://github.com/saintezz/ggbrainXv2/blob/main/Polaroidini.png?raw=true' }
     ];
 
     // ===== КЕЙСЫ =====
@@ -1745,7 +2022,7 @@
             id: 'free',
             name: 'FREE CASE',
             price: 0,
-            freeCooldown: 24 * 60 * 60 * 1000, // 24 часа
+            freeCooldown: 24 * 60 * 60 * 1000,
             img: 'https://github.com/saintezz/ggbrainXv2/blob/main/freecase.jpg?raw=true',
             rewards: [
                 { balance: 3, chance: 70 },
@@ -1759,7 +2036,7 @@
             id: 'easter',
             name: 'EASTER CASE',
             price: 45,
-            img: 'https://github.com/saintezz/ggbrainXv2/blob/main/EasteCase.jpg?raw=true',
+            img: 'https://github.com/saintezz/ggbrainXv2/blob/main/eastercase.png?raw=true',
             rewards: [
                 { balance: 17, chance: 40 },
                 { balance: 20, chance: 40 },
@@ -1773,7 +2050,7 @@
             id: 'newyear',
             name: 'NEW YEAR CASE',
             price: 241,
-            img: 'https://github.com/saintezz/ggbrainXv2/blob/main/NewYearCase.jpg?raw=true',
+            img: 'https://github.com/saintezz/ggbrainXv2/blob/main/NEWYEARCASE.png?raw=true',
             rewards: [
                 { itemId: 'jolly', chance: 60 },
                 { itemId: 'losamigos', chance: 20 },
@@ -1786,11 +2063,21 @@
             id: 'fusing',
             name: 'FUSING CASE',
             price: 1830,
-            img: 'https://github.com/saintezz/ggbrainXv2/blob/main/FusingCase.jpg?raw=true',
+            img: 'https://github.com/saintezz/ggbrainXv2/blob/main/FUSINGCASE.png?raw=true',
             rewards: [
                 { itemId: 'dragon', chance: 70 },
                 { itemId: 'hydra', chance: 20 },
                 { itemId: 'kraken', chance: 10 }
+            ]
+        },
+        {
+            id: 'winter',
+            name: 'WINTER CASE',
+            price: 49,
+            img: 'https://github.com/saintezz/ggbrainXv2/blob/main/WINTERCASE.png?raw=true',
+            rewards: [
+                { balance: 49, chance: 99.9 },
+                { itemId: 'polaroidini', chance: 0.1 }
             ]
         }
     ];
@@ -1821,13 +2108,6 @@
         return '';
     }
 
-    const TOPUP_PROMOS = [
-        { code: 'CLONEXX744',      percent: 12, img: 'https://github.com/saintezz/ggbrainXv2/raw/main/CLONEXX12PROCENTOV.png' },
-        { code: 'SAMMYBURGER23',   percent: 10, img: 'https://github.com/saintezz/ggbrainXv2/raw/main/SAMMYBURGER10PROCENTOV.png' },
-        { code: 'GGBRAINX2131',    percent: 4,  img: 'https://github.com/saintezz/ggbrainXv2/raw/main/ggbrainx4PROCENTA.png' },
-        { code: 'ECLIPSE9403',     percent: 8,  img: 'https://github.com/saintezz/ggbrainXv2/raw/main/eclipse9403.png' }
-    ];
-    const PROMO_ROTATION_MS = 10 * 60 * 1000;
     const API_URL = 'https://ggbrainx.onrender.com';
 
     const TRADE_RECIPES = [
@@ -1856,7 +2136,6 @@
     let inventory = JSON.parse(localStorage.getItem('ggbrainx_inventory') || '[]');
     let deposits = [];
     let topupSelectedItem = null;
-    let appliedTopupPromo = null;
     let isAdmin = false;
 
     let accentColor = localStorage.getItem('ggbrainx_accent') || '#f5c542';
@@ -1874,12 +2153,11 @@
     // Free case cooldown
     let freeCaseLastOpen = parseFloat(localStorage.getItem('ggbrainx_free_case_last') || '0');
 
-    // Case quantity selection
-    let caseQuantities = {};
-    CASES.forEach(c => caseQuantities[c.id] = 1);
-
-    // Case opening state
+    // Case state
+    let currentCaseId = null;
+    let caseOpenQty = 1;
     let isCaseOpening = false;
+    let currentCaseFilter = '';
 
     function saveLocalCache() {
         localStorage.setItem('ggbrainx_balance', String(balance));
@@ -2377,54 +2655,23 @@
             `;
         }).join('');
     }
-    function getCurrentPromoIndex() { const slot = Math.floor(Date.now() / PROMO_ROTATION_MS); return slot % TOPUP_PROMOS.length; }
-    function getCurrentPromo() { return TOPUP_PROMOS[getCurrentPromoIndex()]; }
-    function getSecondsToNextPromo() {
-        const now = Date.now();
-        const next = (Math.floor(now / PROMO_ROTATION_MS) + 1) * PROMO_ROTATION_MS;
-        return Math.max(0, Math.floor((next - now) / 1000));
-    }
     function renderMenuPromo() {
-        const promo = getCurrentPromo();
-        document.getElementById('menuPromoImg').src = promo.img;
-        document.getElementById('menuPromoImg').onerror = function() { this.src = 'https://via.placeholder.com/280?text=%2B' + promo.percent + '%25'; };
-        document.getElementById('menuPromoPercent').textContent = '+' + promo.percent + '%';
-        document.getElementById('menuPromoCodeBox').textContent = '•••••••• - ' + promo.percent + '% к пополнению';
-        updateMenuTimer();
+        // Теперь на главной просто кейсы
+        const featuredCase = CASES[0];
+        const img = document.getElementById('menuCaseImg');
+        const title = document.getElementById('menuCaseTitle');
+        const desc = document.getElementById('menuCaseDesc');
+        if (img) { img.src = featuredCase.img; img.onerror = function() { this.src = 'https://via.placeholder.com/280?text=CASE'; }; }
+        if (title) title.textContent = featuredCase.name;
+        if (desc) desc.textContent = 'Открой кейс и получи редкого брейнрота';
     }
-    function updateMenuTimer() {
-        const sec = getSecondsToNextPromo();
-        const m = Math.floor(sec / 60);
-        const s = sec % 60;
-        document.getElementById('menuPromoTimer').textContent = String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
-    }
-    setInterval(() => {
-        if (document.getElementById('panelMenu').classList.contains('active')) {
-            updateMenuTimer();
-            const promo = getCurrentPromo();
-            const img = document.getElementById('menuPromoImg');
-            const percent = document.getElementById('menuPromoPercent');
-            const codeBox = document.getElementById('menuPromoCodeBox');
-            if (img && img.dataset.idx !== String(getCurrentPromoIndex())) {
-                img.dataset.idx = String(getCurrentPromoIndex());
-                img.src = promo.img;
-                percent.textContent = '+' + promo.percent + '%';
-                codeBox.textContent = '•••••••• - ' + promo.percent + '% к пополнению';
-            }
-        }
-    }, 1000);
     window.openTopup = function() {
         playClick();
         vibrate(10);
         renderTopupGrid();
         document.getElementById('topupRoblox').value = '';
-        document.getElementById('topupPromoInput').value = '';
-        document.getElementById('topupPromoMsg').textContent = '';
-        document.getElementById('topupPromoMsg').className = 'msg';
         document.getElementById('topupMsg').textContent = '';
         document.getElementById('topupMsg').className = 'msg';
-        document.getElementById('topupPromoActive').textContent = '';
-        appliedTopupPromo = null;
         topupSelectedItem = null;
         updateTopupPrice();
         openModal('topupModal');
@@ -2449,61 +2696,15 @@
     function updateTopupPrice() {
         const line = document.getElementById('topupPriceLine');
         const val = document.getElementById('topupPriceValue');
-        const active = document.getElementById('topupPromoActive');
         if (!topupSelectedItem) {
             line.style.display = 'none';
-            active.textContent = '';
             return;
         }
         const item = getItemById(topupSelectedItem);
         if (!item) return;
         line.style.display = 'flex';
-        if (appliedTopupPromo) {
-            const newPrice = Math.round(item.price * (1 + appliedTopupPromo.percent / 100));
-            val.innerHTML = `<span style="color:#a8adb8;text-decoration:line-through;margin-right:6px;">${item.price}</span> <span style="color:var(--accent-bright);">${newPrice}</span> <img src="${COIN_IMG}">`;
-            active.textContent = `+${appliedTopupPromo.percent}%`;
-        } else {
-            val.innerHTML = `${item.price} <img src="${COIN_IMG}">`;
-            active.textContent = '';
-        }
+        val.innerHTML = `${item.price} <img src="${COIN_IMG}">`;
     }
-    window.applyTopupPromo = function() {
-        playClick();
-        vibrate(10);
-        const input = document.getElementById('topupPromoInput');
-        const msg = document.getElementById('topupPromoMsg');
-        const code = input.value.trim().toUpperCase();
-        if (!code) { msg.className = 'msg err'; msg.textContent = 'Введи промокод'; return; }
-        const currentPromo = getCurrentPromo();
-        if (code !== currentPromo.code) {
-            appliedTopupPromo = null;
-            msg.className = 'msg err';
-            msg.textContent = 'Этот промокод не действует';
-            updateTopupPrice();
-            playLose();
-            return;
-        }
-        appliedTopupPromo = { code: currentPromo.code, percent: currentPromo.percent };
-        msg.className = 'msg ok';
-        msg.textContent = 'ПРОМОКОД АКТИВИРОВАН';
-        updateTopupPrice();
-        playCoin();
-    };
-    document.getElementById('topupPromoInput')?.addEventListener('input', function() {
-        const code = this.value.trim().toUpperCase();
-        const msg = document.getElementById('topupPromoMsg');
-        if (!code) {
-            msg.textContent = ''; msg.className = 'msg';
-            appliedTopupPromo = null; updateTopupPrice(); return;
-        }
-        const currentPromo = getCurrentPromo();
-        if (code === currentPromo.code) {
-            msg.className = 'msg ok'; msg.textContent = 'Промокод найден, нажми ОК';
-        } else {
-            msg.className = 'msg err'; msg.textContent = 'Недействующий промокод';
-            appliedTopupPromo = null; updateTopupPrice();
-        }
-    });
     window.createDeposit = async function() {
         const msg = document.getElementById('topupMsg');
         const roblox = document.getElementById('topupRoblox').value.trim();
@@ -2511,12 +2712,6 @@
         if (!roblox) { msg.className = 'msg err'; msg.textContent = 'Введи Roblox ник'; return; }
         const item = getItemById(topupSelectedItem);
         if (!item) return;
-        let finalPrice = item.price;
-        let bonusText = '';
-        if (appliedTopupPromo) {
-            finalPrice = Math.round(item.price * (1 + appliedTopupPromo.percent / 100));
-            bonusText = ` (с промокодом +${appliedTopupPromo.percent}%)`;
-        }
         msg.className = 'msg wait'; msg.textContent = 'Отправляем заявку...';
         try {
             const res = await fetch(API_URL + '/api/deposit/create', {
@@ -2526,16 +2721,14 @@
                     telegram_id: getTelegramId(),
                     username: USER.username || '',
                     item_id: item.id, item_name: item.name,
-                    item_price: finalPrice, base_price: item.price,
-                    promo_code: appliedTopupPromo ? appliedTopupPromo.code : '',
-                    promo_percent: appliedTopupPromo ? appliedTopupPromo.percent : 0,
+                    item_price: item.price, base_price: item.price,
                     roblox_name: roblox
                 })
             });
             const data = await res.json();
             if (data.ok) {
                 msg.className = 'msg ok';
-                msg.textContent = `Заявка отправлена!${bonusText}`;
+                msg.textContent = `Заявка отправлена!`;
                 showToast('Заявка отправлена!', 'ok');
                 playCoin();
                 vibrate(15);
@@ -2569,20 +2762,14 @@
         }
         list.innerHTML = pending.map(d => {
             const item = getItemById(d.item_id) || { img: '', name: d.item_name };
-            const basePrice = d.base_price || d.item_price;
             const finalPrice = d.item_price;
-            const promoLine = d.promo_code
-                ? `<div class="dep-line"><span class="dep-key">Промо:</span> <span class="dep-val green">${d.promo_code} (+${d.promo_percent}%)</span></div>` : '';
-            const priceLine = d.promo_code
-                ? `<div class="dep-line"><span class="dep-key">Цена:</span> <span class="dep-val">${basePrice} → <b style="color:var(--green-bright);">${finalPrice}</b></span></div>`
-                : `<div class="dep-line"><span class="dep-key">Цена:</span> <span class="dep-val accent">${finalPrice}</span></div>`;
             return `
                 <div class="deposit-item">
                     <img src="${item.img}" alt="" onerror="this.style.display='none'">
                     <div class="deposit-info">
                         <div class="dep-line"><span class="dep-key">TG:</span> <span class="dep-val accent">@${d.username || '—'}</span></div>
                         <div class="dep-line"><span class="dep-key">Предмет:</span> <span class="dep-val">${d.item_name}</span></div>
-                        ${priceLine}${promoLine}
+                        <div class="dep-line"><span class="dep-key">Цена:</span> <span class="dep-val accent">${finalPrice}</span></div>
                         <div class="dep-line"><span class="dep-key">Roblox:</span> <span class="dep-val">${d.roblox_name}</span></div>
                     </div>
                     <div class="deposit-actions">
@@ -3109,35 +3296,23 @@
     function renderCases() {
         const grid = document.getElementById('casesGrid');
         if (!grid) return;
-        const now = Date.now();
-        grid.innerHTML = CASES.map(c => {
-            const qty = caseQuantities[c.id] || 1;
+        const filter = (currentCaseFilter || '').toLowerCase();
+        const filtered = CASES.filter(c => c.name.toLowerCase().includes(filter));
+        if (!filtered.length) {
+            grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:30px;color:#6a6d7e;font-size:12px;">Ничего не найдено</div>';
+            return;
+        }
+        grid.innerHTML = filtered.map(c => {
+            const itemsCount = c.rewards.filter(r => r.itemId).length;
+            const totalRewards = c.rewards.length;
             let priceHtml = '';
-            let canOpen = true;
-            let openLabel = 'ОТКРЫТЬ';
             if (c.id === 'free') {
-                const timeLeft = c.freeCooldown - (now - freeCaseLastOpen);
-                if (timeLeft > 0) {
-                    const hours = Math.floor(timeLeft / 3600000);
-                    const mins = Math.floor((timeLeft % 3600000) / 60000);
-                    priceHtml = `<span class="free-tag">FREE</span> <span class="cooldown-tag">через ${hours}ч ${mins}м</span>`;
-                    canOpen = false;
-                    openLabel = 'ЖДИ';
-                } else {
-                    priceHtml = `<span class="free-tag">FREE</span>`;
-                    canOpen = true;
-                }
+                priceHtml = `<span class="free-tag">FREE</span>`;
             } else {
                 priceHtml = `${c.price} <img src="${COIN_IMG}" alt="coin">`;
-                if (balance < c.price * qty) canOpen = false;
             }
-            // Check if can open multiple
-            const totalPrice = c.id === 'free' ? 0 : c.price * qty;
-            if (c.id !== 'free' && balance < totalPrice) canOpen = false;
-            if (c.id === 'free' && qty > 1) { canOpen = false; openLabel = '1 ШТ'; }
-            const isDisabled = !canOpen || isCaseOpening;
             return `
-                <div class="case-card">
+                <div class="case-card" onclick="openCaseDetail('${c.id}')">
                     <div class="case-card-inner">
                         <div class="case-img-wrap">
                             <img src="${c.img}" alt="${c.name}" onerror="this.src='https://via.placeholder.com/100?text=?'">
@@ -3145,20 +3320,7 @@
                         <div class="case-info">
                             <div class="case-name">${c.name}</div>
                             <div class="case-price">${priceHtml}</div>
-                            <div class="case-actions">
-                                <div class="case-qty-selector">
-                                    ${[1,2,3,4].map(n => `
-                                        <button class="case-qty-btn ${qty === n ? 'active' : ''}" 
-                                                onclick="setCaseQty('${c.id}', ${n})" 
-                                                ${c.id === 'free' && n > 1 ? 'disabled style="opacity:0.25;cursor:not-allowed;"' : ''}>
-                                            ${n}
-                                        </button>
-                                    `).join('')}
-                                </div>
-                                <button class="case-open-btn" onclick="openCase('${c.id}')" ${isDisabled ? 'disabled' : ''}>
-                                    ${openLabel}
-                                </button>
-                            </div>
+                            <div class="case-items-count">${totalRewards} предметов</div>
                         </div>
                     </div>
                 </div>
@@ -3166,15 +3328,132 @@
         }).join('');
     }
 
-    window.setCaseQty = function(caseId, qty) {
-        if (isCaseOpening) return;
-        playClick();
-        vibrate(8);
-        const c = CASES.find(x => x.id === caseId);
-        if (c && c.id === 'free' && qty > 1) return;
-        caseQuantities[caseId] = qty;
+    window.filterCases = function(val) {
+        currentCaseFilter = val;
         renderCases();
     };
+
+    window.openCaseDetail = function(caseId) {
+        if (isCaseOpening) return;
+        const c = CASES.find(x => x.id === caseId);
+        if (!c) return;
+        currentCaseId = caseId;
+        caseOpenQty = 1;
+        document.querySelectorAll('.case-qty-btn-big').forEach(b => {
+            b.classList.toggle('active', b.dataset.qty === '1');
+        });
+        document.getElementById('caseOpenImg').src = c.img;
+        document.getElementById('caseOpenName').textContent = c.name;
+        document.getElementById('caseOpenBalance').textContent = balance.toLocaleString('ru-RU');
+        // Build scroll track
+        const track = document.getElementById('caseScrollTrack');
+        const scrollItems = [];
+        // repeat rewards many times for scroll effect
+        for (let r = 0; r < 30; r++) {
+            c.rewards.forEach(rew => {
+                if (rew.itemId) {
+                    const item = getItemById(rew.itemId);
+                    if (item) {
+                        scrollItems.push({ type: 'item', item: item });
+                    }
+                } else if (rew.balance) {
+                    scrollItems.push({ type: 'balance', amount: rew.balance });
+                }
+            });
+        }
+        track.innerHTML = scrollItems.map((si, idx) => {
+            if (si.type === 'item') {
+                return `
+                    <div class="case-scroll-item">
+                        <img src="${si.item.img}" alt="${si.item.name}" onerror="this.src='https://via.placeholder.com/40?text=?'">
+                        <div class="scroll-name">${si.item.name}</div>
+                        <div class="scroll-price"><img src="${COIN_IMG}"> ${si.item.price}</div>
+                    </div>
+                `;
+            } else {
+                return `
+                    <div class="case-scroll-item">
+                        <img src="${COIN_IMG}" alt="coin" style="width:40px;height:40px;">
+                        <div class="scroll-name">Монеты</div>
+                        <div class="scroll-price"><img src="${COIN_IMG}"> +${si.amount}</div>
+                    </div>
+                `;
+            }
+        }).join('');
+        // Build possible rewards
+        const possGrid = document.getElementById('casePossibleGrid');
+        possGrid.innerHTML = c.rewards.map(rew => {
+            if (rew.itemId) {
+                const item = getItemById(rew.itemId);
+                if (!item) return '';
+                return `
+                    <div class="case-possible-item">
+                        <img src="${item.img}" alt="${item.name}" onerror="this.src='https://via.placeholder.com/32?text=?'">
+                        <div class="cp-name">${item.name}</div>
+                        <div class="cp-price"><img src="${COIN_IMG}"> ${item.price}</div>
+                    </div>
+                `;
+            } else {
+                return `
+                    <div class="case-possible-item">
+                        <img src="${COIN_IMG}" alt="coin" style="width:32px;height:32px;">
+                        <div class="cp-name">Монеты</div>
+                        <div class="cp-price"><img src="${COIN_IMG}"> +${rew.balance}</div>
+                    </div>
+                `;
+            }
+        }).join('');
+        // Update open button state
+        updateCaseOpenButton();
+        // Show modal
+        document.getElementById('caseOpenModal').classList.add('show');
+        document.body.style.overflow = 'hidden';
+        playClick();
+        vibrate(10);
+    };
+
+    window.closeCaseOpen = function() {
+        document.getElementById('caseOpenModal').classList.remove('show');
+        document.body.style.overflow = '';
+        currentCaseId = null;
+    };
+
+    window.setCaseOpenQty = function(qty) {
+        if (isCaseOpening) return;
+        caseOpenQty = qty;
+        document.querySelectorAll('.case-qty-btn-big').forEach(b => {
+            b.classList.toggle('active', parseInt(b.dataset.qty) === qty);
+        });
+        updateCaseOpenButton();
+        playClick();
+        vibrate(8);
+    };
+
+    function updateCaseOpenButton() {
+        const c = CASES.find(x => x.id === currentCaseId);
+        if (!c) return;
+        const btn = document.getElementById('caseOpenActionBtn');
+        const totalPrice = c.id === 'free' ? 0 : c.price * caseOpenQty;
+        if (c.id === 'free') {
+            const now = Date.now();
+            const timeLeft = c.freeCooldown - (now - freeCaseLastOpen);
+            if (timeLeft > 0) {
+                btn.disabled = true;
+                btn.textContent = 'ЖДИ';
+            } else {
+                btn.disabled = false;
+                btn.textContent = 'ОТКРЫТЬ КЕЙС';
+            }
+        } else {
+            if (balance < totalPrice) {
+                btn.disabled = true;
+                btn.textContent = 'НЕДОСТАТОЧНО МОНЕТ';
+            } else {
+                btn.disabled = false;
+                btn.textContent = 'ОТКРЫТЬ КЕЙС';
+            }
+        }
+    }
 
     function pickCaseReward(c) {
         const totalChance = c.rewards.reduce((sum, r) => sum + r.chance, 0);
@@ -3227,11 +3506,11 @@
         });
     }
 
-    window.openCase = async function(caseId) {
+    window.confirmOpenCase = async function() {
         if (isCaseOpening) return;
-        const c = CASES.find(x => x.id === caseId);
+        const c = CASES.find(x => x.id === currentCaseId);
         if (!c) return;
-        const qty = caseQuantities[caseId] || 1;
+        const qty = caseOpenQty;
 
         // Free case cooldown check
         if (c.id === 'free') {
@@ -3254,7 +3533,7 @@
         }
 
         isCaseOpening = true;
-        renderCases();
+        closeCaseOpen();
 
         // Deduct balance
         if (c.id !== 'free') {
@@ -3272,7 +3551,7 @@
             results.push(reward);
         }
 
-        // Animation (use first case image)
+        // Animation
         await openCaseAnimation(c.img);
 
         // Apply rewards
@@ -3332,7 +3611,6 @@
                 `;
             }
         } else {
-            // Multiple results
             let html = '<div class="case-multi-results">';
             results.forEach((r, i) => {
                 if (r.balance) {
