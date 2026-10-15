@@ -1,4 +1,4 @@
-// server.js — GGBrainX API (Render-ready) + Live Drops
+// server.js — GGBrainX API (Render-ready) + Live Drops + полная синхронизация
 
 const http = require('http');
 const fs = require('fs');
@@ -10,38 +10,26 @@ const PROMO_FILE = path.join(DATA_DIR, 'promocodes.json');
 const USERS_FILE = path.join(DATA_DIR, 'users.json');
 const DEPOSITS_FILE = path.join(DATA_DIR, 'deposits.json');
 const LIVE_DROPS_FILE = path.join(DATA_DIR, 'live_drops.json');
+const USER_DROPS_FILE = path.join(DATA_DIR, 'user_drops.json');
 
-// ===== Хранилище =====
 let promocodes = {};
-let users = {};        // { telegram_id: { balance, inventory: [], username, roblox_name } }
-let deposits = [];     // [ { id, telegram_id, username, item_id, item_name, item_price, roblox_name, status, created_at } ]
-let liveDrops = [];    // [ { telegram_id, username, item_id, ts } ]
+let users = {};
+let deposits = [];
+let liveDrops = [];
+let userDrops = {};
 
 function ensureDataDir() {
-    try {
-        if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
-    } catch (e) {}
+    try { if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true }); } catch (e) {}
 }
-
 function loadJSON(file, fallback) {
     try {
-        if (fs.existsSync(file)) {
-            const raw = fs.readFileSync(file, 'utf8');
-            return JSON.parse(raw);
-        }
-    } catch (err) {
-        console.error('[ERROR] Load', file, err.message);
-    }
+        if (fs.existsSync(file)) return JSON.parse(fs.readFileSync(file, 'utf8'));
+    } catch (err) { console.error('[ERROR] Load', file, err.message); }
     return fallback;
 }
-
 function saveJSON(file, data) {
-    try {
-        ensureDataDir();
-        fs.writeFileSync(file, JSON.stringify(data, null, 2), 'utf8');
-    } catch (err) {
-        console.error('[ERROR] Save', file, err.message);
-    }
+    try { ensureDataDir(); fs.writeFileSync(file, JSON.stringify(data, null, 2), 'utf8'); }
+    catch (err) { console.error('[ERROR] Save', file, err.message); }
 }
 
 function loadAll() {
@@ -49,35 +37,38 @@ function loadAll() {
     users = loadJSON(USERS_FILE, {});
     deposits = loadJSON(DEPOSITS_FILE, []);
     liveDrops = loadJSON(LIVE_DROPS_FILE, []);
+    userDrops = loadJSON(USER_DROPS_FILE, {});
 
-    // Оставляем только дропы за последние 24 часа
     const cutoff = Date.now() - 24 * 60 * 60 * 1000;
-    liveDrops = liveDrops.filter(d => d.ts > cutoff).slice(0, 100);
+    liveDrops = liveDrops.filter(d => d.ts > cutoff).slice(0, 200);
+
+    const cutoff90 = Date.now() - 90 * 24 * 60 * 60 * 1000;
+    Object.keys(userDrops).forEach(id => {
+        userDrops[id] = userDrops[id].filter(d => d.ts > cutoff90).slice(0, 500);
+    });
 
     console.log('[OK] Промокодов:', Object.keys(promocodes).length,
                 '| Юзеров:', Object.keys(users).length,
                 '| Заявок:', deposits.length,
-                '| Дропов за 24ч:', liveDrops.length);
+                '| Live-дропов:', liveDrops.length);
 }
 
 function savePromos() { saveJSON(PROMO_FILE, promocodes); }
 function saveUsers() { saveJSON(USERS_FILE, users); }
 function saveDeposits() { saveJSON(DEPOSITS_FILE, deposits); }
 function saveLiveDrops() { saveJSON(LIVE_DROPS_FILE, liveDrops); }
+function saveUserDrops() { saveJSON(USER_DROPS_FILE, userDrops); }
 
-// ===== CORS =====
 function setCORS(res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 }
-
 function sendJSON(res, status, data) {
     setCORS(res);
     res.writeHead(status, { 'Content-Type': 'application/json; charset=utf-8' });
     res.end(JSON.stringify(data));
 }
-
 function readBody(req) {
     return new Promise((resolve, reject) => {
         let body = '';
@@ -90,24 +81,22 @@ function readBody(req) {
     });
 }
 
-// ===== Работа с юзером =====
 function ensureUser(telegramId, username) {
     if (!telegramId) telegramId = 'guest_' + Date.now();
     if (!users[telegramId]) {
         users[telegramId] = {
-            balance: 0,
-            inventory: [],
-            username: username || '',
-            roblox_name: '',
-            created_at: new Date().toISOString()
+            balance: 0, inventory: [], username: username || '',
+            roblox_name: '', custom_nick: '', avatar: '',
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
         };
     } else if (username && users[telegramId].username !== username) {
         users[telegramId].username = username;
+        users[telegramId].updated_at = new Date().toISOString();
     }
     return users[telegramId];
 }
 
-// ===== Очистка старых дропов (раз в минуту) =====
 function cleanupLiveDrops() {
     const cutoff = Date.now() - 24 * 60 * 60 * 1000;
     const before = liveDrops.length;
@@ -116,18 +105,33 @@ function cleanupLiveDrops() {
 }
 setInterval(cleanupLiveDrops, 60 * 1000);
 
-// ===== Сервер =====
+function getMoscowDayStart() {
+    const now = new Date();
+    const msk = new Date(now.getTime() + 3 * 60 * 60 * 1000);
+    msk.setUTCHours(0, 0, 0, 0);
+    return msk.getTime() - 3 * 60 * 60 * 1000;
+}
+function getMoscowWeekStart() {
+    const now = new Date();
+    const msk = new Date(now.getTime() + 3 * 60 * 60 * 1000);
+    const day = msk.getUTCDay() || 7;
+    msk.setUTCDate(msk.getUTCDate() - (day - 1));
+    msk.setUTCHours(0, 0, 0, 0);
+    return msk.getTime() - 3 * 60 * 60 * 1000;
+}
+function getMoscowMonthStart() {
+    const now = new Date();
+    const msk = new Date(now.getTime() + 3 * 60 * 60 * 1000);
+    msk.setUTCDate(1);
+    msk.setUTCHours(0, 0, 0, 0);
+    return msk.getTime() - 3 * 60 * 60 * 1000;
+}
+
 const server = http.createServer(async (req, res) => {
     console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
 
-    if (req.method === 'OPTIONS') {
-        setCORS(res);
-        res.writeHead(204);
-        res.end();
-        return;
-    }
+    if (req.method === 'OPTIONS') { setCORS(res); res.writeHead(204); res.end(); return; }
 
-    // ---- HEALTH-CHECK ----
     if (req.method === 'GET' && (req.url === '/' || req.url === '/health')) {
         setCORS(res);
         res.writeHead(200, { 'Content-Type': 'text/plain; charset=utf-8' });
@@ -136,17 +140,14 @@ const server = http.createServer(async (req, res) => {
     }
 
     try {
-        // ---- GET /api/promocodes ----
         if (req.method === 'GET' && req.url === '/api/promocodes') {
             sendJSON(res, 200, { ok: true, promocodes });
             return;
         }
 
-        // ---- POST /api/create ----
         if (req.method === 'POST' && req.url === '/api/create') {
             const body = await readBody(req);
             const { code, uses, type, value } = body;
-
             if (!code || typeof code !== 'string' || code.trim().length < 3)
                 return sendJSON(res, 400, { ok: false, error: 'Название минимум 3 символа' });
             if (!uses || uses < 1)
@@ -159,19 +160,15 @@ const server = http.createServer(async (req, res) => {
                 return sendJSON(res, 409, { ok: false, error: 'Промокод уже есть' });
 
             promocodes[upperCode] = {
-                code: upperCode,
-                uses: parseInt(uses),
-                type,
+                code: upperCode, uses: parseInt(uses), type,
                 value: type === 'balance' ? parseInt(value) : value,
                 createdAt: new Date().toISOString()
             };
-
             savePromos();
             sendJSON(res, 200, { ok: true, promo: promocodes[upperCode] });
             return;
         }
 
-        // ---- POST /api/activate ----
         if (req.method === 'POST' && req.url === '/api/activate') {
             const body = await readBody(req);
             const { code, telegram_id } = body;
@@ -185,23 +182,23 @@ const server = http.createServer(async (req, res) => {
             promo.uses -= 1;
             savePromos();
 
-            // Начисляем награду юзеру (если промокод денежный)
             if (telegram_id && promo.type === 'balance') {
                 const u = ensureUser(telegram_id);
                 u.balance = (u.balance || 0) + promo.value;
+                u.updated_at = new Date().toISOString();
+                saveUsers();
+            } else if (telegram_id && promo.type === 'item') {
+                const u = ensureUser(telegram_id);
+                if (!Array.isArray(u.inventory)) u.inventory = [];
+                u.inventory.push(promo.value);
+                u.updated_at = new Date().toISOString();
                 saveUsers();
             }
 
-            sendJSON(res, 200, {
-                ok: true,
-                type: promo.type,
-                value: promo.value,
-                remaining: promo.uses
-            });
+            sendJSON(res, 200, { ok: true, type: promo.type, value: promo.value, remaining: promo.uses });
             return;
         }
 
-        // ---- GET /api/user/:id ----
         if (req.method === 'GET' && req.url.startsWith('/api/user/')) {
             const id = decodeURIComponent(req.url.slice('/api/user/'.length));
             const u = ensureUser(id);
@@ -210,31 +207,30 @@ const server = http.createServer(async (req, res) => {
             return;
         }
 
-        // ---- POST /api/user/update ----
         if (req.method === 'POST' && req.url === '/api/user/update') {
             const body = await readBody(req);
-            const { telegram_id, balance, inventory, roblox_name } = body;
+            const { telegram_id, balance, inventory, roblox_name, custom_nick, avatar, username } = body;
             if (!telegram_id) return sendJSON(res, 400, { ok: false, error: 'telegram_id обязателен' });
 
-            const u = ensureUser(telegram_id);
+            const u = ensureUser(telegram_id, username);
             if (typeof balance === 'number' && !isNaN(balance)) u.balance = balance;
             if (Array.isArray(inventory)) u.inventory = inventory;
             if (typeof roblox_name === 'string') u.roblox_name = roblox_name;
+            if (typeof custom_nick === 'string') u.custom_nick = custom_nick;
+            if (typeof avatar === 'string') u.avatar = avatar;
+            u.updated_at = new Date().toISOString();
             saveUsers();
             sendJSON(res, 200, { ok: true, user: u });
             return;
         }
 
-        // ---- POST /api/deposit/create ----
         if (req.method === 'POST' && req.url === '/api/deposit/create') {
             const body = await readBody(req);
             const { telegram_id, username, item_id, item_name, item_price, roblox_name } = body;
-
             if (!telegram_id) return sendJSON(res, 400, { ok: false, error: 'telegram_id обязателен' });
             if (!item_id) return sendJSON(res, 400, { ok: false, error: 'Не выбран предмет' });
             if (!roblox_name || !roblox_name.trim()) return sendJSON(res, 400, { ok: false, error: 'Введите Roblox ник' });
 
-            // Сохраняем roblox_name в профиль
             const u = ensureUser(telegram_id, username);
             u.roblox_name = roblox_name.trim();
             saveUsers();
@@ -243,27 +239,22 @@ const server = http.createServer(async (req, res) => {
                 id: 'dep_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7),
                 telegram_id,
                 username: username || u.username || '',
-                item_id,
-                item_name: item_name || '',
+                item_id, item_name: item_name || '',
                 item_price: Number(item_price) || 0,
                 roblox_name: roblox_name.trim(),
-                status: 'pending',
-                created_at: new Date().toISOString()
+                status: 'pending', created_at: new Date().toISOString()
             };
             deposits.push(deposit);
             saveDeposits();
-            console.log('[OK] Заявка на пополнение:', deposit.id, 'от', username);
             sendJSON(res, 200, { ok: true, deposit });
             return;
         }
 
-        // ---- GET /api/deposits ----
         if (req.method === 'GET' && req.url === '/api/deposits') {
             sendJSON(res, 200, { ok: true, deposits });
             return;
         }
 
-        // ---- POST /api/deposit/status ----
         if (req.method === 'POST' && req.url === '/api/deposit/status') {
             const body = await readBody(req);
             const { id, status, admin } = body;
@@ -278,10 +269,10 @@ const server = http.createServer(async (req, res) => {
             dep.processed_at = new Date().toISOString();
             dep.processed_by = admin || '';
 
-            // Если принята — начисляем баланс
             if (status === 'accepted') {
                 const u = ensureUser(dep.telegram_id);
                 u.balance = (u.balance || 0) + (Number(dep.item_price) || 0);
+                u.updated_at = new Date().toISOString();
                 saveUsers();
             }
             saveDeposits();
@@ -289,8 +280,6 @@ const server = http.createServer(async (req, res) => {
             return;
         }
 
-        // ---- POST /api/live-drop ----
-        // Добавить дроп в общую ленту
         if (req.method === 'POST' && req.url === '/api/live-drop') {
             const body = await readBody(req);
             const { telegram_id, username, item_id } = body;
@@ -299,23 +288,24 @@ const server = http.createServer(async (req, res) => {
             const entry = {
                 telegram_id: telegram_id || '',
                 username: username || 'guest',
-                item_id,
-                ts: Date.now()
+                item_id, ts: Date.now()
             };
-
             liveDrops.unshift(entry);
-
-            // Чистим старше 24 часов
             const cutoff = Date.now() - 24 * 60 * 60 * 1000;
-            liveDrops = liveDrops.filter(d => d.ts > cutoff).slice(0, 100);
-
+            liveDrops = liveDrops.filter(d => d.ts > cutoff).slice(0, 200);
             saveLiveDrops();
+
+            if (telegram_id) {
+                if (!userDrops[telegram_id]) userDrops[telegram_id] = [];
+                userDrops[telegram_id].unshift({ item_id, ts: Date.now() });
+                userDrops[telegram_id] = userDrops[telegram_id].slice(0, 500);
+                saveUserDrops();
+            }
+
             sendJSON(res, 200, { ok: true, entry });
             return;
         }
 
-        // ---- GET /api/live-drops ----
-        // Получить все дропы за 24 часа
         if (req.method === 'GET' && req.url === '/api/live-drops') {
             const cutoff = Date.now() - 24 * 60 * 60 * 1000;
             const recent = liveDrops.filter(d => d.ts > cutoff);
@@ -323,16 +313,13 @@ const server = http.createServer(async (req, res) => {
             return;
         }
 
-        // ---- GET /api/live-drops/best ----
-        // Получить лучший дроп за 24 часа (по МСК)
-        if (req.method === 'GET' && req.url === '/api/live-drops/best') {
-            const cutoff = getMoscowDayStart();
-            const recent = liveDrops.filter(d => d.ts > cutoff);
-            sendJSON(res, 200, { ok: true, drops: recent, dayStart: cutoff });
+        if (req.method === 'GET' && req.url.startsWith('/api/user-drops/')) {
+            const id = decodeURIComponent(req.url.slice('/api/user-drops/'.length));
+            const drops = userDrops[id] || [];
+            sendJSON(res, 200, { ok: true, drops });
             return;
         }
 
-        // ---- 404 ----
         sendJSON(res, 404, { ok: false, error: 'Метод не найден: ' + req.method + ' ' + req.url });
 
     } catch (err) {
@@ -340,14 +327,6 @@ const server = http.createServer(async (req, res) => {
         sendJSON(res, 500, { ok: false, error: err.message });
     }
 });
-
-// Начало текущего дня по МСК (UTC+3) = 00:00 МСК
-function getMoscowDayStart() {
-    const now = new Date();
-    const msk = new Date(now.getTime() + 3 * 60 * 60 * 1000);
-    msk.setUTCHours(0, 0, 0, 0);
-    return msk.getTime() - 3 * 60 * 60 * 1000;
-}
 
 loadAll();
 
