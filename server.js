@@ -1,4 +1,4 @@
-// server.js — GGBrainX API (Render-ready)
+// server.js — GGBrainX API (Render-ready) + Live Drops
 
 const http = require('http');
 const fs = require('fs');
@@ -9,11 +9,13 @@ const DATA_DIR = '/tmp';
 const PROMO_FILE = path.join(DATA_DIR, 'promocodes.json');
 const USERS_FILE = path.join(DATA_DIR, 'users.json');
 const DEPOSITS_FILE = path.join(DATA_DIR, 'deposits.json');
+const LIVE_DROPS_FILE = path.join(DATA_DIR, 'live_drops.json');
 
 // ===== Хранилище =====
 let promocodes = {};
 let users = {};        // { telegram_id: { balance, inventory: [], username, roblox_name } }
 let deposits = [];     // [ { id, telegram_id, username, item_id, item_name, item_price, roblox_name, status, created_at } ]
+let liveDrops = [];    // [ { telegram_id, username, item_id, ts } ]
 
 function ensureDataDir() {
     try {
@@ -46,14 +48,22 @@ function loadAll() {
     promocodes = loadJSON(PROMO_FILE, {});
     users = loadJSON(USERS_FILE, {});
     deposits = loadJSON(DEPOSITS_FILE, []);
+    liveDrops = loadJSON(LIVE_DROPS_FILE, []);
+
+    // Оставляем только дропы за последние 24 часа
+    const cutoff = Date.now() - 24 * 60 * 60 * 1000;
+    liveDrops = liveDrops.filter(d => d.ts > cutoff).slice(0, 100);
+
     console.log('[OK] Промокодов:', Object.keys(promocodes).length,
                 '| Юзеров:', Object.keys(users).length,
-                '| Заявок:', deposits.length);
+                '| Заявок:', deposits.length,
+                '| Дропов за 24ч:', liveDrops.length);
 }
 
 function savePromos() { saveJSON(PROMO_FILE, promocodes); }
 function saveUsers() { saveJSON(USERS_FILE, users); }
 function saveDeposits() { saveJSON(DEPOSITS_FILE, deposits); }
+function saveLiveDrops() { saveJSON(LIVE_DROPS_FILE, liveDrops); }
 
 // ===== CORS =====
 function setCORS(res) {
@@ -96,6 +106,15 @@ function ensureUser(telegramId, username) {
     }
     return users[telegramId];
 }
+
+// ===== Очистка старых дропов (раз в минуту) =====
+function cleanupLiveDrops() {
+    const cutoff = Date.now() - 24 * 60 * 60 * 1000;
+    const before = liveDrops.length;
+    liveDrops = liveDrops.filter(d => d.ts > cutoff);
+    if (liveDrops.length !== before) saveLiveDrops();
+}
+setInterval(cleanupLiveDrops, 60 * 1000);
 
 // ===== Сервер =====
 const server = http.createServer(async (req, res) => {
@@ -270,6 +289,49 @@ const server = http.createServer(async (req, res) => {
             return;
         }
 
+        // ---- POST /api/live-drop ----
+        // Добавить дроп в общую ленту
+        if (req.method === 'POST' && req.url === '/api/live-drop') {
+            const body = await readBody(req);
+            const { telegram_id, username, item_id } = body;
+            if (!item_id) return sendJSON(res, 400, { ok: false, error: 'item_id обязателен' });
+
+            const entry = {
+                telegram_id: telegram_id || '',
+                username: username || 'guest',
+                item_id,
+                ts: Date.now()
+            };
+
+            liveDrops.unshift(entry);
+
+            // Чистим старше 24 часов
+            const cutoff = Date.now() - 24 * 60 * 60 * 1000;
+            liveDrops = liveDrops.filter(d => d.ts > cutoff).slice(0, 100);
+
+            saveLiveDrops();
+            sendJSON(res, 200, { ok: true, entry });
+            return;
+        }
+
+        // ---- GET /api/live-drops ----
+        // Получить все дропы за 24 часа
+        if (req.method === 'GET' && req.url === '/api/live-drops') {
+            const cutoff = Date.now() - 24 * 60 * 60 * 1000;
+            const recent = liveDrops.filter(d => d.ts > cutoff);
+            sendJSON(res, 200, { ok: true, drops: recent });
+            return;
+        }
+
+        // ---- GET /api/live-drops/best ----
+        // Получить лучший дроп за 24 часа (по МСК)
+        if (req.method === 'GET' && req.url === '/api/live-drops/best') {
+            const cutoff = getMoscowDayStart();
+            const recent = liveDrops.filter(d => d.ts > cutoff);
+            sendJSON(res, 200, { ok: true, drops: recent, dayStart: cutoff });
+            return;
+        }
+
         // ---- 404 ----
         sendJSON(res, 404, { ok: false, error: 'Метод не найден: ' + req.method + ' ' + req.url });
 
@@ -278,6 +340,14 @@ const server = http.createServer(async (req, res) => {
         sendJSON(res, 500, { ok: false, error: err.message });
     }
 });
+
+// Начало текущего дня по МСК (UTC+3) = 00:00 МСК
+function getMoscowDayStart() {
+    const now = new Date();
+    const msk = new Date(now.getTime() + 3 * 60 * 60 * 1000);
+    msk.setUTCHours(0, 0, 0, 0);
+    return msk.getTime() - 3 * 60 * 60 * 1000;
+}
 
 loadAll();
 
