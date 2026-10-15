@@ -17,7 +17,7 @@
   --lime:#a3e635; --teal:#14b8a6; --amber:#f59e0b; --emerald:#10b981;
   --glass-bg:rgba(15,35,22,.4); --glass-bg-strong:rgba(15,35,22,.6);
   --glass-border:rgba(245,197,66,.2); --glass-highlight:rgba(255,255,255,.06);
-  --app-bg-alpha:.35; --card-img-size:52px; --card-name-size:9px;
+  --card-img-size:52px; --card-name-size:9px;
 }
 *{box-sizing:border-box;margin:0;padding:0;user-select:none;font-family:'Rubik',sans-serif;font-weight:700}
 html{scroll-behavior:smooth}
@@ -47,7 +47,6 @@ body{
 @keyframes toastIn{from{opacity:0;transform:translateX(30px)}to{opacity:1;transform:translateX(0)}}
 @keyframes toastOut{to{opacity:0;transform:translateX(30px)}}
 
-/* ===== LIVE DROP ===== */
 #liveDrop{
   position:fixed;left:12px;top:80px;width:200px;max-height:calc(100vh - 100px);
   z-index:400;display:flex;flex-direction:column;gap:8px;pointer-events:auto;
@@ -75,7 +74,7 @@ body{
 .live-drop-item{
   display:grid;grid-template-columns:36px 1fr;gap:6px;align-items:center;
   padding:6px;border-radius:6px;background:rgba(255,255,255,.04);
-  border:1px solid rgba(245,197,66,.15);transition:transform .25s;
+  border:1px solid rgba(245,197,66,.15);
 }
 .live-drop-item.new{animation:liveDropNew 1.5s ease}
 @keyframes liveDropNew{0%{background:var(--accent-very-dim);transform:scale(1.05)}100%{background:rgba(255,255,255,.04);transform:scale(1)}}
@@ -84,6 +83,7 @@ body{
 .live-drop-name{font-size:9px;font-weight:800;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.15}
 .live-drop-price{font-family:'Orbitron',sans-serif;font-size:9px;font-weight:900;color:var(--accent-bright);display:flex;align-items:center;gap:2px;margin-top:2px}
 .live-drop-price img{width:9px;height:9px}
+.live-drop-who{font-size:8px;color:#a8adb8;font-weight:700;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:.3px;opacity:.85}
 .live-drop-empty{font-size:9px;color:#6a6d7e;text-align:center;padding:10px;font-weight:700}
 
 @media(max-width:900px){
@@ -93,7 +93,6 @@ body{
   .live-drop-item img{width:32px;height:32px}
 }
 
-/* ===== APP ===== */
 .app{
   width:100%;max-width:720px;
   background:rgba(10,25,15,.45);
@@ -220,7 +219,6 @@ body{
 .case-price{font-family:'Orbitron',sans-serif;font-size:14px;font-weight:900;color:var(--accent-bright);display:flex;align-items:center;justify-content:center;gap:5px}
 .case-price img{width:16px;height:16px}
 .case-price .free-tag{background:linear-gradient(135deg,var(--green),var(--accent));color:#0a1a0f;padding:2px 12px;border-radius:3px;font-size:11px;letter-spacing:1.5px}
-.case-price .cooldown-tag{font-size:10px;color:#a8adb8;font-weight:800}
 .case-items-count{font-size:10px;color:#6a6d7e;font-weight:700;margin-top:4px;letter-spacing:.5px}
 
 .case-open-modal{position:fixed;inset:0;z-index:4000;display:none;flex-direction:column;align-items:center;background:radial-gradient(circle at 50% 0,rgba(15,35,22,.97) 0,rgba(5,8,12,.99) 100%);overflow-y:auto;padding:20px 0 40px}
@@ -230,7 +228,6 @@ body{
 .case-open-header{width:100%;max-width:1100px;padding:0 24px;display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
 .case-back-btn{padding:10px 22px;border-radius:6px;border:1px solid var(--glass-border);background:rgba(255,255,255,.06);color:#a8adb8;font-family:'Orbitron',sans-serif;font-size:12px;font-weight:900;letter-spacing:1px;cursor:pointer;transition:all .2s}
 .case-back-btn:hover{border-color:var(--accent);color:var(--accent-bright);background:var(--accent-very-dim)}
-.case-open-title{font-family:'Orbitron',sans-serif;font-size:18px;font-weight:900;color:#fff;letter-spacing:2px;text-transform:uppercase;text-align:center}
 .case-open-balance{display:flex;align-items:center;gap:6px;font-family:'Orbitron',sans-serif;font-size:14px;font-weight:900;color:#fff;padding:8px 16px;background:rgba(0,0,0,.4);border-radius:6px;border:1px solid var(--glass-border)}
 .case-open-balance img{width:16px;height:16px}
 
@@ -256,6 +253,11 @@ body{
 .case-qty-btn-big{flex:1;padding:16px 10px;border-radius:6px;border:1px solid var(--glass-border);background:rgba(255,255,255,.04);color:#a8adb8;font-family:'Orbitron',sans-serif;font-size:18px;font-weight:900;cursor:pointer;transition:all .25s}
 .case-qty-btn-big:hover{border-color:var(--accent);color:var(--accent-bright)}
 .case-qty-btn-big.active{background:linear-gradient(135deg,var(--accent),var(--amber));border-color:var(--accent-bright);color:#0a1a0f}
+
+.case-qty-custom{display:flex;align-items:center;gap:8px;margin-bottom:18px;width:100%;max-width:600px;padding:0 24px}
+.case-qty-custom .form-input{flex:1;text-align:center;font-family:'Orbitron',sans-serif;font-size:16px;letter-spacing:2px}
+.case-qty-custom-btn{padding:14px 20px;border-radius:6px;border:1px solid var(--glass-border);background:linear-gradient(135deg,var(--accent),var(--amber));color:#0a1a0f;font-family:'Orbitron',sans-serif;font-size:13px;font-weight:900;cursor:pointer;letter-spacing:1px;white-space:nowrap}
+.case-qty-custom-btn:hover{filter:brightness(1.1)}
 
 .case-open-action-btn{width:100%;max-width:600px;padding:18px;border-radius:6px;border:1px solid var(--glass-border);background:linear-gradient(135deg,#2ecc71,#f5c542);color:#0a1a0f;font-family:'Orbitron',sans-serif;font-size:16px;font-weight:900;letter-spacing:4px;text-transform:uppercase;cursor:pointer;transition:filter .25s,transform .25s;margin-bottom:24px}
 .case-open-action-btn:hover:not(:disabled){filter:brightness(1.15);transform:translateY(-2px)}
@@ -400,7 +402,6 @@ body{
 .profile-inventory-item .inv-price{font-family:'Orbitron',sans-serif;font-size:10px;color:var(--accent-bright);font-weight:900}
 .profile-inventory-empty{text-align:center;color:#6a6d7e;font-size:11px;padding:18px;font-weight:700}
 
-/* BEST DROPS PROFILE */
 .best-drops-block{margin-bottom:14px;padding:14px;background:rgba(255,255,255,.03);border:1px solid var(--glass-border);border-radius:6px}
 .best-drops-title{font-family:'Orbitron',sans-serif;font-size:11px;color:var(--accent-bright);font-weight:900;letter-spacing:2.5px;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:8px}
 .best-drops-title::before{content:'';width:3px;height:12px;background:linear-gradient(180deg,var(--green),var(--accent))}
@@ -413,9 +414,7 @@ body{
 .best-drop-col-price img{width:9px;height:9px}
 .best-drop-col.empty .best-drop-col-img{opacity:.3;filter:none}
 .best-drop-col.empty .best-drop-col-name{color:#6a6d7e}
-@media(max-width:600px){
-  .best-drops-grid{grid-template-columns:repeat(2,1fr)}
-}
+@media(max-width:600px){.best-drops-grid{grid-template-columns:repeat(2,1fr)}}
 
 .menu-page{padding:14px 14px;display:flex;flex-direction:column;gap:14px}
 .menu-section-title{font-family:'Orbitron',sans-serif;font-size:20px;font-weight:900;color:#fff;letter-spacing:4px;text-transform:uppercase;text-align:center;padding:10px 0 6px}
@@ -503,7 +502,8 @@ body{
 
 .inv-card,.shop-card{background:rgba(255,255,255,.04);border-radius:6px;padding:12px 8px;display:flex;flex-direction:column;align-items:center;border:1px solid var(--glass-border);transition:transform .25s,border-color .25s;position:relative;min-width:0;overflow:hidden}
 .inv-card:hover,.shop-card:hover{border-color:var(--accent);background:var(--accent-very-dim);transform:translateY(-2px)}
-.inv-card.selected{border-color:var(--accent);background:var(--accent-very-dim)}
+.inv-card.selected{border-color:var(--accent);background:var(--accent-very-dim);box-shadow:0 0 12px var(--accent-dim)}
+.inv-card.multi-selected{border-color:var(--green-bright);background:rgba(46,204,113,.15);box-shadow:0 0 12px var(--green-dim)}
 .inv-card img,.shop-card img{width:100%;max-width:var(--card-img-size);height:var(--card-img-size);object-fit:contain;margin-bottom:6px;pointer-events:none}
 .inv-card .name,.shop-card .name{font-size:var(--card-name-size);font-weight:800;text-align:center;margin-bottom:4px;height:24px;overflow:hidden;color:#fff;pointer-events:none;line-height:1.15;width:100%;display:flex;align-items:center;justify-content:center}
 .inv-card .price,.shop-card .price{font-size:10px;color:var(--accent-bright);font-weight:900;display:flex;align-items:center;gap:3px;font-family:'Orbitron',sans-serif;pointer-events:none}
@@ -515,6 +515,13 @@ body{
 .empty-inv{color:#6a6d7e;font-size:12px;text-align:center;width:100%;padding:22px;font-weight:800;grid-column:1/-1}
 .selectable{display:flex;flex-direction:column;align-items:center;width:100%;cursor:pointer}
 .locked{pointer-events:none !important;opacity:.4 !important;filter:grayscale(.5) !important}
+
+.multi-badge{position:absolute;top:2px;right:2px;min-width:20px;height:20px;border-radius:4px;background:linear-gradient(135deg,var(--green),var(--accent));color:#0a1a0f;font-family:'Orbitron',sans-serif;font-size:11px;font-weight:900;display:flex;align-items:center;justify-content:center;padding:0 4px;z-index:10;box-shadow:0 0 8px var(--green-dim)}
+
+.multi-info-bar{padding:8px 18px;display:flex;justify-content:space-between;align-items:center;background:rgba(46,204,113,.1);border-top:1px solid var(--green-dim);border-bottom:1px solid var(--green-dim);margin-top:8px}
+.multi-info-bar-text{font-family:'Orbitron',sans-serif;font-size:11px;font-weight:900;color:var(--green-bright);letter-spacing:1px}
+.multi-info-bar-clear{padding:6px 12px;border-radius:4px;border:1px solid rgba(255,100,100,.4);background:rgba(255,100,100,.15);color:#ff8a8a;font-family:'Orbitron',sans-serif;font-size:9px;font-weight:900;cursor:pointer;text-transform:uppercase;letter-spacing:1px}
+.multi-info-bar-clear:hover{background:rgba(255,100,100,.3)}
 
 .target-list{display:flex;flex-direction:column;gap:6px;max-height:60vh;overflow-y:auto;padding:4px}
 .target-list-item{display:grid;grid-template-columns:48px 1fr auto;align-items:center;gap:12px;padding:10px 12px;background:rgba(255,255,255,.04);border:1px solid var(--glass-border);border-radius:4px;cursor:pointer;transition:all .2s}
@@ -647,7 +654,6 @@ body{
 .haunted-result-stats > div > span{color:#ffb366;font-size:14px}
 
 .mutation-badge{position:absolute;top:2px;left:2px;width:22px;height:22px;object-fit:contain;z-index:10;pointer-events:none}
-.mutation-badge-large{width:28px;height:28px;object-fit:contain;vertical-align:middle;margin-left:6px}
 
 @media (max-width:900px){
   body{padding:10px 10px 100px 10px}
@@ -755,7 +761,6 @@ body{
 <div class="bg-layer"></div>
 <div class="bg-grid"></div>
 
-<!-- ===== LIVE DROP ===== -->
 <div id="liveDrop">
   <div class="live-drop-best" id="liveDropBest">
     <div class="live-drop-best-label">Лучший за 24ч</div>
@@ -769,7 +774,6 @@ body{
   </div>
 </div>
 
-<!-- ===== МОДАЛКИ ===== -->
 <div class="modal" id="topupModal">
     <div class="modal-card">
         <button class="modal-close" onclick="closeModal('topupModal')">X</button>
@@ -933,15 +937,6 @@ body{
     <div class="haunted-anim-text" id="hauntedAnimText">HAUNTED FUSE...</div>
 </div>
 
-<div class="case-anim-overlay" id="caseAnimOverlay">
-    <div class="case-anim-bg"></div>
-    <div class="case-anim-particles" id="caseAnimParticles"></div>
-    <div class="case-anim-box" id="caseAnimBox">
-        <img src="" alt="case" id="caseAnimImg" loading="lazy" decoding="async">
-    </div>
-    <div class="case-anim-text" id="caseAnimText">ОТКРЫВАЕМ...</div>
-</div>
-
 <div class="case-open-modal" id="caseOpenModal">
     <div class="case-open-header">
         <button class="case-back-btn" onclick="closeCaseOpen()">← Назад к кейсам</button>
@@ -959,7 +954,12 @@ body{
         <button class="case-qty-btn-big active" data-qty="1" onclick="setCaseOpenQty(1)">1</button>
         <button class="case-qty-btn-big" data-qty="2" onclick="setCaseOpenQty(2)">2</button>
         <button class="case-qty-btn-big" data-qty="3" onclick="setCaseOpenQty(3)">3</button>
-        <button class="case-qty-btn-big" data-qty="4" onclick="setCaseOpenQty(4)">4</button>
+        <button class="case-qty-btn-big" data-qty="5" onclick="setCaseOpenQty(5)">5</button>
+        <button class="case-qty-btn-big" data-qty="10" onclick="setCaseOpenQty(10)">10</button>
+    </div>
+    <div class="case-qty-custom">
+        <input type="number" class="form-input" id="caseQtyInput" placeholder="Своё кол-во (1-50)" min="1" max="50" value="1">
+        <button class="case-qty-custom-btn" onclick="setCaseOpenCustomQty()">ПРИМЕНИТЬ</button>
     </div>
     <button class="case-open-action-btn" id="caseOpenActionBtn" onclick="confirmOpenCase()">ОТКРЫТЬ КЕЙС</button>
     <div class="case-possible-title">ЧТО МОЖЕТ ВЫПАСТЬ</div>
@@ -1008,7 +1008,7 @@ body{
         </div>
         <div class="items-row">
             <div class="item-box">
-                <div class="label">Твой предмет</div>
+                <div class="label">Твои предметы</div>
                 <img id="sourceImg" src="" alt="" style="display:none" loading="lazy" decoding="async">
                 <div class="name" id="sourceName">—</div>
                 <div class="price" id="sourcePrice"></div>
@@ -1024,6 +1024,7 @@ body{
                 </div>
             </div>
         </div>
+        <div id="multiInfoBarContainer"></div>
         <div class="stage-controls">
             <button class="upgrade-main-btn" id="upgradeBtn" onclick="upgrade()" disabled>
                 <span>Апгрейд - 0%</span>
@@ -1053,18 +1054,10 @@ body{
                 <div class="haunted-title">HAUNTED FUSE</div>
             </div>
             <div class="haunted-slots">
-                <div class="haunted-slot" id="hauntedSlot0" onclick="openHauntedPicker(0)">
-                    <div class="haunted-plus">+</div>
-                </div>
-                <div class="haunted-slot" id="hauntedSlot1" onclick="openHauntedPicker(1)">
-                    <div class="haunted-plus">+</div>
-                </div>
-                <div class="haunted-slot" id="hauntedSlot2" onclick="openHauntedPicker(2)">
-                    <div class="haunted-plus">+</div>
-                </div>
-                <div class="haunted-slot" id="hauntedSlot3" onclick="openHauntedPicker(3)">
-                    <div class="haunted-plus">+</div>
-                </div>
+                <div class="haunted-slot" id="hauntedSlot0" onclick="openHauntedPicker(0)"><div class="haunted-plus">+</div></div>
+                <div class="haunted-slot" id="hauntedSlot1" onclick="openHauntedPicker(1)"><div class="haunted-plus">+</div></div>
+                <div class="haunted-slot" id="hauntedSlot2" onclick="openHauntedPicker(2)"><div class="haunted-plus">+</div></div>
+                <div class="haunted-slot" id="hauntedSlot3" onclick="openHauntedPicker(3)"><div class="haunted-plus">+</div></div>
             </div>
             <div class="haunted-summary">
                 <div class="haunted-summary-box">
@@ -1205,7 +1198,6 @@ body{
                 </div>
             </div>
 
-            <!-- ===== ЛУЧШИЕ ДРОПЫ ===== -->
             <div class="best-drops-block">
                 <div class="best-drops-title">Лучший дроп</div>
                 <div class="best-drops-grid" id="bestDropsGrid"></div>
@@ -1334,8 +1326,6 @@ const ADMIN_USERNAME = 'clonexx7';
 const FALLBACK_IMG = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='60' height='60'><rect width='100%25' height='100%25' fill='%231a2a1f'/><text x='50%25' y='55%25' fill='%236a6d7e' font-size='20' text-anchor='middle'>?</text></svg>";
 const FALLBACK_ATTR = `onerror="this.onerror=null;this.src='${FALLBACK_IMG}'"`;
 
-// ===== ИТЕМЫ =====
-// Мутированные брейнроты доступны ТОЛЬКО из OG CASE. Из магазина, апгрейда, пополнения — исключены.
 const MUTATION_ITEMS = [
     { id: 'cyberskibidi', name: 'Cyber Skibidi Toilet', price: 31000, img: 'https://raw.githubusercontent.com/saintezz/ggbrainXv2/main/CyberSkibidi.webp' },
     { id: 'yinyangmeowl', name: 'YinYang Meowl', price: 35000, img: 'https://raw.githubusercontent.com/saintezz/ggbrainXv2/main/YinYangMeowl.webp' },
@@ -1376,14 +1366,9 @@ const BASE_ITEMS = [
     { id: 'headless', name: 'Headless Horseman', price: 235000, img: 'https://raw.githubusercontent.com/saintezz/ggbrainXv2/main/Headless.webp' }
 ];
 
-// ITEMS — все предметы (базовые + мутированные) для апгрейдера целей и получения
 const ITEMS = [...BASE_ITEMS, ...MUTATION_ITEMS];
-// SHOP_ITEMS — только базовые, без мутаций
 const SHOP_ITEMS = BASE_ITEMS.slice();
-// TOPUP_ITEMS — только базовые
 const TOPUP_ITEMS = BASE_ITEMS.slice();
-// Пул для трейда — все
-const TRADE_POOL = ITEMS.slice();
 
 const CASES = [
     { id: 'og', name: 'OG CASE', price: 12000, img: 'https://raw.githubusercontent.com/saintezz/ggbrainXv2/main/OGCASE.png',
@@ -1435,26 +1420,21 @@ function generateTradeRecipes() {
     const recipes = [];
     const sorted = [...ITEMS].sort((a, b) => a.price - b.price);
     for (const src of sorted) {
-        // Ищем более дешёвые цели
         const cheaper = sorted.filter(x => x.price < src.price);
         if (cheaper.length === 0) continue;
-        // 1-2 варианта для каждого
         const picks = [];
-        // Вариант 1: 2x чуть дешевле + монеты чтобы покрыть 100% цены
         const v1 = cheaper[Math.floor(cheaper.length * 0.7)] || cheaper[cheaper.length - 1];
         if (v1 && v1.id !== src.id) {
             const count = Math.max(1, Math.floor(src.price / v1.price * 0.95));
             const coins = Math.max(0, src.price - v1.price * count);
             if (count > 0) picks.push({ to: v1.id, count, coins });
         }
-        // Вариант 2: 4x дешёвый + монеты
         const v2 = cheaper[Math.floor(cheaper.length * 0.35)] || cheaper[0];
         if (v2 && v2.id !== v1?.id && v2.id !== src.id) {
             const count = 4;
             const coins = Math.max(0, src.price - v2.price * count);
             picks.push({ to: v2.id, count, coins });
         }
-        // Вариант 3: 8x очень дешёвый + монеты
         const v3 = cheaper[0];
         if (v3 && v3.id !== v1?.id && v3.id !== v2?.id && v3.id !== src.id) {
             const count = 8;
@@ -1496,16 +1476,16 @@ let isCaseOpening = false;
 let currentCaseFilter = '';
 
 // ===== LIVE DROPS =====
-let liveDrops = JSON.parse(localStorage.getItem('ggbrainx_live_drops') || '[]'); // [{ itemId, username, ts }]
-let myDrops = JSON.parse(localStorage.getItem('ggbrainx_my_drops') || '[]');   // [{ itemId, ts }]
-const LIVE_DROP_MAX = 30;
-const LIVE_DROP_FETCH_INTERVAL = 15000;
+let liveDrops = JSON.parse(localStorage.getItem('ggbrainx_live_drops') || '[]');
+let myDrops = JSON.parse(localStorage.getItem('ggbrainx_my_drops') || '[]');
+const LIVE_DROP_MAX = 100;
+const LIVE_DROP_FETCH_INTERVAL = 12000;
 
 function saveLocalCache() {
     localStorage.setItem('ggbrainx_balance', String(balance));
     localStorage.setItem('ggbrainx_inventory', JSON.stringify(inventory));
     localStorage.setItem('ggbrainx_live_drops', JSON.stringify(liveDrops.slice(0, LIVE_DROP_MAX)));
-    localStorage.setItem('ggbrainx_my_drops', JSON.stringify(myDrops.slice(0, 200)));
+    localStorage.setItem('ggbrainx_my_drops', JSON.stringify(myDrops.slice(0, 500)));
 }
 function getTelegramId() {
     if (USER.id) return String(USER.id);
@@ -1649,22 +1629,17 @@ function playHaunted() {
         osc1.stop(ctx.currentTime + 1.9); osc2.stop(ctx.currentTime + 1.9);
     } catch(e) {}
 }
-function playCaseOpen() {
-    playOsc(200, 0.3, 'sawtooth', 0.04, 0, 600);
-    playOsc(300, 0.4, 'square', 0.03, 0.1, 800);
-    playOsc(400, 0.5, 'triangle', 0.04, 0.2, 1000);
-    playNoise(0.3, 0.03, 0.3, 600);
-}
 function vibrate(ms = 15) { try { if (navigator.vibrate) navigator.vibrate(ms); } catch(e) {} }
 function vibratePattern(pattern) { try { if (navigator.vibrate) navigator.vibrate(pattern); } catch(e) {} }
 
 const MAX_CHANCE = 70;
 const SPIN_DURATION = 7000;
 const SPIN_DURATION_FAST = 3000;
+const CASE_SPIN_DURATION = 10000;
 const CIRCUMFERENCE = 2 * Math.PI * 130;
 let fastModeEnabled = false;
 
-let selectedSourceIndex = null;
+let selectedSourceIndexes = []; // массив индексов до 5
 let selectedTargetId = null;
 let isSpinning = false;
 let promoType = 'balance';
@@ -1792,6 +1767,7 @@ window.handleAvatarUpload = function(event) {
         applyCustomAvatar();
         showToast('Аватарка загружена', 'ok');
         playCoin(); vibrate(15);
+        syncUserToServer();
     };
     reader.readAsDataURL(file);
 };
@@ -1801,6 +1777,7 @@ window.resetAvatar = function() {
     applyCustomAvatar();
     showToast('Аватарка сброшена', 'ok');
     playClick(); vibrate(10);
+    syncUserToServer();
 };
 function applyUserToProfile() {
     document.getElementById('profileNick').textContent = getDisplayNick();
@@ -1831,26 +1808,68 @@ function syncUserToServer() {
                 telegram_id: getTelegramId(),
                 balance: balance,
                 inventory: inventory,
-                username: (USER.username || '')
+                username: (USER.username || ''),
+                custom_nick: customNick || '',
+                avatar: customAvatar || ''
             })
         }).catch(() => {});
-    }, 800);
+    }, 500);
 }
 async function loadUserFromServer() {
     try {
         const res = await fetch(API_URL + '/api/user/' + encodeURIComponent(getTelegramId()));
         const data = await res.json();
         if (data.ok && data.user) {
-            if (typeof data.user.balance === 'number') balance = data.user.balance;
-            if (Array.isArray(data.user.inventory)) inventory = data.user.inventory;
+            const serverBalance = typeof data.user.balance === 'number' ? data.user.balance : 0;
+            const serverInventory = Array.isArray(data.user.inventory) ? data.user.inventory : [];
+            const serverNick = data.user.custom_nick || '';
+            const serverAvatar = data.user.avatar || '';
+
+            if (serverBalance !== balance) balance = serverBalance;
+            if (JSON.stringify(serverInventory) !== JSON.stringify(inventory)) inventory = serverInventory;
+            if (serverNick && serverNick !== customNick) {
+                customNick = serverNick;
+                localStorage.setItem('ggbrainx_custom_nick', customNick);
+            }
+            if (serverAvatar && serverAvatar !== customAvatar) {
+                customAvatar = serverAvatar;
+                localStorage.setItem('ggbrainx_custom_avatar', customAvatar);
+            }
+
             saveLocalCache();
             updateBalance();
             renderInventory(); renderShop(); updateUpgradeScreen();
             renderProfileInventory();
+            applyUserToProfile();
+
+            if (serverBalance === 0 && balance > 0) syncUserToServer();
         } else {
             syncUserToServer();
         }
     } catch (e) { console.warn('[SYNC] сервер недоступен'); }
+}
+async function pollServerForUpdates() {
+    if (isSpinning || isCaseOpening) return;
+    try {
+        const res = await fetch(API_URL + '/api/user/' + encodeURIComponent(getTelegramId()));
+        const data = await res.json();
+        if (data.ok && data.user) {
+            const serverBalance = typeof data.user.balance === 'number' ? data.user.balance : 0;
+            const serverInventory = Array.isArray(data.user.inventory) ? data.user.inventory : [];
+            let changed = false;
+            if (serverBalance !== balance) { balance = serverBalance; changed = true; }
+            if (JSON.stringify(serverInventory) !== JSON.stringify(inventory)) {
+                inventory = serverInventory;
+                changed = true;
+            }
+            if (changed) {
+                saveLocalCache();
+                updateBalance();
+                renderInventory(); renderShop(); updateUpgradeScreen();
+                renderProfileInventory();
+            }
+        }
+    } catch (e) {}
 }
 function getItemById(id) { return ITEMS.find(item => item.id === id); }
 window.openModal = function(id) { document.getElementById(id).classList.add('open'); };
@@ -1860,55 +1879,105 @@ document.querySelectorAll('.modal').forEach(modal => {
 });
 
 // ===== LIVE DROP =====
-function pushLiveDrop(itemId, username) {
+async function pushLiveDrop(itemId, username) {
     const item = getItemById(itemId);
     if (!item) return;
     const entry = { itemId, username: username || 'guest', ts: Date.now() };
     liveDrops.unshift(entry);
     if (liveDrops.length > LIVE_DROP_MAX) liveDrops.length = LIVE_DROP_MAX;
-    // Сохраняем мои дропы для профиля
     myDrops.unshift({ itemId, ts: Date.now() });
-    if (myDrops.length > 200) myDrops.length = 200;
+    if (myDrops.length > 500) myDrops.length = 500;
     saveLocalCache();
     renderLiveDrops();
     renderBestDrops();
-    // Отправляем на сервер (опционально)
-    fetch(API_URL + '/api/live-drop', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ telegram_id: getTelegramId(), username: username || 'guest', item_id: itemId })
-    }).catch(() => {});
+    try {
+        await fetch(API_URL + '/api/live-drop', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                telegram_id: getTelegramId(),
+                username: username || getDisplayNick() || 'guest',
+                item_id: itemId
+            })
+        });
+        fetchLiveDropsFromServer();
+    } catch (e) {}
 }
-
-function getBestDropLast24h() {
+async function fetchLiveDropsFromServer() {
+    try {
+        const res = await fetch(API_URL + '/api/live-drops');
+        const data = await res.json();
+        if (data.ok && Array.isArray(data.drops)) {
+            liveDrops = data.drops.map(d => ({
+                itemId: d.item_id,
+                username: d.username,
+                ts: d.ts
+            }));
+            saveLocalCache();
+            renderLiveDrops();
+        }
+    } catch (e) {}
+}
+async function fetchMyDropsFromServer() {
+    try {
+        const res = await fetch(API_URL + '/api/user-drops/' + encodeURIComponent(getTelegramId()));
+        const data = await res.json();
+        if (data.ok && Array.isArray(data.drops)) {
+            myDrops = data.drops.map(d => ({ itemId: d.item_id, ts: d.ts }));
+            saveLocalCache();
+            renderBestDrops();
+        }
+    } catch (e) {}
+}
+function getBestGlobalDrop24h() {
     const cutoff = getMoscowDayStart();
     let best = null;
-    for (const d of myDrops) {
+    for (const d of liveDrops) {
         if (d.ts >= cutoff) {
             const item = getItemById(d.itemId);
             if (item && (!best || item.price > best.item.price)) best = { item, ts: d.ts };
         }
     }
-    // Если у меня нет — берём из глобального liveDrops
-    if (!best) {
-        for (const d of liveDrops) {
-            if (d.ts >= cutoff) {
-                const item = getItemById(d.itemId);
-                if (item && (!best || item.price > best.item.price)) best = { item, ts: d.ts };
-            }
-        }
-    }
     return best;
 }
+function renderLiveDrops() {
+    const list = document.getElementById('liveDropList');
+    if (!liveDrops.length) {
+        list.innerHTML = '<div class="live-drop-empty">Пока пусто</div>';
+    } else {
+        list.innerHTML = liveDrops.slice(0, 25).map((d, idx) => {
+            const item = getItemById(d.itemId);
+            if (!item) return '';
+            const who = d.username && d.username !== 'guest' ? d.username : '';
+            return `
+                <div class="live-drop-item ${idx === 0 ? 'new' : ''}">
+                    <img src="${item.img}" alt="${item.name}" loading="lazy" decoding="async" ${FALLBACK_ATTR}>
+                    <div class="live-drop-info">
+                        <div class="live-drop-name">${item.name}</div>
+                        <div class="live-drop-price"><img src="${COIN_IMG}" alt="coin">${item.price.toLocaleString('ru-RU')}</div>
+                        ${who ? `<div class="live-drop-who">${who}</div>` : ''}
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+    const best = getBestGlobalDrop24h();
+    if (best) {
+        document.getElementById('liveDropBestImg').src = best.item.img;
+        document.getElementById('liveDropBestName').textContent = best.item.name;
+        document.getElementById('liveDropBestPrice').textContent = best.item.price.toLocaleString('ru-RU');
+    } else {
+        document.getElementById('liveDropBestImg').src = FALLBACK_IMG;
+        document.getElementById('liveDropBestName').textContent = '—';
+        document.getElementById('liveDropBestPrice').textContent = '0';
+    }
+}
 
-// Начало текущего дня по МСК (UTC+3) = 00:00 МСК
+// МСК-время
 function getMoscowDayStart() {
     const now = new Date();
-    // МСК = UTC+3
     const msk = new Date(now.getTime() + 3 * 60 * 60 * 1000);
-    // Начало дня в МСК
     msk.setUTCHours(0, 0, 0, 0);
-    // Обратно в UTC
     return msk.getTime() - 3 * 60 * 60 * 1000;
 }
 function getWeekStart() {
@@ -1925,57 +1994,6 @@ function getMonthStart() {
     msk.setUTCDate(1);
     msk.setUTCHours(0, 0, 0, 0);
     return msk.getTime() - 3 * 60 * 60 * 1000;
-}
-
-function renderLiveDrops() {
-    const list = document.getElementById('liveDropList');
-    if (!liveDrops.length) {
-        list.innerHTML = '<div class="live-drop-empty">Пока пусто</div>';
-    } else {
-        list.innerHTML = liveDrops.slice(0, 20).map((d, idx) => {
-            const item = getItemById(d.itemId);
-            if (!item) return '';
-            return `
-                <div class="live-drop-item ${idx === 0 ? 'new' : ''}">
-                    <img src="${item.img}" alt="${item.name}" loading="lazy" decoding="async" ${FALLBACK_ATTR}>
-                    <div class="live-drop-info">
-                        <div class="live-drop-name">${item.name}</div>
-                        <div class="live-drop-price"><img src="${COIN_IMG}" alt="coin">${item.price.toLocaleString('ru-RU')}</div>
-                    </div>
-                </div>
-            `;
-        }).join('');
-    }
-    // Best 24h
-    const best = getBestDropLast24h();
-    if (best) {
-        document.getElementById('liveDropBestImg').src = best.item.img;
-        document.getElementById('liveDropBestName').textContent = best.item.name;
-        document.getElementById('liveDropBestPrice').textContent = best.item.price.toLocaleString('ru-RU');
-    } else {
-        document.getElementById('liveDropBestImg').src = '';
-        document.getElementById('liveDropBestName').textContent = '—';
-        document.getElementById('liveDropBestPrice').textContent = '0';
-    }
-}
-
-async function fetchLiveDropsFromServer() {
-    try {
-        const res = await fetch(API_URL + '/api/live-drops');
-        const data = await res.json();
-        if (data.ok && Array.isArray(data.drops)) {
-            // Мержим с локальными, чтобы не терять свои
-            const merged = [...liveDrops];
-            for (const d of data.drops) {
-                if (!merged.find(x => x.ts === d.ts && x.itemId === d.itemId)) merged.push(d);
-            }
-            merged.sort((a, b) => b.ts - a.ts);
-            liveDrops = merged.slice(0, LIVE_DROP_MAX);
-            saveLocalCache();
-            renderLiveDrops();
-            renderBestDrops();
-        }
-    } catch (e) {}
 }
 
 // ===== BEST DROPS PROFILE =====
@@ -2384,8 +2402,8 @@ window.sellItem = function(index) {
     if (!item) return;
     inventory.splice(index, 1);
     balance += item.price;
-    if (selectedSourceIndex === index) { selectedSourceIndex = null; selectedTargetId = null; }
-    else if (selectedSourceIndex !== null && selectedSourceIndex > index) selectedSourceIndex--;
+    selectedSourceIndexes = selectedSourceIndexes.filter(i => i !== index).map(i => i > index ? i - 1 : i);
+    if (selectedSourceIndexes.length === 0) selectedTargetId = null;
     updateBalance();
     renderInventory(); renderShop(); updateUpgradeScreen();
     renderProfileInventory();
@@ -2400,11 +2418,12 @@ function renderInventory() {
     inventoryRow.innerHTML = inventory.map((id, index) => {
         const item = getItemById(id);
         if (!item) return '';
-        const isSelected = selectedSourceIndex === index;
+        const isSelected = selectedSourceIndexes.includes(index);
         const glowClass = getGlowClass(item.price);
         return `
-            <div class="inv-card ${isSelected ? 'selected' : ''} ${glowClass}">
-                <div class="selectable" onclick="selectSourceByIndex(${index})">
+            <div class="inv-card ${isSelected ? 'multi-selected' : ''} ${glowClass}" style="position:relative;">
+                ${isSelected ? `<div class="multi-badge">${selectedSourceIndexes.indexOf(index) + 1}</div>` : ''}
+                <div class="selectable" onclick="toggleSelectSource(${index})">
                     <img src="${item.img}" alt="${item.name}" loading="lazy" decoding="async" ${FALLBACK_ATTR}>
                     <div class="name" title="${item.name}">${item.name}</div>
                     <div class="price"><img src="${COIN_IMG}" alt="coin">${item.price}</div>
@@ -2415,10 +2434,25 @@ function renderInventory() {
     }).join('');
     profileItemsCount.innerText = inventory.length;
 }
-window.selectSourceByIndex = function(index) {
+window.toggleSelectSource = function(index) {
     if (isSpinning) return;
     if (index < 0 || index >= inventory.length) return;
-    selectedSourceIndex = index;
+    const pos = selectedSourceIndexes.indexOf(index);
+    if (pos > -1) {
+        selectedSourceIndexes.splice(pos, 1);
+    } else {
+        if (selectedSourceIndexes.length >= 5) {
+            showToast('Максимум 5 предметов', 'err');
+            return;
+        }
+        selectedSourceIndexes.push(index);
+    }
+    selectedTargetId = null;
+    renderInventory(); updateUpgradeScreen();
+    playClick(); vibrate(10);
+};
+window.clearSelection = function() {
+    selectedSourceIndexes = [];
     selectedTargetId = null;
     renderInventory(); updateUpgradeScreen();
     playClick(); vibrate(10);
@@ -2426,18 +2460,18 @@ window.selectSourceByIndex = function(index) {
 
 window.openTargetList = function() {
     if (isSpinning) return;
-    if (selectedSourceIndex === null) return;
-    if (selectedSourceIndex < 0 || selectedSourceIndex >= inventory.length) return;
-    const sourceItem = getItemById(inventory[selectedSourceIndex]);
-    if (!sourceItem) return;
-    // Цели: любые предметы дороже (включая мутированные)
-    const targets = ITEMS.filter(t => t.price > sourceItem.price).sort((a, b) => a.price - b.price);
+    if (selectedSourceIndexes.length === 0) return;
+    const validIdxs = selectedSourceIndexes.filter(i => i < inventory.length && inventory[i]);
+    if (validIdxs.length === 0) return;
+    const totalPrice = validIdxs.reduce((sum, i) => sum + (getItemById(inventory[i])?.price || 0), 0);
+    // Цели: только БАЗОВЫЕ предметы (без мутаций) дороже суммы
+    const targets = BASE_ITEMS.filter(t => t.price > totalPrice).sort((a, b) => a.price - b.price);
     const list = document.getElementById('targetList');
     if (!targets.length) {
-        list.innerHTML = '<div style="text-align:center; color:#6a6d7e; padding:20px; font-size:12px; font-weight:700;">Нет целей дороже этого предмета</div>';
+        list.innerHTML = '<div style="text-align:center; color:#6a6d7e; padding:20px; font-size:12px; font-weight:700;">Нет целей дороже суммы</div>';
     } else {
         list.innerHTML = targets.map(t => {
-            const chance = Math.min(MAX_CHANCE, Math.max(1, Math.round((100 / (t.price / sourceItem.price)) * 10) / 10));
+            const chance = Math.min(MAX_CHANCE, Math.max(1, Math.round((100 / (t.price / totalPrice)) * 10) / 10));
             const glowClass = getGlowClass(t.price);
             return `
                 <div class="target-list-item ${glowClass}" onclick="pickTargetFromList('${t.id}')">
@@ -2457,11 +2491,11 @@ window.openTargetList = function() {
 
 window.pickTargetFromList = function(targetId) {
     if (isSpinning) return;
-    if (selectedSourceIndex === null) return;
-    const sourceItem = getItemById(inventory[selectedSourceIndex]);
+    if (selectedSourceIndexes.length === 0) return;
     const targetItem = getItemById(targetId);
-    if (!sourceItem || !targetItem) return;
-    if (targetItem.price <= sourceItem.price) return;
+    if (!targetItem) return;
+    const totalPrice = selectedSourceIndexes.reduce((sum, i) => sum + (getItemById(inventory[i])?.price || 0), 0);
+    if (targetItem.price <= totalPrice) return;
     selectedTargetId = targetId;
     closeModal('targetModal');
     renderInventory(); updateUpgradeScreen();
@@ -2612,8 +2646,7 @@ window.runHauntedFuse = async function() {
     const sortedIdx = [...validIndexes].sort((a, b) => b - a);
     sortedIdx.forEach(idx => { inventory.splice(idx, 1); });
     inventory.push(reward.item.id);
-    // Записываем в live drops (если получил что-то дороже 5000)
-    if (reward.item.price >= 5000) pushLiveDrop(reward.item.id, getDisplayNick());
+    pushLiveDrop(reward.item.id, getDisplayNick());
     hauntedSlots = [null, null, null, null];
     renderHauntedSlots(); renderInventory(); updateUpgradeScreen(); renderProfileInventory();
     const resultImg = document.getElementById('hauntedResultImg');
@@ -2699,6 +2732,7 @@ window.openCaseDetail = function(caseId) {
     document.querySelectorAll('.case-qty-btn-big').forEach(b => {
         b.classList.toggle('active', b.dataset.qty === '1');
     });
+    document.getElementById('caseQtyInput').value = 1;
     document.getElementById('caseOpenImg').src = c.img;
     document.getElementById('caseOpenName').textContent = c.name;
     document.getElementById('caseOpenBalance').textContent = balance.toLocaleString('ru-RU');
@@ -2798,6 +2832,24 @@ window.setCaseOpenQty = function(qty) {
     document.querySelectorAll('.case-qty-btn-big').forEach(b => {
         b.classList.toggle('active', parseInt(b.dataset.qty) === qty);
     });
+    document.getElementById('caseQtyInput').value = qty;
+    const c = CASES.find(x => x.id === currentCaseId);
+    if (c) buildRouletteRows(c, qty);
+    updateCaseOpenButton();
+    playClick(); vibrate(8);
+};
+
+window.setCaseOpenCustomQty = function() {
+    if (isCaseOpening) return;
+    const input = document.getElementById('caseQtyInput');
+    let qty = parseInt(input.value);
+    if (!qty || qty < 1) qty = 1;
+    if (qty > 50) qty = 50;
+    input.value = qty;
+    caseOpenQty = qty;
+    document.querySelectorAll('.case-qty-btn-big').forEach(b => {
+        b.classList.toggle('active', parseInt(b.dataset.qty) === qty);
+    });
     const c = CASES.find(x => x.id === currentCaseId);
     if (c) buildRouletteRows(c, qty);
     updateCaseOpenButton();
@@ -2816,7 +2868,7 @@ function updateCaseOpenButton() {
         else { btn.disabled = false; btn.textContent = 'ОТКРЫТЬ КЕЙС'; }
     } else {
         if (balance < totalPrice) { btn.disabled = true; btn.textContent = 'НЕДОСТАТОЧНО МОНЕТ'; }
-        else { btn.disabled = false; btn.textContent = 'ОТКРЫТЬ КЕЙС'; }
+        else { btn.disabled = false; btn.textContent = `ОТКРЫТЬ x${caseOpenQty}`; }
     }
 }
 
@@ -2879,9 +2931,9 @@ window.confirmOpenCase = async function() {
         const track = tracks[idx];
         if (!track) return;
         const targetIndex = getRewardIndexInTrack(c, reward);
-        const duration = 7000;
+        const duration = CASE_SPIN_DURATION;
         animPromises.push(animateRoulette(track, targetIndex, duration));
-        const tickCount = 50;
+        const tickCount = 60;
         for (let t = 0; t < tickCount; t++) setTimeout(() => playTick(), t * (duration / tickCount));
     });
     await Promise.all(animPromises);
@@ -2892,11 +2944,7 @@ window.confirmOpenCase = async function() {
         else if (r.itemId) { inventory.push(r.itemId); itemsWon.push(r.itemId); }
     });
     if (totalCoins > 0) balance += totalCoins;
-    // Записываем предметы в live drops (все предметы дороже 5000)
-    itemsWon.forEach(id => {
-        const item = getItemById(id);
-        if (item && item.price >= 5000) pushLiveDrop(id, getDisplayNick());
-    });
+    itemsWon.forEach(id => { pushLiveDrop(id, getDisplayNick()); });
     updateBalance();
     renderInventory(); renderShop(); updateUpgradeScreen(); renderProfileInventory();
     saveLocalCache(); syncUserToServer();
@@ -2949,7 +2997,7 @@ function showCaseResult(results, c, qty, totalSpent) {
         results.forEach((r, i) => {
             if (r.balance) {
                 html += `
-                    <div class="case-multi-item" style="animation-delay:${i * 0.08}s">
+                    <div class="case-multi-item" style="animation-delay:${Math.min(i * 0.05, 1)}s">
                         <img src="${COIN_IMG}" alt="coin" style="width:40px;height:40px;" loading="lazy" decoding="async">
                         <div class="multi-name">Монеты</div>
                         <div class="multi-price"><img src="${COIN_IMG}"> +${r.balance}</div>
@@ -2958,7 +3006,7 @@ function showCaseResult(results, c, qty, totalSpent) {
             } else {
                 const item = getItemById(r.itemId);
                 html += `
-                    <div class="case-multi-item" style="animation-delay:${i * 0.08}s">
+                    <div class="case-multi-item" style="animation-delay:${Math.min(i * 0.05, 1)}s">
                         <img src="${item.img}" alt="${item.name}" loading="lazy" decoding="async" ${FALLBACK_ATTR}>
                         <div class="multi-name">${item.name}</div>
                         <div class="multi-price"><img src="${COIN_IMG}"> ${item.price}</div>
@@ -2981,23 +3029,32 @@ function showCaseResult(results, c, qty, totalSpent) {
 }
 
 function calculateChance() {
-    const sourceItem = selectedSourceIndex !== null ? getItemById(inventory[selectedSourceIndex]) : null;
+    const validIdxs = selectedSourceIndexes.filter(i => i < inventory.length && inventory[i]);
+    if (validIdxs.length === 0) return 0;
+    const totalPrice = validIdxs.reduce((sum, i) => sum + (getItemById(inventory[i])?.price || 0), 0);
     const targetItem = selectedTargetId ? getItemById(selectedTargetId) : null;
-    if (!sourceItem || !targetItem || targetItem.price <= sourceItem.price) return 0;
-    const ratio = targetItem.price / sourceItem.price;
+    if (!targetItem || targetItem.price <= totalPrice) return 0;
+    const ratio = targetItem.price / totalPrice;
     let chance = 100 / ratio;
     if (chance > MAX_CHANCE) chance = MAX_CHANCE;
     if (chance < 1) chance = 1;
     return Math.round(chance * 10) / 10;
 }
 function updateUpgradeScreen() {
-    const sourceItem = selectedSourceIndex !== null ? getItemById(inventory[selectedSourceIndex]) : null;
+    const validIdxs = selectedSourceIndexes.filter(i => i < inventory.length && inventory[i]);
+    const sourceItems = validIdxs.map(i => getItemById(inventory[i])).filter(Boolean);
     const targetItem = selectedTargetId ? getItemById(selectedTargetId) : null;
-    if (sourceItem) {
-        sourceImg.src = sourceItem.img;
+    if (sourceItems.length > 0) {
+        const first = sourceItems[0];
+        sourceImg.src = first.img;
         sourceImg.style.display = 'block';
-        sourceName.innerText = sourceItem.name;
-        sourcePrice.innerHTML = `<img src="${COIN_IMG}" alt="coin">${sourceItem.price}`;
+        const totalPrice = sourceItems.reduce((s, it) => s + it.price, 0);
+        if (sourceItems.length === 1) {
+            sourceName.innerText = first.name;
+        } else {
+            sourceName.innerText = `${sourceItems.length} предмета (${first.name}...)`;
+        }
+        sourcePrice.innerHTML = `<img src="${COIN_IMG}" alt="coin">${totalPrice.toLocaleString('ru-RU')}`;
     } else {
         sourceImg.style.display = 'none';
         sourceName.innerText = '—';
@@ -3013,7 +3070,7 @@ function updateUpgradeScreen() {
         targetName.innerText = '—';
         targetPrice.innerHTML = '';
     }
-    if (sourceItem && !isSpinning) chooseTargetBtn.disabled = false;
+    if (sourceItems.length > 0 && !isSpinning) chooseTargetBtn.disabled = false;
     else chooseTargetBtn.disabled = true;
     const chance = calculateChance();
     const displayChance = Math.floor(chance);
@@ -3025,21 +3082,37 @@ function updateUpgradeScreen() {
     if (displayChance >= 45) { chanceLabel.innerText = 'ВЫСОКИЙ ШАНС'; chanceLabel.className = 'chance-label'; }
     else if (displayChance >= 25) { chanceLabel.innerText = 'СРЕДНИЙ ШАНС'; chanceLabel.className = 'chance-label medium'; }
     else { chanceLabel.innerText = ''; chanceLabel.className = 'chance-label hidden'; }
-    if (sourceItem && targetItem && chance > 0 && !isSpinning) {
+    if (sourceItems.length > 0 && targetItem && chance > 0 && !isSpinning) {
         upgradeBtn.disabled = false;
         upgradeBtn.querySelector('span').innerText = `Апгрейд - ${displayChance}%`;
     } else {
         upgradeBtn.disabled = true;
         upgradeBtn.querySelector('span').innerText = 'Апгрейд - 0%';
     }
+    // Инфо-бар мультивыбора
+    const barContainer = document.getElementById('multiInfoBarContainer');
+    if (selectedSourceIndexes.length > 0) {
+        const totalPrice = validIdxs.reduce((sum, i) => sum + (getItemById(inventory[i])?.price || 0), 0);
+        barContainer.innerHTML = `
+            <div class="multi-info-bar">
+                <div class="multi-info-bar-text">ВЫБРАНО ${selectedSourceIndexes.length}/5 • СУММА ${totalPrice.toLocaleString('ru-RU')}</div>
+                <button class="multi-info-bar-clear" onclick="clearSelection()">СБРОСИТЬ</button>
+            </div>
+        `;
+    } else {
+        barContainer.innerHTML = '';
+    }
 }
 function performUpgrade(durationMs) {
     if (isSpinning) return;
-    if (selectedSourceIndex === null) return;
-    const sourceItem = getItemById(inventory[selectedSourceIndex]);
+    if (selectedSourceIndexes.length === 0) return;
+    const validIdxs = selectedSourceIndexes.filter(i => i < inventory.length && inventory[i]);
+    if (validIdxs.length === 0) return;
+    const sourceItems = validIdxs.map(i => getItemById(inventory[i])).filter(Boolean);
     const targetItem = getItemById(selectedTargetId);
-    if (!sourceItem || !targetItem) return;
-    if (targetItem.price <= sourceItem.price) return;
+    if (!targetItem) return;
+    const totalPrice = sourceItems.reduce((s, it) => s + it.price, 0);
+    if (targetItem.price <= totalPrice) return;
     const chance = calculateChance();
     if (chance <= 0) return;
     isSpinning = true;
@@ -3059,22 +3132,23 @@ function performUpgrade(durationMs) {
     const successAngle = (chance / 100) * 360;
     const finalAngle = totalRotation % 360;
     const isSuccess = finalAngle <= successAngle;
-    const sourceIndex = selectedSourceIndex;
+    const idxsToRemove = [...selectedSourceIndexes].sort((a, b) => b - a);
     const targetId = selectedTargetId;
+    const sourceNames = sourceItems.map(i => i.name).join(', ');
     setTimeout(() => {
         if (isSuccess) {
-            inventory.splice(sourceIndex, 1);
+            idxsToRemove.forEach(i => inventory.splice(i, 1));
             inventory.push(targetId);
             const wonItem = getItemById(targetId);
             showToast(`УСПЕХ! Получен ${wonItem.name}`, 'ok');
-            if (wonItem.price >= 5000) pushLiveDrop(wonItem.id, getDisplayNick());
+            pushLiveDrop(wonItem.id, getDisplayNick());
             playWin(); vibratePattern([30, 50, 30, 50, 60]);
         } else {
-            inventory.splice(sourceIndex, 1);
-            showToast(`Провал... ${getItemById(sourceItem.id).name} потерян`, 'err');
+            idxsToRemove.forEach(i => inventory.splice(i, 1));
+            showToast(`Провал... ${sourceNames} потеряны`, 'err');
             playLose(); vibratePattern([50, 30, 100]);
         }
-        selectedSourceIndex = null;
+        selectedSourceIndexes = [];
         selectedTargetId = null;
         isSpinning = false;
         updateBalance();
@@ -3256,13 +3330,11 @@ window.rocketAction = function() {
     }
 };
 function applyCustomization() {
-    document.documentElement.style.setProperty('--app-bg-alpha', appOpacity);
     applyAccentColor();
 }
 window.changeOpacity = function(val) {
     appOpacity = val / 100;
     localStorage.setItem('ggbrainx_opacity', appOpacity);
-    document.documentElement.style.setProperty('--app-bg-alpha', appOpacity);
     document.getElementById('opacityValue').textContent = val + '%';
 };
 function renderBgOptions() {
@@ -3329,18 +3401,18 @@ window.saveCustomNick = function() {
         msg.className = 'msg ok'; msg.textContent = 'Ник сохранён: ' + val;
     }
     applyUserToProfile();
+    syncUserToServer();
     showToast('Ник сохранён', 'ok');
 };
 
-// ===== ОБМЕН (для ВСЕХ браинротов) =====
+// ===== ОБМЕН =====
 function renderTradeList() {
     const list = document.getElementById('tradeList');
     if (!list) return;
     if (!inventory.length) {
-        list.innerHTML = '<div class="trade-empty">Инвентарь пуст — сначала купи браинрота</div>';
+        list.innerHTML = '<div class="trade-empty">Инвентарь пуст</div>';
         return;
     }
-    // Группируем инвентарь по id, чтобы показывать по одной карточке на каждый вид
     const counts = {};
     inventory.forEach(id => { counts[id] = (counts[id] || 0) + 1; });
     const available = [];
@@ -3459,10 +3531,8 @@ window.confirmTrade = function() {
     inventory.splice(srcIndex, 1);
     for (let k = 0; k < recipe.count; k++) inventory.push(recipe.to);
     if (recipe.coins > 0) balance += recipe.coins;
-    if (selectedSourceIndex !== null) {
-        if (selectedSourceIndex === srcIndex) { selectedSourceIndex = null; selectedTargetId = null; }
-        else if (selectedSourceIndex > srcIndex) selectedSourceIndex--;
-    }
+    selectedSourceIndexes = selectedSourceIndexes.filter(i => i !== srcIndex).map(i => i > srcIndex ? i - 1 : i);
+    if (selectedSourceIndexes.length === 0) selectedTargetId = null;
     updateBalance();
     renderInventory(); renderShop(); updateUpgradeScreen(); renderProfileInventory();
     closeModal('confirmTradeModal');
@@ -3481,18 +3551,19 @@ function init() {
     renderOrbitPicker(); renderOrbit();
     renderProfileInventory(); renderMenuCases();
     renderColorGrid();
-    startWeather && startWeather('none');
     applyCustomAvatar();
     renderHauntedSlots(); renderMenuCases();
     renderLiveDrops(); renderBestDrops();
     switchTab('menu');
     loadUserFromServer();
     preloadImages();
-    // Опрос live drops с сервера
+
     fetchLiveDropsFromServer();
+    fetchMyDropsFromServer();
     setInterval(fetchLiveDropsFromServer, LIVE_DROP_FETCH_INTERVAL);
-    // Обновление best drop раз в минуту (на случай смены суток)
+    setInterval(fetchMyDropsFromServer, 30000);
     setInterval(() => { renderLiveDrops(); renderBestDrops(); }, 60000);
+    setInterval(pollServerForUpdates, 10000);
 }
 init();
 fetch(API_URL + '/').catch(() => console.log('[WAKE] Сервер просыпается...'));
