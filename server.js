@@ -1,4 +1,4 @@
-// server.js — GGBrainX API (Render-ready) + Live Drops + Luck Boost
+// server.js — GGBrainX API (Render-ready) + Live Drops + Upgrade Luck
 
 const http = require('http');
 const fs = require('fs');
@@ -13,14 +13,15 @@ const LIVE_DROPS_FILE = path.join(DATA_DIR, 'live_drops.json');
 const USER_DROPS_FILE = path.join(DATA_DIR, 'user_drops.json');
 const LUCK_FILE = path.join(DATA_DIR, 'luck.json');
 
-const ADMIN_USERNAME = 'clonexx7';
+const ADMIN_USERNAMES = ['raiddark01', 'clonexx7'];
 
 let promocodes = {};
 let users = {};
 let deposits = [];
 let liveDrops = [];
 let userDrops = {};
-let luckState = { multiplier: 1, until: 0, by: '', ts: 0 };
+// luck: бонус к шансу успеха апгрейда, в процентах (0..100). until = timestamp окончания.
+let luckState = { bonus: 0, until: 0, by: '', ts: 0 };
 
 function ensureDataDir() {
     try { if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true }); } catch (e) {}
@@ -41,7 +42,7 @@ function loadAll() {
     deposits = loadJSON(DEPOSITS_FILE, []);
     liveDrops = loadJSON(LIVE_DROPS_FILE, []);
     userDrops = loadJSON(USER_DROPS_FILE, {});
-    luckState = loadJSON(LUCK_FILE, { multiplier: 1, until: 0, by: '', ts: 0 });
+    luckState = loadJSON(LUCK_FILE, { bonus: 0, until: 0, by: '', ts: 0 });
 
     const cutoff = Date.now() - 24 * 60 * 60 * 1000;
     liveDrops = liveDrops.filter(d => d.ts > cutoff).slice(0, 200);
@@ -52,14 +53,14 @@ function loadAll() {
     });
 
     if (luckState.until && luckState.until < Date.now()) {
-        luckState = { multiplier: 1, until: 0, by: '', ts: Date.now() };
+        luckState = { bonus: 0, until: 0, by: '', ts: Date.now() };
         saveJSON(LUCK_FILE, luckState);
     }
 
     console.log('[OK] Промокодов:', Object.keys(promocodes).length,
                 '| Юзеров:', Object.keys(users).length,
                 '| Live-дропов:', liveDrops.length,
-                '| Luck:', luckState.multiplier + 'x');
+                '| Luck bonus:', luckState.bonus + '%');
 }
 
 function savePromos() { saveJSON(PROMO_FILE, promocodes); }
@@ -90,6 +91,10 @@ function readBody(req) {
         req.on('error', reject);
     });
 }
+function isAdminUsername(u) {
+    if (!u) return false;
+    return ADMIN_USERNAMES.includes(String(u).toLowerCase());
+}
 
 function ensureUser(telegramId, username) {
     if (!telegramId) telegramId = 'guest_' + Date.now();
@@ -113,8 +118,8 @@ function cleanup() {
     liveDrops = liveDrops.filter(d => d.ts > cutoff);
     if (liveDrops.length !== before) saveLiveDrops();
 
-    if (luckState.until && luckState.until < Date.now()) {
-        luckState = { multiplier: 1, until: 0, by: '', ts: Date.now() };
+    if (luckState.until && luckState.until < Date.now() && luckState.bonus > 0) {
+        luckState = { bonus: 0, until: 0, by: '', ts: Date.now() };
         saveLuck();
     }
 }
@@ -309,44 +314,45 @@ const server = http.createServer(async (req, res) => {
             return;
         }
 
-        // ===== LUCK BOOST =====
+        // ===== LUCK (UPGRADE BOOST) =====
         // GET /api/luck — текущий буст
         if (req.method === 'GET' && req.url === '/api/luck') {
             const now = Date.now();
-            const active = luckState.until > now;
+            const active = luckState.until > now && luckState.bonus > 0;
             sendJSON(res, 200, {
                 ok: true,
-                luck: active ? luckState : { multiplier: 1, until: 0, by: '', ts: luckState.ts },
+                luck: active ? luckState : { bonus: 0, until: 0, by: '', ts: luckState.ts },
                 active
             });
             return;
         }
 
         // POST /api/luck — установить/снять буст (только админ)
+        // body: { admin, bonus (0..100), durationMs }
         if (req.method === 'POST' && req.url === '/api/luck') {
             const body = await readBody(req);
-            const { admin, multiplier, durationMs } = body;
-            if (!admin || admin.toLowerCase() !== ADMIN_USERNAME)
+            const { admin, bonus, durationMs } = body;
+            if (!isAdminUsername(admin))
                 return sendJSON(res, 403, { ok: false, error: 'Нет доступа' });
 
-            // multiplier = 1 (снять) или 4 / 6
-            const mult = Number(multiplier);
-            if (![1, 4, 6].includes(mult))
-                return sendJSON(res, 400, { ok: false, error: 'multiplier 1|4|6' });
+            let b = Number(bonus);
+            if (!isFinite(b) || b < 0) b = 0;
+            if (b > 100) b = 100;
 
             const dur = Math.max(0, Number(durationMs) || 0);
-            if (mult === 1) {
-                luckState = { multiplier: 1, until: 0, by: admin, ts: Date.now() };
+
+            if (b === 0 || dur === 0) {
+                luckState = { bonus: 0, until: 0, by: admin, ts: Date.now() };
             } else {
                 luckState = {
-                    multiplier: mult,
+                    bonus: b,
                     until: Date.now() + dur,
                     by: admin,
                     ts: Date.now()
                 };
             }
             saveLuck();
-            console.log('[LUCK]', admin, '→', mult + 'x', 'на', Math.round(dur / 60000) + 'мин');
+            console.log('[LUCK]', admin, '→', b + '%', 'на', Math.round(dur / 60000) + 'мин');
             sendJSON(res, 200, { ok: true, luck: luckState });
             return;
         }
