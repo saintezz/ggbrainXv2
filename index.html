@@ -1023,6 +1023,63 @@ body{
   filter:drop-shadow(0 0 25px rgba(245,197,66,.25));
 }
 
+  <!-- ===== ADMIN MODAL ===== -->
+<div class="modal" id="adminModal">
+    <div class="modal-card wide">
+        <button class="modal-close" onclick="closeModal('adminModal')">X</button>
+        <div class="admin-header">
+            <div class="admin-header-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    <path d="M9 12l2 2 4-4"/>
+                </svg>
+            </div>
+            <div class="admin-header-text">
+                <div class="admin-header-title">Admin Panel</div>
+                <div class="admin-header-sub"><span class="admin-online-dot"></span> СИСТЕМА АКТИВНА</div>
+            </div>
+        </div>
+        <div class="admin-section">
+            <div class="admin-section-title">Создание промокода</div>
+            <div class="form-group">
+                <label class="form-label">Название промокода</label>
+                <input type="text" class="form-input" id="adminCode" placeholder="Например: SUPER2025" maxlength="20" oninput="updateAdminPreview()">
+            </div>
+            <div class="admin-preview">
+                <div class="admin-preview-label">Превью:</div>
+                <div class="admin-preview-value" id="adminPreviewValue"></div>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Кол-во активаций</label>
+                <input type="number" class="form-input" id="adminUses" placeholder="10" min="1" value="1">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Тип награды</label>
+                <div class="radio-row">
+                    <div class="radio-option active" data-type="balance" onclick="selectPromoType('balance')">Баланс</div>
+                    <div class="radio-option" data-type="item" onclick="selectPromoType('item')">Брейнрот</div>
+                </div>
+            </div>
+            <div class="form-group" id="balanceGroup">
+                <label class="form-label">Сумма монет</label>
+                <input type="number" class="form-input" id="adminBalance" placeholder="500" min="1" value="500">
+            </div>
+            <div class="form-group" id="itemGroup" style="display:none;">
+                <label class="form-label">Выбери брейнрот</label>
+                <div class="admin-grid" id="adminGrid"></div>
+            </div>
+            <button class="action-btn" onclick="createPromo()">Создать промокод</button>
+            <div class="msg" id="adminMsg"></div>
+        </div>
+        <div class="admin-section">
+            <div class="admin-section-title">Существующие промокоды</div>
+            <div class="promo-list" id="promoList">
+                <div style="color:#6a6d7e; font-size:11px; text-align:center; padding:10px; font-weight:700;">Загрузка...</div>
+            </div>
+        </div>
+    </div>
+</div>
+
 /* ===== UPGRADE ===== */
 .progress-section{display:flex;justify-content:center;align-items:center;padding:24px 0 16px;position:relative}
 .progress-wrapper{position:relative;width:310px;height:310px}
