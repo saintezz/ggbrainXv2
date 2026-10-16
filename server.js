@@ -1,4 +1,4 @@
-// server.js — GGBrainX API (Render-ready) + Live Drops + полная синхронизация
+// server.js — GGBrainX API (Render-ready) + Live Drops + Luck Boost
 
 const http = require('http');
 const fs = require('fs');
@@ -11,20 +11,23 @@ const USERS_FILE = path.join(DATA_DIR, 'users.json');
 const DEPOSITS_FILE = path.join(DATA_DIR, 'deposits.json');
 const LIVE_DROPS_FILE = path.join(DATA_DIR, 'live_drops.json');
 const USER_DROPS_FILE = path.join(DATA_DIR, 'user_drops.json');
+const LUCK_FILE = path.join(DATA_DIR, 'luck.json');
+
+const ADMIN_USERNAME = 'clonexx7';
 
 let promocodes = {};
 let users = {};
 let deposits = [];
 let liveDrops = [];
 let userDrops = {};
+let luckState = { multiplier: 1, until: 0, by: '', ts: 0 };
 
 function ensureDataDir() {
     try { if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true }); } catch (e) {}
 }
 function loadJSON(file, fallback) {
-    try {
-        if (fs.existsSync(file)) return JSON.parse(fs.readFileSync(file, 'utf8'));
-    } catch (err) { console.error('[ERROR] Load', file, err.message); }
+    try { if (fs.existsSync(file)) return JSON.parse(fs.readFileSync(file, 'utf8')); }
+    catch (err) { console.error('[ERROR] Load', file, err.message); }
     return fallback;
 }
 function saveJSON(file, data) {
@@ -38,6 +41,7 @@ function loadAll() {
     deposits = loadJSON(DEPOSITS_FILE, []);
     liveDrops = loadJSON(LIVE_DROPS_FILE, []);
     userDrops = loadJSON(USER_DROPS_FILE, {});
+    luckState = loadJSON(LUCK_FILE, { multiplier: 1, until: 0, by: '', ts: 0 });
 
     const cutoff = Date.now() - 24 * 60 * 60 * 1000;
     liveDrops = liveDrops.filter(d => d.ts > cutoff).slice(0, 200);
@@ -47,10 +51,15 @@ function loadAll() {
         userDrops[id] = userDrops[id].filter(d => d.ts > cutoff90).slice(0, 500);
     });
 
+    if (luckState.until && luckState.until < Date.now()) {
+        luckState = { multiplier: 1, until: 0, by: '', ts: Date.now() };
+        saveJSON(LUCK_FILE, luckState);
+    }
+
     console.log('[OK] Промокодов:', Object.keys(promocodes).length,
                 '| Юзеров:', Object.keys(users).length,
-                '| Заявок:', deposits.length,
-                '| Live-дропов:', liveDrops.length);
+                '| Live-дропов:', liveDrops.length,
+                '| Luck:', luckState.multiplier + 'x');
 }
 
 function savePromos() { saveJSON(PROMO_FILE, promocodes); }
@@ -58,6 +67,7 @@ function saveUsers() { saveJSON(USERS_FILE, users); }
 function saveDeposits() { saveJSON(DEPOSITS_FILE, deposits); }
 function saveLiveDrops() { saveJSON(LIVE_DROPS_FILE, liveDrops); }
 function saveUserDrops() { saveJSON(USER_DROPS_FILE, userDrops); }
+function saveLuck() { saveJSON(LUCK_FILE, luckState); }
 
 function setCORS(res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -86,7 +96,7 @@ function ensureUser(telegramId, username) {
     if (!users[telegramId]) {
         users[telegramId] = {
             balance: 0, inventory: [], username: username || '',
-            roblox_name: '', custom_nick: '', avatar: '',
+            roblox_name: '', custom_nick: '', avatar: '', accent: '',
             created_at: new Date().toISOString(),
             updated_at: new Date().toISOString()
         };
@@ -97,35 +107,18 @@ function ensureUser(telegramId, username) {
     return users[telegramId];
 }
 
-function cleanupLiveDrops() {
+function cleanup() {
     const cutoff = Date.now() - 24 * 60 * 60 * 1000;
     const before = liveDrops.length;
     liveDrops = liveDrops.filter(d => d.ts > cutoff);
     if (liveDrops.length !== before) saveLiveDrops();
-}
-setInterval(cleanupLiveDrops, 60 * 1000);
 
-function getMoscowDayStart() {
-    const now = new Date();
-    const msk = new Date(now.getTime() + 3 * 60 * 60 * 1000);
-    msk.setUTCHours(0, 0, 0, 0);
-    return msk.getTime() - 3 * 60 * 60 * 1000;
+    if (luckState.until && luckState.until < Date.now()) {
+        luckState = { multiplier: 1, until: 0, by: '', ts: Date.now() };
+        saveLuck();
+    }
 }
-function getMoscowWeekStart() {
-    const now = new Date();
-    const msk = new Date(now.getTime() + 3 * 60 * 60 * 1000);
-    const day = msk.getUTCDay() || 7;
-    msk.setUTCDate(msk.getUTCDate() - (day - 1));
-    msk.setUTCHours(0, 0, 0, 0);
-    return msk.getTime() - 3 * 60 * 60 * 1000;
-}
-function getMoscowMonthStart() {
-    const now = new Date();
-    const msk = new Date(now.getTime() + 3 * 60 * 60 * 1000);
-    msk.setUTCDate(1);
-    msk.setUTCHours(0, 0, 0, 0);
-    return msk.getTime() - 3 * 60 * 60 * 1000;
-}
+setInterval(cleanup, 60 * 1000);
 
 const server = http.createServer(async (req, res) => {
     console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
@@ -140,11 +133,11 @@ const server = http.createServer(async (req, res) => {
     }
 
     try {
+        // PROMOS
         if (req.method === 'GET' && req.url === '/api/promocodes') {
             sendJSON(res, 200, { ok: true, promocodes });
             return;
         }
-
         if (req.method === 'POST' && req.url === '/api/create') {
             const body = await readBody(req);
             const { code, uses, type, value } = body;
@@ -168,7 +161,6 @@ const server = http.createServer(async (req, res) => {
             sendJSON(res, 200, { ok: true, promo: promocodes[upperCode] });
             return;
         }
-
         if (req.method === 'POST' && req.url === '/api/activate') {
             const body = await readBody(req);
             const { code, telegram_id } = body;
@@ -194,11 +186,11 @@ const server = http.createServer(async (req, res) => {
                 u.updated_at = new Date().toISOString();
                 saveUsers();
             }
-
             sendJSON(res, 200, { ok: true, type: promo.type, value: promo.value, remaining: promo.uses });
             return;
         }
 
+        // USER
         if (req.method === 'GET' && req.url.startsWith('/api/user/')) {
             const id = decodeURIComponent(req.url.slice('/api/user/'.length));
             const u = ensureUser(id);
@@ -206,10 +198,9 @@ const server = http.createServer(async (req, res) => {
             sendJSON(res, 200, { ok: true, user: u });
             return;
         }
-
         if (req.method === 'POST' && req.url === '/api/user/update') {
             const body = await readBody(req);
-            const { telegram_id, balance, inventory, roblox_name, custom_nick, avatar, username } = body;
+            const { telegram_id, balance, inventory, roblox_name, custom_nick, avatar, username, accent } = body;
             if (!telegram_id) return sendJSON(res, 400, { ok: false, error: 'telegram_id обязателен' });
 
             const u = ensureUser(telegram_id, username);
@@ -218,12 +209,14 @@ const server = http.createServer(async (req, res) => {
             if (typeof roblox_name === 'string') u.roblox_name = roblox_name;
             if (typeof custom_nick === 'string') u.custom_nick = custom_nick;
             if (typeof avatar === 'string') u.avatar = avatar;
+            if (typeof accent === 'string') u.accent = accent;
             u.updated_at = new Date().toISOString();
             saveUsers();
             sendJSON(res, 200, { ok: true, user: u });
             return;
         }
 
+        // DEPOSITS
         if (req.method === 'POST' && req.url === '/api/deposit/create') {
             const body = await readBody(req);
             const { telegram_id, username, item_id, item_name, item_price, roblox_name } = body;
@@ -249,12 +242,10 @@ const server = http.createServer(async (req, res) => {
             sendJSON(res, 200, { ok: true, deposit });
             return;
         }
-
         if (req.method === 'GET' && req.url === '/api/deposits') {
             sendJSON(res, 200, { ok: true, deposits });
             return;
         }
-
         if (req.method === 'POST' && req.url === '/api/deposit/status') {
             const body = await readBody(req);
             const { id, status, admin } = body;
@@ -280,6 +271,7 @@ const server = http.createServer(async (req, res) => {
             return;
         }
 
+        // LIVE DROPS
         if (req.method === 'POST' && req.url === '/api/live-drop') {
             const body = await readBody(req);
             const { telegram_id, username, item_id } = body;
@@ -301,22 +293,61 @@ const server = http.createServer(async (req, res) => {
                 userDrops[telegram_id] = userDrops[telegram_id].slice(0, 500);
                 saveUserDrops();
             }
-
             sendJSON(res, 200, { ok: true, entry });
             return;
         }
-
         if (req.method === 'GET' && req.url === '/api/live-drops') {
             const cutoff = Date.now() - 24 * 60 * 60 * 1000;
             const recent = liveDrops.filter(d => d.ts > cutoff);
             sendJSON(res, 200, { ok: true, drops: recent });
             return;
         }
-
         if (req.method === 'GET' && req.url.startsWith('/api/user-drops/')) {
             const id = decodeURIComponent(req.url.slice('/api/user-drops/'.length));
             const drops = userDrops[id] || [];
             sendJSON(res, 200, { ok: true, drops });
+            return;
+        }
+
+        // ===== LUCK BOOST =====
+        // GET /api/luck — текущий буст
+        if (req.method === 'GET' && req.url === '/api/luck') {
+            const now = Date.now();
+            const active = luckState.until > now;
+            sendJSON(res, 200, {
+                ok: true,
+                luck: active ? luckState : { multiplier: 1, until: 0, by: '', ts: luckState.ts },
+                active
+            });
+            return;
+        }
+
+        // POST /api/luck — установить/снять буст (только админ)
+        if (req.method === 'POST' && req.url === '/api/luck') {
+            const body = await readBody(req);
+            const { admin, multiplier, durationMs } = body;
+            if (!admin || admin.toLowerCase() !== ADMIN_USERNAME)
+                return sendJSON(res, 403, { ok: false, error: 'Нет доступа' });
+
+            // multiplier = 1 (снять) или 4 / 6
+            const mult = Number(multiplier);
+            if (![1, 4, 6].includes(mult))
+                return sendJSON(res, 400, { ok: false, error: 'multiplier 1|4|6' });
+
+            const dur = Math.max(0, Number(durationMs) || 0);
+            if (mult === 1) {
+                luckState = { multiplier: 1, until: 0, by: admin, ts: Date.now() };
+            } else {
+                luckState = {
+                    multiplier: mult,
+                    until: Date.now() + dur,
+                    by: admin,
+                    ts: Date.now()
+                };
+            }
+            saveLuck();
+            console.log('[LUCK]', admin, '→', mult + 'x', 'на', Math.round(dur / 60000) + 'мин');
+            sendJSON(res, 200, { ok: true, luck: luckState });
             return;
         }
 
