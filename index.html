@@ -54,7 +54,6 @@ body{
 @keyframes toastIn{from{opacity:0;transform:translateX(30px)}to{opacity:1;transform:translateX(0)}}
 @keyframes toastOut{to{opacity:0;transform:translateX(30px)}}
 
-/* ===== LIVE DROP ===== */
 #liveDrop{width:240px;flex-shrink:0;display:flex;flex-direction:column;gap:10px;position:sticky;top:16px;align-self:flex-start;max-height:calc(100vh - 32px);z-index:10}
 .live-drop-panel{background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:var(--panel-radius);box-shadow:0 10px 30px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.06);padding:12px;display:flex;flex-direction:column;gap:10px;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);overflow:hidden;contain:layout paint}
 .live-drop-header{display:flex;align-items:center;gap:8px;padding-bottom:8px;border-bottom:1px solid rgba(245,197,66,.15)}
@@ -165,7 +164,6 @@ body{
 .msg{margin-top:10px;font-size:12px;font-weight:800;min-height:18px;text-align:center}
 .msg.ok{color:var(--green-bright)}.msg.err{color:#ff6b6b}.msg.wait{color:var(--accent-bright)}
 
-/* ===== CASES PREMIUM ===== */
 .cases-page{padding:0 0 16px}
 .cases-header{display:flex;flex-direction:column;gap:10px;padding:16px 16px 10px}
 .cases-search{width:100%;padding:13px 16px;border-radius:4px;border:1px solid var(--glass-border);background:rgba(0,0,0,.3);color:#fff;font-size:13px;font-weight:700;font-family:'Rubik',sans-serif;outline:none;transition:all .25s}
@@ -194,7 +192,6 @@ body{
 .case-price .free-tag{background:linear-gradient(135deg,var(--green),var(--accent));color:#0a1a0f;padding:3px 14px;border-radius:4px;font-size:11px;letter-spacing:2px;box-shadow:0 0 18px rgba(46,204,113,.6), inset 0 1px 0 rgba(255,255,255,.3)}
 .case-items-count{font-size:10px;color:#7a8090;font-weight:700;margin-top:6px;letter-spacing:1px;font-family:'Orbitron',sans-serif}
 
-/* ===== CASE OPEN MODAL ===== */
 .case-open-modal{position:fixed;inset:0;z-index:4000;display:none;flex-direction:column;align-items:center;background:radial-gradient(circle at 50% 0, rgba(15,35,22,.95) 0, rgba(5,8,12,.98) 100%);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);overflow-y:auto;padding:20px 0 40px}
 .case-open-modal.show{display:flex;animation:caseModalIn .3s ease}
 @keyframes caseModalIn{from{opacity:0}to{opacity:1}}
@@ -268,7 +265,6 @@ body{
 .case-multi-summary > div > span.profit{color:#58d68d}
 .case-multi-summary > div > span.loss{color:#ff6b6b}
 
-/* ===== ADMIN ===== */
 .admin-header{background:linear-gradient(135deg, rgba(46,204,113,.15), rgba(245,197,66,.15));border:1px solid var(--glass-border);border-radius:4px;padding:14px;margin-bottom:14px;display:flex;align-items:center;gap:12px}
 .admin-header-icon{width:44px;height:44px;border-radius:4px;background:linear-gradient(135deg,var(--green),var(--accent));display:flex;align-items:center;justify-content:center;color:#0a1a0f;flex-shrink:0;box-shadow:0 0 16px var(--accent-dim)}
 .admin-header-icon svg{width:24px;height:24px}
@@ -303,7 +299,6 @@ body{
 .promo-list-item .pl-uses.empty{color:#ff6b6b}
 .promo-list-item .pl-uses-label{font-size:8px;color:#a8adb8;font-weight:700;text-align:right;letter-spacing:.5px;text-transform:uppercase;margin-top:2px}
 
-/* ===== DEPOSITS / TOPUP / PROFILE / TRADE / PROMO / HAUNTED / ROCKET ===== */
 .deposits-block{margin-top:12px;padding:14px;background:rgba(255,200,0,.06);border:1px solid rgba(255,200,0,.3);border-radius:4px}
 .deposits-block-title{font-family:'Orbitron',sans-serif;font-size:12px;font-weight:900;color:#ffcc33;letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:8px}
 .deposits-block-title::before{content:'';width:3px;height:12px;background:#ffcc33}
@@ -497,72 +492,45 @@ body{
 .rocket-result-prize{font-family:'Orbitron',sans-serif;font-size:24px;font-weight:900;color:var(--accent-bright);display:flex;align-items:center;gap:8px}
 .rocket-result-prize img{width:20px;height:20px}
 
-/* ===== FLIP MODE (COIN) ===== */
-.flip-page{padding:20px 18px;max-width:900px;margin:0 auto}
-.flip-header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}
-.flip-title{font-family:'Orbitron',sans-serif;font-size:22px;font-weight:900;color:#fff;letter-spacing:3px;text-transform:uppercase;background:linear-gradient(135deg,var(--green-bright),var(--accent-bright));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.flip-subtitle{color:#a8adb8;font-size:12px;letter-spacing:1px;font-weight:700;margin-top:4px}
-.flip-balance-wrap{display:flex;align-items:center;background:rgba(255,255,255,.06);border:1px solid var(--glass-border);border-radius:4px;overflow:hidden}
-.flip-balance-inline{display:flex;align-items:center;gap:5px;font-family:'Orbitron',sans-serif;font-weight:900;font-size:14px;color:#fff;padding:8px 14px}
-.flip-balance-inline img{width:16px;height:16px}
-
-.flip-stage{position:relative;width:100%;min-height:380px;background:radial-gradient(circle at 50% 40%, rgba(46,204,113,.15) 0, transparent 60%), radial-gradient(circle at 50% 100%, rgba(245,197,66,.1) 0, transparent 60%), rgba(5,15,8,.65);border:1px solid var(--glass-border);border-radius:8px;overflow:hidden;margin-bottom:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px 20px;box-shadow:inset 0 0 80px rgba(0,0,0,.5);contain:layout paint style}
-.flip-stage::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 50%, rgba(46,204,113,.08), transparent 60%);animation:flipBgPulse 4s ease-in-out infinite;pointer-events:none}
-@keyframes flipBgPulse{0%,100%{opacity:.5;transform:scale(1)}50%{opacity:1;transform:scale(1.05)}}
-
-.flip-coin-wrap{position:relative;width:200px;height:200px;perspective:1000px;margin-bottom:24px;z-index:2}
-.flip-coin{width:100%;height:100%;position:relative;transform-style:preserve-3d;will-change:transform}
-.flip-coin-face{position:absolute;inset:0;border-radius:50%;display:flex;align-items:center;justify-content:center;backface-visibility:hidden;-webkit-backface-visibility:hidden;overflow:hidden;box-shadow:0 20px 50px rgba(0,0,0,.6), inset 0 -8px 20px rgba(0,0,0,.3), inset 0 8px 20px rgba(255,255,255,.15)}
-.flip-coin-head{background:radial-gradient(circle at 30% 30%, #ffe680 0%, #f5c542 40%, #b8860b 100%);border:6px solid #b8860b}
-.flip-coin-head::before{content:'';position:absolute;inset:12px;border-radius:50%;border:3px dashed rgba(184,134,11,.5)}
-.flip-coin-head svg{width:80%;height:80%;filter:drop-shadow(0 0 12px rgba(255,224,102,.8))}
-.flip-coin-tail{background:radial-gradient(circle at 30% 30%, #d4d4d4 0%, #a8a8a8 40%, #606060 100%);border:6px solid #606060;transform:rotateY(180deg)}
-.flip-coin-tail::before{content:'';position:absolute;inset:12px;border-radius:50%;border:3px dashed rgba(96,96,96,.5)}
-.flip-coin-tail svg{width:80%;height:80%;filter:drop-shadow(0 0 12px rgba(220,220,220,.8))}
-
-.flip-result-text{font-family:'Orbitron',sans-serif;font-size:22px;font-weight:900;letter-spacing:5px;text-transform:uppercase;text-align:center;color:#fff;z-index:2;min-height:32px;text-shadow:0 0 20px rgba(46,204,113,.6)}
-.flip-result-text.win{color:var(--green-bright)}
-.flip-result-text.lose{color:#ff5555}
-
-.flip-bet-wrap{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
-.flip-choice{padding:20px 14px;border-radius:6px;border:2px solid var(--glass-border);background:rgba(255,255,255,.03);cursor:pointer;transition:all .25s;display:flex;flex-direction:column;align-items:center;gap:10px}
-.flip-choice:hover{transform:translateY(-3px)}
-.flip-choice.selected-head{border-color:#f5c542;background:rgba(245,197,66,.12);box-shadow:0 0 24px rgba(245,197,66,.4)}
-.flip-choice.selected-tail{border-color:#a8a8a8;background:rgba(168,168,168,.12);box-shadow:0 0 24px rgba(168,168,168,.3)}
-.flip-choice.disabled{pointer-events:none;opacity:.4}
-.flip-choice-icon{width:60px;height:60px;border-radius:50%;display:flex;align-items:center;justify-content:center}
-.flip-choice-head .flip-choice-icon{background:linear-gradient(135deg,#ffe680,#f5c542,#b8860b);box-shadow:0 0 20px rgba(245,197,66,.6)}
-.flip-choice-tail .flip-choice-icon{background:linear-gradient(135deg,#d4d4d4,#a8a8a8,#606060);box-shadow:0 0 20px rgba(168,168,168,.4)}
-.flip-choice-icon svg{width:44px;height:44px}
-.flip-choice-label{font-family:'Orbitron',sans-serif;font-size:13px;font-weight:900;color:#fff;letter-spacing:2px;text-transform:uppercase}
-
-.flip-inputs{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
-.flip-bet-input-wrap{display:flex;gap:6px}
-.flip-bet-input{flex:1;height:52px;padding:0 16px;border-radius:4px;border:1px solid var(--glass-border);background:rgba(255,255,255,.04);color:#fff;font-family:'Orbitron',sans-serif;font-weight:900;font-size:15px;text-align:center;outline:none}
-.flip-quick-bets{display:grid;grid-template-columns:repeat(2,1fr);gap:6px}
-.flip-quick-bet{height:52px;border-radius:4px;border:1px solid var(--glass-border);background:rgba(255,255,255,.04);color:#a8adb8;font-family:'Orbitron',sans-serif;font-size:13px;font-weight:900;cursor:pointer;transition:all .2s}
-.flip-quick-bet:hover{border-color:var(--accent);color:var(--accent-bright);transform:translateY(-1px)}
-.flip-action-btn{grid-column:1/-1;height:64px;border-radius:6px;border:1px solid var(--glass-border);background:linear-gradient(135deg,var(--green),var(--accent));color:#0a1a0f;font-family:'Orbitron',sans-serif;font-size:17px;font-weight:900;letter-spacing:3px;text-transform:uppercase;cursor:pointer;transition:all .25s;box-shadow:0 8px 24px rgba(46,204,113,.35)}
-.flip-action-btn:hover:not(:disabled){filter:brightness(1.1);transform:translateY(-2px)}
-.flip-action-btn:disabled{opacity:.4;cursor:not-allowed;background:#3a3d4d;box-shadow:none}
-.flip-history{margin-top:14px;padding:14px;background:rgba(255,255,255,.03);border:1px solid var(--glass-border);border-radius:6px}
-.flip-history-label{font-family:'Orbitron',sans-serif;font-size:10px;color:#a8adb8;letter-spacing:2.5px;text-transform:uppercase;margin-bottom:8px;font-weight:800}
-.flip-history-list{display:flex;gap:6px;flex-wrap:wrap}
-.flip-history-item{padding:4px 10px;border-radius:4px;font-family:'Orbitron',sans-serif;font-size:10px;font-weight:900;background:var(--accent-very-dim);border:1px solid var(--glass-border);color:var(--accent-bright)}
-.flip-history-item.head{background:rgba(245,197,66,.15);border-color:#f5c542;color:#f5c542}
-.flip-history-item.tail{background:rgba(168,168,168,.15);border-color:#a8a8a8;color:#a8a8a8}
-
-@media (max-width:600px){
-  .flip-page{padding:16px 12px}
-  .flip-stage{min-height:340px}
-  .flip-coin-wrap{width:160px;height:160px}
-  .flip-title{font-size:18px}
-  .flip-bet-wrap{grid-template-columns:1fr 1fr;gap:8px}
-  .flip-choice{padding:16px 10px}
-  .flip-choice-icon{width:50px;height:50px}
-  .flip-inputs{grid-template-columns:1fr}
-  .flip-result-text{font-size:18px;letter-spacing:3px}
-}
+/* HAUNTED */
+.haunted-page{padding:16px 14px}
+.haunted-banner{position:relative;width:100%;border-radius:6px;overflow:hidden;border:1px solid rgba(255,140,0,.4);background:linear-gradient(135deg, rgba(20,8,3,.85), rgba(45,15,5,.85));backdrop-filter:blur(16px);margin-bottom:18px;padding:20px 10px;text-align:center}
+.haunted-banner img{width:100%;max-width:300px;height:auto;object-fit:contain;filter:drop-shadow(0 0 20px rgba(255,100,0,.6));animation:hauntedFloat 3s ease-in-out infinite;position:relative;z-index:1;will-change:transform}
+@keyframes hauntedFloat{0%,100%{transform:translateY(0) rotate(-1deg)}50%{transform:translateY(-10px) rotate(1deg)}}
+.haunted-title{font-family:'Orbitron',sans-serif;font-size:24px;font-weight:900;letter-spacing:5px;color:#ff8c1a;margin-top:12px;position:relative;z-index:1;text-shadow:0 0 15px #ff5500, 0 0 30px #ff2200}
+.haunted-slots{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
+.haunted-slot{aspect-ratio:1;border-radius:4px;border:1px dashed rgba(255,140,0,.5);background:rgba(30,12,4,.5);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .25s;position:relative;overflow:hidden}
+.haunted-slot:hover{border-color:#ff8c1a;border-style:solid;background:rgba(55,20,5,.7);box-shadow:0 0 20px rgba(255,100,0,.55);transform:translateY(-3px)}
+.haunted-slot.filled{border-style:solid;border-color:#ff8c1a;background:rgba(40,15,5,.8)}
+.haunted-slot img{width:80%;height:80%;object-fit:contain;z-index:1}
+.haunted-plus{font-family:'Rubik',sans-serif;font-weight:300;font-size:36px;color:#ffb366;line-height:1;transition:all .25s;z-index:1}
+.haunted-slot:hover .haunted-plus{color:#ffdd99;transform:scale(1.15)}
+.haunted-summary{display:grid;grid-template-columns:1fr;gap:8px;margin-bottom:14px}
+.haunted-summary-box{background:rgba(0,0,0,.35);border:1px solid rgba(255,140,0,.3);border-radius:4px;padding:10px 12px;text-align:center}
+.haunted-summary-label{font-size:9px;color:#a8adb8;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:4px}
+.haunted-summary-value{font-family:'Orbitron',sans-serif;font-size:16px;font-weight:900;color:#ffb366}
+.haunted-fuse-btn{width:100%;padding:18px;border-radius:4px;border:1px solid #ff6a00;background:linear-gradient(135deg,#ff6a00,#b30000);color:#fff;font-family:'Orbitron',sans-serif;font-size:17px;font-weight:900;letter-spacing:4px;text-transform:uppercase;cursor:pointer;transition:all .25s;box-shadow:0 8px 24px rgba(255,100,0,.4), inset 0 1px 0 rgba(255,255,255,.15);text-shadow:0 0 10px rgba(0,0,0,.6)}
+.haunted-fuse-btn:hover:not(:disabled){filter:brightness(1.15);box-shadow:0 12px 30px rgba(255,100,0,.6);transform:translateY(-2px)}
+.haunted-fuse-btn:disabled{opacity:.35;cursor:not-allowed;background:#3a2a1a;border-color:#4a3a2a;box-shadow:none}
+.haunted-anim{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;flex-direction:column;background:radial-gradient(circle at 50% 50%, rgba(255,80,0,.4) 0, rgba(0,0,0,.95) 70%);overflow:hidden}
+.haunted-anim.show{display:flex;animation:animFadeIn .3s ease}
+@keyframes animFadeIn{from{opacity:0}to{opacity:1}}
+.haunted-anim-bg{position:absolute;inset:0;background:radial-gradient(circle at 50% 50%, rgba(255,100,0,.3) 0, transparent 50%), radial-gradient(circle at 20% 80%, rgba(255,40,0,.25) 0, transparent 40%), radial-gradient(circle at 80% 20%, rgba(255,140,0,.2) 0, transparent 40%);pointer-events:none}
+.haunted-anim-img{width:260px;max-width:70vw;height:auto;z-index:2;filter:drop-shadow(0 0 40px #ff5500) drop-shadow(0 0 80px #ff2200);animation:animImg 2s cubic-bezier(.34,1.56,.64,1) forwards}
+@keyframes animImg{0%{transform:scale(.3) rotate(-30deg);opacity:0}50%{transform:scale(1.15) rotate(10deg);opacity:1}70%{transform:scale(1) rotate(-5deg)}100%{transform:scale(1) rotate(0);opacity:1}}
+.haunted-anim-text{font-family:'Orbitron',sans-serif;font-size:24px;font-weight:900;letter-spacing:6px;color:#ffb366;margin-top:30px;z-index:2;text-shadow:0 0 20px #ff5500, 0 0 40px #ff2200;animation:animText 1.2s ease-in-out infinite}
+@keyframes animText{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.6;transform:scale(1.06)}}
+.haunted-anim-particles{position:absolute;inset:0;z-index:1;pointer-events:none}
+.haunted-result-card{background:linear-gradient(135deg, rgba(20,8,3,.95), rgba(45,15,5,.95)) !important;border:1px solid #ff6a00 !important;padding:30px 24px !important;position:relative;overflow:hidden;box-shadow:0 0 60px rgba(255,100,0,.6), inset 0 1px 0 rgba(255,255,255,.1) !important}
+.haunted-result-label{font-family:'Orbitron',sans-serif;font-size:12px;font-weight:900;color:#ffb366;letter-spacing:3px;text-transform:uppercase;margin-bottom:16px;position:relative;z-index:1}
+.haunted-result-img-wrap{position:relative;width:140px;height:140px;margin:0 auto 14px;display:flex;align-items:center;justify-content:center;z-index:1}
+.haunted-result-img-wrap img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 0 20px #ff5500)}
+.haunted-result-name{font-family:'Orbitron',sans-serif;font-size:15px;font-weight:900;color:#fff;letter-spacing:1.5px;margin-bottom:6px;text-align:center;position:relative;z-index:1;text-shadow:0 0 12px rgba(255,100,0,.6)}
+.haunted-result-price{font-family:'Orbitron',sans-serif;font-size:20px;font-weight:900;color:#ffb366;letter-spacing:2px;margin-bottom:18px;text-align:center;display:flex;align-items:center;justify-content:center;gap:6px;position:relative;z-index:1;text-shadow:0 0 15px #ff5500}
+.haunted-result-price img{width:18px;height:18px;object-fit:contain}
+.haunted-result-stats{display:flex;flex-direction:column;gap:8px;padding:14px;background:rgba(0,0,0,.4);border:1px solid rgba(255,140,0,.35);border-radius:4px;position:relative;z-index:1}
+.haunted-result-stats > div{display:flex;justify-content:space-between;align-items:center;font-family:'Orbitron',sans-serif;font-size:12px;font-weight:900;color:#a8adb8;letter-spacing:1.5px;text-transform:uppercase}
+.haunted-result-stats > div > span{color:#ffb366;font-size:14px}
 
 @media (max-width:900px){
   .inventory-row{grid-template-columns:repeat(auto-fill,minmax(82px,1fr))}
@@ -836,81 +804,6 @@ body{
         </div>
     </div>
 
-    <div class="tab-panel" id="panelFlip">
-        <div class="flip-page">
-            <div class="flip-header">
-                <div>
-                    <div class="flip-title">FLIP</div>
-                    <div class="flip-subtitle">Угадай сторону монетки — ×1.95</div>
-                </div>
-                <div class="flip-balance-wrap">
-                    <div class="flip-balance-inline">
-                        <img src="https://raw.githubusercontent.com/saintezz/saintbetW/main/%D0%BC%D0%BE%D0%BD%D0%B5%D1%82%D0%B0.png" alt="coin">
-                        <span id="flipBalanceDisplay">0</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="flip-stage">
-                <div class="flip-coin-wrap">
-                    <div class="flip-coin" id="flipCoin">
-                        <div class="flip-coin-face flip-coin-head">
-                            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                                <circle cx="50" cy="50" r="40" fill="#ffe680" stroke="#b8860b" stroke-width="3"/>
-                                <text x="50" y="63" font-family="Orbitron, sans-serif" font-size="42" font-weight="900" text-anchor="middle" fill="#b8860b">О</text>
-                            </svg>
-                        </div>
-                        <div class="flip-coin-face flip-coin-tail">
-                            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                                <circle cx="50" cy="50" r="40" fill="#d4d4d4" stroke="#606060" stroke-width="3"/>
-                                <text x="50" y="63" font-family="Orbitron, sans-serif" font-size="42" font-weight="900" text-anchor="middle" fill="#606060">Р</text>
-                            </svg>
-                        </div>
-                    </div>
-                </div>
-                <div class="flip-result-text" id="flipResultText">ВЫБЕРИ СТОРОНУ</div>
-            </div>
-
-            <div class="flip-bet-wrap">
-                <div class="flip-choice flip-choice-head" id="flipChoiceHead" onclick="flipSelect('head')">
-                    <div class="flip-choice-icon">
-                        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                            <text x="50" y="68" font-family="Orbitron, sans-serif" font-size="52" font-weight="900" text-anchor="middle" fill="#8a5a00">О</text>
-                        </svg>
-                    </div>
-                    <div class="flip-choice-label">Орёл</div>
-                </div>
-                <div class="flip-choice flip-choice-tail" id="flipChoiceTail" onclick="flipSelect('tail')">
-                    <div class="flip-choice-icon">
-                        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                            <text x="50" y="68" font-family="Orbitron, sans-serif" font-size="52" font-weight="900" text-anchor="middle" fill="#303030">Р</text>
-                        </svg>
-                    </div>
-                    <div class="flip-choice-label">Решка</div>
-                </div>
-            </div>
-
-            <div class="flip-inputs">
-                <div class="flip-bet-input-wrap">
-                    <input type="number" class="flip-bet-input" id="flipBetInput" placeholder="Ставка" min="1" value="100">
-                </div>
-                <div class="flip-quick-bets">
-                    <button class="flip-quick-bet" onclick="flipSetBet(10)">10</button>
-                    <button class="flip-quick-bet" onclick="flipSetBet(100)">100</button>
-                    <button class="flip-quick-bet" onclick="flipSetBet(500)">500</button>
-                    <button class="flip-quick-bet" onclick="flipSetBet('max')">MAX</button>
-                </div>
-            </div>
-
-            <button class="flip-action-btn" id="flipActionBtn" onclick="flipPlay()" disabled>ВЫБЕРИ СТОРОНУ</button>
-
-            <div class="flip-history">
-                <div class="flip-history-label">История</div>
-                <div class="flip-history-list" id="flipHistoryList"><div style="color:#6a6d7e; font-size:11px; font-weight:700;">Пока пусто</div></div>
-            </div>
-        </div>
-    </div>
-
     <div class="tab-panel" id="panelCases">
         <div class="cases-page">
             <div class="cases-header">
@@ -1065,9 +958,6 @@ body{
     </button>
     <button class="nav-btn" id="navRocket" onclick="switchTab('rocket')" title="Ракетка">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/></svg>
-    </button>
-    <button class="nav-btn" id="navFlip" onclick="switchTab('flip')" title="FLIP">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
     </button>
     <button class="nav-btn" id="navTrade" onclick="switchTab('trade')" title="Обмен">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h13l-3-3"/><path d="M20 17H7l3 3"/></svg>
@@ -1427,12 +1317,6 @@ let myDrops = JSON.parse(localStorage.getItem('ggbrainx_my_drops') || '[]');
 const LIVE_DROP_MAX = 100;
 const LIVE_DROP_FETCH_INTERVAL = 12000;
 
-// ===== FLIP STATE =====
-let flipSelected = null;
-let flipState = 'idle';
-let flipHistory = JSON.parse(localStorage.getItem('ggbrainx_flip_history') || '[]');
-const FLIP_WIN_MULT = 1.95;
-
 function saveLocalCache() {
     localStorage.setItem('ggbrainx_balance', String(balance));
     localStorage.setItem('ggbrainx_inventory', JSON.stringify(inventory));
@@ -1739,8 +1623,6 @@ function updateBalance() {
     rocketBalanceDisplay.innerText = balance.toLocaleString('ru-RU');
     profileBalance.innerText = balance.toLocaleString('ru-RU');
     profileItemsCount.innerText = inventory.length;
-    const flipEl = document.getElementById('flipBalanceDisplay');
-    if (flipEl) flipEl.innerText = balance.toLocaleString('ru-RU');
     balanceBox.classList.remove('pulse');
     void balanceBox.offsetWidth;
     balanceBox.classList.add('pulse');
@@ -1801,7 +1683,7 @@ async function loadUserFromServer() {
     } catch (e) { console.warn('[SYNC] сервер недоступен'); }
 }
 async function pollServerForUpdates() {
-    if (isSpinning || isCaseOpening || flipState === 'spinning') return;
+    if (isSpinning || isCaseOpening) return;
     try {
         const res = await fetch(API_URL + '/api/user/' + encodeURIComponent(getTelegramId()));
         const data = await res.json();
@@ -2002,7 +1884,6 @@ window.switchTab = function(tab) {
     }
     if (tab === 'menu') renderMenuCases();
     if (tab === 'haunted') renderHauntedSlots();
-    if (tab === 'flip') { renderFlipBalance(); renderFlipHistory(); }
 };
 function updateProfile() {
     isAdmin = ADMIN_USERNAMES.includes(String(USER.username || '').toLowerCase());
@@ -3204,107 +3085,6 @@ window.rocketAction = function() {
         setTimeout(() => { if (rocketState === 'cashed') { rocketState = 'idle'; rocketCurrentX = 1.00; updateRocketUI(); } }, 2500);
     }
 };
-
-// ===== FLIP =====
-function flipSetBet(v) {
-    playClick(); vibrate(8);
-    const input = document.getElementById('flipBetInput');
-    if (v === 'max') input.value = Math.floor(balance);
-    else input.value = v;
-}
-window.flipSetBet = flipSetBet;
-
-window.flipSelect = function(side) {
-    if (flipState === 'spinning') return;
-    flipSelected = side;
-    const headEl = document.getElementById('flipChoiceHead');
-    const tailEl = document.getElementById('flipChoiceTail');
-    headEl.classList.toggle('selected-head', side === 'head');
-    tailEl.classList.toggle('selected-tail', side === 'tail');
-    const btn = document.getElementById('flipActionBtn');
-    btn.disabled = false;
-    btn.textContent = side === 'head' ? 'СТАВИТЬ НА ОРЛА' : 'СТАВИТЬ НА РЕШКУ';
-    playClick(); vibrate(10);
-};
-function renderFlipBalance() {
-    const el = document.getElementById('flipBalanceDisplay');
-    if (el) el.innerText = balance.toLocaleString('ru-RU');
-}
-function renderFlipHistory() {
-    const list = document.getElementById('flipHistoryList');
-    if (!list) return;
-    if (!flipHistory.length) {
-        list.innerHTML = '<div style="color:#6a6d7e; font-size:11px; font-weight:700;">Пока пусто</div>';
-        return;
-    }
-    list.innerHTML = flipHistory.slice(0, 20).map(h => {
-        const cls = h.result === 'head' ? 'head' : 'tail';
-        return `<div class="flip-history-item ${cls}">${h.result === 'head' ? 'О' : 'Р'}</div>`;
-    }).join('');
-}
-window.flipPlay = function() {
-    if (flipState === 'spinning') return;
-    if (!flipSelected) { showToast('Выбери сторону', 'err'); return; }
-    const input = document.getElementById('flipBetInput');
-    const bet = Math.floor(Number(input.value));
-    if (!bet || bet < 1) { showToast('Минимальная ставка 1 монета', 'err'); playLose(); return; }
-    if (bet > balance) { showToast('Недостаточно монет', 'err'); playLose(); vibrate(30); return; }
-    flipState = 'spinning';
-    balance -= bet;
-    updateBalance();
-    renderFlipBalance();
-    const btn = document.getElementById('flipActionBtn');
-    btn.disabled = true;
-    btn.textContent = 'КРУТИМ...';
-    document.getElementById('flipChoiceHead').classList.add('disabled');
-    document.getElementById('flipChoiceTail').classList.add('disabled');
-    const resultText = document.getElementById('flipResultText');
-    resultText.textContent = 'МОНЕТКА ЛЕТИТ...';
-    resultText.className = 'flip-result-text';
-    const isHead = Math.random() < 0.5;
-    const actualResult = isHead ? 'head' : 'tail';
-    const won = actualResult === flipSelected;
-    const coin = document.getElementById('flipCoin');
-    coin.style.transition = 'none';
-    coin.style.transform = 'rotateY(0) rotateX(0)';
-    void coin.offsetWidth;
-    const spins = 5;
-    const endY = isHead ? (spins * 360) : (spins * 360 + 180);
-    coin.style.transition = 'transform 2.6s cubic-bezier(.25,.8,.3,1)';
-    coin.style.transform = `rotateY(${endY}deg) rotateX(${isHead ? 0 : 180}deg)`;
-    playUpgradeStart(); vibratePattern([20, 40, 20, 40, 60]);
-    for (let i = 0; i < 20; i++) setTimeout(() => playTick(), i * 120);
-    setTimeout(() => {
-        if (won) {
-            const winAmount = Math.floor(bet * FLIP_WIN_MULT);
-            balance += winAmount;
-            updateBalance();
-            renderFlipBalance();
-            resultText.textContent = `ПОБЕДА! +${winAmount.toLocaleString('ru-RU')}`;
-            resultText.className = 'flip-result-text win';
-            showToast(`Победа! +${winAmount}`, 'ok');
-            playWin();
-            vibratePattern([30, 50, 30, 50, 100]);
-        } else {
-            resultText.textContent = `ПРОИГРЫШ -${bet.toLocaleString('ru-RU')}`;
-            resultText.className = 'flip-result-text lose';
-            showToast(`Проигрыш -${bet}`, 'err');
-            playLose();
-            vibratePattern([50, 30, 100]);
-        }
-        flipHistory.unshift({ result: actualResult, ts: Date.now() });
-        if (flipHistory.length > 50) flipHistory.length = 50;
-        localStorage.setItem('ggbrainx_flip_history', JSON.stringify(flipHistory));
-        renderFlipHistory();
-        flipState = 'idle';
-        flipSelected = null;
-        document.getElementById('flipChoiceHead').classList.remove('selected-head', 'disabled');
-        document.getElementById('flipChoiceTail').classList.remove('selected-tail', 'disabled');
-        btn.disabled = true;
-        btn.textContent = 'ВЫБЕРИ СТОРОНУ';
-    }, 2800);
-};
-
 function applyCustomization() { applyAccentColor(); }
 window.changeOpacity = function(val) {
     appOpacity = val / 100;
@@ -3526,7 +3306,6 @@ function init() {
     applyCustomAvatar();
     renderHauntedSlots(); renderMenuCases();
     renderLiveDrops(); renderBestDrops();
-    renderFlipBalance(); renderFlipHistory();
     switchTab('menu');
     loadUserFromServer();
     preloadImages();
