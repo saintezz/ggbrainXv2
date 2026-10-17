@@ -20,7 +20,7 @@
   --glass-bg:rgba(15,35,22,.4); --glass-bg-strong:rgba(15,35,22,.6);
   --glass-border:rgba(245,197,66,.2); --glass-highlight:rgba(255,255,255,.06);
   --app-bg-alpha:.35; --card-img-size:52px; --card-name-size:9px;
-  --rare-gold:#ffd700; --rare-purple:#a855f7; --rare-red:#ef4444;
+  --rare-gold:#ffd700;
   --roulette-item-width:130px;
 }
 *{box-sizing:border-box;margin:0;padding:0;user-select:none;font-family:'Rubik',sans-serif;font-weight:700}
@@ -187,10 +187,6 @@ body{
 .case-price .free-tag{background:linear-gradient(135deg,var(--green),var(--accent));color:#0a1a0f;padding:2px 12px;border-radius:3px;font-size:11px;letter-spacing:1.5px}
 .case-price .cooldown-tag{font-size:10px;color:#a8adb8;font-weight:800}
 .case-items-count{font-size:10px;color:#6a6d7e;font-weight:700;margin-top:4px;letter-spacing:.5px}
-.case-rarity-badge{position:absolute;top:8px;right:8px;z-index:3;padding:3px 8px;border-radius:4px;font-family:'Orbitron',sans-serif;font-size:8px;font-weight:900;letter-spacing:1px;text-transform:uppercase;backdrop-filter:blur(6px)}
-.case-rarity-badge.rare{background:rgba(168,85,247,.25);border:1px solid rgba(168,85,247,.6);color:#e9d5ff}
-.case-rarity-badge.epic{background:rgba(239,68,68,.2);border:1px solid rgba(239,68,68,.55);color:#fecaca}
-.case-rarity-badge.legend{background:rgba(255,215,0,.2);border:1px solid rgba(255,215,0,.65);color:#fff3b0}
 
 .case-open-modal{position:fixed;inset:0;z-index:4000;display:none;flex-direction:column;align-items:center;background:radial-gradient(circle at 50% 0,rgba(15,35,22,.97) 0,rgba(5,8,12,.99) 100%);overflow-y:auto;padding:20px 0 40px}
 .case-open-modal.show{display:flex;animation:caseModalIn .3s ease}
@@ -303,7 +299,6 @@ body{
 .rush-char-btn{padding:8px 14px;border-radius:4px;border:1px solid var(--glass-border);background:var(--accent-very-dim);color:#fff;font-family:'Orbitron',sans-serif;font-size:10px;font-weight:900;cursor:pointer;text-transform:uppercase;letter-spacing:1px;transition:all .2s}
 .rush-char-btn:hover{background:var(--accent-dim);border-color:var(--accent)}
 
-/* Извилистое поле: 5 рядов по 6, ряды 0,2,4 слева-направо; 1,3 справа-налево */
 .rush-board-wrap{position:relative;margin-bottom:16px;padding:12px;background:rgba(5,15,8,.6);border:1px solid var(--glass-border);border-radius:10px}
 .rush-board{position:relative;display:grid;grid-template-columns:repeat(6,1fr);grid-template-rows:repeat(5,1fr);gap:6px;aspect-ratio:6/5}
 .rush-cell{position:relative;border-radius:6px;border:none;background:rgba(255,255,255,.03);display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:'Orbitron',sans-serif;font-size:11px;font-weight:900;color:#a8adb8;transition:background .2s,transform .2s}
@@ -315,10 +310,9 @@ body{
 .rush-cell.x01{color:#ff6b6b;background:rgba(255,107,107,.1)}
 .rush-cell.crash{color:#fff;background:linear-gradient(135deg,rgba(239,68,68,.5),rgba(153,27,27,.5));font-size:16px}
 .rush-cell.visited{opacity:.55}
-.rush-piece{position:absolute;width:calc(100%/6 - 6px);height:calc(100%/5 - 6px);display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:10;transition:left .25s ease,top .25s ease;will-change:left,top}
+.rush-piece{position:absolute;display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:10;transition:left .25s ease,top .25s ease;will-change:left,top}
 .rush-piece img{max-width:80%;max-height:80%;object-fit:contain;filter:drop-shadow(0 0 10px var(--accent))}
 
-/* Кубик */
 .rush-dice-row{display:flex;align-items:center;gap:12px;margin-bottom:14px}
 .rush-dice-wrap{perspective:600px;width:64px;height:64px;flex-shrink:0}
 .rush-dice{width:64px;height:64px;position:relative;transform-style:preserve-3d;transition:transform .12s linear}
@@ -336,7 +330,6 @@ body{
 .face-left  {transform: rotateY(-90deg) translateZ(32px)}
 .face-top   {transform: rotateX(90deg) translateZ(32px)}
 .face-bottom{transform: rotateX(-90deg) translateZ(32px)}
-/* точки на гранях */
 .face-1 .pip:nth-child(5)::before{content:''}
 .face-1 .pip:not(:nth-child(5))::before{display:none}
 .face-2 .pip:nth-child(1)::before,.face-2 .pip:nth-child(9)::before{content:''}
@@ -534,34 +527,16 @@ body{
 .reset-avatar-btn{padding:10px 14px;border-radius:4px;border:1px solid rgba(255,100,100,.4);background:rgba(255,100,100,.12);color:#ff8a8a;font-family:'Orbitron',sans-serif;font-size:10px;font-weight:900;cursor:pointer;transition:background .2s;text-transform:uppercase}
 .reset-avatar-btn:hover{background:rgba(255,100,100,.25)}
 
-/* ===== АПГРЕЙД ===== */
+/* ===== АПГРЕЙД — как в самой первой версии ===== */
 .progress-section{display:flex;justify-content:center;align-items:center;padding:22px 0 14px;position:relative}
 .progress-wrapper{position:relative;width:300px;height:300px}
 .progress-svg{width:100%;height:100%;transform:rotate(-90deg)}
 .progress-bg{fill:none;stroke:rgba(30,30,38,.7);stroke-width:22}
-.progress-bar{fill:none;stroke:rgba(46,204,113,.35);stroke-width:22;stroke-linecap:butt}
-/* Стрелка: толстая полоска-индикатор + круг win/lose */
-.arrow-container{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:5;transform-origin:center center;will-change:transform}
-.arrow-pointer{
-  position:absolute;top:50%;left:50%;
-  width:8px;height:calc(50% - 20px);
-  margin-left:-4px;
-  transform-origin:50% 0%;
-  transform:translateY(0) rotate(180deg);
-  background:linear-gradient(180deg, var(--accent-bright), var(--accent) 50%, var(--accent-deep));
-  border-radius:4px;
-  box-shadow:0 0 14px var(--accent),0 0 28px var(--accent-dim);
-}
-.arrow-pointer::after{
-  content:'';position:absolute;bottom:-5px;left:50%;
-  width:14px;height:14px;margin-left:-7px;border-radius:50%;
-  background:var(--accent-bright);
-  box-shadow:0 0 14px var(--accent-bright),0 0 24px var(--accent);
-  animation:pointerPulse 1s ease-in-out infinite;
-}
-@keyframes pointerPulse{0%,100%{transform:scale(1);opacity:.85}50%{transform:scale(1.25);opacity:1}}
-/* Круг win/lose (два сектора) — рисуется в SVG как дуга, цвет победы/луза */
-.progress-win-arc{fill:none;stroke:var(--green-bright);stroke-width:22;stroke-linecap:butt;opacity:.0}
+.progress-bar{fill:none;stroke:url(#progressGradient);stroke-width:22;stroke-linecap:butt;stroke-dasharray:816;stroke-dashoffset:816;transition:stroke-dashoffset .3s ease}
+.arrow-container{position:absolute;top:0;left:0;width:100%;height:100%;display:flex;justify-content:center;align-items:flex-start;pointer-events:none;z-index:5;transform-origin:center center;will-change:transform}
+.arrow-pointer{width:0;height:0;border-left:12px solid transparent;border-right:12px solid transparent;border-top:26px solid var(--accent);margin-top:18px;position:relative}
+.arrow-pointer::after{content:'';position:absolute;top:-32px;left:-5px;width:10px;height:10px;background:var(--accent-bright);border-radius:50%;animation:pointerPulse 1s ease-in-out infinite}
+@keyframes pointerPulse{0%,100%{transform:scale(1);opacity:.8}50%{transform:scale(1.4);opacity:1}}
 .progress-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;z-index:10}
 .chance-big{font-family:'Orbitron',sans-serif;font-size:42px;font-weight:900;background:linear-gradient(135deg,var(--green-bright),var(--accent-bright));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1}
 .chance-label{font-size:12px;color:var(--accent-bright);font-weight:900;text-transform:uppercase;letter-spacing:4px;margin-top:6px;min-height:16px}
@@ -676,23 +651,6 @@ body{
 .rocket-result-prize{font-family:'Orbitron',sans-serif;font-size:24px;font-weight:900;color:var(--accent-bright);display:flex;align-items:center;gap:8px}
 .rocket-result-prize img{width:24px;height:24px}
 
-/* ===== ОБМЕН ===== */
-.trade-page{padding:20px 18px;max-width:720px;margin:0 auto}
-.trade-page-header{text-align:center;margin-bottom:18px}
-.trade-page-header h2{font-family:'Orbitron',sans-serif;font-size:20px;font-weight:900;color:#fff;letter-spacing:3px;text-transform:uppercase;margin-bottom:8px}
-.trade-page-header p{color:#a8adb8;font-size:13px;line-height:1.6;font-weight:700}
-.trade-list-page{display:flex;flex-direction:column;gap:8px}
-.trade-item{display:grid;grid-template-columns:60px 1fr auto;align-items:center;gap:14px;padding:14px 16px;background:rgba(255,255,255,.04);border:1px solid var(--glass-border);border-radius:6px}
-.trade-left-img{width:60px;height:60px;object-fit:contain}
-.trade-info{min-width:0}
-.trade-name{font-size:13px;font-weight:800;color:#fff;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.trade-reward{font-size:11px;color:var(--accent-bright);font-weight:800;display:flex;align-items:center;gap:5px;flex-wrap:wrap}
-.trade-reward img{width:14px;height:14px;object-fit:contain}
-.trade-reward .arrow{color:var(--accent);font-weight:900;margin:0 3px}
-.trade-btn{height:40px;padding:0 18px;border-radius:4px;border:1px solid var(--glass-border);background:linear-gradient(135deg,var(--green),var(--accent));color:#0a1a0f;font-family:'Orbitron',sans-serif;font-size:10px;font-weight:900;letter-spacing:1px;text-transform:uppercase;cursor:pointer;transition:filter .2s}
-.trade-btn:disabled{opacity:.35;cursor:not-allowed;background:#3a3d4d}
-.trade-empty{text-align:center;padding:36px 12px;color:#6a6d7e;font-size:12px;font-weight:700}
-
 /* ===== ПРОМО ===== */
 .promo-panel{padding:24px 18px;text-align:center}
 .promo-panel h2{font-family:'Orbitron',sans-serif;font-size:20px;font-weight:900;color:#fff;margin-bottom:8px;text-transform:uppercase;letter-spacing:3px}
@@ -702,9 +660,6 @@ body{
 .promo-input-wrap .action-btn{width:auto;padding:12px 20px;margin-top:0}
 
 .profile-action-row{margin-top:12px}
-
-.mutation-badge{position:absolute;top:2px;left:2px;width:22px;height:22px;object-fit:contain;z-index:10;pointer-events:none}
-.mutation-badge-large{width:28px;height:28px;object-fit:contain;vertical-align:middle;margin-left:6px}
 
 @media (max-width:900px){
   body{padding:10px 10px 100px}
@@ -725,7 +680,6 @@ body{
   .nav-btn-fuse .fuse-label{font-size:6px}
   .progress-wrapper{width:260px;height:260px}
   .chance-big{font-size:36px}
-  .arrow-pointer{width:7px;margin-left:-3.5px;height:calc(50% - 18px)}
   .item-box{min-width:0;padding:10px;max-width:none}
   .item-box img{width:52px;height:52px}
   .upgrade-main-btn{flex:0 1 190px;font-size:12px;padding:12px}
@@ -911,41 +865,6 @@ body{
     </div>
 </div>
 
-<div class="modal" id="confirmTradeModal">
-    <div class="modal-card">
-        <button class="modal-close" onclick="closeModal('confirmTradeModal')">X</button>
-        <div class="modal-title">Ты уверен?</div>
-        <div style="display:flex; align-items:center; justify-content:center; gap:12px; margin-bottom:16px;">
-            <div style="flex:1; display:flex; flex-direction:column; align-items:center; padding:12px 8px; background:rgba(255,255,255,0.04); border:1px solid var(--glass-border); border-radius:6px;">
-                <img id="confirmFromImg" src="" alt="" style="width:64px;height:64px;object-fit:contain;margin-bottom:6px;">
-                <div id="confirmFromName" style="font-size:10px;color:#fff;font-weight:800;text-align:center;min-height:24px;margin-bottom:4px;">—</div>
-                <div style="font-size:11px;font-weight:900;color:var(--accent-bright);font-family:'Orbitron',sans-serif;display:flex;align-items:center;gap:3px;">
-                    <img src="" id="confirmFromCoin" alt="" style="width:13px;height:13px;"> <span id="confirmFromPrice">0</span>
-                </div>
-            </div>
-            <div style="color:var(--accent);font-size:24px;font-weight:900;">→</div>
-            <div style="flex:1; display:flex; flex-direction:column; align-items:center; padding:12px 8px; background:rgba(255,255,255,0.04); border:1px solid var(--glass-border); border-radius:6px;">
-                <img id="confirmToImg" src="" alt="" style="width:64px;height:64px;object-fit:contain;margin-bottom:6px;">
-                <div id="confirmToName" style="font-size:10px;color:#fff;font-weight:800;text-align:center;min-height:24px;margin-bottom:4px;">—</div>
-                <div style="font-size:11px;font-weight:900;color:var(--accent-bright);font-family:'Orbitron',sans-serif;display:flex;align-items:center;gap:3px;">
-                    <img src="" id="confirmToCoin" alt="" style="width:13px;height:13px;"> <span id="confirmToPrice">0</span>
-                </div>
-                <div id="confirmCoinsRow" style="display:none;margin-top:8px;font-size:12px;font-weight:900;color:var(--accent-bright);font-family:'Orbitron',sans-serif;align-items:center;gap:6px;">
-                    + <img src="" id="confirmCoinsCoin" alt="" style="width:14px;height:14px;"> <span id="confirmCoins">0</span>
-                </div>
-            </div>
-        </div>
-        <div id="confirmSelector" style="display:none;margin:14px 0;padding:12px;background:rgba(255,255,255,0.03); border:1px solid var(--glass-border);border-radius:6px;">
-            <div style="font-size:10px;color:#a8adb8;font-weight:800;text-transform:uppercase;letter-spacing:2px;margin-bottom:8px;">Выбери, на что менять</div>
-            <div id="confirmOptions" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px;"></div>
-        </div>
-        <div style="display:flex;gap:8px;margin-top:16px;">
-            <button onclick="closeModal('confirmTradeModal')" style="flex:1;height:46px;border-radius:4px;font-family:'Orbitron',sans-serif;font-size:12px;font-weight:900;text-transform:uppercase;cursor:pointer;border:1px solid var(--glass-border);background:rgba(255,255,255,0.05);color:#a8adb8;">Отмена</button>
-            <button onclick="confirmTrade()" style="flex:1;height:46px;border-radius:4px;font-family:'Orbitron',sans-serif;font-size:12px;font-weight:900;text-transform:uppercase;cursor:pointer;border:1px solid var(--glass-border);background:linear-gradient(135deg,var(--green),var(--accent));color:#0a1a0f;">Обменять</button>
-        </div>
-    </div>
-</div>
-
 <div class="rush-anim" id="rushAnim">
     <div class="rush-anim-text" id="rushAnimText">БРОСОК...</div>
 </div>
@@ -1036,7 +955,7 @@ body{
             <div class="progress-wrapper">
                 <svg class="progress-svg" viewBox="0 0 340 340">
                     <circle class="progress-bg" cx="170" cy="170" r="130"></circle>
-                    <circle class="progress-bar" id="progressBar" cx="170" cy="170" r="130" style="display:none;"></circle>
+                    <circle class="progress-bar" id="progressBar" cx="170" cy="170" r="130"></circle>
                 </svg>
                 <div class="arrow-container" id="arrowContainer">
                     <div class="arrow-pointer"></div>
@@ -1103,9 +1022,7 @@ body{
                 <button class="rush-char-btn" onclick="openRushCharPicker()">Сменить</button>
             </div>
             <div class="rush-board-wrap">
-                <div class="rush-board" id="rushBoard">
-                    <!-- клетки генерируются JS -->
-                </div>
+                <div class="rush-board" id="rushBoard"></div>
                 <div class="rush-piece" id="rushPiece">
                     <img src="" alt="piece" id="rushPieceImg">
                 </div>
@@ -1198,16 +1115,6 @@ body{
             <div class="cases-title-main">КЕЙСЫ</div>
             <div class="cases-subtitle-main">Открывай кейсы и получай брейнротов и монеты · шанс 1/100 на легендарку</div>
             <div class="cases-grid" id="casesGrid"></div>
-        </div>
-    </div>
-
-    <div class="tab-panel" id="panelTrade">
-        <div class="trade-page">
-            <div class="trade-page-header">
-                <h2>Обмен браинротов</h2>
-                <p>Выбери своего браинрота и посмотри, на что его можно обменять</p>
-            </div>
-            <div class="trade-list-page" id="tradeList"></div>
         </div>
     </div>
 
@@ -1375,11 +1282,6 @@ body{
             <path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/>
         </svg>
     </button>
-    <button class="nav-btn" id="navTrade" onclick="switchTab('trade')" title="Обмен">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M4 7h13l-3-3"/><path d="M20 17H7l3 3"/>
-        </svg>
-    </button>
     <button class="nav-btn" id="navPromo" onclick="switchTab('promo')" title="Промо">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M20 12v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-6"/><path d="M2 7h20v5H2z"/><path d="M12 22V7"/>
@@ -1391,7 +1293,7 @@ body{
         </svg>
     </button>
     <button class="nav-btn nav-btn-fuse" id="navRush" onclick="switchTab('rush')" title="Rush">
-        <img src="https://raw.githubusercontent.com/saintezz/ggbrainXv2/main/raketa.png" alt="Rush" loading="lazy" decoding="async">
+        <img src="https://raw.githubusercontent.com/saintezz/ggbrainXv2/main/RUSH.png" alt="Rush" loading="lazy" decoding="async">
         <span class="fuse-label">RUSH</span>
     </button>
 </div>
@@ -1410,6 +1312,8 @@ body{
         lava: 'https://raw.githubusercontent.com/saintezz/SaintGLOSSARY/main/mutation/Lava_Mutation_Icon.webp'
     };
 
+    // Мутационные браинроты остались ТОЛЬКО в наградах кейсов (см. CASES),
+    // но НЕ в списке ITEMS — значит они не показываются в магазине, инвентаре-выборе, целях апгрейда.
     const ITEMS = [
         { id: 'cupid', name: 'Cupid Wings', price: 34, img: 'https://raw.githubusercontent.com/forerer-afk/brainroterX/main/cupid-wings.png' },
         { id: 'garama', name: 'Garama and Madundung', price: 41, img: 'https://raw.githubusercontent.com/forerer-afk/brainroterX/main/garama.png' },
@@ -1442,13 +1346,13 @@ body{
         { id: 'headless', name: 'Headless Horseman', price: 235000, img: 'https://raw.githubusercontent.com/saintezz/ggbrainXv2/main/Headless.webp' }
     ];
 
-    const COLOR_ITEMS = [
+    // Отдельный список "эксклюзивов кейсов" — только для отображения наград (в CASES).
+    const CASE_ONLY_ITEMS = [
         { id: 'cyberskibidi', name: 'Cyber Skibidi Toilet', price: 31000, img: 'https://raw.githubusercontent.com/saintezz/ggbrainXv2/main/CyberSkibidi.webp', mutation: 'cyber' },
         { id: 'yinyangmeowl', name: 'YinYang Meowl', price: 35000, img: 'https://raw.githubusercontent.com/saintezz/ggbrainXv2/main/YinYangMeowl.webp', mutation: 'yinyang' },
         { id: 'goldstrawberry', name: 'Gold Strawberry Elephant', price: 45000, img: 'https://raw.githubusercontent.com/saintezz/ggbrainXv2/main/GoldStrawberryeleph.webp', mutation: 'gold' },
         { id: 'lavastrawberry', name: 'Lava Strawberry Elephant', price: 56000, img: 'https://raw.githubusercontent.com/saintezz/ggbrainXv2/main/LavaStrawberry.webp', mutation: 'lava' }
     ];
-    COLOR_ITEMS.forEach(item => { if (!ITEMS.find(i => i.id === item.id)) ITEMS.push(item); });
 
     const CASES = [
         { id: 'og', name: 'OG CASE', price: 12000, img: 'https://raw.githubusercontent.com/saintezz/ggbrainXv2/main/OGCASE.png',
@@ -1463,7 +1367,7 @@ body{
           rewards: [ { itemId: 'jolly', chance: 60 }, { itemId: 'losamigos', chance: 20 }, { itemId: 'rubiko', chance: 10 }, { itemId: 'roseyandteddy', chance: 9 }, { itemId: 'dragon', chance: 1 } ] },
         { id: 'fusing', name: 'FUSING CASE', price: 1830, img: 'https://raw.githubusercontent.com/saintezz/ggbrainXv2/main/FUSINGCASE.png',
           rewards: [ { itemId: 'dragon', chance: 70 }, { itemId: 'hydra', chance: 20 }, { itemId: 'kraken', chance: 10 } ] },
-        { id: 'winter', name: 'WINTER CASE', price: 49, img: 'https://raw.githubusercontent.com/saintezz/ggbrainXv2/main/WINTERCASE.png',
+        { id: 'winter', name: 'WINTER CASE', price: 109, img: 'https://raw.githubusercontent.com/saintezz/ggbrainXv2/main/WINTERCASE.png',
           rewards: [ { balance: 49, chance: 99.9 }, { itemId: 'polaroidini', chance: 0.1 } ] }
     ];
 
@@ -1495,23 +1399,6 @@ body{
 
     const API_URL = 'https://ggbrainx.onrender.com';
 
-    const TRADE_RECIPES = [
-        { from: 'celestial', to: 'garama', count: 2, coins: 11 },
-        { from: 'cooki', to: 'garama', count: 2, coins: 48 },
-        { from: 'jolly', to: 'garama', count: 3, coins: 9 },
-        { from: 'cerberus', to: 'burguro', count: 2, coins: 15 },
-        { from: 'globba', to: 'burguro', count: 2, coins: 24 },
-        { from: 'losamigos', to: 'cerberus', count: 1, coins: 65 },
-        { from: 'losadmins', to: 'cerberus', count: 2, coins: 60 },
-        { from: 'rubiko', to: 'cerberus', count: 2, coins: 85 },
-        { from: 'rubiko', to: 'garama', count: 9, coins: 26 },
-        { from: 'lossecret', to: 'cerberus', count: 2, coins: 109 },
-        { from: 'lossecret', to: 'garama', count: 10, coins: 9 },
-        { from: 'lacasaboo', to: 'cerberus', count: 3, coins: 86 },
-        { from: 'hydra', to: 'dragon', count: 1, coins: 330 },
-        { from: 'kraken', to: 'dragon', count: 2, coins: 250 }
-    ];
-
     // ===== RUSH =====
     const RUSH_CHARS = [
         { id: 'garama', name: 'Garama and Madundung', mult: 1.0, req: 0 },
@@ -1521,31 +1408,28 @@ body{
         { id: 'skibidi', name: 'Skibidi Toilet', mult: 1.5, req: 20 },
         { id: 'headless', name: 'Headless Horseman', mult: 2.0, req: 50 }
     ];
-    // 30 клеток. Краш ставим на 15-ю (индекс 14). Раскладка: 5 рядов по 6.
+    // 30 клеток. CRASH — на 3-й клетке, как в примере. Порядок шагов — змейка.
     const RUSH_BOARD = [
-        'x1','x2','x1','x0.5','x1','x2',
+        'x1','x2','CRASH','x0.5','x1','x2',
         'x4','x1','x0.7','x1','x2','x0.1',
-        'x1','x2','CRASH','x0.5','x4','x1',
+        'x1','x2','x1','x0.5','x4','x1',
         'x2','x0.7','x1','x2','x1','x0.5',
         'x4','x1','x2','x0.1','x1','x2'
     ];
-    // Карта извилины: row -> список индексов слева направо или справа налево
+    // Извилина: нечётные ряды идут справа налево
     const RUSH_SNAKE_ORDER = (() => {
         const order = [];
         const rows = 5, cols = 6;
         for (let r = 0; r < rows; r++) {
-            if (r % 2 === 0) {
-                for (let c = 0; c < cols; c++) order.push(r * cols + c);
-            } else {
-                for (let c = cols - 1; c >= 0; c--) order.push(r * cols + c);
-            }
+            if (r % 2 === 0) { for (let c = 0; c < cols; c++) order.push(r * cols + c); }
+            else { for (let c = cols - 1; c >= 0; c--) order.push(r * cols + c); }
         }
-        return order; // order[step] = индекс клетки в RUSH_BOARD
+        return order;
     })();
 
     let rushRoundsPlayed = parseInt(localStorage.getItem('ggbrainx_rush_rounds') || '0');
     let rushCurrentCharId = localStorage.getItem('ggbrainx_rush_char') || 'garama';
-    let rushPosition = 0;       // индекс шага на змейке (0..29)
+    let rushPosition = 0;
     let rushBet = 0;
     let rushIsRolling = false;
     let rushRoundActive = false;
@@ -1612,13 +1496,20 @@ body{
     })();
     function getDisplayNick() { return customNick || USER.nick; }
 
+    // Универсальный getItemById: ищет и в ITEMS, и в CASE_ONLY_ITEMS
+    function getItemById(id) {
+        return ITEMS.find(item => item.id === id) || CASE_ONLY_ITEMS.find(item => item.id === id);
+    }
+
     function preloadImages() {
         const urls = new Set();
         ITEMS.forEach(i => urls.add(i.img));
+        CASE_ONLY_ITEMS.forEach(i => urls.add(i.img));
         CASES.forEach(c => urls.add(c.img));
         urls.add(COIN_IMG);
         urls.add(DEFAULT_AVATAR);
         urls.add('https://raw.githubusercontent.com/saintezz/ggbrainXv2/main/raketa.png');
+        urls.add('https://raw.githubusercontent.com/saintezz/ggbrainXv2/main/RUSH.png');
         Object.values(MUTATION_ICONS).forEach(u => urls.add(u));
         const list = [...urls];
         let i = 0;
@@ -1721,9 +1612,7 @@ body{
         if (!ctx) return;
         try {
             const notes = [523, 659, 784, 1047, 1319];
-            notes.forEach((f, i) => {
-                playOsc(f, 0.35, 'sine', 0.06, i * 0.09, 2000);
-            });
+            notes.forEach((f, i) => { playOsc(f, 0.35, 'sine', 0.06, i * 0.09, 2000); });
             playOsc(130, 1.0, 'triangle', 0.04, 0, 400);
             playNoise(0.3, 0.03, 0, 2000);
         } catch(e) {}
@@ -1743,9 +1632,6 @@ body{
     let isSpinning = false;
     let promoType = 'balance';
     let selectedAdminItem = null;
-    let currentTradeOptions = [];
-    let currentTradeSelected = null;
-    let currentTradeFromIndex = null;
 
     let rocketState = 'idle';
     let rocketBet = 0;
@@ -1982,7 +1868,7 @@ body{
             }
         } catch (e) { console.warn('[SYNC] сервер недоступен'); }
     }
-    function getItemById(id) { return ITEMS.find(item => item.id === id); }
+
     window.openModal = function(id) { document.getElementById(id).classList.add('open'); };
     window.closeModal = function(id) { document.getElementById(id).classList.remove('open'); };
     document.querySelectorAll('.modal').forEach(modal => {
@@ -1996,7 +1882,6 @@ body{
         const navBtn = document.getElementById('nav' + tab.charAt(0).toUpperCase() + tab.slice(1));
         if (panel) panel.classList.add('active');
         if (navBtn) navBtn.classList.add('active');
-        if (tab === 'trade') renderTradeList();
         if (tab === 'cases') renderCases();
         if (tab === 'profile') {
             updateProfile(); renderColorGrid(); renderWeatherOptions(); renderBgOptions(); renderOrbitPicker(); renderOrbit();
@@ -2406,6 +2291,7 @@ body{
         if (selectedSourceIndex < 0 || selectedSourceIndex >= inventory.length) return;
         const sourceItem = getItemById(inventory[selectedSourceIndex]);
         if (!sourceItem) return;
+        // Цели — только из ITEMS (без мутационных эксклюзивов кейсов)
         const targets = ITEMS.filter(t => t.price > sourceItem.price).sort((a, b) => a.price - b.price);
         const list = document.getElementById('targetList');
         if (!targets.length) {
@@ -2462,15 +2348,9 @@ body{
     function renderRushBoard() {
         const board = document.getElementById('rushBoard');
         board.innerHTML = '';
-        // Создаём 30 клеток в порядке массива RUSH_BOARD, но раскладка по змейке:
-        // клетка i (RUSH_BOARD[i]) ставится в row/col согласно RUSH_SNAKE_ORDER.
-        // Нам нужно отрисовать каждую клетку на её физическом месте (row*6+col),
-        // а визуальный порядок шагов — через RUSH_SNAKE_ORDER.
-        const cellPositions = {}; // index in RUSH_BOARD -> {row, col}
+        const cellPositions = {};
         RUSH_SNAKE_ORDER.forEach((boardIdx, step) => {
-            const row = Math.floor(step / 6);
-            const col = step % 6;
-            cellPositions[boardIdx] = { row, col };
+            cellPositions[boardIdx] = { row: Math.floor(step / 6), col: step % 6 };
         });
         RUSH_BOARD.forEach((cell, idx) => {
             const pos = cellPositions[idx];
@@ -2493,18 +2373,10 @@ body{
         positionRushPiece();
     }
 
-    function getCellStepInfo(step) {
-        const boardIdx = RUSH_SNAKE_ORDER[step];
-        const row = Math.floor(step / 6);
-        const col = step % 6;
-        return { boardIdx, row, col, cell: RUSH_BOARD[boardIdx] };
-    }
-
     function positionRushPiece() {
         const piece = document.getElementById('rushPiece');
-        if (!piece) return;
         const board = document.getElementById('rushBoard');
-        if (!board) return;
+        if (!piece || !board) return;
         const step = Math.max(0, Math.min(rushPosition, RUSH_SNAKE_ORDER.length - 1));
         const row = Math.floor(step / 6);
         const col = step % 6;
@@ -2560,7 +2432,6 @@ body{
         return 1 + Math.floor(Math.random() * 6);
     }
 
-    // Анимация кубика: крутим, затем фиксируем грань с нужным числом
     function animateDice(finalValue) {
         return new Promise(resolve => {
             const dice = document.getElementById('rushDice');
@@ -2574,10 +2445,9 @@ body{
                 const t = (performance.now() - start) / dur;
                 if (t >= 1) {
                     dice.classList.remove('rolling');
-                    // Фиксируем грань
                     const rotations = {
                         1: {x: 0, y: 0},
-                        2: {x: 0, y: 0},   // top -> покажем как 2 (условно)
+                        2: {x: 0, y: 0},
                         3: {x: 0, y: -90},
                         4: {x: 0, y: 90},
                         5: {x: 90, y: 0},
@@ -2588,7 +2458,6 @@ body{
                     resultEl.textContent = finalValue;
                     resolve();
                 } else {
-                    // хаотичное вращение во время ролла
                     const rx = Math.random() * 720;
                     const ry = Math.random() * 720;
                     dice.style.transform = `rotateX(${rx}deg) rotateY(${ry}deg)`;
@@ -2650,16 +2519,15 @@ body{
         let targetStep = fromStep + diceValue;
         if (targetStep >= RUSH_SNAKE_ORDER.length) targetStep = RUSH_SNAKE_ORDER.length - 1;
 
-        // Проверяем: есть ли CRASH на пути (строго между fromStep+1 и targetStep)
-        let crashStep = -1;
-        for (let s = fromStep + 1; s <= targetStep; s++) {
-            const cell = RUSH_BOARD[RUSH_SNAKE_ORDER[s]];
-            if (cell === 'CRASH') { crashStep = s; break; }
+        // Краш срабатывает ТОЛЬКО если приземляемся ровно на CRASH-клетку.
+        // Если перешагиваем — краша нет.
+        let landingOnCrash = false;
+        if (RUSH_BOARD[RUSH_SNAKE_ORDER[targetStep]] === 'CRASH') {
+            landingOnCrash = true;
         }
 
-        if (crashStep !== -1) {
-            // Останавливаемся на краше
-            await movePieceStepByStep(fromStep, crashStep);
+        if (landingOnCrash) {
+            await movePieceStepByStep(fromStep, targetStep);
             rushRoundActive = false;
             rushIsRolling = false;
             actionBtn.disabled = false;
@@ -2677,14 +2545,12 @@ body{
             return;
         }
 
-        // Идём по шагам до targetStep (без краша)
         await movePieceStepByStep(fromStep, targetStep);
 
         if (targetStep === RUSH_SNAKE_ORDER.length - 1) {
-            // Финиш
             const finalBoardIdx = RUSH_SNAKE_ORDER[targetStep];
             const cell = RUSH_BOARD[finalBoardIdx];
-            const cellMult = cell === 'CRASH' ? 0 : parseFloat(cell.replace('x', '')) || 1;
+            const cellMult = parseFloat(cell.replace('x', '')) || 1;
             const ch = getRushChar(rushCurrentCharId);
             const win = Math.floor(rushBet * cellMult * ch.mult);
             balance += win;
@@ -2705,7 +2571,6 @@ body{
             return;
         }
 
-        // Обычная клетка — продолжаем
         rushIsRolling = false;
         actionBtn.disabled = false;
         const curCell = RUSH_BOARD[RUSH_SNAKE_ORDER[targetStep]];
@@ -2714,20 +2579,6 @@ body{
     };
 
     // ===== КЕЙСЫ =====
-    function getCaseRarity(c) {
-        if (c.id === 'og' || c.id === 'fusing') return 'epic';
-        if (c.id === 'winter' || c.id === 'easter') return 'rare';
-        if (c.id === 'newyear') return 'legend';
-        return '';
-    }
-    function getCaseRarityLabel(c) {
-        const r = getCaseRarity(c);
-        if (r === 'epic') return 'EPIC';
-        if (r === 'rare') return 'RARE';
-        if (r === 'legend') return 'LEGEND';
-        return '';
-    }
-
     function renderMenuCases() {
         const grid = document.getElementById('menuCasesGrid');
         if (!grid) return;
@@ -2736,12 +2587,8 @@ body{
             let priceHtml = '';
             if (c.id === 'free') priceHtml = `<span class="free-tag">FREE</span>`;
             else priceHtml = `${c.price} <img src="${COIN_IMG}" alt="coin">`;
-            const rarity = getCaseRarity(c);
-            const rarityLabel = getCaseRarityLabel(c);
-            const badge = rarity ? `<div class="case-rarity-badge ${rarity}">${rarityLabel}</div>` : '';
             return `
                 <div class="case-card" onclick="openCaseDetail('${c.id}')">
-                    ${badge}
                     <div class="case-card-inner">
                         <div class="case-img-wrap">
                             <img src="${c.img}" alt="${c.name}" loading="lazy" decoding="async" ${FALLBACK_ATTR}>
@@ -2771,12 +2618,8 @@ body{
             let priceHtml = '';
             if (c.id === 'free') priceHtml = `<span class="free-tag">FREE</span>`;
             else priceHtml = `${c.price} <img src="${COIN_IMG}" alt="coin">`;
-            const rarity = getCaseRarity(c);
-            const rarityLabel = getCaseRarityLabel(c);
-            const badge = rarity ? `<div class="case-rarity-badge ${rarity}">${rarityLabel}</div>` : '';
             return `
                 <div class="case-card" onclick="openCaseDetail('${c.id}')">
-                    ${badge}
                     <div class="case-card-inner">
                         <div class="case-img-wrap">
                             <img src="${c.img}" alt="${c.name}" loading="lazy" decoding="async" ${FALLBACK_ATTR}>
@@ -3048,19 +2891,13 @@ body{
 
         let isRareRoll = false;
         rareRollCounter++;
-        if (rareRollCounter >= 100) {
-            isRareRoll = true;
-            rareRollCounter = 0;
-        }
+        if (rareRollCounter >= 100) { isRareRoll = true; rareRollCounter = 0; }
         localStorage.setItem('ggbrainx_rare_roll_counter', String(rareRollCounter));
 
         const rewards = [];
         for (let i = 0; i < qty; i++) {
-            if (isRareRoll && i === 0) {
-                rewards.push(pickLegendaryReward(c));
-            } else {
-                rewards.push(pickCaseReward(c));
-            }
+            if (isRareRoll && i === 0) rewards.push(pickLegendaryReward(c));
+            else rewards.push(pickCaseReward(c));
         }
 
         await playCaseOpenAnimation(c, qty);
@@ -3075,12 +2912,9 @@ body{
             animPromises.push(animateRoulette(track, targetIndex, duration));
             const tickCount = 45;
             for (let t = 0; t < tickCount; t++) setTimeout(() => playTick(), t * (duration / tickCount));
-            setTimeout(() => {
-                highlightWinner(track, targetIndex);
-            }, duration);
+            setTimeout(() => highlightWinner(track, targetIndex), duration);
         });
         await Promise.all(animPromises);
-
         await new Promise(r => setTimeout(r, 500));
 
         let totalCoins = 0;
@@ -3099,9 +2933,7 @@ body{
         closeCaseOpen();
         renderMenuCases();
         renderCases();
-        if (isRareRoll) {
-            showToast('🎉 ЛЕГЕНДАРКА! (1/100)', 'ok');
-        }
+        if (isRareRoll) showToast('🎉 ЛЕГЕНДАРКА! (1/100)', 'ok');
     };
 
     function showCaseResult(results, c, qty, totalSpent, isRareRoll = false) {
@@ -3227,7 +3059,7 @@ body{
         return Math.round(chance * 10) / 10;
     }
 
-    // Стрелка теперь просто визуальный индикатор, не привязан к %
+    // Апгрейд — как в самой первой версии
     function updateUpgradeScreen() {
         const sourceItem = selectedSourceIndex !== null ? getItemById(inventory[selectedSourceIndex]) : null;
         const targetItem = selectedTargetId ? getItemById(selectedTargetId) : null;
@@ -3255,7 +3087,10 @@ body{
         else chooseTargetBtn.disabled = true;
         const chance = calculateChance();
         const displayChance = Math.floor(chance);
-        arrowContainer.style.transform = 'rotate(0deg)';
+        const offset = CIRCUMFERENCE - (chance / 100) * CIRCUMFERENCE;
+        progressBar.style.strokeDashoffset = offset;
+        const angle = (chance / 100) * 360;
+        arrowContainer.style.transform = `rotate(${angle}deg)`;
         chanceBig.innerText = displayChance + '%';
         if (displayChance >= 45) { chanceLabel.innerText = 'ВЫСОКИЙ ШАНС'; chanceLabel.className = 'chance-label'; }
         else if (displayChance >= 25) { chanceLabel.innerText = 'СРЕДНИЙ ШАНС'; chanceLabel.className = 'chance-label medium'; }
@@ -3292,7 +3127,9 @@ body{
         const totalRotation = baseRotation + randomAngle;
         arrowContainer.style.transition = `transform ${durationMs}ms cubic-bezier(0.12, 0.8, 0.15, 1)`;
         arrowContainer.style.transform = `rotate(${totalRotation}deg)`;
-        const isSuccess = Math.random() * 100 < chance;
+        const successAngle = (chance / 100) * 360;
+        const finalAngle = totalRotation % 360;
+        const isSuccess = finalAngle <= successAngle;
         const sourceIndex = selectedSourceIndex;
         const targetId = selectedTargetId;
         setTimeout(() => {
@@ -3564,143 +3401,7 @@ body{
         applyUserToProfile();
         showToast('Ник сохранён', 'ok');
     };
-    function renderTradeList() {
-        const list = document.getElementById('tradeList');
-        if (!list) return;
-        if (!inventory.length) {
-            list.innerHTML = '<div class="trade-empty">Инвентарь пуст — сначала купи браинрота</div>';
-            return;
-        }
-        const available = [];
-        inventory.forEach((id, index) => {
-            const srcItem = getItemById(id);
-            if (!srcItem) return;
-            const variants = TRADE_RECIPES.map((r, idx) => {
-                if (r.from !== id) return null;
-                const dstItem = getItemById(r.to);
-                if (!dstItem) return null;
-                const receivePrice = dstItem.price * r.count + r.coins;
-                if (receivePrice > srcItem.price) return null;
-                return { recipe: r, idx, dstItem };
-            }).filter(Boolean);
-            if (variants.length > 0) available.push({ fromItem: srcItem, index, variants });
-        });
-        if (!available.length) {
-            list.innerHTML = '<div class="trade-empty">Нет браинротов для обмена</div>';
-            return;
-        }
-        list.innerHTML = available.map(({ fromItem, index, variants }) => {
-            const variantsHtml = variants.map(v => {
-                const coinsHtml = v.recipe.coins > 0 ? ` + ${v.recipe.coins} <img src="${COIN_IMG}" alt="coin">` : '';
-                return `<div class="trade-reward" style="margin-top:6px;"><span class="arrow">→</span> ${v.recipe.count}x ${v.dstItem.name}${coinsHtml}</div>`;
-            }).join('');
-            return `
-                <div class="trade-item">
-                    <img class="trade-left-img" src="${fromItem.img}" alt="${fromItem.name}" loading="lazy" decoding="async" ${FALLBACK_ATTR}>
-                    <div class="trade-info">
-                        <div class="trade-name">${fromItem.name}</div>
-                        ${variantsHtml}
-                    </div>
-                    <button class="trade-btn" onclick="openConfirmTrade(${index})">Обменять</button>
-                </div>
-            `;
-        }).join('');
-    }
-    window.openConfirmTrade = function(fromIndex) {
-        playClick(); vibrate(10);
-        if (isSpinning) return;
-        if (fromIndex < 0 || fromIndex >= inventory.length) return;
-        const fromId = inventory[fromIndex];
-        const srcItem = getItemById(fromId);
-        if (!srcItem) return;
-        const variants = TRADE_RECIPES.map((r, idx) => {
-            if (r.from !== fromId) return null;
-            const dstItem = getItemById(r.to);
-            if (!dstItem) return null;
-            const receivePrice = dstItem.price * r.count + r.coins;
-            if (receivePrice > srcItem.price) return null;
-            return { recipe: r, idx, dstItem };
-        }).filter(Boolean);
-        if (!variants.length) return;
-        currentTradeOptions = variants;
-        currentTradeSelected = 0;
-        currentTradeFromIndex = fromIndex;
-        document.getElementById('confirmFromImg').src = srcItem.img;
-        document.getElementById('confirmFromName').textContent = srcItem.name;
-        document.getElementById('confirmFromPrice').textContent = srcItem.price;
-        document.getElementById('confirmFromCoin').src = COIN_IMG;
-        document.getElementById('confirmToCoin').src = COIN_IMG;
-        document.getElementById('confirmCoinsCoin').src = COIN_IMG;
-        const selector = document.getElementById('confirmSelector');
-        const optionsContainer = document.getElementById('confirmOptions');
-        if (variants.length > 1) {
-            selector.style.display = 'block';
-            optionsContainer.innerHTML = variants.map((v, i) => `
-                <div class="confirm-option ${i === 0 ? 'selected' : ''}" onclick="selectTradeOption(${i})" style="padding:10px 8px;background:rgba(255,255,255,0.04);border:1px solid var(--glass-border);border-radius:6px;cursor:pointer;text-align:center;">
-                    <img src="${v.dstItem.img}" alt="${v.dstItem.name}" style="width:40px;height:40px;object-fit:contain;margin-bottom:4px;" loading="lazy" decoding="async">
-                    <div style="font-size:9px;color:#fff;font-weight:800;line-height:1.2;margin-bottom:2px;min-height:20px;">${v.recipe.count}x ${v.dstItem.name}</div>
-                    <div style="font-size:10px;color:var(--accent-bright);font-weight:900;font-family:'Orbitron',sans-serif;">${v.dstItem.price * v.recipe.count + v.recipe.coins}${v.recipe.coins > 0 ? ' (+' + v.recipe.coins + ')' : ''}</div>
-                </div>
-            `).join('');
-        } else {
-            selector.style.display = 'none';
-        }
-        renderConfirmVariant(0);
-        openModal('confirmTradeModal');
-    };
-    window.selectTradeOption = function(i) {
-        playClick();
-        currentTradeSelected = i;
-        document.querySelectorAll('#confirmOptions > div').forEach((el, idx) => {
-            if (idx === i) el.style.background = 'var(--accent-very-dim)';
-            else el.style.background = 'rgba(255,255,255,0.04)';
-        });
-        renderConfirmVariant(i);
-    };
-    function renderConfirmVariant(i) {
-        const variant = currentTradeOptions[i];
-        if (!variant) return;
-        const { recipe, dstItem } = variant;
-        document.getElementById('confirmToImg').src = dstItem.img;
-        document.getElementById('confirmToName').textContent = `${recipe.count}x ${dstItem.name}`;
-        document.getElementById('confirmToPrice').textContent = (dstItem.price * recipe.count);
-        const coinsRow = document.getElementById('confirmCoinsRow');
-        if (recipe.coins > 0) {
-            coinsRow.style.display = 'flex';
-            document.getElementById('confirmCoins').textContent = recipe.coins;
-        } else {
-            coinsRow.style.display = 'none';
-        }
-    }
-    window.confirmTrade = function() {
-        playClick(); vibrate(15);
-        if (isSpinning) return;
-        if (currentTradeFromIndex === null) return;
-        const variant = currentTradeOptions[currentTradeSelected];
-        if (!variant) return;
-        const recipe = variant.recipe;
-        const dstItem = variant.dstItem;
-        const srcIndex = currentTradeFromIndex;
-        if (srcIndex < 0 || srcIndex >= inventory.length) { showToast('Предмет не найден', 'err'); return; }
-        const fromId = inventory[srcIndex];
-        const srcItem = getItemById(fromId);
-        const receivePrice = dstItem.price * recipe.count + recipe.coins;
-        if (receivePrice > srcItem.price) { showToast('Рецепт нечестный', 'err'); return; }
-        inventory.splice(srcIndex, 1);
-        for (let k = 0; k < recipe.count; k++) inventory.push(recipe.to);
-        if (recipe.coins > 0) balance += recipe.coins;
-        if (selectedSourceIndex !== null) {
-            if (selectedSourceIndex === srcIndex) { selectedSourceIndex = null; selectedTargetId = null; }
-            else if (selectedSourceIndex > srcIndex) selectedSourceIndex--;
-        }
-        updateBalance();
-        renderInventory(); renderShop(); updateUpgradeScreen(); renderProfileInventory();
-        closeModal('confirmTradeModal');
-        renderTradeList();
-        showToast(`Обмен: ${srcItem.name} → ${recipe.count}x ${dstItem.name}`, 'ok');
-        playWin(); vibratePattern([20, 40, 20]);
-        currentTradeFromIndex = null;
-    };
+
     function init() {
         applyCustomization();
         initParticles();
@@ -3719,7 +3420,6 @@ body{
         loadUserFromServer();
         updateWeatherContainerHeight();
         preloadImages();
-        // Пересчёт позиции фигурки при ресайзе
         window.addEventListener('resize', () => { positionRushPiece(); });
     }
     init();
