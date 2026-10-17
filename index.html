@@ -21,6 +21,7 @@
   --glass-border:rgba(245,197,66,.2); --glass-highlight:rgba(255,255,255,.06);
   --app-bg-alpha:.35; --card-img-size:52px; --card-name-size:9px;
   --rare-gold:#ffd700; --rare-purple:#a855f7; --rare-red:#ef4444;
+  --roulette-item-width:130px;
 }
 *{box-sizing:border-box;margin:0;padding:0;user-select:none;font-family:'Rubik',sans-serif;font-weight:700}
 html{scroll-behavior:smooth}
@@ -171,9 +172,6 @@ body{
 @media (min-width:600px){.cases-grid{grid-template-columns:repeat(3,1fr)}}
 
 .case-card{position:relative;border-radius:10px;border:1px solid rgba(245,197,66,.25);background:linear-gradient(160deg,rgba(20,45,28,.65),rgba(10,25,15,.5));overflow:hidden;transition:transform .3s,border-color .3s,box-shadow .3s;cursor:pointer;contain:layout paint style}
-.case-card::before{content:'';position:absolute;inset:-2px;border-radius:12px;background:conic-gradient(from 0deg,transparent,var(--accent-dim),transparent 40%,var(--green-dim),transparent 80%);opacity:0;transition:opacity .35s;z-index:0;pointer-events:none}
-.case-card:hover::before{opacity:1;animation:conicSpin 4s linear infinite}
-@keyframes conicSpin{to{transform:rotate(360deg)}}
 .case-card:hover{border-color:var(--accent);transform:translateY(-5px) scale(1.02);box-shadow:0 18px 40px rgba(0,0,0,.5),0 0 30px rgba(245,197,66,.12)}
 .case-card-inner{position:relative;display:flex;flex-direction:column;padding:18px 14px 14px;align-items:center;gap:12px;z-index:1}
 .case-img-wrap{position:relative;width:100%;aspect-ratio:1;border-radius:8px;overflow:hidden;background:radial-gradient(circle at 50% 45%,rgba(46,204,113,.22) 0,rgba(0,0,0,.25) 72%);border:1px solid rgba(46,204,113,.25);display:flex;align-items:center;justify-content:center}
@@ -216,7 +214,7 @@ body{
 .case-roulette-row::before{left:0;background:linear-gradient(90deg,rgba(5,8,12,.9),transparent)}
 .case-roulette-row::after{right:0;background:linear-gradient(270deg,rgba(5,8,12,.9),transparent)}
 .case-roulette-track{display:flex;align-items:center;height:100%;will-change:transform}
-.case-roulette-item{flex:0 0 130px;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:8px;border-right:1px solid rgba(255,255,255,.05);position:relative;transition:background .2s}
+.case-roulette-item{flex:0 0 var(--roulette-item-width,130px);height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:8px;border-right:1px solid rgba(255,255,255,.05);position:relative;transition:background .2s}
 .case-roulette-item img{width:70px;height:70px;object-fit:contain;filter:drop-shadow(0 0 6px rgba(0,0,0,.5))}
 .case-roulette-item .roulette-name{font-size:9px;font-weight:800;color:#e5e7ef;text-align:center;line-height:1.1;height:22px;overflow:hidden;width:100%}
 .case-roulette-item .roulette-price{font-family:'Orbitron',sans-serif;font-size:10px;font-weight:900;color:var(--accent-bright);display:flex;align-items:center;gap:3px}
@@ -249,7 +247,6 @@ body{
 .case-possible-item .cp-price img{width:12px;height:12px}
 .case-possible-item .cp-chance{font-size:8px;color:#6a6d7e;font-weight:800}
 
-/* Анимация открытия кейса */
 .case-anim-overlay{position:fixed;inset:0;z-index:9999;display:none;flex-direction:column;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 50%,rgba(46,204,113,.3) 0,rgba(0,0,0,.97) 70%);overflow:hidden}
 .case-anim-overlay.show{display:flex;animation:caseFadeIn .3s ease}
 @keyframes caseFadeIn{from{opacity:0}to{opacity:1}}
@@ -262,7 +259,6 @@ body{
 @keyframes caseTextPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.6;transform:scale(1.06)}}
 .case-anim-particles{position:absolute;inset:0;z-index:1;pointer-events:none}
 
-/* Результат кейса */
 .case-result-card{background:rgba(10,25,15,.95) !important;border:1px solid rgba(46,204,113,.5) !important;padding:30px 24px !important;position:relative;overflow:hidden}
 .case-result-card.legend{border-color:var(--rare-gold) !important;box-shadow:0 0 60px rgba(255,215,0,.4),0 20px 60px rgba(0,0,0,.8) !important}
 .case-result-card.legend::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 30%,rgba(255,215,0,.2),transparent 60%);pointer-events:none;animation:legendGlow 2s ease-in-out infinite}
@@ -293,7 +289,71 @@ body{
 .case-multi-summary > div > span.loss{color:#ff6b6b}
 .case-multi-summary > div > span.gold{color:var(--rare-gold)}
 
-/* Остальные секции (без изменений) */
+/* ===== RUSH ===== */
+.rush-page{padding:16px 14px}
+.rush-header{text-align:center;margin-bottom:14px}
+.rush-title{font-family:'Orbitron',sans-serif;font-size:26px;font-weight:900;letter-spacing:6px;color:var(--accent-bright);text-transform:uppercase;background:linear-gradient(135deg,var(--accent),var(--green-bright),var(--accent));background-size:200% 200%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:logoGradient 4s ease infinite}
+.rush-subtitle{color:#a8adb8;font-size:12px;font-weight:700;margin-top:4px}
+.rush-char-row{display:flex;align-items:center;gap:12px;padding:12px;background:rgba(255,255,255,.04);border:1px solid var(--glass-border);border-radius:8px;margin-bottom:14px}
+.rush-char-img{width:64px;height:64px;object-fit:contain;background:rgba(0,0,0,.3);border-radius:6px;padding:4px;border:1px solid var(--glass-border)}
+.rush-char-info{flex:1;min-width:0}
+.rush-char-name{font-family:'Orbitron',sans-serif;font-size:13px;font-weight:900;color:#fff;letter-spacing:1px;margin-bottom:3px}
+.rush-char-mult{font-family:'Orbitron',sans-serif;font-size:11px;font-weight:900;color:var(--green-bright)}
+.rush-char-progress{font-size:10px;color:#a8adb8;font-weight:700;margin-top:4px}
+.rush-char-btn{padding:8px 14px;border-radius:4px;border:1px solid var(--glass-border);background:var(--accent-very-dim);color:#fff;font-family:'Orbitron',sans-serif;font-size:10px;font-weight:900;cursor:pointer;text-transform:uppercase;letter-spacing:1px;transition:all .2s}
+.rush-char-btn:hover{background:var(--accent-dim);border-color:var(--accent)}
+.rush-board{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin-bottom:14px;padding:10px;background:rgba(5,15,8,.6);border:1px solid var(--glass-border);border-radius:8px}
+.rush-cell{aspect-ratio:1;border-radius:6px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-family:'Orbitron',sans-serif;font-size:10px;font-weight:900;color:#a8adb8;transition:all .25s;position:relative}
+.rush-cell .rc-num{position:absolute;top:3px;left:5px;font-size:7px;opacity:.5}
+.rush-cell.x2{color:#58d68d;border-color:rgba(88,214,141,.5);background:rgba(46,204,113,.1)}
+.rush-cell.x4{color:#ffe066;border-color:rgba(255,224,102,.6);background:rgba(245,197,66,.15)}
+.rush-cell.x1{color:#e5e7ef}
+.rush-cell.x07,.rush-cell.x05{color:#fb923c;border-color:rgba(251,146,60,.4);background:rgba(251,146,60,.08)}
+.rush-cell.x01{color:#ff6b6b;border-color:rgba(255,107,107,.4);background:rgba(255,107,107,.08)}
+.rush-cell.crash{color:#fff;border-color:#ff5555;background:linear-gradient(135deg,rgba(239,68,68,.4),rgba(153,27,27,.4))}
+.rush-cell.current{border-color:var(--accent-bright);box-shadow:0 0 15px var(--accent-bright);transform:scale(1.08)}
+.rush-cell.passed{opacity:.45}
+.rush-dice-row{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.rush-dice{width:64px;height:64px;border-radius:10px;background:linear-gradient(145deg,#2a3a2e,#1a2a1e);border:1px solid var(--glass-border);display:flex;align-items:center;justify-content:center;font-family:'Orbitron',sans-serif;font-size:30px;font-weight:900;color:var(--accent-bright);flex-shrink:0;box-shadow:0 4px 15px rgba(0,0,0,.4)}
+.rush-dice.rolling{animation:diceRoll .12s linear infinite}
+@keyframes diceRoll{0%{transform:rotate(-8deg) scale(1.05)}50%{transform:rotate(8deg) scale(.95)}100%{transform:rotate(-8deg) scale(1.05)}}
+.rush-bet-wrap{flex:1;display:flex;gap:6px}
+.rush-bet-input{flex:1;height:64px;padding:0 14px;border-radius:6px;border:1px solid var(--glass-border);background:rgba(255,255,255,.04);color:#fff;font-family:'Orbitron',sans-serif;font-weight:900;font-size:16px;text-align:center;outline:none}
+.rush-quick-bets{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:12px}
+.rush-quick-bet{height:40px;border-radius:4px;border:1px solid var(--glass-border);background:rgba(255,255,255,.04);color:#a8adb8;font-family:'Orbitron',sans-serif;font-size:12px;font-weight:900;cursor:pointer;transition:all .2s}
+.rush-quick-bet:hover{border-color:var(--accent);color:var(--accent-bright)}
+.rush-action-btn{width:100%;padding:18px;border-radius:6px;border:1px solid var(--glass-border);background:linear-gradient(135deg,var(--green),var(--accent));color:#0a1a0f;font-family:'Orbitron',sans-serif;font-size:16px;font-weight:900;letter-spacing:3px;text-transform:uppercase;cursor:pointer;transition:filter .25s}
+.rush-action-btn:hover:not(:disabled){filter:brightness(1.15)}
+.rush-action-btn:disabled{opacity:.4;cursor:not-allowed;background:#3a3d4d}
+.rush-action-btn.cashout{background:linear-gradient(135deg,var(--accent-bright),var(--amber))}
+
+.rush-anim{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;flex-direction:column;background:rgba(0,0,0,.85);overflow:hidden}
+.rush-anim.show{display:flex;animation:animFadeIn .3s ease}
+@keyframes animFadeIn{from{opacity:0}to{opacity:1}}
+.rush-anim-img{width:200px;height:200px;object-fit:contain;z-index:2;filter:drop-shadow(0 0 30px var(--accent))}
+.rush-anim-img.hopping{animation:hop .5s ease-in-out infinite}
+@keyframes hop{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-25px) scale(1.08)}}
+.rush-anim-text{font-family:'Orbitron',sans-serif;font-size:22px;font-weight:900;letter-spacing:6px;color:var(--accent-bright);margin-top:20px;z-index:2}
+
+.rush-result-card{background:rgba(10,25,15,.95) !important;border:1px solid var(--accent) !important;padding:26px 22px !important}
+.rush-result-label{font-family:'Orbitron',sans-serif;font-size:13px;font-weight:900;color:var(--accent-bright);letter-spacing:3px;text-transform:uppercase;margin-bottom:14px}
+.rush-result-name{font-family:'Orbitron',sans-serif;font-size:15px;font-weight:900;color:#fff;margin-bottom:6px}
+.rush-result-mult{font-family:'Orbitron',sans-serif;font-size:22px;font-weight:900;color:var(--green-bright);margin-bottom:16px}
+.rush-result-stats{padding:14px;background:rgba(0,0,0,.4);border:1px solid var(--glass-border);border-radius:6px;display:flex;flex-direction:column;gap:8px}
+.rush-result-stats > div{display:flex;justify-content:space-between;font-family:'Orbitron',sans-serif;font-size:12px;font-weight:900;color:#a8adb8;letter-spacing:1px;text-transform:uppercase}
+.rush-result-stats > div > span{color:var(--accent-bright)}
+
+.rush-char-pick{display:flex;flex-direction:column;gap:8px;max-height:60vh;overflow-y:auto;padding:4px}
+.rush-char-item{display:grid;grid-template-columns:52px 1fr auto;align-items:center;gap:12px;padding:10px 12px;background:rgba(255,255,255,.04);border:1px solid var(--glass-border);border-radius:6px;cursor:pointer;transition:all .2s}
+.rush-char-item:hover{border-color:var(--accent);background:var(--accent-very-dim)}
+.rush-char-item.locked{opacity:.5;cursor:not-allowed}
+.rush-char-item.selected{border-color:var(--accent-bright);background:var(--accent-very-dim);box-shadow:0 0 15px var(--accent-dim)}
+.rush-char-item img{width:52px;height:52px;object-fit:contain}
+.rush-char-item .ci-name{font-size:12px;font-weight:800;color:#fff;margin-bottom:3px;text-align:left}
+.rush-char-item .ci-mult{font-family:'Orbitron',sans-serif;font-size:10px;font-weight:900;color:var(--green-bright);text-align:left}
+.rush-char-item .ci-lock{font-family:'Orbitron',sans-serif;font-size:10px;font-weight:900;color:#ff6b6b;text-align:right}
+
+/* ===== АДМИН / ПРОМО / ДЕПОЗИТЫ ===== */
 .admin-header{background:linear-gradient(135deg,rgba(46,204,113,.15),rgba(245,197,66,.15));border:1px solid var(--glass-border);border-radius:6px;padding:16px;margin-bottom:16px;display:flex;align-items:center;gap:14px;position:relative;overflow:hidden}
 .admin-header-icon{width:46px;height:46px;border-radius:4px;background:linear-gradient(135deg,var(--green),var(--accent));display:flex;align-items:center;justify-content:center;color:#0a1a0f;flex-shrink:0;z-index:1}
 .admin-header-icon svg{width:24px;height:24px}
@@ -360,6 +420,7 @@ body{
 .topup-price-line .tpl-value{font-family:'Orbitron',sans-serif;font-weight:900;color:#fff;display:flex;align-items:center;gap:5px}
 .topup-price-line .tpl-value img{width:13px;height:13px}
 
+/* ===== ПРОФИЛЬ ===== */
 .profile-page{padding:18px 18px}
 .profile-banner{position:relative;width:100%;height:220px;border-radius:8px;overflow:hidden;margin-bottom:14px;border:1px solid var(--glass-border);background:linear-gradient(135deg,rgba(10,26,15,.8),rgba(26,58,31,.8))}
 .profile-banner video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none}
@@ -442,7 +503,7 @@ body{
 .reset-avatar-btn{padding:10px 14px;border-radius:4px;border:1px solid rgba(255,100,100,.4);background:rgba(255,100,100,.12);color:#ff8a8a;font-family:'Orbitron',sans-serif;font-size:10px;font-weight:900;cursor:pointer;transition:background .2s;text-transform:uppercase}
 .reset-avatar-btn:hover{background:rgba(255,100,100,.25)}
 
-/* ===== АПГРЕЙД (тонкая полоска вместо стрелки) ===== */
+/* ===== АПГРЕЙД (простая полоска) ===== */
 .progress-section{display:flex;justify-content:center;align-items:center;padding:22px 0 14px;position:relative}
 .progress-wrapper{position:relative;width:300px;height:300px}
 .progress-svg{width:100%;height:100%;transform:rotate(-90deg)}
@@ -526,6 +587,7 @@ body{
 .target-list-item .tl-price img{width:12px;height:12px}
 .target-list-item .tl-chance{font-family:'Orbitron',sans-serif;font-size:11px;font-weight:900;color:var(--green-bright);text-align:right}
 
+/* ===== РАКЕТА ===== */
 .rocket-page{padding:20px 18px;max-width:900px;margin:0 auto}
 .rocket-header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
 .rocket-title{font-family:'Orbitron',sans-serif;font-size:20px;font-weight:900;color:#fff;letter-spacing:3px;text-transform:uppercase}
@@ -580,6 +642,7 @@ body{
 .rocket-result-prize{font-family:'Orbitron',sans-serif;font-size:24px;font-weight:900;color:var(--accent-bright);display:flex;align-items:center;gap:8px}
 .rocket-result-prize img{width:24px;height:24px}
 
+/* ===== ОБМЕН ===== */
 .trade-page{padding:20px 18px;max-width:720px;margin:0 auto}
 .trade-page-header{text-align:center;margin-bottom:18px}
 .trade-page-header h2{font-family:'Orbitron',sans-serif;font-size:20px;font-weight:900;color:#fff;letter-spacing:3px;text-transform:uppercase;margin-bottom:8px}
@@ -596,6 +659,7 @@ body{
 .trade-btn:disabled{opacity:.35;cursor:not-allowed;background:#3a3d4d}
 .trade-empty{text-align:center;padding:36px 12px;color:#6a6d7e;font-size:12px;font-weight:700}
 
+/* ===== ПРОМО ===== */
 .promo-panel{padding:24px 18px;text-align:center}
 .promo-panel h2{font-family:'Orbitron',sans-serif;font-size:20px;font-weight:900;color:#fff;margin-bottom:8px;text-transform:uppercase;letter-spacing:3px}
 .promo-panel p{color:#a8adb8;font-size:13px;margin-bottom:18px;font-weight:700}
@@ -604,47 +668,6 @@ body{
 .promo-input-wrap .action-btn{width:auto;padding:12px 20px;margin-top:0}
 
 .profile-action-row{margin-top:12px}
-
-.haunted-page{padding:16px 14px}
-.haunted-banner{position:relative;width:100%;border-radius:8px;overflow:hidden;border:1px solid rgba(255,140,0,.4);background:linear-gradient(135deg,rgba(20,8,3,.9),rgba(45,15,5,.9));margin-bottom:18px;padding:20px 10px;text-align:center;overflow:hidden}
-.haunted-banner img{width:100%;max-width:300px;height:auto;object-fit:contain;filter:drop-shadow(0 0 20px rgba(255,100,0,.6));animation:hauntedFloat 3s ease-in-out infinite;position:relative;z-index:1;will-change:transform}
-@keyframes hauntedFloat{0%,100%{transform:translateY(0) rotate(-1deg)}50%{transform:translateY(-10px) rotate(1deg)}}
-.haunted-title{font-family:'Orbitron',sans-serif;font-size:24px;font-weight:900;letter-spacing:5px;color:#ff8c1a;margin-top:12px;position:relative;z-index:1}
-.haunted-slots{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
-.haunted-slot{aspect-ratio:1;border-radius:6px;border:1px dashed rgba(255,140,0,.5);background:rgba(30,12,4,.5);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .25s;position:relative;overflow:hidden}
-.haunted-slot:hover{border-color:#ff8c1a;border-style:solid;background:rgba(55,20,5,.7);transform:translateY(-3px)}
-.haunted-slot.filled{border-style:solid;border-color:#ff8c1a;background:rgba(40,15,5,.8)}
-.haunted-slot img{width:80%;height:80%;object-fit:contain;z-index:1}
-.haunted-plus{font-family:'Rubik',sans-serif;font-weight:300;font-size:36px;color:#ffb366;line-height:1;transition:all .25s;z-index:1}
-.haunted-slot:hover .haunted-plus{color:#ffdd99;transform:scale(1.15)}
-.haunted-summary{display:grid;grid-template-columns:1fr;gap:8px;margin-bottom:14px}
-.haunted-summary-box{background:rgba(0,0,0,.35);border:1px solid rgba(255,140,0,.3);border-radius:4px;padding:10px 12px;text-align:center}
-.haunted-summary-label{font-size:9px;color:#a8adb8;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:4px}
-.haunted-summary-value{font-family:'Orbitron',sans-serif;font-size:16px;font-weight:900;color:#ffb366}
-.haunted-fuse-btn{width:100%;padding:18px;border-radius:6px;border:1px solid #ff6a00;background:linear-gradient(135deg,#ff6a00,#b30000);color:#fff;font-family:'Orbitron',sans-serif;font-size:17px;font-weight:900;letter-spacing:4px;text-transform:uppercase;cursor:pointer;transition:filter .25s,transform .25s}
-.haunted-fuse-btn:hover:not(:disabled){filter:brightness(1.15);transform:translateY(-2px)}
-.haunted-fuse-btn:disabled{opacity:.35;cursor:not-allowed;background:#3a2a1a;border-color:#4a3a2a}
-
-.haunted-anim{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;flex-direction:column;background:radial-gradient(circle at 50% 50%,rgba(255,80,0,.4) 0,rgba(0,0,0,.95) 70%);overflow:hidden}
-.haunted-anim.show{display:flex;animation:animFadeIn .3s ease}
-@keyframes animFadeIn{from{opacity:0}to{opacity:1}}
-.haunted-anim-bg{position:absolute;inset:0;background:radial-gradient(circle at 50% 50%,rgba(255,100,0,.3) 0,transparent 50%),radial-gradient(circle at 20% 80%,rgba(255,40,0,.25) 0,transparent 40%),radial-gradient(circle at 80% 20%,rgba(255,140,0,.2) 0,transparent 40%);pointer-events:none}
-.haunted-anim-img{width:260px;max-width:70vw;height:auto;z-index:2;filter:drop-shadow(0 0 40px #ff5500);animation:animImg 2s cubic-bezier(.34,1.56,.64,1) forwards}
-@keyframes animImg{0%{transform:scale(.3) rotate(-30deg);opacity:0}50%{transform:scale(1.15) rotate(10deg);opacity:1}70%{transform:scale(1) rotate(-5deg)}100%{transform:scale(1) rotate(0);opacity:1}}
-.haunted-anim-text{font-family:'Orbitron',sans-serif;font-size:24px;font-weight:900;letter-spacing:6px;color:#ffb366;margin-top:30px;z-index:2;animation:animText 1.2s ease-in-out infinite}
-@keyframes animText{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.6;transform:scale(1.06)}}
-.haunted-anim-particles{position:absolute;inset:0;z-index:1;pointer-events:none}
-
-.haunted-result-card{background:linear-gradient(135deg,rgba(20,8,3,.98),rgba(45,15,5,.98)) !important;border:1px solid #ff6a00 !important;padding:30px 24px !important;position:relative;overflow:hidden}
-.haunted-result-label{font-family:'Orbitron',sans-serif;font-size:12px;font-weight:900;color:#ffb366;letter-spacing:3px;text-transform:uppercase;margin-bottom:16px;position:relative;z-index:1}
-.haunted-result-img-wrap{position:relative;width:140px;height:140px;margin:0 auto 14px;display:flex;align-items:center;justify-content:center;z-index:1}
-.haunted-result-img-wrap img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 0 20px #ff5500)}
-.haunted-result-name{font-family:'Orbitron',sans-serif;font-size:15px;font-weight:900;color:#fff;letter-spacing:1.5px;margin-bottom:6px;text-align:center;position:relative;z-index:1}
-.haunted-result-price{font-family:'Orbitron',sans-serif;font-size:20px;font-weight:900;color:#ffb366;letter-spacing:2px;margin-bottom:18px;text-align:center;display:flex;align-items:center;justify-content:center;gap:6px;position:relative;z-index:1}
-.haunted-result-price img{width:20px;height:20px;object-fit:contain}
-.haunted-result-stats{display:flex;flex-direction:column;gap:8px;padding:14px;background:rgba(0,0,0,.4);border:1px solid rgba(255,140,0,.35);border-radius:4px;position:relative;z-index:1}
-.haunted-result-stats > div{display:flex;justify-content:space-between;align-items:center;font-family:'Orbitron',sans-serif;font-size:12px;font-weight:900;color:#a8adb8;letter-spacing:1.5px;text-transform:uppercase}
-.haunted-result-stats > div > span{color:#ffb366;font-size:14px}
 
 .mutation-badge{position:absolute;top:2px;left:2px;width:22px;height:22px;object-fit:contain;z-index:10;pointer-events:none}
 .mutation-badge-large{width:28px;height:28px;object-fit:contain;vertical-align:middle;margin-left:6px}
@@ -697,19 +720,18 @@ body{
   .profile-nick-big{font-size:18px}
   .avatar-orbit-item{width:22px;height:22px;margin-left:-11px;margin-top:-11px;transform-origin:11px 11px}
   .avatar-orbit-item img{width:14px;height:14px}
-  :root{--card-img-size:44px;--card-name-size:8px}
+  :root{--card-img-size:44px;--card-name-size:8px;--roulette-item-width:100px}
   .color-grid{grid-template-columns:repeat(5,1fr)}
   .admin-grid{grid-template-columns:repeat(2,1fr)}
   .deposit-item{grid-template-columns:40px 1fr}
   .deposit-actions{grid-column:1/-1;flex-direction:row}
   .dep-accept,.dep-reject{flex:1}
-  .haunted-title{font-size:18px;letter-spacing:3px}
-  .haunted-plus{font-size:28px}
-  .haunted-anim-img{width:180px}
-  .haunted-anim-text{font-size:18px;letter-spacing:4px}
-  .haunted-result-img-wrap{width:110px;height:110px}
-  .haunted-result-name{font-size:13px}
-  .haunted-result-price{font-size:17px}
+  .rush-title{font-size:18px;letter-spacing:4px}
+  .rush-dice{width:54px;height:54px;font-size:26px}
+  .rush-bet-input{height:54px;font-size:14px}
+  .rush-anim-img{width:160px;height:160px}
+  .rush-anim-text{font-size:18px;letter-spacing:4px}
+  .rush-result-mult{font-size:18px}
   .case-card-inner{padding:14px 10px 12px}
   .case-name{font-size:10px}
   .case-price{font-size:12px}
@@ -717,7 +739,6 @@ body{
   .cases-grid{gap:10px;padding:0 10px}
   .case-open-main-img{width:180px;height:180px}
   .case-open-name{font-size:18px;letter-spacing:3px}
-  .case-roulette-item{flex:0 0 100px}
   .case-roulette-item img{width:54px;height:54px}
   .case-roulette-row{height:120px}
   .case-roulette-item .roulette-name{font-size:8px;height:18px}
@@ -842,33 +863,9 @@ body{
     </div>
 </div>
 
-<div class="modal" id="hauntedPickModal">
-    <div class="modal-card">
-        <button class="modal-close" onclick="closeModal('hauntedPickModal')">X</button>
-        <div class="modal-title">Выбери браинрота</div>
-        <div class="target-list" id="hauntedPickList"></div>
-    </div>
-</div>
+<div class="modal" id="hauntedPickModal" style="display:none;"></div>
 
-<div class="modal" id="hauntedResultModal">
-    <div class="modal-card haunted-result-card">
-        <button class="modal-close" onclick="closeModal('hauntedResultModal')">X</button>
-        <div class="haunted-result-label">Ты получил:</div>
-        <div class="haunted-result-img-wrap">
-            <img id="hauntedResultImg" src="" alt="">
-        </div>
-        <div class="haunted-result-name" id="hauntedResultName">—</div>
-        <div class="haunted-result-price" id="hauntedResultPrice">
-            <img src="https://raw.githubusercontent.com/saintezz/saintbetW/main/%D0%BC%D0%BE%D0%BD%D0%B5%D1%82%D0%B0.png" alt="coin">
-            <span>0</span>
-        </div>
-        <div class="haunted-result-stats">
-            <div>ШАНС БЫЛ: <span id="hauntedResultChance">??%</span></div>
-            <div>Множитель: <span id="hauntedResultMultiplier">?x</span></div>
-            <div>РЕЗУЛЬТАТ: <span id="hauntedResultLabel2">—</span></div>
-        </div>
-    </div>
-</div>
+<div class="modal" id="hauntedResultModal" style="display:none;"></div>
 
 <div class="modal" id="caseResultModal">
     <div class="modal-card case-result-card" id="caseResultCard">
@@ -913,11 +910,9 @@ body{
     </div>
 </div>
 
-<div class="haunted-anim" id="hauntedAnim">
-    <div class="haunted-anim-bg"></div>
-    <div class="haunted-anim-particles" id="hauntedAnimParticles"></div>
-    <img class="haunted-anim-img" src="https://raw.githubusercontent.com/saintezz/ggbrainXv2/main/Haunted.png" alt="Haunted Fuse" loading="lazy" decoding="async">
-    <div class="haunted-anim-text" id="hauntedAnimText">HAUNTED FUSE...</div>
+<div class="rush-anim" id="rushAnim">
+    <img class="rush-anim-img" id="rushAnimImg" src="" alt="char">
+    <div class="rush-anim-text" id="rushAnimText">БРОСОК...</div>
 </div>
 
 <div class="case-anim-overlay" id="caseAnimOverlay">
@@ -927,6 +922,30 @@ body{
         <img src="" alt="case" id="caseAnimImg" loading="lazy" decoding="async">
     </div>
     <div class="case-anim-text" id="caseAnimText">ОТКРЫВАЕМ...</div>
+</div>
+
+<div class="modal" id="rushCharModal">
+    <div class="modal-card">
+        <button class="modal-close" onclick="closeModal('rushCharModal')">X</button>
+        <div class="modal-title">Выбери персонажа</div>
+        <div class="rush-char-pick" id="rushCharPickList"></div>
+    </div>
+</div>
+
+<div class="modal" id="rushResultModal">
+    <div class="modal-card rush-result-card">
+        <button class="modal-close" onclick="closeModal('rushResultModal')">X</button>
+        <div class="rush-result-label">Результат раунда</div>
+        <div class="rush-result-name" id="rushResultName">—</div>
+        <div class="rush-result-mult" id="rushResultMult">x1.0</div>
+        <div class="rush-result-stats">
+            <div>Ставка: <span id="rushResultBet">0</span></div>
+            <div>Клетка: <span id="rushResultCell">—</span></div>
+            <div>Множитель клетки: <span id="rushResultCellMult">x1</span></div>
+            <div>Множитель персонажа: <span id="rushResultCharMult">x1</span></div>
+            <div>Выплата: <span id="rushResultWin">0</span></div>
+        </div>
+    </div>
 </div>
 
 <div class="case-open-modal" id="caseOpenModal">
@@ -1033,33 +1052,35 @@ body{
         </div>
     </div>
 
-    <div class="tab-panel" id="panelHaunted">
-        <div class="haunted-page">
-            <div class="haunted-banner">
-                <img src="https://raw.githubusercontent.com/saintezz/ggbrainXv2/main/Haunted.png" alt="Haunted Fuse" loading="lazy" decoding="async">
-                <div class="haunted-title">HAUNTED FUSE</div>
+    <div class="tab-panel" id="panelRush">
+        <div class="rush-page">
+            <div class="rush-header">
+                <div class="rush-title">RUSH</div>
+                <div class="rush-subtitle">Бросай кость и шагай по 30 клеткам</div>
             </div>
-            <div class="haunted-slots">
-                <div class="haunted-slot" id="hauntedSlot0" onclick="openHauntedPicker(0)">
-                    <div class="haunted-plus">+</div>
+            <div class="rush-char-row">
+                <img class="rush-char-img" id="rushCharImg" src="" alt="char">
+                <div class="rush-char-info">
+                    <div class="rush-char-name" id="rushCharName">—</div>
+                    <div class="rush-char-mult" id="rushCharMult">x1.0</div>
+                    <div class="rush-char-progress" id="rushCharProgress">Сыграно раундов: 0</div>
                 </div>
-                <div class="haunted-slot" id="hauntedSlot1" onclick="openHauntedPicker(1)">
-                    <div class="haunted-plus">+</div>
-                </div>
-                <div class="haunted-slot" id="hauntedSlot2" onclick="openHauntedPicker(2)">
-                    <div class="haunted-plus">+</div>
-                </div>
-                <div class="haunted-slot" id="hauntedSlot3" onclick="openHauntedPicker(3)">
-                    <div class="haunted-plus">+</div>
-                </div>
+                <button class="rush-char-btn" onclick="openRushCharPicker()">Сменить</button>
             </div>
-            <div class="haunted-summary">
-                <div class="haunted-summary-box">
-                    <div class="haunted-summary-label">Сумма</div>
-                    <div class="haunted-summary-value" id="hauntedSum">0</div>
+            <div class="rush-board" id="rushBoard"></div>
+            <div class="rush-dice-row">
+                <div class="rush-dice" id="rushDice">?</div>
+                <div class="rush-bet-wrap">
+                    <input type="number" class="rush-bet-input" id="rushBetInput" placeholder="Ставка" min="1" value="100">
                 </div>
             </div>
-            <button class="haunted-fuse-btn" id="hauntedFuseBtn" onclick="runHauntedFuse()" disabled>ЗАПУСТИТЬ FUSE</button>
+            <div class="rush-quick-bets">
+                <button class="rush-quick-bet" onclick="rushSetBet(10)">10</button>
+                <button class="rush-quick-bet" onclick="rushSetBet(100)">100</button>
+                <button class="rush-quick-bet" onclick="rushSetBet(500)">500</button>
+                <button class="rush-quick-bet" onclick="rushSetBet('max')">MAX</button>
+            </div>
+            <button class="rush-action-btn" id="rushActionBtn" onclick="rushAction()">СДЕЛАТЬ СТАВКУ</button>
         </div>
     </div>
 
@@ -1317,9 +1338,9 @@ body{
             <circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/>
         </svg>
     </button>
-    <button class="nav-btn nav-btn-fuse" id="navHaunted" onclick="switchTab('haunted')" title="Haunted Fuse">
-        <img src="https://raw.githubusercontent.com/saintezz/ggbrainXv2/main/Haunted.png" alt="Haunted" loading="lazy" decoding="async">
-        <span class="fuse-label">FUSE</span>
+    <button class="nav-btn nav-btn-fuse" id="navRush" onclick="switchTab('rush')" title="Rush">
+        <img src="https://raw.githubusercontent.com/saintezz/ggbrainXv2/main/raketa.png" alt="Rush" loading="lazy" decoding="async">
+        <span class="fuse-label">RUSH</span>
     </button>
 </div>
 
@@ -1439,6 +1460,29 @@ body{
         { from: 'kraken', to: 'dragon', count: 2, coins: 250 }
     ];
 
+    // ===== RUSH =====
+    const RUSH_CHARS = [
+        { id: 'garama', name: 'Garama and Madundung', mult: 1.0, req: 0 },
+        { id: 'cerberus', name: 'Cerberus', mult: 1.1, req: 2 },
+        { id: 'losamigos', name: 'Los Amigos', mult: 1.3, req: 5 },
+        { id: 'dragon', name: 'Dragon Cannelloni', mult: 1.4, req: 10 },
+        { id: 'skibidi', name: 'Skibidi Toilet', mult: 1.5, req: 20 },
+        { id: 'headless', name: 'Headless Horseman', mult: 2.0, req: 50 }
+    ];
+    const RUSH_BOARD = [
+        'x1','x2','x1','x0.5','x1','x2',
+        'x4','x1','x0.7','x1','x2','x0.1',
+        'x1','x2','x1','x0.5','x4','x1',
+        'x2','x0.7','x1','x2','x1','x0.5',
+        'x4','x1','x2','x0.1','x1','CRASH'
+    ];
+    let rushRoundsPlayed = parseInt(localStorage.getItem('ggbrainx_rush_rounds') || '0');
+    let rushCurrentCharId = localStorage.getItem('ggbrainx_rush_char') || 'garama';
+    let rushPosition = 0;
+    let rushBet = 0;
+    let rushIsRolling = false;
+    let rushRoundActive = false;
+
     let USER = { nick: 'Гость', tg: '@guest', tgLink: '#', id: null, username: null, photo: null };
     let customNick = localStorage.getItem('ggbrainx_custom_nick') || null;
     let profileBg = localStorage.getItem('ggbrainx_profile_bg') || 'none';
@@ -1459,16 +1503,12 @@ body{
     let currentWeather = localStorage.getItem('ggbrainx_weather') || 'none';
     let customAvatar = localStorage.getItem('ggbrainx_custom_avatar') || null;
 
-    let hauntedSlots = [null, null, null, null];
-    let hauntedPickerTargetSlot = null;
     let freeCaseLastOpen = parseFloat(localStorage.getItem('ggbrainx_free_case_last') || '0');
     let currentCaseId = null;
     let caseOpenQty = 1;
     let isCaseOpening = false;
     let currentCaseFilter = '';
-
-    // Новая механика 1/100
-    let rareRollCounter = 0;
+    let rareRollCounter = parseInt(localStorage.getItem('ggbrainx_rare_roll_counter') || '0') || 0;
 
     function saveLocalCache() {
         localStorage.setItem('ggbrainx_balance', String(balance));
@@ -1511,7 +1551,6 @@ body{
         CASES.forEach(c => urls.add(c.img));
         urls.add(COIN_IMG);
         urls.add(DEFAULT_AVATAR);
-        urls.add('https://raw.githubusercontent.com/saintezz/ggbrainXv2/main/Haunted.png');
         urls.add('https://raw.githubusercontent.com/saintezz/ggbrainXv2/main/raketa.png');
         Object.values(MUTATION_ICONS).forEach(u => urls.add(u));
         const list = [...urls];
@@ -1607,36 +1646,6 @@ body{
             osc.start(ctx.currentTime); osc.stop(ctx.currentTime + 0.6);
         } catch(e) {}
     }
-    function playHaunted() {
-        const ctx = getAudioCtx();
-        if (!ctx) return;
-        try {
-            const osc1 = ctx.createOscillator();
-            const osc2 = ctx.createOscillator();
-            const gain = ctx.createGain();
-            const filter = ctx.createBiquadFilter();
-            filter.type = 'lowpass';
-            filter.frequency.setValueAtTime(400, ctx.currentTime);
-            filter.frequency.exponentialRampToValueAtTime(2500, ctx.currentTime + 0.8);
-            filter.frequency.exponentialRampToValueAtTime(600, ctx.currentTime + 1.5);
-            osc1.type = 'sawtooth'; osc2.type = 'square';
-            osc1.frequency.setValueAtTime(80, ctx.currentTime);
-            osc1.frequency.exponentialRampToValueAtTime(240, ctx.currentTime + 0.8);
-            osc1.frequency.exponentialRampToValueAtTime(120, ctx.currentTime + 1.5);
-            osc2.frequency.setValueAtTime(160, ctx.currentTime);
-            osc2.frequency.exponentialRampToValueAtTime(480, ctx.currentTime + 0.8);
-            osc2.frequency.exponentialRampToValueAtTime(240, ctx.currentTime + 1.5);
-            gain.gain.setValueAtTime(0.0001, ctx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.08, ctx.currentTime + 0.1);
-            gain.gain.exponentialRampToValueAtTime(0.06, ctx.currentTime + 0.8);
-            gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 1.8);
-            osc1.connect(filter); osc2.connect(filter);
-            filter.connect(gain); gain.connect(ctx.destination);
-            osc1.start(ctx.currentTime); osc2.start(ctx.currentTime);
-            osc1.stop(ctx.currentTime + 1.9); osc2.stop(ctx.currentTime + 1.9);
-        } catch(e) {}
-    }
-    // Легендарный звук для 1/100
     function playLegendary() {
         const ctx = getAudioCtx();
         if (!ctx) return;
@@ -1926,7 +1935,7 @@ body{
             document.getElementById('opacityValue').textContent = Math.round(appOpacity * 100) + '%';
         }
         if (tab === 'menu') renderMenuCases();
-        if (tab === 'haunted') renderHauntedSlots();
+        if (tab === 'rush') { renderRushCharInfo(); renderRushBoard(); }
         setTimeout(updateWeatherContainerHeight, 100);
     };
     function updateProfile() {
@@ -2366,178 +2375,188 @@ body{
         playClick(); vibrate(15);
     };
 
-    window.renderHauntedSlots = function() {
-        for (let i = 0; i < 4; i++) {
-            const slotEl = document.getElementById('hauntedSlot' + i);
-            const idx = hauntedSlots[i];
-            if (idx !== null && inventory[idx]) {
-                const item = getItemById(inventory[idx]);
-                slotEl.classList.add('filled');
-                slotEl.innerHTML = `<img src="${item.img}" alt="${item.name}" loading="lazy" decoding="async" ${FALLBACK_ATTR}>`;
-            } else {
-                slotEl.classList.remove('filled');
-                slotEl.innerHTML = '<div class="haunted-plus">+</div>';
-            }
-        }
-        updateHauntedSummary();
+    // ===== RUSH =====
+    function getRushChar(id) { return RUSH_CHARS.find(c => c.id === id) || RUSH_CHARS[0]; }
+
+    function renderRushCharInfo() {
+        const ch = getRushChar(rushCurrentCharId);
+        const item = getItemById(ch.id) || { img: FALLBACK_IMG, name: ch.name };
+        document.getElementById('rushCharImg').src = item.img;
+        document.getElementById('rushCharName').textContent = ch.name;
+        document.getElementById('rushCharMult').textContent = 'x' + ch.mult.toFixed(1) + ' после раунда';
+        document.getElementById('rushCharProgress').textContent = 'Сыграно раундов: ' + rushRoundsPlayed + (rushRoundsPlayed < ch.req ? ' / нужно ' + ch.req : '');
+    }
+
+    function renderRushBoard() {
+        const board = document.getElementById('rushBoard');
+        board.innerHTML = RUSH_BOARD.map((cell, i) => {
+            let cls = '';
+            if (cell === 'CRASH') cls = 'crash';
+            else if (cell === 'x2') cls = 'x2';
+            else if (cell === 'x4') cls = 'x4';
+            else if (cell === 'x1') cls = 'x1';
+            else if (cell === 'x0.7') cls = 'x07';
+            else if (cell === 'x0.5') cls = 'x05';
+            else if (cell === 'x0.1') cls = 'x01';
+            if (i < rushPosition) cls += ' passed';
+            if (i === rushPosition) cls += ' current';
+            return `<div class="rush-cell ${cls}"><span class="rc-num">${i + 1}</span>${cell === 'CRASH' ? '💥' : cell}</div>`;
+        }).join('');
+    }
+
+    window.rushSetBet = function(v) {
+        playClick(); vibrate(8);
+        const input = document.getElementById('rushBetInput');
+        if (v === 'max') input.value = Math.floor(balance);
+        else input.value = v;
     };
 
-    window.openHauntedPicker = function(slotIndex) {
+    window.openRushCharPicker = function() {
         playClick(); vibrate(10);
-        if (!inventory.length) { showToast('Инвентарь пуст', 'err'); return; }
-        hauntedPickerTargetSlot = slotIndex;
-        const list = document.getElementById('hauntedPickList');
-        const counts = {};
-        inventory.forEach((id, i) => { counts[id] = (counts[id] || 0) + 1; });
-        list.innerHTML = Object.keys(counts).map(id => {
-            const item = getItemById(id);
-            if (!item) return '';
-            const count = counts[id];
-            const glowClass = getGlowClass(item.price);
-            const mutationIcon = item.mutation ? `<img class="mutation-badge" src="${MUTATION_ICONS[item.mutation]}" alt="mutation" loading="lazy" decoding="async" style="width:18px;height:18px;top:4px;left:4px;">` : '';
+        const list = document.getElementById('rushCharPickList');
+        list.innerHTML = RUSH_CHARS.map(ch => {
+            const item = getItemById(ch.id) || { img: FALLBACK_IMG, name: ch.name };
+            const locked = rushRoundsPlayed < ch.req;
+            const selected = rushCurrentCharId === ch.id;
             return `
-                <div class="target-list-item ${glowClass}" onclick="pickHauntedItem('${id}')" style="position:relative;">
-                    ${mutationIcon}
-                    <img src="${item.img}" alt="${item.name}" loading="lazy" decoding="async" ${FALLBACK_ATTR}>
-                    <div class="tl-info">
-                        <div class="tl-name">${item.name}${count > 1 ? ' x' + count : ''}</div>
-                        <div class="tl-price"><img src="${COIN_IMG}" alt="coin">${item.price}</div>
+                <div class="rush-char-item ${locked ? 'locked' : ''} ${selected ? 'selected' : ''}" onclick="${locked ? '' : `selectRushChar('${ch.id}')`}">
+                    <img src="${item.img}" alt="${ch.name}" ${FALLBACK_ATTR}>
+                    <div>
+                        <div class="ci-name">${ch.name}</div>
+                        <div class="ci-mult">x${ch.mult.toFixed(1)} после раунда</div>
                     </div>
-                    <div class="tl-chance" style="color:var(--accent-bright);">${count} шт.</div>
+                    <div class="ci-lock">${locked ? 'Нужно ' + ch.req + ' раундов' : (selected ? 'Выбран' : 'Выбрать')}</div>
                 </div>
             `;
         }).join('');
-        openModal('hauntedPickModal');
+        openModal('rushCharModal');
     };
 
-    window.pickHauntedItem = function(itemId) {
+    window.selectRushChar = function(id) {
         playClick(); vibrate(10);
-        if (hauntedPickerTargetSlot === null) return;
-        const usedIndexes = hauntedSlots.filter(x => x !== null);
-        const idx = inventory.findIndex((id, i) => id === itemId && !usedIndexes.includes(i));
-        if (idx === -1) { showToast('Нет свободных экземпляров', 'err'); return; }
-        hauntedSlots[hauntedPickerTargetSlot] = idx;
-        closeModal('hauntedPickModal');
-        renderHauntedSlots();
-        playCoin();
+        rushCurrentCharId = id;
+        localStorage.setItem('ggbrainx_rush_char', id);
+        renderRushCharInfo();
+        closeModal('rushCharModal');
+        showToast('Персонаж выбран', 'ok');
     };
 
-    function updateHauntedSummary() {
-        let sum = 0; let count = 0;
-        hauntedSlots.forEach(idx => {
-            if (idx !== null && inventory[idx]) {
-                const item = getItemById(inventory[idx]);
-                if (item) { sum += item.price; count++; }
-            }
-        });
-        document.getElementById('hauntedSum').textContent = sum.toLocaleString('ru-RU');
-        document.getElementById('hauntedFuseBtn').disabled = count < 1;
+    function rollDice() {
+        return 1 + Math.floor(Math.random() * 6);
     }
 
-    function calculateHauntedReward() {
-        let sum = 0; let count = 0;
-        hauntedSlots.forEach(idx => {
-            if (idx !== null && inventory[idx]) {
-                const item = getItemById(inventory[idx]);
-                if (item) { sum += item.price; count++; }
-            }
-        });
-        if (sum <= 0) return null;
-        const multiplierRanges = [
-            { minMult: 0.1, maxMult: 0.5, weight: 35, label: 'ЛУЗ' },
-            { minMult: 0.5, maxMult: 0.9, weight: 22, label: 'Малый луз' },
-            { minMult: 0.9, maxMult: 1.1, weight: 13, label: 'Около нуля' },
-            { minMult: 1.1, maxMult: 1.8, weight: 12, label: 'Малый плюс' },
-            { minMult: 1.8, maxMult: 2.8, weight: 9,  label: 'Средний плюс' },
-            { minMult: 2.8, maxMult: 4.0, weight: 6,  label: 'Большой плюс' },
-            { minMult: 4.0, maxMult: 5.0, weight: 3,  label: 'ДЖЕКПОТ' }
-        ];
-        const totalWeight = multiplierRanges.reduce((a, r) => a + r.weight, 0);
-        let r = Math.random() * totalWeight;
-        let chosenRange = multiplierRanges[0];
-        for (const range of multiplierRanges) {
-            if (r < range.weight) { chosenRange = range; break; }
-            r -= range.weight;
-        }
-        const mult = chosenRange.minMult + Math.random() * (chosenRange.maxMult - chosenRange.minMult);
-        const targetPrice = Math.max(1, Math.round(sum * mult));
-        let bestItem = ITEMS[0];
-        let bestDiff = Math.abs(bestItem.price - targetPrice);
-        for (const item of ITEMS) {
-            const diff = Math.abs(item.price - targetPrice);
-            if (diff < bestDiff) { bestDiff = diff; bestItem = item; }
-        }
-        const realMultiplier = bestItem.price / sum;
-        const chance = Math.round((chosenRange.weight / totalWeight) * 100);
-        return { item: bestItem, chance: chance, multiplier: realMultiplier, label: chosenRange.label };
-    }
-
-    function playHauntedAnimation() {
+    function playRushAnim(diceValue) {
         return new Promise(resolve => {
-            const anim = document.getElementById('hauntedAnim');
-            const particles = document.getElementById('hauntedAnimParticles');
-            const textEl = document.getElementById('hauntedAnimText');
+            const anim = document.getElementById('rushAnim');
+            const img = document.getElementById('rushAnimImg');
+            const text = document.getElementById('rushAnimText');
+            const ch = getRushChar(rushCurrentCharId);
+            const item = getItemById(ch.id) || { img: FALLBACK_IMG };
+            img.src = item.img;
+            img.classList.add('hopping');
+            text.textContent = 'БРОСОК: ' + diceValue;
             anim.classList.add('show');
-            textEl.textContent = 'HAUNTED FUSE...';
-            particles.innerHTML = '';
-            for (let i = 0; i < 40; i++) {
-                const p = document.createElement('div');
-                p.className = 'haunted-anim-particle';
-                p.style.left = '50%'; p.style.top = '50%';
-                const angle = Math.random() * Math.PI * 2;
-                const dist = 200 + Math.random() * 400;
-                p.style.setProperty('--dx', Math.cos(angle) * dist + 'px');
-                p.style.setProperty('--dy', Math.sin(angle) * dist + 'px');
-                p.style.animationDuration = (1 + Math.random() * 1.5) + 's';
-                p.style.animationDelay = (Math.random() * 0.5) + 's';
-                particles.appendChild(p);
-            }
-            playHaunted(); vibratePattern([50, 100, 50, 100, 200]);
-            setTimeout(() => { textEl.textContent = 'ФЬЮЗИМ...'; }, 700);
-            setTimeout(() => { textEl.textContent = 'ГОТОВО!'; }, 1400);
-            setTimeout(() => { anim.classList.remove('show'); resolve(); }, 2000);
+            playUpgradeStart(); vibratePattern([20, 40, 20]);
+            setTimeout(() => {
+                img.classList.remove('hopping');
+                anim.classList.remove('show');
+                resolve();
+            }, 900);
         });
     }
 
-    window.runHauntedFuse = async function() {
-        const filledCount = hauntedSlots.filter(x => x !== null).length;
-        if (filledCount < 1) { showToast('Заполни хотя бы 1 слот', 'err'); playLose(); return; }
-        const validIndexes = hauntedSlots.filter(idx => idx !== null && inventory[idx]);
-        if (validIndexes.length < 1) { showToast('Предметы потеряны', 'err'); return; }
-        let sum = 0;
-        validIndexes.forEach(idx => { const item = getItemById(inventory[idx]); if (item) sum += item.price; });
-        const reward = calculateHauntedReward();
-        if (!reward) { showToast('Нет подходящей цели', 'err'); playLose(); return; }
-        const fuseBtn = document.getElementById('hauntedFuseBtn');
-        fuseBtn.disabled = true;
-        fuseBtn.textContent = 'ФЬЮЗ...';
-        await playHauntedAnimation();
-        const sortedIdx = [...validIndexes].sort((a, b) => b - a);
-        sortedIdx.forEach(idx => { inventory.splice(idx, 1); });
-        inventory.push(reward.item.id);
-        hauntedSlots = [null, null, null, null];
-        renderHauntedSlots(); renderInventory(); updateUpgradeScreen(); renderProfileInventory();
-        const resultImg = document.getElementById('hauntedResultImg');
-        const resultName = document.getElementById('hauntedResultName');
-        const resultPrice = document.getElementById('hauntedResultPrice');
-        const resultChance = document.getElementById('hauntedResultChance');
-        const resultMultiplier = document.getElementById('hauntedResultMultiplier');
-        const resultLabel2 = document.getElementById('hauntedResultLabel2');
-        resultImg.src = reward.item.img;
-        resultName.textContent = reward.item.name;
-        resultPrice.querySelector('span').textContent = reward.item.price;
-        resultChance.textContent = reward.chance + '%';
-        resultMultiplier.textContent = reward.multiplier.toFixed(2) + 'x';
-        if (resultLabel2) resultLabel2.textContent = reward.label || '—';
-        fuseBtn.textContent = 'ЗАПУСТИТЬ FUSE';
-        fuseBtn.disabled = false;
-        if (reward.multiplier >= 1.1) { playWin(); vibratePattern([30, 50, 30, 50, 100]); }
-        else { playLose(); vibratePattern([50, 30, 100]); }
-        openModal('hauntedResultModal');
-        saveLocalCache(); syncUserToServer();
+    function showRushResult(title, cell, cellMult, charMult, win, bet) {
+        document.getElementById('rushResultName').textContent = title;
+        document.getElementById('rushResultMult').textContent = 'x' + (cellMult * charMult).toFixed(2);
+        document.getElementById('rushResultBet').textContent = bet;
+        document.getElementById('rushResultCell').textContent = cell;
+        document.getElementById('rushResultCellMult').textContent = 'x' + cellMult;
+        document.getElementById('rushResultCharMult').textContent = 'x' + charMult;
+        document.getElementById('rushResultWin').textContent = win;
+        openModal('rushResultModal');
+    }
+
+    window.rushAction = async function() {
+        if (rushIsRolling) return;
+        const actionBtn = document.getElementById('rushActionBtn');
+
+        if (!rushRoundActive) {
+            const input = document.getElementById('rushBetInput');
+            const bet = Math.floor(Number(input.value));
+            if (!bet || bet < 1) { showToast('Минимальная ставка 1 монета', 'err'); playLose(); return; }
+            if (bet > balance) { showToast('Недостаточно монет', 'err'); playLose(); vibrate(30); return; }
+            rushBet = bet;
+            balance -= bet;
+            updateBalance();
+            rushRoundActive = true;
+            rushPosition = 0;
+            renderRushBoard();
+            actionBtn.textContent = 'БРОСИТЬ КОСТЬ';
+            actionBtn.classList.add('cashout');
+            return;
+        }
+
+        rushIsRolling = true;
+        actionBtn.disabled = true;
+        const diceEl = document.getElementById('rushDice');
+        diceEl.classList.add('rolling');
+        const diceValue = rollDice();
+        await playRushAnim(diceValue);
+        diceEl.classList.remove('rolling');
+        diceEl.textContent = diceValue;
+
+        rushPosition += diceValue;
+        if (rushPosition >= RUSH_BOARD.length) rushPosition = RUSH_BOARD.length - 1;
+        renderRushBoard();
+
+        const cell = RUSH_BOARD[rushPosition];
+        const ch = getRushChar(rushCurrentCharId);
+
+        if (cell === 'CRASH') {
+            rushRoundActive = false;
+            rushIsRolling = false;
+            actionBtn.disabled = false;
+            actionBtn.textContent = 'СДЕЛАТЬ СТАВКУ';
+            actionBtn.classList.remove('cashout');
+            rushRoundsPlayed++;
+            localStorage.setItem('ggbrainx_rush_rounds', String(rushRoundsPlayed));
+            renderRushCharInfo();
+            showRushResult('💥 КРАШ', cell, 0, ch.mult, 0, rushBet);
+            showToast('Краш! Ставка сгорела', 'err');
+            playLose(); vibratePattern([50, 30, 100]);
+            rushPosition = 0;
+            renderRushBoard();
+            return;
+        }
+
+        if (rushPosition === RUSH_BOARD.length - 1) {
+            const cellMult = parseFloat(cell.replace('x', ''));
+            const win = Math.floor(rushBet * cellMult * ch.mult);
+            balance += win;
+            updateBalance();
+            rushRoundActive = false;
+            rushIsRolling = false;
+            actionBtn.disabled = false;
+            actionBtn.textContent = 'СДЕЛАТЬ СТАВКУ';
+            actionBtn.classList.remove('cashout');
+            rushRoundsPlayed++;
+            localStorage.setItem('ggbrainx_rush_rounds', String(rushRoundsPlayed));
+            renderRushCharInfo();
+            showRushResult('🏁 ФИНИШ', cell, cellMult, ch.mult, win, rushBet);
+            showToast(`Финиш! +${win}`, 'ok');
+            playWin(); vibratePattern([20, 40, 20]);
+            rushPosition = 0;
+            renderRushBoard();
+            return;
+        }
+
+        rushIsRolling = false;
+        actionBtn.disabled = false;
+        showToast(`Клетка ${rushPosition + 1}: ${cell}`, 'info');
+        vibrate(15);
     };
 
-    // ====== КЕЙСЫ ======
+    // ===== КЕЙСЫ =====
     function getCaseRarity(c) {
         if (c.id === 'og' || c.id === 'fusing') return 'epic';
         if (c.id === 'winter' || c.id === 'easter') return 'rare';
@@ -2756,7 +2775,6 @@ body{
         }
     }
 
-    // Обычный ролл
     function pickCaseReward(c) {
         const totalChance = c.rewards.reduce((sum, r) => sum + r.chance, 0);
         let rand = Math.random() * totalChance;
@@ -2767,7 +2785,6 @@ body{
         return c.rewards[0];
     }
 
-    // Легендарный ролл для 1/100: самый дорогой предмет кейса
     function pickLegendaryReward(c) {
         let bestReward = c.rewards[0];
         let bestPrice = -1;
@@ -2788,20 +2805,19 @@ body{
         return cycleOffset * perCycle + baseIndex;
     }
 
+    // ВАЖНО: ширина элемента берётся из DOM, случайный сдвиг убран
     function animateRoulette(trackEl, targetIndex, duration) {
         return new Promise(resolve => {
-            const itemWidth = 130;
+            const sampleItem = trackEl.querySelector('.case-roulette-item');
+            const itemWidth = sampleItem ? sampleItem.getBoundingClientRect().width : 130;
             const containerWidth = trackEl.parentElement.clientWidth;
             const targetX = -(targetIndex * itemWidth) + (containerWidth / 2) - (itemWidth / 2);
-            const randomOffset = (Math.random() - 0.5) * (itemWidth * 0.5);
-            const finalX = targetX + randomOffset;
             trackEl.style.transition = `transform ${duration}ms cubic-bezier(0.15, 0.9, 0.2, 1)`;
-            trackEl.style.transform = `translate3d(${finalX}px,0,0)`;
+            trackEl.style.transform = `translate3d(${targetX}px,0,0)`;
             setTimeout(() => resolve(), duration + 100);
         });
     }
 
-    // Подсветка выигрышного элемента после остановки
     function highlightWinner(trackEl, winnerIndex) {
         const items = trackEl.querySelectorAll('.case-roulette-item');
         items.forEach((el, i) => {
@@ -2809,7 +2825,6 @@ body{
         });
     }
 
-    // Эффект открытия (анимация сундука)
     function playCaseOpenAnimation(c, qty) {
         return new Promise(resolve => {
             const overlay = document.getElementById('caseAnimOverlay');
@@ -2847,7 +2862,6 @@ body{
         });
     }
 
-    // CSS keyframe для частиц анимации кейса
     const caseParticleStyle = document.createElement('style');
     caseParticleStyle.textContent = `
         @keyframes caseParticleFly {
@@ -2876,7 +2890,6 @@ body{
         if (c.id !== 'free') { balance -= totalPrice; updateBalance(); }
         else { freeCaseLastOpen = Date.now(); localStorage.setItem('ggbrainx_free_case_last', String(freeCaseLastOpen)); }
 
-        // ====== МЕХАНИКА 1/100 (раз в 100 открытий — легендарка) ======
         let isRareRoll = false;
         rareRollCounter++;
         if (rareRollCounter >= 100) {
@@ -2887,7 +2900,6 @@ body{
 
         const rewards = [];
         for (let i = 0; i < qty; i++) {
-            // Только первое открытие в пачке может быть "легендарным" от счётчика
             if (isRareRoll && i === 0) {
                 rewards.push(pickLegendaryReward(c));
             } else {
@@ -2895,7 +2907,6 @@ body{
             }
         }
 
-        // Запускаем анимацию открытия
         await playCaseOpenAnimation(c, qty);
 
         const tracks = document.querySelectorAll('.case-roulette-track');
@@ -2914,7 +2925,6 @@ body{
         });
         await Promise.all(animPromises);
 
-        // Небольшая пауза для подсветки
         await new Promise(r => setTimeout(r, 500));
 
         let totalCoins = 0;
@@ -2957,11 +2967,6 @@ body{
         itemsWon.forEach(r => { totalValue += getItemById(r.itemId).price; });
         const profit = totalValue - totalSpent;
 
-        function itemPrice(r) {
-            if (r.balance) return r.balance;
-            const item = getItemById(r.itemId);
-            return item ? item.price : 0;
-        }
         function isLegendItem(r) {
             if (!r.itemId) return false;
             const best = pickLegendaryReward(c);
@@ -3092,10 +3097,9 @@ body{
         else chooseTargetBtn.disabled = true;
         const chance = calculateChance();
         const displayChance = Math.floor(chance);
-        const offset = CIRCUMFERENCE - (chance / 100) * CIRCUMFERENCE;
-        progressBar.style.strokeDashoffset = offset;
-        const angle = (chance / 100) * 360;
-        arrowContainer.style.transform = `rotate(${angle}deg)`;
+        // Полоска не зависит от процента — просто сброс
+        progressBar.style.strokeDashoffset = CIRCUMFERENCE;
+        arrowContainer.style.transform = 'rotate(0deg)';
         chanceBig.innerText = displayChance + '%';
         if (displayChance >= 45) { chanceLabel.innerText = 'ВЫСОКИЙ ШАНС'; chanceLabel.className = 'chance-label'; }
         else if (displayChance >= 25) { chanceLabel.innerText = 'СРЕДНИЙ ШАНС'; chanceLabel.className = 'chance-label medium'; }
@@ -3131,9 +3135,8 @@ body{
         const totalRotation = baseRotation + randomAngle;
         arrowContainer.style.transition = `transform ${durationMs}ms cubic-bezier(0.12, 0.8, 0.15, 1)`;
         arrowContainer.style.transform = `rotate(${totalRotation}deg)`;
-        const successAngle = (chance / 100) * 360;
-        const finalAngle = totalRotation % 360;
-        const isSuccess = finalAngle <= successAngle;
+        // Успех — честный рандом по шансу
+        const isSuccess = Math.random() * 100 < chance;
         const sourceIndex = selectedSourceIndex;
         const targetId = selectedTargetId;
         setTimeout(() => {
@@ -3171,12 +3174,12 @@ body{
         if (r < 0.97) return 2.5 + Math.random() * 2.5;
         return 5 + Math.random() * 145;
     }
-    function rocketSetBet(v) {
+    window.rocketSetBet = function(v) {
         playClick(); vibrate(8);
         const input = document.getElementById('rocketBetInput');
         if (v === 'max') input.value = Math.floor(balance);
         else input.value = v;
-    }
+    };
     function initRocketStars() {
         const stars = document.getElementById('rocketStars');
         stars.innerHTML = '';
@@ -3553,14 +3556,11 @@ body{
         renderColorGrid(); renderWeatherOptions();
         startWeather(currentWeather);
         applyCustomAvatar();
-        renderHauntedSlots(); renderMenuCases();
+        renderRushCharInfo(); renderRushBoard();
         switchTab('menu');
         loadUserFromServer();
         updateWeatherContainerHeight();
         preloadImages();
-        // Загружаем счётчик редкого ролла
-        const savedRare = parseInt(localStorage.getItem('ggbrainx_rare_roll_counter') || '0');
-        if (!isNaN(savedRare)) rareRollCounter = savedRare;
     }
     init();
     fetch(API_URL + '/').catch(() => console.log('[WAKE] Сервер просыпается...'));
