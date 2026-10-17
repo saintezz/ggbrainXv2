@@ -1,4 +1,4 @@
-// server.js — GGBrainX API (Render-ready) + Live Drops + Luck Boost
+// server.js — GGBrainX API (Render-ready) + Live Drops + Luck Boost + Topup Race
 
 const http = require('http');
 const fs = require('fs');
@@ -12,6 +12,7 @@ const DEPOSITS_FILE = path.join(DATA_DIR, 'deposits.json');
 const LIVE_DROPS_FILE = path.join(DATA_DIR, 'live_drops.json');
 const USER_DROPS_FILE = path.join(DATA_DIR, 'user_drops.json');
 const LUCK_FILE = path.join(DATA_DIR, 'luck.json');
+const TOPUP_RACE_FILE = path.join(DATA_DIR, 'topup_race.json');
 
 const ADMIN_USERNAME = 'clonexx7';
 
@@ -21,6 +22,8 @@ let deposits = [];
 let liveDrops = [];
 let userDrops = {};
 let luckState = { multiplier: 1, until: 0, by: '', ts: 0 };
+// topupRace: { id, itemId, minTopup, endsAt, createdAt, by, participants: { [tgId]: { username, total, updatedAt } }, winner: null|{ tgId, username, total } }
+let topupRace = null;
 
 function ensureDataDir() {
     try { if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true }); } catch (e) {}
@@ -42,6 +45,7 @@ function loadAll() {
     liveDrops = loadJSON(LIVE_DROPS_FILE, []);
     userDrops = loadJSON(USER_DROPS_FILE, {});
     luckState = loadJSON(LUCK_FILE, { multiplier: 1, until: 0, by: '', ts: 0 });
+    topupRace = loadJSON(TOPUP_RACE_FILE, null);
 
     const cutoff = Date.now() - 24 * 60 * 60 * 1000;
     liveDrops = liveDrops.filter(d => d.ts > cutoff).slice(0, 200);
@@ -59,7 +63,8 @@ function loadAll() {
     console.log('[OK] Промокодов:', Object.keys(promocodes).length,
                 '| Юзеров:', Object.keys(users).length,
                 '| Live-дропов:', liveDrops.length,
-                '| Luck:', luckState.multiplier + 'x');
+                '| Luck:', luckState.multiplier + 'x',
+                '| Розыгрыш:', topupRace ? topupRace.itemId : 'нет');
 }
 
 function savePromos() { saveJSON(PROMO_FILE, promocodes); }
@@ -68,6 +73,7 @@ function saveDeposits() { saveJSON(DEPOSITS_FILE, deposits); }
 function saveLiveDrops() { saveJSON(LIVE_DROPS_FILE, liveDrops); }
 function saveUserDrops() { saveJSON(USER_DROPS_FILE, userDrops); }
 function saveLuck() { saveJSON(LUCK_FILE, luckState); }
+function saveTopupRace() { saveJSON(TOPUP_RACE_FILE, topupRace); }
 
 function setCORS(res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -107,6 +113,41 @@ function ensureUser(telegramId, username) {
     return users[telegramId];
 }
 
+function addTopupParticipant(telegramId, username, amount) {
+    if (!topupRace || !topupRace.id) return;
+    if (topupRace.endsAt && topupRace.endsAt < Date.now()) return; // розыгрыш уже закончился
+    if (amount < (topupRace.minTopup || 0)) return;
+    if (!topupRace.participants) topupRace.participants = {};
+    const key = telegramId || ('guest_' + Date.now());
+    if (!topupRace.participants[key]) {
+        topupRace.participants[key] = { username: username || 'guest', total: 0, updatedAt: Date.now() };
+    }
+    topupRace.participants[key].username = username || topupRace.participants[key].username;
+    topupRace.participants[key].total += Number(amount) || 0;
+    topupRace.participants[key].updatedAt = Date.now();
+    saveTopupRace();
+}
+
+function getTopupRaceWithTop(limit = 15) {
+    if (!topupRace) return null;
+    const participants = Object.entries(topupRace.participants || {})
+        .map(([tgId, v]) => ({ tgId, username: v.username, total: v.total }))
+        .sort((a, b) => b.total - a.total)
+        .slice(0, limit);
+    const ended = topupRace.endsAt && topupRace.endsAt < Date.now();
+    return {
+        id: topupRace.id,
+        itemId: topupRace.itemId,
+        minTopup: topupRace.minTopup,
+        endsAt: topupRace.endsAt,
+        createdAt: topupRace.createdAt,
+        by: topupRace.by,
+        ended,
+        winner: topupRace.winner || (ended && participants[0]) || null,
+        top: participants
+    };
+}
+
 function cleanup() {
     const cutoff = Date.now() - 24 * 60 * 60 * 1000;
     const before = liveDrops.length;
@@ -116,6 +157,17 @@ function cleanup() {
     if (luckState.until && luckState.until < Date.now()) {
         luckState = { multiplier: 1, until: 0, by: '', ts: Date.now() };
         saveLuck();
+    }
+
+    // фиксируем победителя розыгрыша при истечении
+    if (topupRace && topupRace.endsAt && topupRace.endsAt < Date.now() && !topupRace.winner) {
+        const sorted = Object.entries(topupRace.participants || {})
+            .map(([tgId, v]) => ({ tgId, username: v.username, total: v.total }))
+            .sort((a, b) => b.total - a.total);
+        if (sorted[0]) {
+            topupRace.winner = sorted[0];
+            saveTopupRace();
+        }
     }
 }
 setInterval(cleanup, 60 * 1000);
@@ -265,6 +317,8 @@ const server = http.createServer(async (req, res) => {
                 u.balance = (u.balance || 0) + (Number(dep.item_price) || 0);
                 u.updated_at = new Date().toISOString();
                 saveUsers();
+                // добавляем в топ пополнений активного розыгрыша
+                addTopupParticipant(dep.telegram_id, dep.username, Number(dep.item_price) || 0);
             }
             saveDeposits();
             sendJSON(res, 200, { ok: true, deposit: dep });
@@ -310,7 +364,6 @@ const server = http.createServer(async (req, res) => {
         }
 
         // ===== LUCK BOOST =====
-        // GET /api/luck — текущий буст
         if (req.method === 'GET' && req.url === '/api/luck') {
             const now = Date.now();
             const active = luckState.until > now;
@@ -321,15 +374,12 @@ const server = http.createServer(async (req, res) => {
             });
             return;
         }
-
-        // POST /api/luck — установить/снять буст (только админ)
         if (req.method === 'POST' && req.url === '/api/luck') {
             const body = await readBody(req);
             const { admin, multiplier, durationMs } = body;
             if (!admin || admin.toLowerCase() !== ADMIN_USERNAME)
                 return sendJSON(res, 403, { ok: false, error: 'Нет доступа' });
 
-            // multiplier = 1 (снять) или 4 / 6
             const mult = Number(multiplier);
             if (![1, 4, 6].includes(mult))
                 return sendJSON(res, 400, { ok: false, error: 'multiplier 1|4|6' });
@@ -348,6 +398,43 @@ const server = http.createServer(async (req, res) => {
             saveLuck();
             console.log('[LUCK]', admin, '→', mult + 'x', 'на', Math.round(dur / 60000) + 'мин');
             sendJSON(res, 200, { ok: true, luck: luckState });
+            return;
+        }
+
+        // ===== TOPUP RACE =====
+        if (req.method === 'GET' && req.url === '/api/topup-race') {
+            sendJSON(res, 200, { ok: true, race: getTopupRaceWithTop(15) });
+            return;
+        }
+        if (req.method === 'POST' && req.url === '/api/topup-race/set') {
+            const body = await readBody(req);
+            const { admin, itemId, minTopup, days } = body;
+            if (!admin || admin.toLowerCase() !== ADMIN_USERNAME)
+                return sendJSON(res, 403, { ok: false, error: 'Нет доступа' });
+            if (!itemId) return sendJSON(res, 400, { ok: false, error: 'itemId обязателен' });
+            const min = Math.max(1, Number(minTopup) || 1);
+            const d = Math.max(1, Number(days) || 1);
+            topupRace = {
+                id: 'race_' + Date.now(),
+                itemId,
+                minTopup: min,
+                endsAt: Date.now() + d * 24 * 60 * 60 * 1000,
+                createdAt: Date.now(),
+                by: admin,
+                participants: {},
+                winner: null
+            };
+            saveTopupRace();
+            console.log('[TOPUP RACE] Новый:', itemId, '| мин', min, '|', d, 'дн.');
+            sendJSON(res, 200, { ok: true, race: getTopupRaceWithTop(15) });
+            return;
+        }
+        if (req.method === 'POST' && req.url === '/api/topup-race/add') {
+            const body = await readBody(req);
+            const { telegram_id, username, amount } = body;
+            if (!telegram_id || !amount) return sendJSON(res, 400, { ok: false, error: 'telegram_id и amount обязательны' });
+            addTopupParticipant(telegram_id, username, amount);
+            sendJSON(res, 200, { ok: true, race: getTopupRaceWithTop(15) });
             return;
         }
 
