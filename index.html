@@ -302,21 +302,55 @@ body{
 .rush-char-progress{font-size:10px;color:#a8adb8;font-weight:700;margin-top:4px}
 .rush-char-btn{padding:8px 14px;border-radius:4px;border:1px solid var(--glass-border);background:var(--accent-very-dim);color:#fff;font-family:'Orbitron',sans-serif;font-size:10px;font-weight:900;cursor:pointer;text-transform:uppercase;letter-spacing:1px;transition:all .2s}
 .rush-char-btn:hover{background:var(--accent-dim);border-color:var(--accent)}
-.rush-board{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin-bottom:14px;padding:10px;background:rgba(5,15,8,.6);border:1px solid var(--glass-border);border-radius:8px}
-.rush-cell{aspect-ratio:1;border-radius:6px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-family:'Orbitron',sans-serif;font-size:10px;font-weight:900;color:#a8adb8;transition:all .25s;position:relative}
-.rush-cell .rc-num{position:absolute;top:3px;left:5px;font-size:7px;opacity:.5}
-.rush-cell.x2{color:#58d68d;border-color:rgba(88,214,141,.5);background:rgba(46,204,113,.1)}
-.rush-cell.x4{color:#ffe066;border-color:rgba(255,224,102,.6);background:rgba(245,197,66,.15)}
+
+/* Извилистое поле: 5 рядов по 6, ряды 0,2,4 слева-направо; 1,3 справа-налево */
+.rush-board-wrap{position:relative;margin-bottom:16px;padding:12px;background:rgba(5,15,8,.6);border:1px solid var(--glass-border);border-radius:10px}
+.rush-board{position:relative;display:grid;grid-template-columns:repeat(6,1fr);grid-template-rows:repeat(5,1fr);gap:6px;aspect-ratio:6/5}
+.rush-cell{position:relative;border-radius:6px;border:none;background:rgba(255,255,255,.03);display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:'Orbitron',sans-serif;font-size:11px;font-weight:900;color:#a8adb8;transition:background .2s,transform .2s}
+.rush-cell .rc-num{position:absolute;top:2px;left:4px;font-size:7px;opacity:.45}
+.rush-cell.x2{color:#58d68d;background:rgba(46,204,113,.12)}
+.rush-cell.x4{color:#ffe066;background:rgba(245,197,66,.18)}
 .rush-cell.x1{color:#e5e7ef}
-.rush-cell.x07,.rush-cell.x05{color:#fb923c;border-color:rgba(251,146,60,.4);background:rgba(251,146,60,.08)}
-.rush-cell.x01{color:#ff6b6b;border-color:rgba(255,107,107,.4);background:rgba(255,107,107,.08)}
-.rush-cell.crash{color:#fff;border-color:#ff5555;background:linear-gradient(135deg,rgba(239,68,68,.4),rgba(153,27,27,.4))}
-.rush-cell.current{border-color:var(--accent-bright);box-shadow:0 0 15px var(--accent-bright);transform:scale(1.08)}
-.rush-cell.passed{opacity:.45}
+.rush-cell.x07,.rush-cell.x05{color:#fb923c;background:rgba(251,146,60,.1)}
+.rush-cell.x01{color:#ff6b6b;background:rgba(255,107,107,.1)}
+.rush-cell.crash{color:#fff;background:linear-gradient(135deg,rgba(239,68,68,.5),rgba(153,27,27,.5));font-size:16px}
+.rush-cell.visited{opacity:.55}
+.rush-piece{position:absolute;width:calc(100%/6 - 6px);height:calc(100%/5 - 6px);display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:10;transition:left .25s ease,top .25s ease;will-change:left,top}
+.rush-piece img{max-width:80%;max-height:80%;object-fit:contain;filter:drop-shadow(0 0 10px var(--accent))}
+
+/* Кубик */
 .rush-dice-row{display:flex;align-items:center;gap:12px;margin-bottom:14px}
-.rush-dice{width:64px;height:64px;border-radius:10px;background:linear-gradient(145deg,#2a3a2e,#1a2a1e);border:1px solid var(--glass-border);display:flex;align-items:center;justify-content:center;font-family:'Orbitron',sans-serif;font-size:30px;font-weight:900;color:var(--accent-bright);flex-shrink:0;box-shadow:0 4px 15px rgba(0,0,0,.4)}
-.rush-dice.rolling{animation:diceRoll .12s linear infinite}
-@keyframes diceRoll{0%{transform:rotate(-8deg) scale(1.05)}50%{transform:rotate(8deg) scale(.95)}100%{transform:rotate(-8deg) scale(1.05)}}
+.rush-dice-wrap{perspective:600px;width:64px;height:64px;flex-shrink:0}
+.rush-dice{width:64px;height:64px;position:relative;transform-style:preserve-3d;transition:transform .12s linear}
+.rush-dice.rolling{animation:diceTumble .7s linear infinite}
+@keyframes diceTumble{
+  0%{transform:rotateX(0) rotateY(0) rotateZ(0)}
+  100%{transform:rotateX(360deg) rotateY(720deg) rotateZ(360deg)}
+}
+.dice-face{position:absolute;width:64px;height:64px;background:linear-gradient(145deg,#f8fafc,#d1d5db);border-radius:8px;border:1px solid #94a3b8;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);padding:6px;box-shadow:inset 0 0 8px rgba(0,0,0,.15)}
+.dice-face .pip{width:100%;height:100%;display:flex;align-items:center;justify-content:center}
+.dice-face .pip::before{content:'';width:8px;height:8px;border-radius:50%;background:#0f172a}
+.face-front {transform: translateZ(32px)}
+.face-back  {transform: rotateY(180deg) translateZ(32px)}
+.face-right {transform: rotateY(90deg) translateZ(32px)}
+.face-left  {transform: rotateY(-90deg) translateZ(32px)}
+.face-top   {transform: rotateX(90deg) translateZ(32px)}
+.face-bottom{transform: rotateX(-90deg) translateZ(32px)}
+/* точки на гранях */
+.face-1 .pip:nth-child(5)::before{content:''}
+.face-1 .pip:not(:nth-child(5))::before{display:none}
+.face-2 .pip:nth-child(1)::before,.face-2 .pip:nth-child(9)::before{content:''}
+.face-2 .pip:not(:nth-child(1)):not(:nth-child(9))::before{display:none}
+.face-3 .pip:nth-child(1)::before,.face-3 .pip:nth-child(5)::before,.face-3 .pip:nth-child(9)::before{content:''}
+.face-3 .pip:not(:nth-child(1)):not(:nth-child(5)):not(:nth-child(9))::before{display:none}
+.face-4 .pip:nth-child(1)::before,.face-4 .pip:nth-child(3)::before,.face-4 .pip:nth-child(7)::before,.face-4 .pip:nth-child(9)::before{content:''}
+.face-4 .pip:not(:nth-child(1)):not(:nth-child(3)):not(:nth-child(7)):not(:nth-child(9))::before{display:none}
+.face-5 .pip:nth-child(1)::before,.face-5 .pip:nth-child(3)::before,.face-5 .pip:nth-child(5)::before,.face-5 .pip:nth-child(7)::before,.face-5 .pip:nth-child(9)::before{content:''}
+.face-5 .pip:not(:nth-child(1)):not(:nth-child(3)):not(:nth-child(5)):not(:nth-child(7)):not(:nth-child(9))::before{display:none}
+.face-6 .pip:nth-child(1)::before,.face-6 .pip:nth-child(3)::before,.face-6 .pip:nth-child(4)::before,.face-6 .pip:nth-child(6)::before,.face-6 .pip:nth-child(7)::before,.face-6 .pip:nth-child(9)::before{content:''}
+.face-6 .pip:not(:nth-child(1)):not(:nth-child(3)):not(:nth-child(4)):not(:nth-child(6)):not(:nth-child(7)):not(:nth-child(9))::before{display:none}
+
+.rush-dice-result{font-family:'Orbitron',sans-serif;font-size:22px;font-weight:900;color:var(--accent-bright)}
 .rush-bet-wrap{flex:1;display:flex;gap:6px}
 .rush-bet-input{flex:1;height:64px;padding:0 14px;border-radius:6px;border:1px solid var(--glass-border);background:rgba(255,255,255,.04);color:#fff;font-family:'Orbitron',sans-serif;font-weight:900;font-size:16px;text-align:center;outline:none}
 .rush-quick-bets{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:12px}
@@ -330,9 +364,6 @@ body{
 .rush-anim{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;flex-direction:column;background:rgba(0,0,0,.85);overflow:hidden}
 .rush-anim.show{display:flex;animation:animFadeIn .3s ease}
 @keyframes animFadeIn{from{opacity:0}to{opacity:1}}
-.rush-anim-img{width:200px;height:200px;object-fit:contain;z-index:2;filter:drop-shadow(0 0 30px var(--accent))}
-.rush-anim-img.hopping{animation:hop .5s ease-in-out infinite}
-@keyframes hop{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-25px) scale(1.08)}}
 .rush-anim-text{font-family:'Orbitron',sans-serif;font-size:22px;font-weight:900;letter-spacing:6px;color:var(--accent-bright);margin-top:20px;z-index:2}
 
 .rush-result-card{background:rgba(10,25,15,.95) !important;border:1px solid var(--accent) !important;padding:26px 22px !important}
@@ -503,31 +534,34 @@ body{
 .reset-avatar-btn{padding:10px 14px;border-radius:4px;border:1px solid rgba(255,100,100,.4);background:rgba(255,100,100,.12);color:#ff8a8a;font-family:'Orbitron',sans-serif;font-size:10px;font-weight:900;cursor:pointer;transition:background .2s;text-transform:uppercase}
 .reset-avatar-btn:hover{background:rgba(255,100,100,.25)}
 
-/* ===== АПГРЕЙД (простая полоска) ===== */
+/* ===== АПГРЕЙД ===== */
 .progress-section{display:flex;justify-content:center;align-items:center;padding:22px 0 14px;position:relative}
 .progress-wrapper{position:relative;width:300px;height:300px}
 .progress-svg{width:100%;height:100%;transform:rotate(-90deg)}
 .progress-bg{fill:none;stroke:rgba(30,30,38,.7);stroke-width:22}
-.progress-bar{fill:none;stroke:url(#progressGradient);stroke-width:22;stroke-linecap:butt;stroke-dasharray:816;stroke-dashoffset:816;transition:stroke-dashoffset .3s ease}
+.progress-bar{fill:none;stroke:rgba(46,204,113,.35);stroke-width:22;stroke-linecap:butt}
+/* Стрелка: толстая полоска-индикатор + круг win/lose */
 .arrow-container{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:5;transform-origin:center center;will-change:transform}
 .arrow-pointer{
   position:absolute;top:50%;left:50%;
-  width:2px;height:calc(50% - 22px);
-  margin-left:-1px;
+  width:8px;height:calc(50% - 20px);
+  margin-left:-4px;
   transform-origin:50% 0%;
   transform:translateY(0) rotate(180deg);
-  background:linear-gradient(180deg, var(--accent-bright), var(--accent) 40%, transparent);
-  border-radius:1px;
-  box-shadow:0 0 8px var(--accent-dim);
+  background:linear-gradient(180deg, var(--accent-bright), var(--accent) 50%, var(--accent-deep));
+  border-radius:4px;
+  box-shadow:0 0 14px var(--accent),0 0 28px var(--accent-dim);
 }
 .arrow-pointer::after{
-  content:'';position:absolute;bottom:-3px;left:50%;
-  width:6px;height:6px;margin-left:-3px;border-radius:50%;
+  content:'';position:absolute;bottom:-5px;left:50%;
+  width:14px;height:14px;margin-left:-7px;border-radius:50%;
   background:var(--accent-bright);
-  box-shadow:0 0 10px var(--accent-bright);
+  box-shadow:0 0 14px var(--accent-bright),0 0 24px var(--accent);
   animation:pointerPulse 1s ease-in-out infinite;
 }
-@keyframes pointerPulse{0%,100%{transform:scale(1);opacity:.8}50%{transform:scale(1.4);opacity:1}}
+@keyframes pointerPulse{0%,100%{transform:scale(1);opacity:.85}50%{transform:scale(1.25);opacity:1}}
+/* Круг win/lose (два сектора) — рисуется в SVG как дуга, цвет победы/луза */
+.progress-win-arc{fill:none;stroke:var(--green-bright);stroke-width:22;stroke-linecap:butt;opacity:.0}
 .progress-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;z-index:10}
 .chance-big{font-family:'Orbitron',sans-serif;font-size:42px;font-weight:900;background:linear-gradient(135deg,var(--green-bright),var(--accent-bright));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1}
 .chance-label{font-size:12px;color:var(--accent-bright);font-weight:900;text-transform:uppercase;letter-spacing:4px;margin-top:6px;min-height:16px}
@@ -691,6 +725,7 @@ body{
   .nav-btn-fuse .fuse-label{font-size:6px}
   .progress-wrapper{width:260px;height:260px}
   .chance-big{font-size:36px}
+  .arrow-pointer{width:7px;margin-left:-3.5px;height:calc(50% - 18px)}
   .item-box{min-width:0;padding:10px;max-width:none}
   .item-box img{width:52px;height:52px}
   .upgrade-main-btn{flex:0 1 190px;font-size:12px;padding:12px}
@@ -727,10 +762,15 @@ body{
   .deposit-actions{grid-column:1/-1;flex-direction:row}
   .dep-accept,.dep-reject{flex:1}
   .rush-title{font-size:18px;letter-spacing:4px}
-  .rush-dice{width:54px;height:54px;font-size:26px}
+  .rush-dice-wrap,.rush-dice{width:54px;height:54px}
+  .dice-face{width:54px;height:54px}
+  .face-front{transform:translateZ(27px)}
+  .face-back{transform:rotateY(180deg) translateZ(27px)}
+  .face-right{transform:rotateY(90deg) translateZ(27px)}
+  .face-left{transform:rotateY(-90deg) translateZ(27px)}
+  .face-top{transform:rotateX(90deg) translateZ(27px)}
+  .face-bottom{transform:rotateX(-90deg) translateZ(27px)}
   .rush-bet-input{height:54px;font-size:14px}
-  .rush-anim-img{width:160px;height:160px}
-  .rush-anim-text{font-size:18px;letter-spacing:4px}
   .rush-result-mult{font-size:18px}
   .case-card-inner{padding:14px 10px 12px}
   .case-name{font-size:10px}
@@ -863,10 +903,6 @@ body{
     </div>
 </div>
 
-<div class="modal" id="hauntedPickModal" style="display:none;"></div>
-
-<div class="modal" id="hauntedResultModal" style="display:none;"></div>
-
 <div class="modal" id="caseResultModal">
     <div class="modal-card case-result-card" id="caseResultCard">
         <button class="modal-close" onclick="closeModal('caseResultModal')">X</button>
@@ -911,7 +947,6 @@ body{
 </div>
 
 <div class="rush-anim" id="rushAnim">
-    <img class="rush-anim-img" id="rushAnimImg" src="" alt="char">
     <div class="rush-anim-text" id="rushAnimText">БРОСОК...</div>
 </div>
 
@@ -1001,7 +1036,7 @@ body{
             <div class="progress-wrapper">
                 <svg class="progress-svg" viewBox="0 0 340 340">
                     <circle class="progress-bg" cx="170" cy="170" r="130"></circle>
-                    <circle class="progress-bar" id="progressBar" cx="170" cy="170" r="130"></circle>
+                    <circle class="progress-bar" id="progressBar" cx="170" cy="170" r="130" style="display:none;"></circle>
                 </svg>
                 <div class="arrow-container" id="arrowContainer">
                     <div class="arrow-pointer"></div>
@@ -1056,7 +1091,7 @@ body{
         <div class="rush-page">
             <div class="rush-header">
                 <div class="rush-title">RUSH</div>
-                <div class="rush-subtitle">Бросай кость и шагай по 30 клеткам</div>
+                <div class="rush-subtitle">Бросай кость и шагай по извилистой дорожке</div>
             </div>
             <div class="rush-char-row">
                 <img class="rush-char-img" id="rushCharImg" src="" alt="char">
@@ -1067,9 +1102,26 @@ body{
                 </div>
                 <button class="rush-char-btn" onclick="openRushCharPicker()">Сменить</button>
             </div>
-            <div class="rush-board" id="rushBoard"></div>
+            <div class="rush-board-wrap">
+                <div class="rush-board" id="rushBoard">
+                    <!-- клетки генерируются JS -->
+                </div>
+                <div class="rush-piece" id="rushPiece">
+                    <img src="" alt="piece" id="rushPieceImg">
+                </div>
+            </div>
             <div class="rush-dice-row">
-                <div class="rush-dice" id="rushDice">?</div>
+                <div class="rush-dice-wrap">
+                    <div class="rush-dice" id="rushDice">
+                        <div class="dice-face face-front face-1"><div class="pip"></div><div class="pip"></div><div class="pip"></div><div class="pip"></div><div class="pip"></div><div class="pip"></div><div class="pip"></div><div class="pip"></div><div class="pip"></div></div>
+                        <div class="dice-face face-back face-6"><div class="pip"></div><div class="pip"></div><div class="pip"></div><div class="pip"></div><div class="pip"></div><div class="pip"></div><div class="pip"></div><div class="pip"></div><div class="pip"></div></div>
+                        <div class="dice-face face-right face-3"><div class="pip"></div><div class="pip"></div><div class="pip"></div><div class="pip"></div><div class="pip"></div><div class="pip"></div><div class="pip"></div><div class="pip"></div><div class="pip"></div></div>
+                        <div class="dice-face face-left face-4"><div class="pip"></div><div class="pip"></div><div class="pip"></div><div class="pip"></div><div class="pip"></div><div class="pip"></div><div class="pip"></div><div class="pip"></div><div class="pip"></div></div>
+                        <div class="dice-face face-top face-2"><div class="pip"></div><div class="pip"></div><div class="pip"></div><div class="pip"></div><div class="pip"></div><div class="pip"></div><div class="pip"></div><div class="pip"></div><div class="pip"></div></div>
+                        <div class="dice-face face-bottom face-5"><div class="pip"></div><div class="pip"></div><div class="pip"></div><div class="pip"></div><div class="pip"></div><div class="pip"></div><div class="pip"></div><div class="pip"></div><div class="pip"></div></div>
+                    </div>
+                </div>
+                <div class="rush-dice-result" id="rushDiceResult">?</div>
                 <div class="rush-bet-wrap">
                     <input type="number" class="rush-bet-input" id="rushBetInput" placeholder="Ставка" min="1" value="100">
                 </div>
@@ -1469,16 +1521,31 @@ body{
         { id: 'skibidi', name: 'Skibidi Toilet', mult: 1.5, req: 20 },
         { id: 'headless', name: 'Headless Horseman', mult: 2.0, req: 50 }
     ];
+    // 30 клеток. Краш ставим на 15-ю (индекс 14). Раскладка: 5 рядов по 6.
     const RUSH_BOARD = [
         'x1','x2','x1','x0.5','x1','x2',
         'x4','x1','x0.7','x1','x2','x0.1',
-        'x1','x2','x1','x0.5','x4','x1',
+        'x1','x2','CRASH','x0.5','x4','x1',
         'x2','x0.7','x1','x2','x1','x0.5',
-        'x4','x1','x2','x0.1','x1','CRASH'
+        'x4','x1','x2','x0.1','x1','x2'
     ];
+    // Карта извилины: row -> список индексов слева направо или справа налево
+    const RUSH_SNAKE_ORDER = (() => {
+        const order = [];
+        const rows = 5, cols = 6;
+        for (let r = 0; r < rows; r++) {
+            if (r % 2 === 0) {
+                for (let c = 0; c < cols; c++) order.push(r * cols + c);
+            } else {
+                for (let c = cols - 1; c >= 0; c--) order.push(r * cols + c);
+            }
+        }
+        return order; // order[step] = индекс клетки в RUSH_BOARD
+    })();
+
     let rushRoundsPlayed = parseInt(localStorage.getItem('ggbrainx_rush_rounds') || '0');
     let rushCurrentCharId = localStorage.getItem('ggbrainx_rush_char') || 'garama';
-    let rushPosition = 0;
+    let rushPosition = 0;       // индекс шага на змейке (0..29)
     let rushBet = 0;
     let rushIsRolling = false;
     let rushRoundActive = false;
@@ -1645,6 +1712,9 @@ body{
             osc.connect(filter); filter.connect(gain); gain.connect(ctx.destination);
             osc.start(ctx.currentTime); osc.stop(ctx.currentTime + 0.6);
         } catch(e) {}
+    }
+    function playDiceRoll() {
+        for (let i = 0; i < 8; i++) setTimeout(() => playTick(), i * 70);
     }
     function playLegendary() {
         const ctx = getAudioCtx();
@@ -1935,7 +2005,7 @@ body{
             document.getElementById('opacityValue').textContent = Math.round(appOpacity * 100) + '%';
         }
         if (tab === 'menu') renderMenuCases();
-        if (tab === 'rush') { renderRushCharInfo(); renderRushBoard(); }
+        if (tab === 'rush') { renderRushCharInfo(); renderRushBoard(); positionRushPiece(); }
         setTimeout(updateWeatherContainerHeight, 100);
     };
     function updateProfile() {
@@ -2385,11 +2455,25 @@ body{
         document.getElementById('rushCharName').textContent = ch.name;
         document.getElementById('rushCharMult').textContent = 'x' + ch.mult.toFixed(1) + ' после раунда';
         document.getElementById('rushCharProgress').textContent = 'Сыграно раундов: ' + rushRoundsPlayed + (rushRoundsPlayed < ch.req ? ' / нужно ' + ch.req : '');
+        const pieceImg = document.getElementById('rushPieceImg');
+        if (pieceImg) pieceImg.src = item.img;
     }
 
     function renderRushBoard() {
         const board = document.getElementById('rushBoard');
-        board.innerHTML = RUSH_BOARD.map((cell, i) => {
+        board.innerHTML = '';
+        // Создаём 30 клеток в порядке массива RUSH_BOARD, но раскладка по змейке:
+        // клетка i (RUSH_BOARD[i]) ставится в row/col согласно RUSH_SNAKE_ORDER.
+        // Нам нужно отрисовать каждую клетку на её физическом месте (row*6+col),
+        // а визуальный порядок шагов — через RUSH_SNAKE_ORDER.
+        const cellPositions = {}; // index in RUSH_BOARD -> {row, col}
+        RUSH_SNAKE_ORDER.forEach((boardIdx, step) => {
+            const row = Math.floor(step / 6);
+            const col = step % 6;
+            cellPositions[boardIdx] = { row, col };
+        });
+        RUSH_BOARD.forEach((cell, idx) => {
+            const pos = cellPositions[idx];
             let cls = '';
             if (cell === 'CRASH') cls = 'crash';
             else if (cell === 'x2') cls = 'x2';
@@ -2398,10 +2482,40 @@ body{
             else if (cell === 'x0.7') cls = 'x07';
             else if (cell === 'x0.5') cls = 'x05';
             else if (cell === 'x0.1') cls = 'x01';
-            if (i < rushPosition) cls += ' passed';
-            if (i === rushPosition) cls += ' current';
-            return `<div class="rush-cell ${cls}"><span class="rc-num">${i + 1}</span>${cell === 'CRASH' ? '💥' : cell}</div>`;
-        }).join('');
+            const el = document.createElement('div');
+            el.className = 'rush-cell ' + cls;
+            el.dataset.step = RUSH_SNAKE_ORDER.indexOf(idx);
+            el.style.gridRow = (pos.row + 1);
+            el.style.gridColumn = (pos.col + 1);
+            el.innerHTML = `<span class="rc-num">${RUSH_SNAKE_ORDER.indexOf(idx) + 1}</span>${cell === 'CRASH' ? '💥' : cell}`;
+            board.appendChild(el);
+        });
+        positionRushPiece();
+    }
+
+    function getCellStepInfo(step) {
+        const boardIdx = RUSH_SNAKE_ORDER[step];
+        const row = Math.floor(step / 6);
+        const col = step % 6;
+        return { boardIdx, row, col, cell: RUSH_BOARD[boardIdx] };
+    }
+
+    function positionRushPiece() {
+        const piece = document.getElementById('rushPiece');
+        if (!piece) return;
+        const board = document.getElementById('rushBoard');
+        if (!board) return;
+        const step = Math.max(0, Math.min(rushPosition, RUSH_SNAKE_ORDER.length - 1));
+        const row = Math.floor(step / 6);
+        const col = step % 6;
+        const rect = board.getBoundingClientRect();
+        const cellW = rect.width / 6;
+        const cellH = rect.height / 5;
+        const gap = 6;
+        piece.style.left = (col * cellW + gap / 2) + 'px';
+        piece.style.top = (row * cellH + gap / 2) + 'px';
+        piece.style.width = (cellW - gap) + 'px';
+        piece.style.height = (cellH - gap) + 'px';
     }
 
     window.rushSetBet = function(v) {
@@ -2437,6 +2551,7 @@ body{
         rushCurrentCharId = id;
         localStorage.setItem('ggbrainx_rush_char', id);
         renderRushCharInfo();
+        positionRushPiece();
         closeModal('rushCharModal');
         showToast('Персонаж выбран', 'ok');
     };
@@ -2445,24 +2560,54 @@ body{
         return 1 + Math.floor(Math.random() * 6);
     }
 
-    function playRushAnim(diceValue) {
+    // Анимация кубика: крутим, затем фиксируем грань с нужным числом
+    function animateDice(finalValue) {
         return new Promise(resolve => {
-            const anim = document.getElementById('rushAnim');
-            const img = document.getElementById('rushAnimImg');
-            const text = document.getElementById('rushAnimText');
-            const ch = getRushChar(rushCurrentCharId);
-            const item = getItemById(ch.id) || { img: FALLBACK_IMG };
-            img.src = item.img;
-            img.classList.add('hopping');
-            text.textContent = 'БРОСОК: ' + diceValue;
-            anim.classList.add('show');
-            playUpgradeStart(); vibratePattern([20, 40, 20]);
-            setTimeout(() => {
-                img.classList.remove('hopping');
-                anim.classList.remove('show');
-                resolve();
-            }, 900);
+            const dice = document.getElementById('rushDice');
+            const resultEl = document.getElementById('rushDiceResult');
+            dice.classList.add('rolling');
+            resultEl.textContent = '?';
+            playDiceRoll();
+            const start = performance.now();
+            const dur = 900;
+            function frame() {
+                const t = (performance.now() - start) / dur;
+                if (t >= 1) {
+                    dice.classList.remove('rolling');
+                    // Фиксируем грань
+                    const rotations = {
+                        1: {x: 0, y: 0},
+                        2: {x: 0, y: 0},   // top -> покажем как 2 (условно)
+                        3: {x: 0, y: -90},
+                        4: {x: 0, y: 90},
+                        5: {x: 90, y: 0},
+                        6: {x: 0, y: 180}
+                    };
+                    const r = rotations[finalValue] || {x:0,y:0};
+                    dice.style.transform = `rotateX(${r.x}deg) rotateY(${r.y}deg)`;
+                    resultEl.textContent = finalValue;
+                    resolve();
+                } else {
+                    // хаотичное вращение во время ролла
+                    const rx = Math.random() * 720;
+                    const ry = Math.random() * 720;
+                    dice.style.transform = `rotateX(${rx}deg) rotateY(${ry}deg)`;
+                    requestAnimationFrame(frame);
+                }
+            }
+            requestAnimationFrame(frame);
         });
+    }
+
+    async function movePieceStepByStep(fromStep, toStep) {
+        const piece = document.getElementById('rushPiece');
+        if (!piece) return;
+        for (let s = fromStep + 1; s <= toStep; s++) {
+            rushPosition = s;
+            positionRushPiece();
+            playTick(); vibrate(8);
+            await new Promise(r => setTimeout(r, 220));
+        }
     }
 
     function showRushResult(title, cell, cellMult, charMult, win, bet) {
@@ -2498,21 +2643,23 @@ body{
 
         rushIsRolling = true;
         actionBtn.disabled = true;
-        const diceEl = document.getElementById('rushDice');
-        diceEl.classList.add('rolling');
         const diceValue = rollDice();
-        await playRushAnim(diceValue);
-        diceEl.classList.remove('rolling');
-        diceEl.textContent = diceValue;
+        await animateDice(diceValue);
 
-        rushPosition += diceValue;
-        if (rushPosition >= RUSH_BOARD.length) rushPosition = RUSH_BOARD.length - 1;
-        renderRushBoard();
+        const fromStep = rushPosition;
+        let targetStep = fromStep + diceValue;
+        if (targetStep >= RUSH_SNAKE_ORDER.length) targetStep = RUSH_SNAKE_ORDER.length - 1;
 
-        const cell = RUSH_BOARD[rushPosition];
-        const ch = getRushChar(rushCurrentCharId);
+        // Проверяем: есть ли CRASH на пути (строго между fromStep+1 и targetStep)
+        let crashStep = -1;
+        for (let s = fromStep + 1; s <= targetStep; s++) {
+            const cell = RUSH_BOARD[RUSH_SNAKE_ORDER[s]];
+            if (cell === 'CRASH') { crashStep = s; break; }
+        }
 
-        if (cell === 'CRASH') {
+        if (crashStep !== -1) {
+            // Останавливаемся на краше
+            await movePieceStepByStep(fromStep, crashStep);
             rushRoundActive = false;
             rushIsRolling = false;
             actionBtn.disabled = false;
@@ -2521,16 +2668,24 @@ body{
             rushRoundsPlayed++;
             localStorage.setItem('ggbrainx_rush_rounds', String(rushRoundsPlayed));
             renderRushCharInfo();
-            showRushResult('💥 КРАШ', cell, 0, ch.mult, 0, rushBet);
+            const ch = getRushChar(rushCurrentCharId);
+            showRushResult('💥 КРАШ', 'CRASH', 0, ch.mult, 0, rushBet);
             showToast('Краш! Ставка сгорела', 'err');
             playLose(); vibratePattern([50, 30, 100]);
             rushPosition = 0;
-            renderRushBoard();
+            positionRushPiece();
             return;
         }
 
-        if (rushPosition === RUSH_BOARD.length - 1) {
-            const cellMult = parseFloat(cell.replace('x', ''));
+        // Идём по шагам до targetStep (без краша)
+        await movePieceStepByStep(fromStep, targetStep);
+
+        if (targetStep === RUSH_SNAKE_ORDER.length - 1) {
+            // Финиш
+            const finalBoardIdx = RUSH_SNAKE_ORDER[targetStep];
+            const cell = RUSH_BOARD[finalBoardIdx];
+            const cellMult = cell === 'CRASH' ? 0 : parseFloat(cell.replace('x', '')) || 1;
+            const ch = getRushChar(rushCurrentCharId);
             const win = Math.floor(rushBet * cellMult * ch.mult);
             balance += win;
             updateBalance();
@@ -2546,13 +2701,15 @@ body{
             showToast(`Финиш! +${win}`, 'ok');
             playWin(); vibratePattern([20, 40, 20]);
             rushPosition = 0;
-            renderRushBoard();
+            positionRushPiece();
             return;
         }
 
+        // Обычная клетка — продолжаем
         rushIsRolling = false;
         actionBtn.disabled = false;
-        showToast(`Клетка ${rushPosition + 1}: ${cell}`, 'info');
+        const curCell = RUSH_BOARD[RUSH_SNAKE_ORDER[targetStep]];
+        showToast(`Клетка ${targetStep + 1}: ${curCell}`, 'info');
         vibrate(15);
     };
 
@@ -2805,7 +2962,6 @@ body{
         return cycleOffset * perCycle + baseIndex;
     }
 
-    // ВАЖНО: ширина элемента берётся из DOM, случайный сдвиг убран
     function animateRoulette(trackEl, targetIndex, duration) {
         return new Promise(resolve => {
             const sampleItem = trackEl.querySelector('.case-roulette-item');
@@ -3070,6 +3226,8 @@ body{
         if (chance < 1) chance = 1;
         return Math.round(chance * 10) / 10;
     }
+
+    // Стрелка теперь просто визуальный индикатор, не привязан к %
     function updateUpgradeScreen() {
         const sourceItem = selectedSourceIndex !== null ? getItemById(inventory[selectedSourceIndex]) : null;
         const targetItem = selectedTargetId ? getItemById(selectedTargetId) : null;
@@ -3097,8 +3255,6 @@ body{
         else chooseTargetBtn.disabled = true;
         const chance = calculateChance();
         const displayChance = Math.floor(chance);
-        // Полоска не зависит от процента — просто сброс
-        progressBar.style.strokeDashoffset = CIRCUMFERENCE;
         arrowContainer.style.transform = 'rotate(0deg)';
         chanceBig.innerText = displayChance + '%';
         if (displayChance >= 45) { chanceLabel.innerText = 'ВЫСОКИЙ ШАНС'; chanceLabel.className = 'chance-label'; }
@@ -3112,6 +3268,7 @@ body{
             upgradeBtn.querySelector('span').innerText = 'Апгрейд - 0%';
         }
     }
+
     function performUpgrade(durationMs) {
         if (isSpinning) return;
         if (selectedSourceIndex === null) return;
@@ -3135,7 +3292,6 @@ body{
         const totalRotation = baseRotation + randomAngle;
         arrowContainer.style.transition = `transform ${durationMs}ms cubic-bezier(0.12, 0.8, 0.15, 1)`;
         arrowContainer.style.transform = `rotate(${totalRotation}deg)`;
-        // Успех — честный рандом по шансу
         const isSuccess = Math.random() * 100 < chance;
         const sourceIndex = selectedSourceIndex;
         const targetId = selectedTargetId;
@@ -3556,11 +3712,15 @@ body{
         renderColorGrid(); renderWeatherOptions();
         startWeather(currentWeather);
         applyCustomAvatar();
-        renderRushCharInfo(); renderRushBoard();
+        renderRushCharInfo();
+        renderRushBoard();
+        positionRushPiece();
         switchTab('menu');
         loadUserFromServer();
         updateWeatherContainerHeight();
         preloadImages();
+        // Пересчёт позиции фигурки при ресайзе
+        window.addEventListener('resize', () => { positionRushPiece(); });
     }
     init();
     fetch(API_URL + '/').catch(() => console.log('[WAKE] Сервер просыпается...'));
