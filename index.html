@@ -68,13 +68,13 @@ a{color:inherit;text-decoration:none}
 .topnav-left{display:flex;align-items:center;gap:36px}
 .brand{display:flex;align-items:center;gap:10px;font-family:'Unbounded',sans-serif;font-weight:800;font-size:16px;letter-spacing:-.02em}
 .brand-logo{
-  width:34px;height:34px;border-radius:10px;
-  background:linear-gradient(135deg,#f5b60a,#ff7b00);
+  width:34px;height:34px;border-radius:8px;
   display:flex;align-items:center;justify-content:center;
-  font-family:'Unbounded',sans-serif;font-weight:900;font-size:18px;color:#1a1200;
-  box-shadow:0 4px 20px rgba(245,182,10,.25);
+  overflow:hidden;
 }
-.brand-name span{color:var(--accent)}
+.brand-logo img{width:100%;height:100%;object-fit:contain;border-radius:8px}
+.brand-name span:first-child{color:var(--accent)}
+.brand-name span:last-child{color:var(--green)}
 
 .nav-tabs{display:flex;align-items:center;gap:4px}
 .nav-tab{
@@ -83,12 +83,21 @@ a{color:inherit;text-decoration:none}
   display:flex;align-items:center;gap:8px;
   transition:all .15s ease;cursor:pointer;
 }
-.nav-tab svg{width:16px;height:16px;stroke-width:2.2}
+.nav-tab svg{width:16px;height:16px;stroke-width:2.2;stroke:currentColor;fill:none}
 .nav-tab:hover{color:var(--text);background:rgba(255,255,255,.04)}
 .nav-tab.active{
   background:linear-gradient(135deg,rgba(124,92,255,.9),rgba(90,60,220,.9));
   color:#fff;box-shadow:0 4px 20px rgba(124,92,255,.35);
 }
+
+/* Hamburger */
+.hamburger{
+  display:none;
+  width:40px;height:40px;border-radius:10px;
+  background:var(--bg-elevated);border:1px solid var(--border);
+  color:var(--text);align-items:center;justify-content:center;cursor:pointer;
+}
+.hamburger svg{width:22px;height:22px}
 
 .topnav-right{display:flex;align-items:center;gap:12px}
 .nav-balance{
@@ -124,6 +133,7 @@ a{color:inherit;text-decoration:none}
   overflow-y:auto;z-index:50;
   padding:20px 14px;
   display:flex;flex-direction:column;
+  transition:transform .3s ease;
 }
 .sidebar::-webkit-scrollbar{width:6px}
 .sidebar::-webkit-scrollbar-thumb{background:var(--border-strong);border-radius:3px}
@@ -168,38 +178,6 @@ a{color:inherit;text-decoration:none}
 .tab-content{display:none;animation:fadeIn .25s ease}
 .tab-content.active{display:block}
 @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
-
-/* Top Race banner */
-.race-banner{
-  display:flex;align-items:center;justify-content:space-between;
-  background:linear-gradient(135deg,rgba(245,182,10,.08),rgba(124,92,255,.06));
-  border:1px solid rgba(245,182,10,.25);
-  border-radius:var(--radius-lg);
-  padding:18px 24px;margin-bottom:24px;gap:16px;
-}
-.race-banner-left{display:flex;align-items:center;gap:16px;flex:1;min-width:0}
-.race-banner-img{
-  width:60px;height:60px;border-radius:12px;
-  background:rgba(0,0,0,.35);border:1px solid rgba(245,182,10,.35);
-  display:flex;align-items:center;justify-content:center;padding:6px;flex-shrink:0;
-}
-.race-banner-img img{width:100%;height:100%;object-fit:contain}
-.race-banner-label{
-  font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;
-  color:var(--accent);margin-bottom:4px;
-}
-.race-banner-name{font-family:'Unbounded',sans-serif;font-size:18px;font-weight:700;color:var(--text);margin-bottom:2px}
-.race-banner-sub{font-size:12px;color:var(--text-muted)}
-.race-banner-right{display:flex;align-items:center;gap:14px;flex-shrink:0}
-.race-banner-amount{
-  font-family:'Unbounded',sans-serif;font-size:20px;font-weight:800;color:var(--accent);
-  display:flex;align-items:center;gap:8px;
-}
-.race-banner-amount img{width:20px;height:20px}
-.race-banner-timer{
-  font-family:'Unbounded',sans-serif;font-size:14px;font-weight:700;color:var(--text);
-  padding:6px 12px;border-radius:8px;background:rgba(0,0,0,.3);border:1px solid var(--border);
-}
 
 /* Section headers */
 .section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
@@ -335,20 +313,56 @@ a{color:inherit;text-decoration:none}
 .toast.err{border-color:var(--red)}
 @keyframes toastIn{from{opacity:0;transform:translateX(30px)}to{opacity:1;transform:translateX(0)}}
 
+/* ======= NEW UPGRADE DESIGN ======= */
+.upgrade-wrapper{display:flex;flex-direction:column;align-items:center;padding:20px 0}
+.upgrade-circle-container{position:relative;width:320px;height:320px;margin-bottom:30px}
+.upgrade-ring-svg{width:100%;height:100%;transform:rotate(90deg)}
+.upgrade-ring-bg{fill:none;stroke:var(--bg-elevated-2);stroke-width:24}
+.upgrade-ring-scale{fill:none;stroke:url(#upgradeGradient);stroke-width:24;stroke-dasharray:2 10;opacity:.3}
+.upgrade-ring-active{fill:none;stroke:url(#upgradeGradient);stroke-width:24;stroke-dasharray:816;stroke-dashoffset:816;transition:stroke-dashoffset .4s ease}
+.upgrade-arrow-wrap{
+  position:absolute;top:0;left:0;width:100%;height:100%;
+  display:flex;justify-content:center;align-items:flex-start;
+  transform-origin:center center;
+  transition:transform 4s cubic-bezier(0.1, 0.8, 0.2, 1);
+  pointer-events:none;z-index:10;
+}
+.upgrade-arrow-svg{width:32px;height:44px;margin-top:12px;filter:drop-shadow(0 0 10px var(--accent));color:var(--accent)}
+.upgrade-center-text{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;z-index:5}
+.upgrade-percent{font-family:'Unbounded',sans-serif;font-size:48px;font-weight:800;color:var(--green);line-height:1;margin-bottom:8px}
+.upgrade-label{font-size:13px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.12em}
+.upgrade-items{display:flex;gap:16px;align-items:center;margin-bottom:24px;justify-content:center}
+.upgrade-item-box{background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:16px;text-align:center;width:140px}
+.upgrade-item-box .label{font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px}
+.upgrade-item-box img{width:56px;height:56px;object-fit:contain;margin:0 auto 10px}
+.upgrade-item-box .name{font-size:11px;font-weight:700;line-height:1.2;height:28px;overflow:hidden;margin-bottom:4px}
+.upgrade-item-box .price{font-family:'Unbounded',sans-serif;font-size:12px;font-weight:700;color:var(--accent)}
+.upgrade-plus-btn{width:32px;height:32px;border-radius:8px;background:var(--bg-elevated-2);border:1px solid var(--border);color:var(--text);font-size:18px;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.upgrade-plus-btn:hover{border-color:var(--accent);color:var(--accent)}
+.upgrade-actions{display:flex;gap:10px;align-items:center;margin-bottom:30px}
+.upgrade-go-btn{padding:14px 40px;border-radius:12px;background:var(--accent);color:#1a1200;font-family:'Unbounded',sans-serif;font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;transition:all .15s}
+.upgrade-go-btn:hover:not(:disabled){filter:brightness(1.1)}
+.upgrade-go-btn:disabled{opacity:.5;cursor:not-allowed}
+.upgrade-fast-btn{width:48px;height:48px;border-radius:12px;background:var(--bg-card);border:1px solid var(--border);color:var(--text-dim);display:flex;align-items:center;justify-content:center;transition:all .15s}
+.upgrade-fast-btn:hover{border-color:var(--accent);color:var(--accent)}
+.upgrade-fast-btn.active{background:var(--accent);border-color:var(--accent);color:#1a1200}
+
 /* ======= RESPONSIVE ======= */
 @media (max-width: 1024px){
   .main{margin-left:0;padding:20px 20px 80px}
-  .sidebar{display:none}
-  .nav-tabs{overflow-x:auto;scrollbar-width:none;flex:1;margin-left:16px}
-  .nav-tabs::-webkit-scrollbar{display:none}
+  .sidebar{transform:translateX(-100%);z-index:200}
+  .sidebar.open{transform:translateX(0);box-shadow:0 0 50px rgba(0,0,0,.8)}
+  .hamburger{display:flex}
+  .nav-tabs{display:none}
+  .nav-tabs.mobile-open{display:flex;flex-direction:column;position:fixed;top:var(--nav-h);left:0;bottom:0;width:220px;background:var(--bg-elevated);border-right:1px solid var(--border);padding:16px;z-index:150;gap:4px;align-items:stretch;margin-left:0}
+  .nav-tabs.mobile-open .nav-tab{padding:14px 16px;justify-content:flex-start;border-radius:10px}
+  .nav-tabs.mobile-open .nav-tab span{display:inline}
+  .nav-tabs.mobile-open .nav-tab svg{width:20px;height:20px}
+  .topnav{padding:0 16px}
+  .brand-name{font-size:14px}
+  .topnav-left{gap:12px}
 }
 @media (max-width: 640px){
-  .topnav{padding:0 12px;height:56px}
-  :root{--nav-h:56px}
-  .brand-name{display:none}
-  .nav-tab{padding:8px 10px;font-size:12px}
-  .nav-tab span{display:none}
-  .nav-tab svg{width:18px;height:18px}
   .main{padding:16px 12px 80px}
   .section-title{font-size:20px}
   .cases-grid{grid-template-columns:repeat(2,1fr);gap:10px}
@@ -357,107 +371,76 @@ a{color:inherit;text-decoration:none}
   .case-card-name{font-size:11px}
   .case-card-items{font-size:10px;margin-bottom:8px}
   .case-card-price{padding:8px;font-size:11px}
-  .race-banner{padding:14px;flex-direction:column;align-items:flex-start}
-  .race-banner-img{width:48px;height:48px}
-  .race-banner-name{font-size:15px}
-  .race-banner-amount{font-size:16px}
-  .race-banner-right{width:100%;justify-content:space-between}
   .featured-case{padding:14px;gap:12px}
   .featured-case-img{width:56px;height:56px}
   .featured-case-name{font-size:14px}
   .featured-case-timer{font-size:11px;padding:6px 10px}
   .modal-card{padding:18px;border-radius:14px}
+  .upgrade-circle-container{width:260px;height:260px}
+  .upgrade-percent{font-size:36px}
+  .upgrade-item-box{width:110px;padding:10px}
+  .upgrade-item-box img{width:40px;height:40px}
+  .mines-grid{grid-template-columns:repeat(5,1fr);gap:4px;padding:8px}
+  .mines-cell{font-size:16px}
+  .mines-setup{padding:14px}
 }
 
-/* ======= MINES / UPGRADE / ROCKET / PROFILE STYLES ======= */
-/* (сохранены из предыдущей версии, но с новыми переменными) */
-
-.mines-page{padding:0}
-.mines-header{text-align:center;margin-bottom:24px}
-.mines-title{font-family:'Unbounded',sans-serif;font-size:32px;font-weight:800;color:var(--text);letter-spacing:-.02em}
-.mines-subtitle{color:var(--text-muted);font-size:13px;margin-top:4px}
-
-.mines-setup{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px;margin-bottom:20px}
-.mines-setup-row{display:flex;align-items:center;gap:8px;margin-bottom:12px}
-.mines-bet-input{flex:1;height:56px;padding:0 16px;border-radius:10px;border:1px solid var(--border);background:var(--bg-elevated);color:var(--text);font-family:'Unbounded',sans-serif;font-weight:700;font-size:16px;text-align:center;outline:none}
-.mines-bet-input:focus{border-color:var(--accent)}
-.mines-quick-bets{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}
-.mines-quick-bet{height:40px;border-radius:8px;border:1px solid var(--border);background:var(--bg-elevated);color:var(--text-dim);font-family:'Unbounded',sans-serif;font-size:12px;font-weight:700;transition:all .15s}
+/* ======= MINES / ROCKET STYLES ======= */
+.mines-page{padding:0;max-width:480px;margin:0 auto}
+.mines-header{text-align:center;margin-bottom:20px}
+.mines-title{font-family:'Unbounded',sans-serif;font-size:28px;font-weight:800;color:var(--text);letter-spacing:-.02em}
+.mines-subtitle{color:var(--text-muted);font-size:12px;margin-top:2px}
+.mines-setup{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;margin-bottom:16px}
+.mines-setup-row{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.mines-bet-input{flex:1;height:48px;padding:0 14px;border-radius:10px;border:1px solid var(--border);background:var(--bg-elevated);color:var(--text);font-family:'Unbounded',sans-serif;font-weight:700;font-size:14px;text-align:center;outline:none}
+.mines-quick-bets{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:10px}
+.mines-quick-bet{height:36px;border-radius:8px;border:1px solid var(--border);background:var(--bg-elevated);color:var(--text-dim);font-family:'Unbounded',sans-serif;font-size:11px;font-weight:700;transition:all .15s}
 .mines-quick-bet:hover{border-color:var(--accent);color:var(--accent)}
-.mines-mines-label{font-size:11px;color:var(--text-muted);font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px}
-.mines-mines-row{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
-.mines-mine-btn{height:44px;border-radius:8px;border:1px solid var(--border);background:var(--bg-elevated);color:var(--text-dim);font-family:'Unbounded',sans-serif;font-size:13px;font-weight:700;transition:all .15s}
+.mines-mines-label{font-size:10px;color:var(--text-muted);font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px}
+.mines-mines-row{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.mines-mine-btn{height:38px;border-radius:8px;border:1px solid var(--border);background:var(--bg-elevated);color:var(--text-dim);font-family:'Unbounded',sans-serif;font-size:12px;font-weight:700;transition:all .15s}
 .mines-mine-btn:hover{border-color:var(--accent);color:var(--accent)}
 .mines-mine-btn.active{background:var(--accent);border-color:var(--accent);color:#1a1200}
-.mines-action-btn{width:100%;padding:16px;border-radius:10px;background:var(--accent);color:#1a1200;font-family:'Unbounded',sans-serif;font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;transition:all .15s;margin-top:12px}
+.mines-action-btn{width:100%;padding:14px;border-radius:10px;background:var(--accent);color:#1a1200;font-family:'Unbounded',sans-serif;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;transition:all .15s;margin-top:10px}
 .mines-action-btn:hover:not(:disabled){filter:brightness(1.1)}
 .mines-action-btn:disabled{opacity:.5;cursor:not-allowed}
 .mines-action-btn.cashout{background:var(--green)}
-.mines-info{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
-.mines-info-box{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:12px;text-align:center}
-.mines-info-label{font-size:10px;color:var(--text-muted);font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px}
-.mines-info-value{font-family:'Unbounded',sans-serif;font-size:18px;font-weight:700;color:var(--text)}
+.mines-info{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.mines-info-box{background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center}
+.mines-info-label{font-size:9px;color:var(--text-muted);font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px}
+.mines-info-value{font-family:'Unbounded',sans-serif;font-size:16px;font-weight:700;color:var(--text)}
 .mines-info-value.green{color:var(--green)}
-.mines-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:20px;background:var(--bg-card);padding:12px;border-radius:var(--radius-lg);border:1px solid var(--border)}
-.mines-cell{aspect-ratio:1;border-radius:10px;background:var(--bg-elevated);border:1px solid var(--border);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:22px;transition:all .15s;user-select:none}
+.mines-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:16px;background:var(--bg-card);padding:10px;border-radius:14px;border:1px solid var(--border)}
+.mines-cell{aspect-ratio:1;border-radius:8px;background:var(--bg-elevated);border:1px solid var(--border);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;transition:all .15s;user-select:none}
 .mines-cell:hover:not(.revealed):not(.disabled){border-color:var(--accent);transform:translateY(-2px)}
 .mines-cell.safe{background:var(--green-dim);border-color:var(--green);color:#fff}
 .mines-cell.mine{background:var(--red-dim);border-color:var(--red);color:#fff}
 .mines-cell.disabled{cursor:default}
-.mines-history{padding:14px;background:var(--bg-card);border:1px solid var(--border);border-radius:12px}
-.mines-history-label{font-size:10px;color:var(--text-muted);font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px}
-.mines-history-list{display:flex;gap:6px;flex-wrap:wrap}
-.mines-history-item{padding:4px 10px;border-radius:6px;font-family:'Unbounded',sans-serif;font-size:11px;font-weight:700;background:var(--green-dim);color:var(--green)}
+.mines-history{padding:12px;background:var(--bg-card);border:1px solid var(--border);border-radius:12px}
+.mines-history-label{font-size:10px;color:var(--text-muted);font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px}
+.mines-history-list{display:flex;gap:4px;flex-wrap:wrap}
+.mines-history-item{padding:3px 8px;border-radius:6px;font-family:'Unbounded',sans-serif;font-size:10px;font-weight:700;background:var(--green-dim);color:var(--green)}
 .mines-history-item.loss{background:var(--red-dim);color:var(--red)}
-
 .mines-overlay{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.85);pointer-events:none}
 .mines-overlay.show{display:flex}
-.mines-overlay-text{font-family:'Unbounded',sans-serif;font-size:48px;font-weight:800;letter-spacing:.02em}
+.mines-overlay-text{font-family:'Unbounded',sans-serif;font-size:42px;font-weight:800;letter-spacing:.02em}
 .mines-overlay-text.win{color:var(--green)}
 .mines-overlay-text.lose{color:var(--red)}
 
-/* Progress (upgrade) */
-.progress-section{display:flex;justify-content:center;padding:20px 0}
-.progress-wrapper{position:relative;width:300px;height:300px}
-.progress-svg{width:100%;height:100%;transform:rotate(-90deg)}
-.progress-bg{fill:none;stroke:var(--bg-elevated-2);stroke-width:20}
-.progress-bar{fill:none;stroke:url(#progressGradient);stroke-width:20;stroke-dasharray:816;stroke-dashoffset:816;transition:stroke-dashoffset .3s ease}
-.arrow-container{position:absolute;top:0;left:0;width:100%;height:100%;display:flex;justify-content:center;align-items:flex-start;pointer-events:none;transform-origin:center center}
-.arrow-pointer{width:0;height:0;border-left:14px solid transparent;border-right:14px solid transparent;border-top:28px solid var(--accent);margin-top:16px;position:relative;filter:drop-shadow(0 0 10px var(--accent))}
-.progress-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center}
-.chance-big{font-family:'Unbounded',sans-serif;font-size:42px;font-weight:800;color:var(--text);line-height:1}
-.chance-label{font-size:11px;color:var(--accent);font-weight:700;text-transform:uppercase;letter-spacing:.12em;margin-top:8px}
-.chance-label.hidden{visibility:hidden}
-.items-row{display:flex;justify-content:center;align-items:center;gap:16px;padding:16px;max-width:520px;margin:0 auto}
-.item-box{flex:1;background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:16px;display:flex;flex-direction:column;align-items:center}
-.item-box .label{font-size:10px;color:var(--text-muted);font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px}
-.item-box img{width:64px;height:64px;object-fit:contain;margin-bottom:10px}
-.item-box .name{font-size:12px;font-weight:700;text-align:center;margin-bottom:6px;height:32px;display:flex;align-items:center;justify-content:center}
-.item-box .price{font-family:'Unbounded',sans-serif;font-size:13px;font-weight:700;color:var(--accent);display:flex;align-items:center;gap:4px}
-.price-coin{width:14px;height:14px}
-.swap-arrow{font-size:24px;color:var(--accent)}
-.stage-controls{display:flex;justify-content:center;align-items:center;gap:10px;margin:16px 0}
-.upgrade-main-btn{padding:16px 32px;border-radius:12px;background:var(--accent);color:#1a1200;font-family:'Unbounded',sans-serif;font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;transition:all .15s}
-.upgrade-main-btn:hover:not(:disabled){filter:brightness(1.1)}
-.upgrade-main-btn:disabled{opacity:.5;cursor:not-allowed}
-.fast-btn{width:48px;height:48px;border-radius:10px;background:var(--bg-card);border:1px solid var(--border);color:var(--text);display:flex;align-items:center;justify-content:center;transition:all .15s}
-.fast-btn:hover{border-color:var(--accent)}
-.fast-btn.active{background:var(--accent);color:#1a1200;border-color:var(--accent)}
-.fast-btn svg{width:22px;height:22px}
-
-.section-title2{font-family:'Unbounded',sans-serif;font-size:16px;font-weight:700;margin:24px 0 14px;display:flex;align-items:center;gap:8px}
-.inventory-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:10px}
-.shop-scroll{max-height:500px;overflow-y:auto;padding-right:4px}
+/* Inventory / Shop */
+.section-title2{font-family:'Unbounded',sans-serif;font-size:15px;font-weight:700;margin:20px 0 12px;display:flex;align-items:center;gap:8px}
+.inventory-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:8px}
+.shop-scroll{max-height:420px;overflow-y:auto;padding-right:4px}
 .shop-scroll::-webkit-scrollbar{width:6px}
 .shop-scroll::-webkit-scrollbar-thumb{background:var(--border-strong);border-radius:3px}
-.shop-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:10px}
-.inv-card,.shop-card{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:12px 8px;display:flex;flex-direction:column;align-items:center;transition:all .15s;position:relative;overflow:hidden}
+.shop-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:8px}
+.inv-card,.shop-card{background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:10px 6px;display:flex;flex-direction:column;align-items:center;transition:all .15s;position:relative;overflow:hidden}
 .inv-card:hover,.shop-card:hover{border-color:var(--border-strong);transform:translateY(-2px)}
 .inv-card.selected{border-color:var(--accent);background:var(--accent-dim)}
-.inv-card img,.shop-card img{width:64px;height:64px;object-fit:contain;margin-bottom:8px;pointer-events:none}
-.inv-card .name,.shop-card .name{font-size:10px;font-weight:700;text-align:center;height:26px;overflow:hidden;line-height:1.2;width:100%;pointer-events:none}
-.inv-card .price,.shop-card .price{font-size:11px;color:var(--accent);font-weight:700;font-family:'Unbounded',sans-serif;margin-top:4px}
-.buy-btn,.sell-btn{width:100%;padding:8px;border-radius:8px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;margin-top:6px;transition:all .15s}
+.inv-card img,.shop-card img{width:56px;height:56px;object-fit:contain;margin-bottom:6px;pointer-events:none}
+.inv-card .name,.shop-card .name{font-size:9px;font-weight:700;text-align:center;height:24px;overflow:hidden;line-height:1.2;width:100%;pointer-events:none}
+.inv-card .price,.shop-card .price{font-size:10px;color:var(--accent);font-weight:700;font-family:'Unbounded',sans-serif;margin-top:4px}
+.buy-btn,.sell-btn{width:100%;padding:6px;border-radius:6px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;margin-top:6px;transition:all .15s}
 .buy-btn{background:var(--accent);color:#1a1200}
 .sell-btn{background:var(--bg-elevated-2);color:var(--text-dim);border:1px solid var(--border)}
 .buy-btn:hover:not(:disabled),.sell-btn:hover:not(:disabled){filter:brightness(1.15)}
@@ -508,7 +491,6 @@ a{color:inherit;text-decoration:none}
 .rocket-action-btn:hover:not(:disabled){filter:brightness(1.1)}
 .rocket-action-btn:disabled{opacity:.5;cursor:not-allowed}
 .rocket-action-btn.cashout{background:var(--green)}
-
 .rocket-overlay-result{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;background:rgba(0,0,0,.8);opacity:0;pointer-events:none;transition:opacity .3s;z-index:10}
 .rocket-overlay-result.show{opacity:1}
 .rocket-result-x{font-family:'Unbounded',sans-serif;font-size:56px;font-weight:800}
@@ -571,11 +553,6 @@ a{color:inherit;text-decoration:none}
 .orbit-item.selected{border-color:var(--accent);background:var(--accent-dim)}
 .orbit-item.selected::after{content:'✓';position:absolute;top:-6px;right:-6px;width:18px;height:18px;border-radius:6px;background:var(--accent);color:#1a1200;font-size:10px;font-weight:900;display:flex;align-items:center;justify-content:center}
 .orbit-item img{width:36px;height:36px;object-fit:contain}
-.color-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}
-.color-swatch{aspect-ratio:1;border-radius:8px;cursor:pointer;border:2px solid transparent;transition:transform .15s;position:relative}
-.color-swatch:hover{transform:scale(1.08)}
-.color-swatch.selected{border-color:#fff;transform:scale(1.05)}
-.color-swatch.selected::after{content:'✓';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:900;text-shadow:0 0 6px rgba(0,0,0,.8)}
 .avatar-upload-row{display:flex;align-items:center;gap:12px}
 .avatar-preview{width:64px;height:64px;border-radius:10px;border:1px solid var(--border);object-fit:cover;background:#000}
 .upload-btn{flex:1;padding:12px 16px;border-radius:10px;background:var(--bg-elevated-2);border:1px solid var(--border);color:var(--text);font-size:12px;font-weight:700;cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:8px;text-transform:uppercase;letter-spacing:.04em}
@@ -584,7 +561,7 @@ a{color:inherit;text-decoration:none}
 .reset-avatar-btn{padding:10px 14px;border-radius:8px;background:var(--red-dim);color:var(--red);border:1px solid rgba(239,68,68,.3);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;transition:all .15s}
 .reset-avatar-btn:hover{background:rgba(239,68,68,.25)}
 
-/* ======= ADMIN ======= */
+/* Admin */
 .admin-header{padding:16px;background:var(--bg-card);border:1px solid var(--border);border-radius:14px;margin-bottom:16px;display:flex;align-items:center;gap:14px}
 .admin-header-icon{width:44px;height:44px;border-radius:10px;background:var(--accent-dim);color:var(--accent);display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .admin-header-icon svg{width:22px;height:22px}
@@ -627,7 +604,6 @@ a{color:inherit;text-decoration:none}
 .dep-reject{background:var(--red-dim);color:var(--red)}
 .deposits-empty{text-align:center;color:var(--text-muted);font-size:12px;padding:14px}
 
-/* Topup grid (for deposits) */
 .topup-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;max-height:280px;overflow-y:auto;padding:8px;background:var(--bg-elevated-2);border-radius:10px;margin-bottom:12px;border:1px solid var(--border)}
 .topup-item{padding:8px 4px;border-radius:8px;border:1px solid var(--border);background:var(--bg-card);display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;transition:all .15s;text-align:center}
 .topup-item.selected{border-color:var(--accent);background:var(--accent-dim)}
@@ -650,7 +626,6 @@ a{color:inherit;text-decoration:none}
 .promo-input-wrap .form-input{flex:1;text-transform:uppercase}
 .promo-input-wrap .action-btn{width:auto;padding:12px 20px}
 
-/* Кейс результат (полноэкранный) */
 .case-result-overlay{position:fixed;inset:0;z-index:1500;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.92);backdrop-filter:blur(6px);padding:20px}
 .case-result-overlay.show{display:flex}
 .case-result-content{background:var(--bg-elevated);border:1px solid var(--border-strong);border-radius:20px;padding:28px;max-width:460px;width:100%;position:relative;overflow:hidden;text-align:center}
@@ -673,7 +648,6 @@ a{color:inherit;text-decoration:none}
 .case-result-btn.secondary{background:var(--bg-card);color:var(--text);border:1px solid var(--border)}
 .case-result-btn:hover{filter:brightness(1.1)}
 
-/* Case open modal (roulette) */
 .case-open-modal{position:fixed;inset:0;z-index:1200;display:none;flex-direction:column;align-items:center;background:rgba(0,0,0,.95);overflow-y:auto;padding:24px}
 .case-open-modal.show{display:flex}
 .case-open-header{width:100%;max-width:900px;display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
@@ -715,10 +689,6 @@ a{color:inherit;text-decoration:none}
 .case-anim-text{font-family:'Unbounded',sans-serif;font-size:20px;font-weight:800;color:var(--accent);margin-top:20px;letter-spacing:.08em}
 @keyframes caseBoxShake{from{transform:rotate(-4deg) scale(1)}to{transform:rotate(4deg) scale(1.06)}}
 
-/* hide old weather */
-#weather, .weather-particle{display:none!important}
-
-/* Light glow effect for cards with legend items */
 .mutation-badge{position:absolute;top:4px;left:4px;width:22px;height:22px;object-fit:contain;z-index:5}
 </style>
 </head>
@@ -728,32 +698,36 @@ a{color:inherit;text-decoration:none}
 <nav class="topnav">
   <div class="topnav-left">
     <div class="brand">
-      <div class="brand-logo">B</div>
+      <div class="brand-logo"><img src="https://raw.githubusercontent.com/saintezz/ggbrainXv2/main/brainzone.png" alt="B"></div>
       <div class="brand-name">Brainrot <span>Zone</span></div>
     </div>
-    <div class="nav-tabs">
+    <div class="hamburger" onclick="toggleMobileMenu()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+    </div>
+    <div class="nav-tabs" id="navTabsMenu">
       <div class="nav-tab active" data-tab="menu" onclick="switchTab('menu')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5L12 3l9 7.5"/><path d="M5 10v10h14V10"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M3 10.5L12 3l9 7.5"/><path d="M5 10v10h14V10"/></svg>
         <span>Главная</span>
       </div>
       <div class="nav-tab" data-tab="upgrade" onclick="switchTab('upgrade')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4l-6 6a2 2 0 0 0 2.8 2.8l6-6a4 4 0 0 0 5.4-5.4l-2.3 2.3-2.8-2.8 2.3-2.3z"/></svg>
+        <!-- Double arrow (Upgrade) -->
+        <svg viewBox="0 0 24 24"><path d="M7 15l5 5 5-5M7 9l5 5 5-5"/></svg>
         <span>Апгрейдер</span>
       </div>
       <div class="nav-tab" data-tab="mines" onclick="switchTab('mines')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="14" r="7"/><path d="M12 7V4"/><path d="M8.5 9.5L6 7"/><path d="M15.5 9.5L18 7"/></svg>
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="14" r="7"/><path d="M12 7V4"/><path d="M8.5 9.5L6 7"/><path d="M15.5 9.5L18 7"/></svg>
         <span>Mines</span>
       </div>
       <div class="nav-tab" data-tab="rocket" onclick="switchTab('rocket')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg>
         <span>Ракетка</span>
       </div>
       <div class="nav-tab" data-tab="promo" onclick="switchTab('promo')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13"/><path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7"/><path d="M7.5 8a2.5 2.5 0 0 1 0-5A4.8 8 0 0 1 12 8a4.8 8 0 0 1 4.5-5 2.5 2.5 0 0 1 0 5"/></svg>
+        <svg viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13"/><path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7"/><path d="M7.5 8a2.5 2.5 0 0 1 0-5A4.8 8 0 0 1 12 8a4.8 8 0 0 1 4.5-5 2.5 2.5 0 0 1 0 5"/></svg>
         <span>Промо</span>
       </div>
       <div class="nav-tab" data-tab="profile" onclick="switchTab('profile')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>
         <span>Профиль</span>
       </div>
     </div>
@@ -783,8 +757,6 @@ a{color:inherit;text-decoration:none}
 
   <!-- ===== MENU (Главная) ===== -->
   <div class="tab-content active" id="tabMenu">
-    <div class="race-banner" id="raceBannerMenu"></div>
-
     <div class="section-header">
       <div class="section-title">Кейсы</div>
     </div>
@@ -808,49 +780,66 @@ a{color:inherit;text-decoration:none}
   <!-- ===== UPGRADE ===== -->
   <div class="tab-content" id="tabUpgrade">
     <div class="section-header"><div class="section-title">Апгрейдер</div></div>
-    <div class="progress-section">
-      <div class="progress-wrapper">
-        <svg class="progress-svg" viewBox="0 0 340 340">
-          <circle class="progress-bg" cx="170" cy="170" r="130"></circle>
-          <circle class="progress-bar" id="progressBar" cx="170" cy="170" r="130"></circle>
+    <div class="upgrade-wrapper">
+      <div class="upgrade-circle-container">
+        <svg class="upgrade-ring-svg" viewBox="0 0 340 340">
+          <defs>
+            <linearGradient id="upgradeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#ef4444"/>
+              <stop offset="50%" stop-color="#f5b60a"/>
+              <stop offset="100%" stop-color="#22c55e"/>
+            </linearGradient>
+          </defs>
+          <circle class="upgrade-ring-bg" cx="170" cy="170" r="140"></circle>
+          <!-- Active progress ring -->
+          <circle class="upgrade-ring-active" id="upgradeRingActive" cx="170" cy="170" r="140"></circle>
+          <!-- Static scale marks -->
+          <circle class="upgrade-ring-scale" cx="170" cy="170" r="140" style="stroke-dasharray: 4 20; stroke: #2f3646; opacity: 1;"></circle>
         </svg>
-        <div class="arrow-container" id="arrowContainer">
-          <div class="arrow-pointer"></div>
+        <div class="upgrade-arrow-wrap" id="upgradeArrowWrap">
+          <!-- Double arrow -->
+          <svg class="upgrade-arrow-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M7 15l5 5 5-5"/>
+            <path d="M7 9l5 5 5-5"/>
+          </svg>
         </div>
-        <div class="progress-center">
-          <div class="chance-big" id="chanceBig">0%</div>
-          <div class="chance-label hidden" id="chanceLabel">—</div>
-        </div>
-      </div>
-    </div>
-    <div class="items-row">
-      <div class="item-box">
-        <div class="label">Твой предмет</div>
-        <img id="sourceImg" src="" alt="" style="display:none">
-        <div class="name" id="sourceName">—</div>
-        <div class="price" id="sourcePrice"></div>
-      </div>
-      <div class="swap-arrow">→</div>
-      <div class="item-box">
-        <div class="label">Цель</div>
-        <img id="targetImg" src="" alt="" style="display:none">
-        <div class="name" id="targetName">—</div>
-        <div class="price" id="targetPrice"></div>
-        <div style="margin-top:8px">
-          <button id="chooseTargetBtn" onclick="openTargetList()" disabled style="width:40px;height:40px;border-radius:10px;background:var(--bg-elevated-2);border:1px solid var(--border);color:var(--text);font-size:22px;cursor:pointer;transition:all .15s">+</button>
+        <div class="upgrade-center-text">
+          <div class="upgrade-percent" id="chanceBig">0%</div>
+          <div class="upgrade-label" id="chanceLabel">—</div>
         </div>
       </div>
+
+      <div class="upgrade-items">
+        <div class="upgrade-item-box">
+          <div class="label">Твой предмет</div>
+          <img id="sourceImg" src="" style="display:none" alt="">
+          <div class="name" id="sourceName">—</div>
+          <div class="price" id="sourcePrice"></div>
+        </div>
+        <div style="font-size:24px;color:var(--accent)">→</div>
+        <div class="upgrade-item-box">
+          <div class="label">Цель</div>
+          <img id="targetImg" src="" style="display:none" alt="">
+          <div class="name" id="targetName">—</div>
+          <div class="price" id="targetPrice"></div>
+          <button class="upgrade-plus-btn" id="chooseTargetBtn" onclick="openTargetList()" disabled>+</button>
+        </div>
+      </div>
+
+      <div class="upgrade-actions">
+        <button class="upgrade-go-btn" id="upgradeBtn" onclick="upgrade()" disabled><span>Апгрейд</span></button>
+        <button class="upgrade-fast-btn" id="fastUpgradeBtn" onclick="toggleFastMode()" title="Быстрый режим">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M13 2L4 14h6l-1 8 9-12h-6l1-8z"/></svg>
+        </button>
+      </div>
+
+      <div style="width:100%; max-width:600px;">
+        <div class="section-title2">Инвентарь</div>
+        <div class="inventory-row" id="inventoryRow"><div class="empty-inv">Инвентарь пуст</div></div>
+        <div class="section-title2">Магазин</div>
+        <div class="shop-scroll"><div class="shop-grid" id="shopRow"></div></div>
+      </div>
     </div>
-    <div class="stage-controls">
-      <button class="upgrade-main-btn" id="upgradeBtn" onclick="upgrade()" disabled><span>Апгрейд - 0%</span></button>
-      <button class="fast-btn" id="fastUpgradeBtn" onclick="toggleFastMode()" title="Быстрый режим">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L4 14h6l-1 8 9-12h-6l1-8z"/></svg>
-      </button>
-    </div>
-    <div class="section-title2">Инвентарь</div>
-    <div class="inventory-row" id="inventoryRow"><div class="empty-inv">Инвентарь пуст</div></div>
-    <div class="section-title2">Магазин</div>
-    <div class="shop-scroll"><div class="shop-grid" id="shopRow"></div></div>
   </div>
 
   <!-- ===== MINES ===== -->
@@ -979,8 +968,6 @@ a{color:inherit;text-decoration:none}
         </div>
       </div>
 
-      <div class="race-banner" id="raceBannerProfile" style="margin:0 0 20px"></div>
-
       <div class="profile-stats-column">
         <div class="profile-stat">
           <div class="profile-stat-label">Баланс</div>
@@ -1010,10 +997,6 @@ a{color:inherit;text-decoration:none}
       </div>
 
       <div class="customize-in-profile">
-        <div class="customize-section">
-          <div class="customize-section-title">Цвет проекта</div>
-          <div class="color-grid" id="colorGrid"></div>
-        </div>
         <div class="customize-section">
           <div class="customize-section-title">Аватарка</div>
           <div class="avatar-upload-row">
@@ -1130,24 +1113,6 @@ a{color:inherit;text-decoration:none}
       </div>
       <button class="action-btn" onclick="createPromo()">Создать промокод</button>
       <div class="msg" id="adminMsg"></div>
-    </div>
-
-    <div class="admin-section">
-      <div class="admin-section-title">Розыгрыш пополнений</div>
-      <div class="form-group">
-        <label class="form-label">Браинрот на розыгрыш</label>
-        <div class="admin-grid" id="raceGrid"></div>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Минимальное пополнение</label>
-        <input type="number" class="form-input" id="raceMinTopup" value="400" min="1">
-      </div>
-      <div class="form-group">
-        <label class="form-label">На сколько дней</label>
-        <input type="number" class="form-input" id="raceDays" value="7" min="1">
-      </div>
-      <button class="action-btn" onclick="startTopupRace()" style="background:linear-gradient(135deg,var(--accent),var(--accent-strong))">Запустить розыгрыш</button>
-      <div class="msg" id="raceMsg"></div>
     </div>
 
     <div class="admin-section">
@@ -1284,23 +1249,6 @@ const CASES = [
     style: 'blue' }
 ];
 
-const COLOR_PALETTE = [
-  { name: 'Золотой', color: '#f5c542', deep: '#b8860b', bright: '#ffe066', green: '#2ecc71', greenBright: '#58d68d', greenDeep: '#1e8449' },
-  { name: 'Изумруд', color: '#10b981', deep: '#065f46', bright: '#34d399', green: '#22c55e', greenBright: '#4ade80', greenDeep: '#15803d' },
-  { name: 'Лайм', color: '#a3e635', deep: '#4d7c0f', bright: '#bef264', green: '#84cc16', greenBright: '#a3e635', greenDeep: '#3f6212' },
-  { name: 'Бирюза', color: '#14b8a6', deep: '#0f766e', bright: '#5eead4', green: '#2dd4bf', greenBright: '#5eead4', greenDeep: '#115e59' },
-  { name: 'Голубой', color: '#06b6d4', deep: '#0e7490', bright: '#67e8f9', green: '#22d3ee', greenBright: '#67e8f9', greenDeep: '#155e75' },
-  { name: 'Синий', color: '#3b82f6', deep: '#1e40af', bright: '#60a5fa', green: '#60a5fa', greenBright: '#93c5fd', greenDeep: '#1e40af' },
-  { name: 'Индиго', color: '#6366f1', deep: '#3730a3', bright: '#818cf8', green: '#818cf8', greenBright: '#a5b4fc', greenDeep: '#3730a3' },
-  { name: 'Фиолет', color: '#a855f7', deep: '#6b21a8', bright: '#c084fc', green: '#c084fc', greenBright: '#d8b4fe', greenDeep: '#6b21a8' },
-  { name: 'Фуксия', color: '#d946ef', deep: '#86198f', bright: '#e879f9', green: '#e879f9', greenBright: '#f0abfc', greenDeep: '#86198f' },
-  { name: 'Розовый', color: '#ec4899', deep: '#9d174d', bright: '#f472b6', green: '#f472b6', greenBright: '#f9a8d4', greenDeep: '#9d174d' },
-  { name: 'Красный', color: '#ef4444', deep: '#991b1b', bright: '#f87171', green: '#f87171', greenBright: '#fca5a5', greenDeep: '#991b1b' },
-  { name: 'Оранж', color: '#f97316', deep: '#9a3412', bright: '#fb923c', green: '#fb923c', greenBright: '#fdba74', greenDeep: '#9a3412' },
-  { name: 'Амбер', color: '#f59e0b', deep: '#92400e', bright: '#fbbf24', green: '#fbbf24', greenBright: '#fcd34d', greenDeep: '#92400e' },
-  { name: 'Жёлтый', color: '#eab308', deep: '#854d0e', bright: '#facc15', green: '#facc15', greenBright: '#fde047', greenDeep: '#854d0e' }
-];
-
 /* ============ STATE ============ */
 let USER = { nick: 'Гость', tg: '@guest', tgLink: '#', id: null, username: null };
 let customNick = localStorage.getItem('ggbrainx_custom_nick') || null;
@@ -1313,22 +1261,12 @@ let deposits = [];
 let topupSelectedItem = null;
 let isAdmin = false;
 
-let accentColor = localStorage.getItem('ggbrainx_accent') || '#f5c542';
-let accentDeep = localStorage.getItem('ggbrainx_accent_deep') || '#b8860b';
-let accentBright = localStorage.getItem('ggbrainx_accent_bright') || '#ffe066';
-let themeGreen = localStorage.getItem('ggbrainx_theme_green') || '#2ecc71';
-let themeGreenBright = localStorage.getItem('ggbrainx_theme_green_bright') || '#58d68d';
-let themeGreenDeep = localStorage.getItem('ggbrainx_theme_green_deep') || '#1e8449';
 let customAvatar = localStorage.getItem('ggbrainx_custom_avatar') || null;
-
 let freeCaseLastOpen = parseFloat(localStorage.getItem('ggbrainx_free_case_last') || '0');
 let currentCaseId = null;
 let caseOpenQty = 1;
 let isCaseOpening = false;
-let currentCaseFilter = '';
 let rareRollCounter = parseInt(localStorage.getItem('ggbrainx_rare_roll_counter') || '0') || 0;
-
-let topupRaceCache = null;
 
 let minesState = 'idle';
 let minesBet = 0;
@@ -1350,12 +1288,11 @@ let selectedTargetId = null;
 let isSpinning = false;
 let promoType = 'balance';
 let selectedAdminItem = null;
-let selectedRaceItem = null;
 
 const MAX_CHANCE = 70;
-const SPIN_DURATION = 7000;
-const SPIN_DURATION_FAST = 3000;
-const CIRCUMFERENCE = 2 * Math.PI * 130;
+const SPIN_DURATION = 5000;
+const SPIN_DURATION_FAST = 2000;
+const CIRCUMFERENCE = 2 * Math.PI * 140;
 let fastModeEnabled = false;
 
 /* ============ UTIL ============ */
@@ -1395,14 +1332,6 @@ function getTelegramId() {
 function getDisplayNick() { return customNick || USER.nick; }
 function getItemById(id) {
   return ITEMS.find(item => item.id === id) || CASE_ONLY_ITEMS.find(item => item.id === id);
-}
-function getGlowClass(price) {
-  if (price >= 100000) return 'glow-rainbow';
-  if (price >= 20000) return 'glow-purple';
-  if (price >= 5000) return 'glow-red';
-  if (price >= 200) return 'glow-green';
-  if (price >= 34) return 'glow-blue';
-  return '';
 }
 function showToast(text, type = 'info') {
   const container = document.getElementById('toastContainer');
@@ -1467,7 +1396,6 @@ function playLose() { playOsc(220, 0.25, 'triangle', 0.05, 0, 500); playOsc(180,
 function playLegendary() { [523, 659, 784, 1047, 1319].forEach((f, i) => playOsc(f, 0.35, 'sine', 0.06, i * 0.09)); playOsc(130, 1.0, 'triangle', 0.04, 0); }
 function playUpgradeStart() { playOsc(140, 0.55, 'triangle', 0.04, 0); playOsc(420, 0.4, 'triangle', 0.04, 0.15); }
 function vibrate(ms = 15) { try { if (navigator.vibrate) navigator.vibrate(ms); } catch(e) {} }
-function vibratePattern(p) { try { if (navigator.vibrate) navigator.vibrate(p); } catch(e) {} }
 
 /* ============ BALANCE / SYNC ============ */
 const balanceDisplay = document.getElementById('balanceDisplay');
@@ -1516,7 +1444,7 @@ async function loadUserFromServer() {
   } catch (e) { console.warn('[SYNC] сервер недоступен'); }
 }
 
-/* ============ TABS ============ */
+/* ============ TABS & MOBILE MENU ============ */
 window.switchTab = function(tab) {
   playClick(); vibrate(8);
   document.querySelectorAll('.tab-content').forEach(p => p.classList.remove('active'));
@@ -1527,14 +1455,22 @@ window.switchTab = function(tab) {
   if (navBtn) navBtn.classList.add('active');
   if (tab === 'menu') renderMenuCases();
   if (tab === 'profile') {
-    updateProfile(); renderColorGrid(); renderBgOptions(); renderOrbitPicker(); renderOrbit();
+    updateProfile(); renderBgOptions(); renderOrbitPicker(); renderOrbit();
     document.getElementById('customizeNickInput').value = customNick || USER.nick;
     document.getElementById('opacitySlider').value = Math.round(appOpacity * 100);
     document.getElementById('opacityValue').textContent = Math.round(appOpacity * 100) + '%';
   }
   if (tab === 'mines') { renderMinesGrid(); updateMinesUI(); }
   if (tab === 'rocket') updateRocketUI();
-  setTimeout(renderTopupRace, 100);
+  if (window.innerWidth <= 1024) {
+    document.getElementById('navTabsMenu').classList.remove('mobile-open');
+    document.querySelector('.sidebar').classList.remove('open');
+  }
+};
+
+window.toggleMobileMenu = function() {
+  document.getElementById('navTabsMenu').classList.toggle('mobile-open');
+  document.querySelector('.sidebar').classList.toggle('open');
 };
 
 /* ============ LIVE DROPS ============ */
@@ -1569,65 +1505,6 @@ function renderLiveDrops(drops) {
       </div>
     `;
   }).join('');
-}
-
-/* ============ TOPUP RACE UI ============ */
-function formatTimer(endsAt) {
-  const now = Date.now();
-  const diff = Math.max(0, endsAt - now);
-  if (diff <= 0) return { text: 'Завершён', expired: true };
-  const totalSec = Math.floor(diff / 1000);
-  const d = Math.floor(totalSec / 86400);
-  const h = Math.floor((totalSec % 86400) / 3600);
-  const m = Math.floor((totalSec % 3600) / 60);
-  const s = totalSec % 60;
-  const pad = n => n.toString().padStart(2, '0');
-  const text = (d > 0 ? d + 'д ' : '') + pad(h) + ':' + pad(m) + ':' + pad(s);
-  return { text, expired: false };
-}
-function renderRaceBanner(container) {
-  if (!container) return;
-  const race = topupRaceCache;
-  if (!race) {
-    container.innerHTML = `<div style="color:var(--text-muted);font-size:12px;font-weight:600;padding:4px">Розыгрыш пока не запущен</div>`;
-    return;
-  }
-  const item = getItemById(race.itemId) || { name: race.itemId, img: FALLBACK_IMG };
-  const timer = formatTimer(race.endsAt);
-  const top = race.top?.[0];
-  container.innerHTML = `
-    <div class="race-banner-left">
-      <div class="race-banner-img"><img src="${item.img}" ${FALLBACK_ATTR}></div>
-      <div>
-        <div class="race-banner-label">Топ лут (24ч)</div>
-        <div class="race-banner-name">${item.name}</div>
-        <div class="race-banner-sub">от ${race.minTopup} токенов · участников: ${race.top?.length || 0}</div>
-      </div>
-    </div>
-    <div class="race-banner-right">
-      <div class="race-banner-amount">
-        <img src="${COIN_IMG}">${top ? top.total : 0}
-      </div>
-      <div class="race-banner-timer">${timer.expired ? 'Завершён' : timer.text}</div>
-    </div>
-  `;
-}
-function renderTopupRace() {
-  fetch(API_URL + '/api/topup-race')
-    .then(r => r.json())
-    .then(d => { topupRaceCache = (d.ok && d.race) ? d.race : null; })
-    .catch(() => { topupRaceCache = null; })
-    .finally(() => {
-      renderRaceBanner(document.getElementById('raceBannerMenu'));
-      renderRaceBanner(document.getElementById('raceBannerProfile'));
-    });
-}
-function tickTopupRaceTimer() {
-  if (!topupRaceCache) return;
-  const timer = formatTimer(topupRaceCache.endsAt);
-  document.querySelectorAll('.race-banner-timer').forEach(el => {
-    el.textContent = timer.expired ? 'Завершён' : timer.text;
-  });
 }
 
 /* ============ MENU CASES ============ */
@@ -1938,8 +1815,7 @@ function showCaseResultBig(results, c, qty, totalSpent, isRare) {
         </div>
       `;
     }
-    if (legend) { playLegendary(); vibratePattern([40, 60, 40, 60, 200]); }
-    else { playWin(); vibratePattern([20, 40, 20]); }
+    if (legend) { playLegendary(); } else { playWin(); }
   } else {
     let multi = '<div class="case-result-multi-list" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(80px,1fr));gap:8px;margin-bottom:16px">';
     results.forEach(r => {
@@ -2230,7 +2106,7 @@ function rocketAction() {
   }
 }
 
-/* ============ UPGRADE ============ */
+/* ============ UPGRADE (NEW) ============ */
 function renderShop() {
   const shopRow = document.getElementById('shopRow');
   shopRow.innerHTML = ITEMS.map(item => `
@@ -2335,8 +2211,7 @@ function updateUpgradeScreen() {
   const targetName = document.getElementById('targetName');
   const targetPrice = document.getElementById('targetPrice');
   const chooseTargetBtn = document.getElementById('chooseTargetBtn');
-  const progressBar = document.getElementById('progressBar');
-  const arrowContainer = document.getElementById('arrowContainer');
+  const ringActive = document.getElementById('upgradeRingActive');
   const chanceBig = document.getElementById('chanceBig');
   const chanceLabel = document.getElementById('chanceLabel');
   const upgradeBtn = document.getElementById('upgradeBtn');
@@ -2345,7 +2220,7 @@ function updateUpgradeScreen() {
     sourceImg.src = sourceItem.img;
     sourceImg.style.display = 'block';
     sourceName.innerText = sourceItem.name;
-    sourcePrice.innerHTML = `<img src="${COIN_IMG}" style="width:14px;height:14px"> ${sourceItem.price}`;
+    sourcePrice.innerHTML = `<img src="${COIN_IMG}" style="width:12px;height:12px"> ${sourceItem.price}`;
   } else {
     sourceImg.style.display = 'none';
     sourceName.innerText = '—';
@@ -2355,7 +2230,7 @@ function updateUpgradeScreen() {
     targetImg.src = targetItem.img;
     targetImg.style.display = 'block';
     targetName.innerText = targetItem.name;
-    targetPrice.innerHTML = `<img src="${COIN_IMG}" style="width:14px;height:14px"> ${targetItem.price}`;
+    targetPrice.innerHTML = `<img src="${COIN_IMG}" style="width:12px;height:12px"> ${targetItem.price}`;
   } else {
     targetImg.style.display = 'none';
     targetName.innerText = '—';
@@ -2364,14 +2239,17 @@ function updateUpgradeScreen() {
   chooseTargetBtn.disabled = !(sourceItem && !isSpinning);
   const chance = calculateChance();
   const displayChance = Math.floor(chance);
-  const offset = CIRCUMFERENCE - (chance / 100) * CIRCUMFERENCE;
-  progressBar.style.strokeDashoffset = offset;
-  const angle = (chance / 100) * 360;
-  arrowContainer.style.transform = `rotate(${angle}deg)`;
+  
+  // Update ring fill (circumference of r=140 is ~879)
+  const circumference = 879;
+  const offset = circumference - (chance / 100) * circumference;
+  ringActive.style.strokeDashoffset = offset;
   chanceBig.innerText = displayChance + '%';
-  if (displayChance >= 45) { chanceLabel.innerText = 'ВЫСОКИЙ ШАНС'; chanceLabel.className = 'chance-label'; }
-  else if (displayChance >= 25) { chanceLabel.innerText = 'СРЕДНИЙ ШАНС'; chanceLabel.className = 'chance-label medium'; }
-  else { chanceLabel.innerText = ''; chanceLabel.className = 'chance-label hidden'; }
+  
+  if (displayChance >= 45) { chanceLabel.innerText = 'ВЫСОКИЙ ШАНС'; }
+  else if (displayChance >= 25) { chanceLabel.innerText = 'СРЕДНИЙ ШАНС'; }
+  else { chanceLabel.innerText = 'НИЗКИЙ ШАНС'; }
+  
   if (sourceItem && targetItem && chance > 0 && !isSpinning) {
     upgradeBtn.disabled = false;
     upgradeBtn.querySelector('span').innerText = `Апгрейд - ${displayChance}%`;
@@ -2387,19 +2265,27 @@ function performUpgrade(durationMs) {
   if (!sourceItem || !targetItem || targetItem.price <= sourceItem.price) return;
   const chance = calculateChance();
   if (chance <= 0) return;
+  
   isSpinning = true;
   document.getElementById('upgradeBtn').disabled = true;
   document.getElementById('upgradeBtn').querySelector('span').innerText = 'КРУТИМ...';
+  
   playUpgradeStart();
-  const totalRotation = 360 * 8 + Math.random() * 360;
-  const arrowContainer = document.getElementById('arrowContainer');
-  arrowContainer.style.transition = `transform ${durationMs}ms cubic-bezier(0.12, 0.8, 0.15, 1)`;
-  arrowContainer.style.transform = `rotate(${totalRotation}deg)`;
-  const successAngle = (chance / 100) * 360;
-  const isSuccess = (totalRotation % 360) <= successAngle;
+  
+  // Rotate arrow to a random spot (0..100%)
+  const randomValue = Math.floor(Math.random() * 100);
+  const targetAngle = (randomValue / 100) * 360;
+  
+  const arrowWrap = document.getElementById('upgradeArrowWrap');
+  arrowWrap.style.transition = `transform ${durationMs}ms cubic-bezier(0.12, 0.8, 0.15, 1)`;
+  // Rotate from top (0 deg) to targetAngle * 5 full rotations for visual effect
+  arrowWrap.style.transform = `rotate(${targetAngle + 360 * 5}deg)`;
+  
   const sourceIdx = selectedSourceIndex;
   const targetId = selectedTargetId;
+  
   setTimeout(() => {
+    const isSuccess = randomValue <= chance;
     if (isSuccess) {
       inventory.splice(sourceIdx, 1);
       inventory.push(targetId);
@@ -2415,8 +2301,10 @@ function performUpgrade(durationMs) {
     isSpinning = false;
     updateBalance();
     renderInventory(); renderShop(); updateUpgradeScreen(); renderProfileInventory();
-    arrowContainer.style.transition = 'none';
-    arrowContainer.style.transform = 'rotate(0deg)';
+    
+    // Reset arrow
+    arrowWrap.style.transition = 'none';
+    arrowWrap.style.transform = `rotate(0deg)`;
     document.getElementById('upgradeBtn').disabled = true;
   }, durationMs + 100);
 }
@@ -2496,22 +2384,6 @@ function changeOpacity(val) {
   localStorage.setItem('ggbrainx_opacity', appOpacity);
   document.getElementById('opacityValue').textContent = val + '%';
 }
-function renderColorGrid() {
-  const grid = document.getElementById('colorGrid');
-  grid.innerHTML = COLOR_PALETTE.map(c => `
-    <div class="color-swatch ${c.color === accentColor ? 'selected' : ''}" style="background:${c.color}" onclick="changeAccentColor('${c.color}')" title="${c.name}"></div>
-  `).join('');
-}
-function changeAccentColor(color) {
-  accentColor = color;
-  localStorage.setItem('ggbrainx_accent', color);
-  applyAccentColor();
-  renderColorGrid();
-  playClick();
-}
-function applyAccentColor() {
-  document.documentElement.style.setProperty('--accent', accentColor);
-}
 function renderBgOptions() {
   document.querySelectorAll('#bgOptions .bg-option').forEach(el => el.classList.toggle('selected', el.dataset.bg === profileBg));
 }
@@ -2550,7 +2422,7 @@ function renderOrbit() {
   });
 }
 
-/* ============ TOPUP ============ */
+/* ============ TOPUP / PROMO / ADMIN ============ */
 function openTopup() {
   renderTopupGrid();
   document.getElementById('topupRoblox').value = '';
@@ -2594,8 +2466,6 @@ async function createDeposit() {
     else { msg.className = 'msg err'; msg.textContent = data.error || 'Ошибка'; }
   } catch (e) { msg.className = 'msg err'; msg.textContent = 'Сервер недоступен'; }
 }
-
-/* ============ PROMO ============ */
 async function activatePromo() {
   const input = document.getElementById('promoInput');
   const msg = document.getElementById('promoMsg');
@@ -2615,11 +2485,9 @@ async function activatePromo() {
     } else { msg.className = 'msg err'; msg.textContent = data.error || 'Ошибка'; }
   } catch (e) { msg.className = 'msg err'; msg.textContent = 'Сервер недоступен'; }
 }
-
-/* ============ ADMIN ============ */
 function openAdminPanel() {
   if (!isAdmin) return;
-  renderAdminGrid(); renderRaceGrid(); renderPromoList();
+  renderAdminGrid(); renderPromoList();
   openModal('adminModal');
 }
 function renderAdminGrid() {
@@ -2629,15 +2497,7 @@ function renderAdminGrid() {
     </div>
   `).join('');
 }
-function renderRaceGrid() {
-  document.getElementById('raceGrid').innerHTML = ITEMS.map(item => `
-    <div class="admin-item ${selectedRaceItem === item.id ? 'selected' : ''}" onclick="selectRaceItem('${item.id}')">
-      <img src="${item.img}" ${FALLBACK_ATTR}><div class="name">${item.name}</div>
-    </div>
-  `).join('');
-}
 function selectAdminItem(id) { selectedAdminItem = id; renderAdminGrid(); }
-function selectRaceItem(id) { selectedRaceItem = id; renderRaceGrid(); }
 function selectPromoType(type) {
   promoType = type;
   document.querySelectorAll('.radio-option').forEach(o => o.classList.toggle('active', o.dataset.type === type));
@@ -2660,20 +2520,6 @@ async function createPromo() {
     const res = await fetch(API_URL + '/api/create', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ code, uses, type: promoType, value }) });
     const data = await res.json();
     if (data.ok) { msg.className = 'msg ok'; msg.textContent = 'Создан!'; document.getElementById('adminCode').value = ''; updateAdminPreview(); renderPromoList(); }
-    else { msg.className = 'msg err'; msg.textContent = data.error || 'Ошибка'; }
-  } catch (e) { msg.className = 'msg err'; msg.textContent = 'Сервер недоступен'; }
-}
-async function startTopupRace() {
-  const msg = document.getElementById('raceMsg');
-  const minTopup = parseInt(document.getElementById('raceMinTopup').value);
-  const days = parseInt(document.getElementById('raceDays').value);
-  if (!selectedRaceItem) { msg.className = 'msg err'; msg.textContent = 'Выбери брейнрот'; return; }
-  if (!minTopup || !days) { msg.className = 'msg err'; msg.textContent = 'Заполни поля'; return; }
-  msg.className = 'msg'; msg.textContent = 'Запускаем...';
-  try {
-    const res = await fetch(API_URL + '/api/topup-race/set', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ admin: USER.username || '', itemId: selectedRaceItem, minTopup, days }) });
-    const data = await res.json();
-    if (data.ok) { msg.className = 'msg ok'; msg.textContent = 'Розыгрыш запущен!'; topupRaceCache = data.race; renderTopupRace(); }
     else { msg.className = 'msg err'; msg.textContent = data.error || 'Ошибка'; }
   } catch (e) { msg.className = 'msg err'; msg.textContent = 'Сервер недоступен'; }
 }
@@ -2714,25 +2560,21 @@ async function processDeposit(id, status) {
   try {
     const res = await fetch(API_URL + '/api/deposit/status', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id, status, admin: USER.username || '' }) });
     const data = await res.json();
-    if (data.ok) { await loadDeposits(); showToast('Обработано', 'ok'); renderTopupRace(); }
+    if (data.ok) { await loadDeposits(); showToast('Обработано', 'ok'); }
   } catch (e) { showToast('Ошибка', 'err'); }
 }
 
 /* ============ INIT ============ */
 function init() {
-  applyAccentColor();
   updateBalance();
   renderInventory(); renderShop(); updateUpgradeScreen();
   renderMenuCases();
-  renderColorGrid(); renderBgOptions(); renderOrbitPicker(); renderOrbit();
+  renderBgOptions(); renderOrbitPicker(); renderOrbit();
   applyCustomAvatar();
   renderMinesGrid(); updateMinesUI(); renderMinesHistory();
   renderRocketHistory();
   loadUserFromServer();
   loadLiveDrops();
-  renderTopupRace();
-  setInterval(renderTopupRace, 60000);
-  setInterval(tickTopupRaceTimer, 1000);
   setInterval(updateFreeCaseTimer, 30000);
   updateFreeCaseTimer();
   setInterval(loadLiveDrops, 30000);
